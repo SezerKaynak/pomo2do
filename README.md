@@ -1,5 +1,4 @@
-# flutter_application_1
-
+# Pomotodo
 A new Flutter project.
 
 ## Getting Started
