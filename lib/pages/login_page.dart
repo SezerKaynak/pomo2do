@@ -1,10 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    var title = "Hoşgeldiniz!";
+    var subtitle = "Lütfen öncelikle giriş yapınız👋";
+    var email = "Email";
+    var sifre = "Şifre";
+    var forgotPassword = "Şifremi Unuttum";
+    var textLabel2 = 'abc@xyz.com';
+    var textLabel3 = 'Şifrenizi Girin';
+    var loginWithAccount = 'Hesabınızla Giriş Yapın';
+    var dontHaveAccount = 'Henüz bir hesabınız yok mu?';
+
+    return Scaffold(
+      backgroundColor: Colors.blueGrey[100],
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: ScreenPadding().screenPadding,
+          child: Column(
+            children: [
+              ScreenTexts(title: title, theme: Theme.of(context).textTheme.headline4, fontW: FontWeight.w600, textPosition: TextAlign.left),
+              ScreenTexts(title: subtitle, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w400, textPosition: TextAlign.left),
+              const SizedBox(height: 40),
+              ScreenTexts(title: email, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w500, textPosition: TextAlign.left),
+              ScreenTextField(textLabel: textLabel2),
+              const SizedBox(height: 20),
+              ScreenTexts(title: sifre, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w500, textPosition: TextAlign.left),
+              ScreenTextField(textLabel: textLabel3),
+              ScreenTexts(title: forgotPassword, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.right),
+              const SizedBox(height: 50),
+              SizedBox(width: 400, height: 60, child: ElevatedButton(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), onPressed: (){}, child: const Text("Giriş Yap"))),
+              const SizedBox(height: 40),
+              ScreenTexts(title: loginWithAccount, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.center),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(height: 30, child: InkWell(onTap: (){}, child: Image.asset("assets/google.png", fit: BoxFit.fitHeight))),
+              ),
+              bottomText(dontHaveAccount),
+            ],
+          ),
+        ),
+      )
+    );
   }
+
+  Row bottomText(String dontHaveAccount) {
+    return Row(      
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(dontHaveAccount),
+              TextButton(onPressed: (){}, child: const Text("Register"))
+            ],
+          );
+  }
+}
+
+class ScreenTextField extends StatelessWidget {
+  const ScreenTextField({
+    Key? key, required this.textLabel,
+  }) : super(key: key);
+  final String textLabel;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 70,
+      child: Center(
+        child: TextField(
+          decoration: InputDecoration(
+            labelText: textLabel,
+            filled: true,
+            fillColor: Colors.grey[200],
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ScreenTexts extends StatelessWidget {
+  const ScreenTexts({
+    Key? key, required this.title, required this.theme, required this.fontW, required this.textPosition,
+  }) : super(key: key);
+  final String title;
+  final TextStyle? theme;
+  final FontWeight fontW;
+  final TextAlign textPosition;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(width: 400, child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(title, textAlign: textPosition, style: theme?.copyWith(fontWeight: fontW, color: Colors.black)),
+    ));
+  }
+}
+
+
+class ScreenPadding{
+  final EdgeInsets screenPadding = const EdgeInsets.fromLTRB(30, 40, 30, 20);
 }
