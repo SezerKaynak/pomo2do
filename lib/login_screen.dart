@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
                       color: Colors.blue),
                 ),
                 SizedBox(
-                  height: 25,
+                  height: 23,
                 ),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
