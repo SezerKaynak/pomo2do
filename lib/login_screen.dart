@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'POMO',
+                  'Login',
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 60.0,
