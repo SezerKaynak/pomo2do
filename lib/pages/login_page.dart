@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -45,22 +47,36 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(height: 30, child: InkWell(onTap: (){}, child: Image.asset("assets/google.png", fit: BoxFit.fitHeight))),
               ),
-              bottomText(dontHaveAccount),
+              BottomText(dontHaveAccount: dontHaveAccount),
             ],
           ),
         ),
       )
     );
   }
+}
 
-  Row bottomText(String dontHaveAccount) {
+class BottomText extends StatelessWidget {
+  const BottomText({
+    Key? key,
+    required this.dontHaveAccount,
+  }) : super(key: key);
+
+  final String dontHaveAccount;
+
+  @override
+  Widget build(BuildContext context) {
+    final _authService = Provider.of<IAuthService>(context, listen: false);
+
     return Row(      
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(dontHaveAccount),
-              TextButton(onPressed: (){}, child: const Text("Register"))
-            ],
-          );
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(dontHaveAccount),
+        TextButton(onPressed: () async {
+          await _authService.createUserWithEmailAndPassword(email: "deneme@gmail.com", password: "12345678");
+        }, child: const Text("Register"))
+      ],
+    );
   }
 }
 
