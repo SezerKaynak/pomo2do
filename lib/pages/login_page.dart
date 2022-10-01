@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     var title = "Hoşgeldiniz!";
@@ -17,6 +16,7 @@ class LoginPage extends StatelessWidget {
     var textLabel3 = 'Şifrenizi Girin';
     var loginWithAccount = 'Hesabınızla Giriş Yapın';
     var dontHaveAccount = 'Henüz bir hesabınız yok mu?';
+    final _authService = Provider.of<IAuthService>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
@@ -40,7 +40,9 @@ class LoginPage extends StatelessWidget {
               ScreenTextField(textLabel: textLabel3),
               ScreenTexts(title: forgotPassword, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.right),
               const SizedBox(height: 50),
-              SizedBox(width: 400, height: 60, child: ElevatedButton(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), onPressed: (){}, child: const Text("Giriş Yap"))),
+              SizedBox(width: 400, height: 60, child: ElevatedButton(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), onPressed: () async{
+                await _authService.signInEmailAndPassword(email: "deneme@gmail.com", password: "12345678");
+              }, child: const Text("Giriş Yap"))),
               const SizedBox(height: 40),
               ScreenTexts(title: loginWithAccount, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.center),
               Padding(
@@ -73,7 +75,7 @@ class BottomText extends StatelessWidget {
       children: [
         Text(dontHaveAccount),
         TextButton(onPressed: () async {
-          await _authService.createUserWithEmailAndPassword(email: "deneme@gmail.com", password: "12345678");
+          await _authService.createUserWithEmailAndPassword(email: "deneme1@gmail.com", password: "12345678");
         }, child: const Text("Register"))
       ],
     );
