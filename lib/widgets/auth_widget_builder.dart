@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/service/firebase_service.dart';
+import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 import '../models/pomotodo_user.dart';
 
@@ -8,7 +8,7 @@ class AuthWidgetBuilder extends StatelessWidget {
   final Widget Function(BuildContext context, AsyncSnapshot<PomotodoUser?> snapShot) onPageBuilder;
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<AuthService>(context, listen:false);
+    final _authService = Provider.of<IAuthService>(context, listen:false);
     return StreamBuilder<PomotodoUser?>(
       stream: _authService.onAuthStateChanged,
       builder: (context,AsyncSnapshot<PomotodoUser?> snapShot) {
