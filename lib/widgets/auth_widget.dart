@@ -6,6 +6,8 @@ class AuthWidget extends StatelessWidget {
   final AsyncSnapshot<PomotodoUser?> snapShot;
   @override
   Widget build(BuildContext context) {
+    if(snapShot.connectionState == ConnectionState.active){
+    }
     return Container();
   }
 }
