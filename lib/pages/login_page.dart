@@ -6,6 +6,7 @@ import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
+
   const LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,8 @@ class LoginPage extends StatelessWidget {
     var loginWithAccount = 'Hesabınızla Giriş Yapın';
     var dontHaveAccount = 'Henüz bir hesabınız yok mu?';
     final _authService = Provider.of<IAuthService>(context, listen: false);
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
@@ -36,14 +39,14 @@ class LoginPage extends StatelessWidget {
               ScreenTexts(title: subtitle, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w400, textPosition: TextAlign.left),
               const SizedBox(height: 40),
               ScreenTexts(title: email, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w500, textPosition: TextAlign.left),
-              ScreenTextField(textLabel: textLabel2, obscure: false),
+              ScreenTextField(textLabel: textLabel2, obscure: false, controller: _emailController),
               const SizedBox(height: 20),
               ScreenTexts(title: sifre, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w500, textPosition: TextAlign.left),
-              ScreenTextField(textLabel: textLabel3, obscure: true),
+              ScreenTextField(textLabel: textLabel3, obscure: true, controller: _passwordController),
               ScreenTexts(title: forgotPassword, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.right),
               const SizedBox(height: 50),
               SizedBox(width: 400, height: 60, child: ElevatedButton(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), onPressed: () async{
-                await _authService.signInEmailAndPassword(email: "", password: "12345678");
+                await _authService.signInEmailAndPassword(email: _emailController.text, password: _passwordController.text);
               }, child: const Text("Giriş Yap"))),
               const SizedBox(height: 40),
               ScreenTexts(title: loginWithAccount, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.center),
@@ -86,20 +89,18 @@ class BottomText extends StatelessWidget {
 
 class ScreenTextField extends StatelessWidget {
   const ScreenTextField({
-    Key? key, required this.textLabel, required this.obscure,
+    Key? key, required this.textLabel, required this.obscure, required this.controller,
   }) : super(key: key);
   final String textLabel;
   final bool obscure;
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
-    String deneme;
     return SizedBox(
       height: 70,
       child: Center(
-        child: TextField(
-          onSubmitted: (String s) {
-            deneme = s;
-          },
+        child: TextFormField(
+          controller: controller,
           obscureText: obscure,
           decoration: InputDecoration(
             labelText: textLabel,
