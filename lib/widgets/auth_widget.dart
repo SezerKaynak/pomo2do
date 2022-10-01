@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
+import 'package:flutter_application_1/pages/register_page.dart';
 import 'package:flutter_application_1/widgets/error_page.dart';
 
 class AuthWidget extends StatelessWidget {
