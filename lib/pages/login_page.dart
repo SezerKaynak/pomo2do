@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -34,14 +36,14 @@ class LoginPage extends StatelessWidget {
               ScreenTexts(title: subtitle, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w400, textPosition: TextAlign.left),
               const SizedBox(height: 40),
               ScreenTexts(title: email, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w500, textPosition: TextAlign.left),
-              ScreenTextField(textLabel: textLabel2),
+              ScreenTextField(textLabel: textLabel2, obscure: false),
               const SizedBox(height: 20),
               ScreenTexts(title: sifre, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w500, textPosition: TextAlign.left),
-              ScreenTextField(textLabel: textLabel3),
+              ScreenTextField(textLabel: textLabel3, obscure: true),
               ScreenTexts(title: forgotPassword, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.right),
               const SizedBox(height: 50),
               SizedBox(width: 400, height: 60, child: ElevatedButton(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), onPressed: () async{
-                await _authService.signInEmailAndPassword(email: "deneme@gmail.com", password: "12345678");
+                await _authService.signInEmailAndPassword(email: "", password: "12345678");
               }, child: const Text("Giriş Yap"))),
               const SizedBox(height: 40),
               ScreenTexts(title: loginWithAccount, theme: Theme.of(context).textTheme.subtitle1, fontW: FontWeight.w300, textPosition: TextAlign.center),
@@ -84,15 +86,21 @@ class BottomText extends StatelessWidget {
 
 class ScreenTextField extends StatelessWidget {
   const ScreenTextField({
-    Key? key, required this.textLabel,
+    Key? key, required this.textLabel, required this.obscure,
   }) : super(key: key);
   final String textLabel;
+  final bool obscure;
   @override
   Widget build(BuildContext context) {
+    String deneme;
     return SizedBox(
       height: 70,
       child: Center(
         child: TextField(
+          onSubmitted: (String s) {
+            deneme = s;
+          },
+          obscureText: obscure,
           decoration: InputDecoration(
             labelText: textLabel,
             filled: true,
