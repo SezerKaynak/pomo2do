@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "564579364345",
+    "project_id": "pomotodo-f236a",
+    "storage_bucket": "pomotodo-f236a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564579364345:android:eea0b3ac91f0b2ad476128",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564579364345-7nahm3gve1muqlpsp7iugvnllqecincg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATYp93dobUuYCMWCUsHdpYwEnFnZTK6hA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564579364345-7nahm3gve1muqlpsp7iugvnllqecincg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
