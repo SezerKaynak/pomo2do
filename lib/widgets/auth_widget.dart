@@ -8,13 +8,12 @@ import 'package:flutter_application_1/widgets/error_page.dart';
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({super.key, required this.snapShot});
-  final AsyncSnapshot<PomotodoUser?> snapShot; 
+  final AsyncSnapshot<PomotodoUser?> snapShot;
   @override
   Widget build(BuildContext context) {
-    if(snapShot.connectionState == ConnectionState.active){
-      return snapShot.hasData ? TaskView(): const LoginPage();
+    if (snapShot.connectionState == ConnectionState.active) {
+      return snapShot.hasData ? TaskView() : const LoginPage();
     }
     return const ErrorPage();
   }
 }
-
