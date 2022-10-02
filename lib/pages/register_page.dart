@@ -1,16 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
-    FirebaseDatabase database = FirebaseDatabase.instance;
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
     var register = "Kayıt Ol";
     var subtitle = "Aşağıdaki alanları doldurarak kaydolabilirsiniz.🙂";
     var name = "Ad";
@@ -84,7 +86,7 @@ class RegisterPage extends StatelessWidget {
                   textPosition: TextAlign.left),
               ScreenTextField(
                   textLabel: password,
-                  obscure: false,
+                  obscure: true,
                   controller: _passwordController),
               Container(height: 30),
               SizedBox(
@@ -95,12 +97,34 @@ class RegisterPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () async {
-                        await _authService.signInEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passwordController.text);
-                        await ref.set({
-                          "name": _nameController.text,
-                          "surname": _surnameController.text
+                        try {
+                          await _authService.createUserWithEmailAndPassword(
+                              email: _emailController.text,
+                              password: _passwordController.text);
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'weak-password') {
+                            print('Şifre güçsüz.');
+                          } else if (e.code == 'email-already-in-use') {
+                            print(
+                                'Aynı e-posta adresine sahip başka bir hesap var.');
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
+                        // DatabaseReference ref = FirebaseDatabase.instance.ref('users/${FirebaseAuth.instance.currentUser!.uid}');
+                        // await ref.set({
+                        //   "email": _emailController.text,
+                        //   "name": _nameController.text,
+                        //   "surname": _surnameController.text
+                        // });
+
+                        CollectionReference users =
+                            FirebaseFirestore.instance.collection('Users');
+
+                        users.doc(FirebaseAuth.instance.currentUser!.uid).set({
+                          'email': _emailController.text,
+                          'name': _nameController.text,
+                          'surname': _surnameController.text
                         });
                       },
                       child: const Text("Kayıt Ol"))),
@@ -111,9 +135,3 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
-
-// class //   final TextEditingController _emailController = TextEditingController();
-//   final TextEditingController _passwordController = TextEditingController();
-//   final TextEditingController _nameController = TextEditingController();
-//   final TextEditingController _surnameController = TextEditingController();
-// }

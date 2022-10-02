@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        title: Text(userId),
+        title: Text(userId, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.red)),
         actions: [IconButton(onPressed: ()async {await _authService.signOut();}, icon: const Icon(Icons.exit_to_app))],
       ),
     );

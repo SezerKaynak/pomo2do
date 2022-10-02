@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/register_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -72,9 +73,18 @@ class LoginPage extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
-                          await _authService.signInEmailAndPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text);
+                          try {
+                            await _authService.signInEmailAndPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text);
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              print(
+                                  'Bu email adresiyle ilişkilendirilmiş bir kullanıcı bulunamadı.');
+                            } else if (e.code == 'wrong-password') {
+                              print('Yanlış şifre girdiniz.');
+                            }
+                          }
                         },
                         child: const Text("Giriş Yap"))),
                 const SizedBox(height: 40),
