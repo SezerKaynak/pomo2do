@@ -53,7 +53,7 @@ class TaskView extends StatelessWidget {
           TaskAdded(),
           TaskAdded(),
           TaskAdded(),
-          TaskAdded()
+          TaskAdded(),
         ]),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -81,23 +81,32 @@ class TaskAdded extends StatelessWidget {
     // ignore: prefer_typing_uninitialized_variables
     var doNothing;
     return Slidable(
+      key: const ValueKey(0),
       startActionPane: ActionPane(
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(onDismissed: () {}),
         children: [
           SlidableAction(
+            borderRadius: BorderRadius.circular(20),
+            onPressed: doNothing,
+            backgroundColor: Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.edit,
+            label: 'Düzenle',
+          ),
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(onDismissed: () {}),
+        children: [
+          SlidableAction(
+            borderRadius: BorderRadius.circular(20),
             onPressed: doNothing,
             backgroundColor: Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
-            label: 'Delete',
-          ),
-          SlidableAction(
-            onPressed: doNothing,
-            backgroundColor: Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: Icons.share,
-            label: 'Share',
+            label: 'Sil',
           ),
         ],
       ),
