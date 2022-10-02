@@ -142,28 +142,29 @@ class TaskAdded extends StatelessWidget {
       ),
       child: Center(
         child: Card(
-            shadowColor: Colors.red,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.blueGrey[50],
-            child: Column(
-              children: [
-                ListTile(
-                  //tileColor: Colors.red,
-                  contentPadding: const EdgeInsets.all(15),
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                  //minVerticalPadding: 15,
-                  leading: const Icon(Icons.numbers),
-                  title: ScreenTexts(
-                      title: "Görev İsmi",
-                      theme: Theme.of(context).textTheme.subtitle1,
-                      fontW: FontWeight.w400,
-                      textPosition: TextAlign.left),
-                  subtitle: const Text("Görev açıklaması"),
-                  onTap: () {},
-                )
-              ],
-            )),
+          shadowColor: Colors.red,
+          shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          color: Colors.blueGrey[50],
+          child: Column(
+            children: [
+              ListTile(
+                //tileColor: Colors.red,
+                contentPadding: const EdgeInsets.all(15),
+                //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                //minVerticalPadding: 15,
+                leading: const Icon(Icons.numbers),
+                title: ScreenTexts(
+                  title: "Görev İsmi",
+                  theme: Theme.of(context).textTheme.subtitle1,
+                  fontW: FontWeight.w400,
+                  textPosition: TextAlign.left),
+                subtitle: const Text("Görev açıklaması"),
+                onTap: () {},
+              )
+            ],
+          )
+        ),
       ),
     );
   }
