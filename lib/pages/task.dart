@@ -1,3 +1,4 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
@@ -6,24 +7,29 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskView extends StatelessWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
-
+  final TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           systemOverlayStyle: ProjectThemeOptions().systemTheme,
           backgroundColor: ProjectThemeOptions().backGroundColor,
-          title: const Center(child: Text("PomoTodo")),
           leading: TaskPageIconButton(
-              taskIcons: Icons.search,
-              onPressIconButton: () {
-                ButtonsOnPressed().searchButton();
-              }),
+            taskIcons: Icons.person,
+            onPressIconButton: () {
+              ButtonsOnPressed().personInfoButton(context);
+            },
+          ),
+          title: const Center(child: Text("PomoTodo")),
           actions: [
-            TaskPageIconButton(
-              taskIcons: Icons.person,
-              onPressIconButton: () {
-                ButtonsOnPressed().personInfoButton(context);
+            AnimSearchBar(
+              color: Colors.blue,
+              width: 410,
+              textController: textController,
+              onSuffixTap: () {
+                // setState(() {
+                //   textController.clear();
+                // });
               },
             ),
           ]),
@@ -187,13 +193,14 @@ class TaskPageIconButton extends StatelessWidget {
   }
 }
 
-class ButtonsOnPressed{
+class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => PersonInfo()),
         ModalRoute.withName("/Task"));
   }
+
   void searchButton() {}
   void homeButton() {}
   void timerButton() {}
