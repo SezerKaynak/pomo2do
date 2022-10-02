@@ -1,60 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
+import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class TaskView extends StatelessWidget {
-  const TaskView({Key? key}) : super(key: key);
+class TaskView extends StatelessWidget with ProjectThemeOptions {
+  TaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.blue,
-          //title:Text("PomoTodo",),
-          title: const Center(
-              child: Text(
-            "PomoTodo",
-          )),
-          leading: TaskPageIconButton(taskIcons: Icons.search),
+          systemOverlayStyle: ProjectThemeOptions().systemTheme,
+          backgroundColor: ProjectThemeOptions().backGroundColor,
+          title: const Center(child: Text("PomoTodo")),
+          leading: TaskPageIconButton(
+              taskIcons: Icons.search,
+              onPressIconButton: () {
+                ButtonsOnPressed().searchButton();
+              }),
           actions: [
-            TaskPageIconButton(taskIcons: Icons.person),
+            TaskPageIconButton(
+              taskIcons: Icons.person,
+              onPressIconButton: () {
+                ButtonsOnPressed().personInfoButton(context);
+              },
+            ),
           ]),
-      bottomNavigationBar: Container(
-        height: 60,
-        decoration: const BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            TaskPageIconButton(taskIcons: Icons.home),
-            TaskPageIconButton(taskIcons: Icons.timer),
-            TaskPageIconButton(taskIcons: Icons.done),
-            TaskPageIconButton(taskIcons: Icons.stacked_bar_chart),
-          ],
-        ),
-      ),
       body: SingleChildScrollView(
         child: Column(children: [
           Container(
             color: Colors.black45,
             height: 60,
           ),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
-          TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
+          const TaskAdded(),
         ]),
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+          // borderRadius: BorderRadius.only(
+          //     topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TaskPageIconButton(
+                taskIcons: Icons.home,
+                onPressIconButton: () {
+                  ButtonsOnPressed().homeButton;
+                }),
+            TaskPageIconButton(
+                taskIcons: Icons.timer,
+                onPressIconButton: () {
+                  ButtonsOnPressed().timerButton;
+                }),
+            TaskPageIconButton(
+                taskIcons: Icons.done,
+                onPressIconButton: () {
+                  ButtonsOnPressed().doneButton;
+                }),
+            TaskPageIconButton(
+                taskIcons: Icons.stacked_bar_chart,
+                onPressIconButton: () {
+                  ButtonsOnPressed().stackedBarButton;
+                }),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
@@ -65,7 +89,7 @@ class TaskView extends StatelessWidget {
               .headline6
               ?.copyWith(color: Colors.white),
         ),
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
       ),
     );
   }
@@ -89,7 +113,7 @@ class TaskAdded extends StatelessWidget {
           SlidableAction(
             borderRadius: BorderRadius.circular(20),
             onPressed: doNothing,
-            backgroundColor: Color(0xFF21B7CA),
+            backgroundColor: const Color(0xFF21B7CA),
             foregroundColor: Colors.white,
             icon: Icons.edit,
             label: 'Düzenle',
@@ -103,7 +127,7 @@ class TaskAdded extends StatelessWidget {
           SlidableAction(
             borderRadius: BorderRadius.circular(20),
             onPressed: doNothing,
-            backgroundColor: Color(0xFFFE4A49),
+            backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Sil',
@@ -120,7 +144,7 @@ class TaskAdded extends StatelessWidget {
               children: [
                 ListTile(
                   //tileColor: Colors.red,
-                  contentPadding: EdgeInsets.all(15),
+                  contentPadding: const EdgeInsets.all(15),
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                   //minVerticalPadding: 15,
                   leading: const Icon(Icons.numbers),
@@ -140,22 +164,20 @@ class TaskAdded extends StatelessWidget {
 }
 
 class TaskPageIconButton extends StatelessWidget {
-  TaskPageIconButton({
+  const TaskPageIconButton({
     Key? key,
     required this.taskIcons,
+    required this.onPressIconButton,
   }) : super(key: key);
 
   final IconData taskIcons;
+  final void Function()? onPressIconButton;
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
       enableFeedback: false,
-      onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => Ogrencibilgi()),
-        // );
-      },
+      onPressed: onPressIconButton,
       icon: Icon(
         taskIcons,
         color: Colors.white,
@@ -163,4 +185,18 @@ class TaskPageIconButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class ButtonsOnPressed{
+  void personInfoButton(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => PersonInfo()),
+        ModalRoute.withName("/Task"));
+  }
+  void searchButton() {}
+  void homeButton() {}
+  void timerButton() {}
+  void doneButton() {}
+  void stackedBarButton() {}
 }

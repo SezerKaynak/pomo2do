@@ -8,15 +8,13 @@ import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, required this.userId});
-  final userId;
+  const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
-    AsyncSnapshot<PomotodoUser?> snapShot;
     return Scaffold(
       appBar: AppBar(
-        title: Text(userId, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.red)),
+        title: Text("Home", style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.red)),
         actions: [IconButton(onPressed: ()async {await _authService.signOut();}, icon: const Icon(Icons.exit_to_app))],
       ),
     );
