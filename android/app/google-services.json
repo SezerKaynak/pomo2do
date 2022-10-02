@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "564579364345",
+    "firebase_url": "https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "pomotodo-f236a",
     "storage_bucket": "pomotodo-f236a.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "564579364345-7nahm3gve1muqlpsp7iugvnllqecincg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "564579364345-hjt9ktssi2f3pp4kn94vkslsic0cfrs2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterApplication1"
+              }
             }
           ]
         }

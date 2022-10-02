@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '564579364345',
     projectId: 'pomotodo-f236a',
     authDomain: 'pomotodo-f236a.firebaseapp.com',
+    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'pomotodo-f236a.appspot.com',
     measurementId: 'G-JWDDMTEBPG',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:564579364345:android:eea0b3ac91f0b2ad476128',
     messagingSenderId: '564579364345',
     projectId: 'pomotodo-f236a',
+    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'pomotodo-f236a.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:564579364345:ios:2708d5a49f1290cf476128',
     messagingSenderId: '564579364345',
     projectId: 'pomotodo-f236a',
+    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'pomotodo-f236a.appspot.com',
     iosClientId: '564579364345-hjt9ktssi2f3pp4kn94vkslsic0cfrs2.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
@@ -76,6 +79,7 @@ class DefaultFirebaseOptions {
     appId: '1:564579364345:ios:2708d5a49f1290cf476128',
     messagingSenderId: '564579364345',
     projectId: 'pomotodo-f236a',
+    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'pomotodo-f236a.appspot.com',
     iosClientId: '564579364345-hjt9ktssi2f3pp4kn94vkslsic0cfrs2.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
