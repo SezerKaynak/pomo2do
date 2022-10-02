@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskView extends StatelessWidget {
@@ -56,7 +57,16 @@ class TaskView extends StatelessWidget {
         ]),
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {}, label: const Text("Ekle")),
+        onPressed: () {},
+        label: Text(
+          "Ekle",
+          style: Theme.of(context)
+              .textTheme
+              .headline6
+              ?.copyWith(color: Colors.white),
+        ),
+        icon: Icon(Icons.add),
+      ),
     );
   }
 }
@@ -68,75 +78,54 @@ class TaskAdded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: prefer_typing_uninitialized_variables
     var doNothing;
     return Slidable(
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(onDismissed: () {}),
+        children: [
+          SlidableAction(
+            onPressed: doNothing,
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+          SlidableAction(
+            onPressed: doNothing,
+            backgroundColor: Color(0xFF21B7CA),
+            foregroundColor: Colors.white,
+            icon: Icons.share,
+            label: 'Share',
+          ),
+        ],
+      ),
       child: Center(
         child: Card(
+            shadowColor: Colors.red,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Colors.blueGrey[50],
             child: Column(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.numbers),
-              title: const Text("Görev ismi"),
-              subtitle: const Text("Görev açıklaması"),
-              onTap: () {},
-            )
-          ],
-        )),
+              children: [
+                ListTile(
+                  //tileColor: Colors.red,
+                  contentPadding: EdgeInsets.all(15),
+                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                  //minVerticalPadding: 15,
+                  leading: const Icon(Icons.numbers),
+                  title: ScreenTexts(
+                      title: "Görev İsmi",
+                      theme: Theme.of(context).textTheme.subtitle1,
+                      fontW: FontWeight.w400,
+                      textPosition: TextAlign.left),
+                  subtitle: const Text("Görev açıklaması"),
+                  onTap: () {},
+                )
+              ],
+            )),
       ),
-      startActionPane: ActionPane(
-    // A motion is a widget used to control how the pane animates.
-    motion: const ScrollMotion(),
-
-    // A pane can dismiss the Slidable.
-    dismissible: DismissiblePane(onDismissed: () {}),
-
-    // All actions are defined in the children parameter.
-    children: [
-      // A SlidableAction can have an icon and/or a label.
-      SlidableAction(
-        onPressed: doNothing,
-        backgroundColor: Color(0xFFFE4A49),
-        foregroundColor: Colors.white,
-        icon: Icons.delete,
-        label: 'Delete',
-      ),
-      SlidableAction(
-        onPressed: doNothing,
-        backgroundColor: Color(0xFF21B7CA),
-        foregroundColor: Colors.white,
-        icon: Icons.share,
-        label: 'Share',
-      ),
-    ],
-  ),
-  //     actions: <Widget>[
-  //   new IconSlideAction(
-  //     caption: 'Archive',
-  //     color: Colors.blue,
-  //     icon: Icons.archive,
-  //     onTap: () => _showSnackBar('Archive'),
-  //   ),
-  //   new IconSlideAction(
-  //     caption: 'Share',
-  //     color: Colors.indigo,
-  //     icon: Icons.share,
-  //     onTap: () => _showSnackBar('Share'),
-  //   ),
-  // ],
-  // secondaryActions: <Widget>[
-  //   new IconSlideAction(
-  //     caption: 'More',
-  //     color: Colors.black45,
-  //     icon: Icons.more_horiz,
-  //     onTap: () => _showSnackBar('More'),
-  //   ),
-  //   new IconSlideAction(
-  //     caption: 'Delete',
-  //     color: Colors.red,
-  //     icon: Icons.delete,
-  //     onTap: () => _showSnackBar('Delete'),
-  //   ),
-  // ],
     );
   }
 }
