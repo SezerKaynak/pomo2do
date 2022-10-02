@@ -57,8 +57,6 @@ class TaskView extends StatelessWidget with ProjectThemeOptions {
         height: 60,
         decoration: const BoxDecoration(
           color: Colors.blue,
-          // borderRadius: BorderRadius.only(
-          //     topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
