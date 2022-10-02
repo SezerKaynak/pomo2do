@@ -15,7 +15,6 @@ class HomeScreen extends StatelessWidget {
     final _authService = Provider.of<IAuthService>(context, listen: false);
     AsyncSnapshot<PomotodoUser?> snapShot;
     return Scaffold(
-
       appBar: AppBar(
         title: Text(userId, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.red)),
         actions: [IconButton(onPressed: ()async {await _authService.signOut();}, icon: const Icon(Icons.exit_to_app))],
