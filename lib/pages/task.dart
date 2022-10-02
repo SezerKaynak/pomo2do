@@ -57,8 +57,6 @@ class TaskView extends StatelessWidget with ProjectThemeOptions {
         height: 60,
         decoration: const BoxDecoration(
           color: Colors.blue,
-          // borderRadius: BorderRadius.only(
-          //     topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -142,28 +140,29 @@ class TaskAdded extends StatelessWidget {
       ),
       child: Center(
         child: Card(
-            shadowColor: Colors.red,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.blueGrey[50],
-            child: Column(
-              children: [
-                ListTile(
-                  //tileColor: Colors.red,
-                  contentPadding: const EdgeInsets.all(15),
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                  //minVerticalPadding: 15,
-                  leading: const Icon(Icons.numbers),
-                  title: ScreenTexts(
-                      title: "Görev İsmi",
-                      theme: Theme.of(context).textTheme.subtitle1,
-                      fontW: FontWeight.w400,
-                      textPosition: TextAlign.left),
-                  subtitle: const Text("Görev açıklaması"),
-                  onTap: () {},
-                )
-              ],
-            )),
+          shadowColor: Colors.red,
+          shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          color: Colors.blueGrey[50],
+          child: Column(
+            children: [
+              ListTile(
+                //tileColor: Colors.red,
+                contentPadding: const EdgeInsets.all(15),
+                //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                //minVerticalPadding: 15,
+                leading: const Icon(Icons.numbers),
+                title: ScreenTexts(
+                  title: "Görev İsmi",
+                  theme: Theme.of(context).textTheme.subtitle1,
+                  fontW: FontWeight.w400,
+                  textPosition: TextAlign.left),
+                subtitle: const Text("Görev açıklaması"),
+                onTap: () {},
+              )
+            ],
+          )
+        ),
       ),
     );
   }
