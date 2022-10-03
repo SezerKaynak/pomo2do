@@ -1,4 +1,6 @@
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
@@ -113,6 +115,9 @@ class TaskAdded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_typing_uninitialized_variables
+    CollectionReference tasks = FirebaseFirestore.instance
+        .collection('Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+    var task = tasks.doc("0HyIqs5QvSFQquZ3Siyt");
     var doNothing;
     return Slidable(
       key: const ValueKey(0),
@@ -158,12 +163,28 @@ class TaskAdded extends StatelessWidget {
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                   //minVerticalPadding: 15,
                   leading: const Icon(Icons.numbers),
-                  title: ScreenTexts(
-                      title: "Görev İsmi",
-                      theme: Theme.of(context).textTheme.subtitle1,
-                      fontW: FontWeight.w400,
-                      textPosition: TextAlign.left),
-                  subtitle: const Text("Görev açıklaması"),
+                  title: StreamBuilder(
+                      stream: task.snapshots(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 5.0, left: 4),
+                          child: Text(
+                            "${asyncSnapshot.data.data()["taskName"]}",
+                          ),
+                        );
+                      }),
+                  subtitle: StreamBuilder(
+                      stream: task.snapshots(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 5.0, left: 4),
+                          child: Text(
+                            "${asyncSnapshot.data.data()["taskInfo"]}",
+                          ),
+                        );
+                      }),
                   onTap: () {},
                 )
               ],
