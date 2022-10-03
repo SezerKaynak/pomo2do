@@ -1,5 +1,6 @@
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
@@ -85,7 +86,12 @@ class TaskView extends StatelessWidget with ProjectThemeOptions {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddTask()),
+          );
+        },
         label: Text(
           "Ekle",
           style: Theme.of(context)
@@ -140,29 +146,28 @@ class TaskAdded extends StatelessWidget {
       ),
       child: Center(
         child: Card(
-          shadowColor: Colors.red,
-          shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          color: Colors.blueGrey[50],
-          child: Column(
-            children: [
-              ListTile(
-                //tileColor: Colors.red,
-                contentPadding: const EdgeInsets.all(15),
-                //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                //minVerticalPadding: 15,
-                leading: const Icon(Icons.numbers),
-                title: ScreenTexts(
-                  title: "Görev İsmi",
-                  theme: Theme.of(context).textTheme.subtitle1,
-                  fontW: FontWeight.w400,
-                  textPosition: TextAlign.left),
-                subtitle: const Text("Görev açıklaması"),
-                onTap: () {},
-              )
-            ],
-          )
-        ),
+            shadowColor: Colors.red,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            color: Colors.blueGrey[50],
+            child: Column(
+              children: [
+                ListTile(
+                  //tileColor: Colors.red,
+                  contentPadding: const EdgeInsets.all(15),
+                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                  //minVerticalPadding: 15,
+                  leading: const Icon(Icons.numbers),
+                  title: ScreenTexts(
+                      title: "Görev İsmi",
+                      theme: Theme.of(context).textTheme.subtitle1,
+                      fontW: FontWeight.w400,
+                      textPosition: TextAlign.left),
+                  subtitle: const Text("Görev açıklaması"),
+                  onTap: () {},
+                )
+              ],
+            )),
       ),
     );
   }
