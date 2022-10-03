@@ -46,9 +46,12 @@ class LoginPage extends StatelessWidget {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: textLabel2,
-                    obscure: false,
-                    controller: _emailController, height: 70),
+                  textLabel: textLabel2,
+                  obscure: false,
+                  controller: _emailController,
+                  height: 70,
+                  maxLines: 1,
+                ),
                 const SizedBox(height: 20),
                 ScreenTexts(
                     title: sifre,
@@ -58,7 +61,9 @@ class LoginPage extends StatelessWidget {
                 ScreenTextField(
                     textLabel: textLabel3,
                     obscure: true,
-                    controller: _passwordController, height: 70),
+                    controller: _passwordController,
+                    height: 70,
+                    maxLines: 1),
                 ScreenTexts(
                     title: forgotPassword,
                     theme: Theme.of(context).textTheme.subtitle1,
@@ -145,18 +150,21 @@ class ScreenTextField extends StatelessWidget {
     required this.textLabel,
     required this.obscure,
     required this.controller,
-    required this.height, 
+    required this.height,
+    required this.maxLines,
   }) : super(key: key);
   final String textLabel;
   final bool obscure;
   final TextEditingController controller;
   final double height;
+  final int maxLines;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
       child: Center(
         child: TextFormField(
+          maxLines: maxLines,
           controller: controller,
           obscureText: obscure,
           decoration: InputDecoration(
