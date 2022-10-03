@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
+import 'package:flutter_application_1/pages/task.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
@@ -21,7 +22,12 @@ class AddTask extends StatelessWidget {
 
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: IconButton(icon: const Icon(Icons.arrow_back_ios, color: Colors.black,), onPressed: () {  Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => TaskView()),
+                  ModalRoute.withName("/Task"));},),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: ScreenPadding().screenPadding,
