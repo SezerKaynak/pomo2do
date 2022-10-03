@@ -60,7 +60,11 @@ class RegisterPage extends StatelessWidget {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: name, obscure: false, controller: _nameController, height: 70,maxLines: 1),
+                  textLabel: name,
+                  obscure: false,
+                  controller: _nameController,
+                  height: 70,
+                  maxLines: 1),
               ScreenTexts(
                   title: yourSurname,
                   theme: Theme.of(context).textTheme.subtitle1,
@@ -69,7 +73,9 @@ class RegisterPage extends StatelessWidget {
               ScreenTextField(
                   textLabel: surname,
                   obscure: false,
-                  controller: _surnameController, height: 70,maxLines: 1),
+                  controller: _surnameController,
+                  height: 70,
+                  maxLines: 1),
               ScreenTexts(
                   title: email,
                   theme: Theme.of(context).textTheme.subtitle1,
@@ -78,7 +84,9 @@ class RegisterPage extends StatelessWidget {
               ScreenTextField(
                   textLabel: email,
                   obscure: false,
-                  controller: _emailController, height: 70,maxLines: 1),
+                  controller: _emailController,
+                  height: 70,
+                  maxLines: 1),
               ScreenTexts(
                   title: password,
                   theme: Theme.of(context).textTheme.subtitle1,
@@ -87,7 +95,9 @@ class RegisterPage extends StatelessWidget {
               ScreenTextField(
                   textLabel: password,
                   obscure: true,
-                  controller: _passwordController, height: 70,maxLines: 1),
+                  controller: _passwordController,
+                  height: 70,
+                  maxLines: 1),
               Container(height: 30),
               SizedBox(
                   width: 400,
