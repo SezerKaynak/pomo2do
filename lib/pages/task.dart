@@ -4,8 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
-import 'package:flutter_application_1/pages/home.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
@@ -15,10 +13,10 @@ class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
 
   @override
-  State<TaskView> createState() => a();
+  State<TaskView> createState() => Task();
 }
 
-class a extends State<TaskView> {
+class Task extends State<TaskView> {
   DatabaseService service = DatabaseService();
   Future<List<TaskModel>>? taskList;
   List<TaskModel>? retrievedTaskList;
