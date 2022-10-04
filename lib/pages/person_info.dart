@@ -34,10 +34,21 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
             title: StreamBuilder(
                 stream: user.snapshots(),
                 builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                  return Text(
+
+                  if(asyncSnapshot.hasError){
+                    return const Text("Something went wrong");
+                  }
+
+                  if(asyncSnapshot.hasData && !asyncSnapshot.data!.exists){
+                    return const Text("Document does not exist");
+                  }
+
+                  if (asyncSnapshot.connectionState == ConnectionState.active){
+                    return Text(
                     "${asyncSnapshot.data.data()["name"]}"
-                    " ${asyncSnapshot.data.data()["surname"]}",
-                  );
+                    " ${asyncSnapshot.data.data()["surname"]}");
+                  }
+                  return const Text("Loading");
                 }),
             subtitle: "Profilinizi düzenleyebilirsiniz",
             onTouch: () {},

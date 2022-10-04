@@ -15,6 +15,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  animation_search_bar:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "478454f070c1942d52bd288039b09abc77609c4a"
+      url: "https://github.com/SezerKaynak/animation_search_bar.git"
+    source: git
+    version: "0.0.9"
   async:
     dependency: transitive
     description:
