@@ -80,51 +80,72 @@ class Task extends State<TaskView> {
                                 height: 10,
                               ),
                           itemBuilder: (context, index) {
-                            return Dismissible(
-                              onDismissed: ((direction) async {
-                                await service.deleteTask(
-                                    retrievedTaskList![index].id.toString());
-                                _dismiss();
-                              }),
-                              background: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(16.0)),
-                                padding: const EdgeInsets.only(right: 28.0),
-                                alignment: AlignmentDirectional.centerEnd,
-                                child: const Text(
-                                  "Sil",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              direction: DismissDirection.endToStart,
-                              resizeDuration: const Duration(milliseconds: 200),
-                              key: UniqueKey(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.blueGrey[50],
-                                    borderRadius: BorderRadius.circular(16.0)),
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.all(15),
-                                  leading: const Icon(Icons.numbers),
-                                  onTap: () {
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => EditTask()),
-                                        ModalRoute.withName("/EditTask"));
-                                  },
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
+                            var doNothing;
+                            return Slidable(
+                                key: const ValueKey(0),
+                                startActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    dismissible:
+                                        DismissiblePane(onDismissed: () {}),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (doNothing),
+                                        borderRadius: BorderRadius.circular(20),
+                                        backgroundColor:
+                                            const Color(0xFF21B7CA),
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.edit,
+                                        label: 'Düzenle',
+                                      )
+                                    ]),
+                                endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    dismissible:
+                                        DismissiblePane(onDismissed: () async {
+                                      await service.deleteTask(
+                                          retrievedTaskList![index]
+                                              .id
+                                              .toString());
+                                      _dismiss();
+                                    }),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: doNothing,
+                                        borderRadius: BorderRadius.circular(20),
+                                        backgroundColor:
+                                            const Color(0xFFFE4A49),
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.delete,
+                                        label: 'Sil',
+                                      )
+                                    ]),
+                                child: Center(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.blueGrey[50],
+                                        borderRadius:
+                                            BorderRadius.circular(16.0)),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(15),
+                                      leading: const Icon(Icons.numbers),
+                                      onTap: () {
+                                        Navigator.pushNamed(context, "/edit",
+                                            arguments:
+                                                retrievedTaskList![index]);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      title: Text(
+                                          retrievedTaskList![index].taskName),
+                                      subtitle: Text(
+                                          retrievedTaskList![index].taskInfo),
+                                      trailing:
+                                          const Icon(Icons.arrow_right_sharp),
+                                    ),
                                   ),
-                                  title:
-                                      Text(retrievedTaskList![index].taskName),
-                                  subtitle:
-                                      Text(retrievedTaskList![index].taskInfo),
-                                  trailing: const Icon(Icons.arrow_right_sharp),
-                                ),
-                              ),
-                            );
+                                ));
                           });
                     } else if (snapshot.connectionState ==
                             ConnectionState.done &&
