@@ -9,7 +9,7 @@ class AddTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = "Görev Ekleme Sayfası!";
+    var title = "Görev Ekleme Sayfası";
     var subtitle = "Görevin ismi,türü ve açıklamasını giriniz👋";
     var taskName = "Görev İsmi";
     var taskType = "Görev Türü";

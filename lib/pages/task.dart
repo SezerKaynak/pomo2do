@@ -2,15 +2,32 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class TaskView extends StatelessWidget with ProjectThemeOptions {
+class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
+
+  @override
+  State<TaskView> createState() => Task();
+}
+
+class Task extends State<TaskView> {
+  DatabaseService service = DatabaseService();
+  Future<List<TaskModel>>? taskList;
+  List<TaskModel>? retrievedTaskList;
   final TextEditingController textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _initRetrieval();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,25 +53,93 @@ class TaskView extends StatelessWidget with ProjectThemeOptions {
               },
             ),
           ]),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Container(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(flex: 1, child: Container(
             color: Colors.black45,
-            height: 60,
+            height: 60,)),
+          Expanded(
+            flex: 12,
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FutureBuilder(
+                  future: taskList,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<TaskModel>> snapshot) {
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                      return ListView.separated(
+                          itemCount: retrievedTaskList!.length,
+                          separatorBuilder: (context, index) => const SizedBox(
+                                height: 10,
+                              ),
+                          itemBuilder: (context, index) {
+                            return Dismissible(
+                              onDismissed: ((direction) async {
+                                await service.deleteTask(
+                                    retrievedTaskList![index].id.toString());
+                                _dismiss();
+                              }),
+                              background: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(16.0)),
+                                padding: const EdgeInsets.only(right: 28.0),
+                                alignment: AlignmentDirectional.centerEnd,
+                                child: const Text(
+                                  "Sil",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              direction: DismissDirection.endToStart,
+                              resizeDuration: const Duration(milliseconds: 200),
+                              key: UniqueKey(),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.blueGrey[50],
+                                    borderRadius: BorderRadius.circular(16.0)),
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.all(15),
+                                  leading: const Icon(Icons.numbers),
+                                  onTap: () {
+                                    Navigator.pushNamed(context, "/edit",
+                                        arguments: retrievedTaskList![index]);
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  title:
+                                      Text(retrievedTaskList![index].taskName),
+                                  subtitle:
+                                      Text(retrievedTaskList![index].taskInfo),
+                                  trailing: const Icon(Icons.arrow_right_sharp),
+                                ),
+                              ),
+                            );
+                          });
+                    } else if (snapshot.connectionState ==
+                            ConnectionState.done &&
+                        retrievedTaskList!.isEmpty) {
+                      return Center(
+                        child: ListView(
+                          children: const <Widget>[
+                            Align(
+                                alignment: AlignmentDirectional.center,
+                                child: Text('Görev bulunamadı!')),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              ),
+            ),
           ),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-          const TaskAdded(),
-        ]),
+        ],
       ),
       bottomNavigationBar: Container(
         height: 60,
@@ -104,6 +189,21 @@ class TaskView extends StatelessWidget with ProjectThemeOptions {
         icon: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> _refresh() async {
+    taskList = service.retrieveTasks();
+    retrievedTaskList = await service.retrieveTasks();
+    setState(() {});
+  }
+
+  void _dismiss() {
+    taskList = service.retrieveTasks();
+  }
+
+  Future<void> _initRetrieval() async {
+    taskList = service.retrieveTasks();
+    retrievedTaskList = await service.retrieveTasks();
   }
 }
 
@@ -222,7 +322,8 @@ class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => PersonInfo()),
+        MaterialPageRoute(
+            builder: (context) => PersonInfo()),
         ModalRoute.withName("/Task"));
   }
 
