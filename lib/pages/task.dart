@@ -1,4 +1,5 @@
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:animation_search_bar/animation_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,24 +36,19 @@ class Task extends State<TaskView> {
       appBar: AppBar(
           systemOverlayStyle: ProjectThemeOptions().systemTheme,
           backgroundColor: ProjectThemeOptions().backGroundColor,
-          leading: TaskPageIconButton(
-            taskIcons: Icons.tune,
-            onPressIconButton: () {
-              ButtonsOnPressed().personInfoButton(context);
-            },
-          ),
-          title: const Center(child: Text("PomoTodo")),
           actions: [
-            AnimSearchBar(
-              color: Colors.blue,
-              width: 390,
-              textController: textController,
-              onSuffixTap: () {
-                // setState(() {
-                //   textController.clear();
-                // });
-              },
-            ),
+            AnimationSearchBar(
+              previousScreen: PersonInfo(),
+              searchFieldDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.white),
+              backIcon: Icons.tune,
+              centerTitleStyle: const TextStyle(color: Colors.white, fontSize: 18),
+              backIconColor: Colors.white,
+              searchIconColor: Colors.white,
+              closeIconColor: Colors.white,
+              centerTitle: 'PomoTodo',
+              onChanged: (text) => debugPrint(text),
+              searchTextEditingController: textController,
+              horizontalPadding: 5)
           ]),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

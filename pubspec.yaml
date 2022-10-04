@@ -28,6 +28,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   anim_search_bar: ^2.0.2
+  animation_search_bar:
+    git:
+      url: https://github.com/SezerKaynak/animation_search_bar.git
   cloud_firestore: ^3.5.0
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.11.0
