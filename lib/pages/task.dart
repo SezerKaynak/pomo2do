@@ -325,9 +325,7 @@ class ButtonsOnPressed {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => const DashboardScreen(
-                  title: 'Dashbord',
-                )),
+            builder: (context) => PersonInfo()),
         ModalRoute.withName("/Task"));
   }
 
