@@ -45,7 +45,7 @@ class Task extends State<TaskView> {
           actions: [
             AnimSearchBar(
               color: Colors.blue,
-              width: 410,
+              width: 390,
               textController: textController,
               onSuffixTap: () {
                 // setState(() {
@@ -80,16 +80,72 @@ class Task extends State<TaskView> {
                                 height: 10,
                               ),
                           itemBuilder: (context, index) {
-                            var doNothing;
                             return Slidable(
                                 key: const ValueKey(0),
                                 startActionPane: ActionPane(
                                     motion: const ScrollMotion(),
-                                    dismissible:
-                                        DismissiblePane(onDismissed: () {}),
+                                    dismissible: DismissiblePane(
+                                        key: UniqueKey(),
+                                        resizeDuration:
+                                            const Duration(milliseconds: 200),
+                                        onDismissed: () {
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditTask(
+                                                        isDone:
+                                                            retrievedTaskList![
+                                                                    index]
+                                                                .isDone,
+                                                        taskInfo:
+                                                            retrievedTaskList![
+                                                                    index]
+                                                                .taskInfo,
+                                                        taskName:
+                                                            retrievedTaskList![
+                                                                    index]
+                                                                .taskName,
+                                                        taskType:
+                                                            retrievedTaskList![
+                                                                    index]
+                                                                .taskType,
+                                                        id: retrievedTaskList![
+                                                                index]
+                                                            .id
+                                                            .toString(),
+                                                      )),
+                                              ModalRoute.withName("/EditTask"));
+                                        }),
                                     children: [
                                       SlidableAction(
-                                        onPressed: (doNothing),
+                                        onPressed:
+                                            (context) =>
+                                                Navigator.pushAndRemoveUntil(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder:
+                                                            (context) =>
+                                                                EditTask(
+                                                                  isDone: retrievedTaskList![
+                                                                          index]
+                                                                      .isDone,
+                                                                  taskInfo: retrievedTaskList![
+                                                                          index]
+                                                                      .taskInfo,
+                                                                  taskName: retrievedTaskList![
+                                                                          index]
+                                                                      .taskName,
+                                                                  taskType: retrievedTaskList![
+                                                                          index]
+                                                                      .taskType,
+                                                                  id: retrievedTaskList![
+                                                                          index]
+                                                                      .id
+                                                                      .toString(),
+                                                                )),
+                                                    ModalRoute.withName(
+                                                        "/EditTask")),
                                         borderRadius: BorderRadius.circular(20),
                                         backgroundColor:
                                             const Color(0xFF21B7CA),
@@ -100,17 +156,26 @@ class Task extends State<TaskView> {
                                     ]),
                                 endActionPane: ActionPane(
                                     motion: const ScrollMotion(),
-                                    dismissible:
-                                        DismissiblePane(onDismissed: () async {
-                                      await service.deleteTask(
-                                          retrievedTaskList![index]
-                                              .id
-                                              .toString());
-                                      _dismiss();
-                                    }),
+                                    dismissible: DismissiblePane(
+                                        key: UniqueKey(),
+                                        resizeDuration:
+                                            const Duration(milliseconds: 200),
+                                        onDismissed: () async {
+                                          await service.deleteTask(
+                                              retrievedTaskList![index]
+                                                  .id
+                                                  .toString());
+                                          _dismiss();
+                                        }),
                                     children: [
                                       SlidableAction(
-                                        onPressed: doNothing,
+                                        onPressed: (context) => () async {
+                                          await service.deleteTask(
+                                              retrievedTaskList![index]
+                                                  .id
+                                                  .toString());
+                                          _dismiss();
+                                        },
                                         borderRadius: BorderRadius.circular(20),
                                         backgroundColor:
                                             const Color(0xFFFE4A49),
@@ -286,7 +351,7 @@ class TaskAdded extends StatelessWidget {
     //   ),
     return Center(
         child: Card(
-            shadowColor: Colors.red,
+            //shadowColor: Colors.red,
             // shape:
             //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             color: Colors.blueGrey[50],
