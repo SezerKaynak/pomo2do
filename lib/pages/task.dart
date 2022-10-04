@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
+import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
@@ -35,7 +36,7 @@ class Task extends State<TaskView> {
           systemOverlayStyle: ProjectThemeOptions().systemTheme,
           backgroundColor: ProjectThemeOptions().backGroundColor,
           leading: TaskPageIconButton(
-            taskIcons: Icons.person,
+            taskIcons: Icons.tune,
             onPressIconButton: () {
               ButtonsOnPressed().personInfoButton(context);
             },
@@ -56,9 +57,12 @@ class Task extends State<TaskView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(flex: 1, child: Container(
-            color: Colors.black45,
-            height: 60,)),
+          Expanded(
+              flex: 1,
+              child: Container(
+                color: Colors.black45,
+                height: 60,
+              )),
           Expanded(
             flex: 12,
             child: RefreshIndicator(
@@ -104,8 +108,11 @@ class Task extends State<TaskView> {
                                   contentPadding: const EdgeInsets.all(15),
                                   leading: const Icon(Icons.numbers),
                                   onTap: () {
-                                    Navigator.pushNamed(context, "/edit",
-                                        arguments: retrievedTaskList![index]);
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => EditTask()),
+                                        ModalRoute.withName("/EditTask"));
                                   },
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
@@ -208,52 +215,59 @@ class Task extends State<TaskView> {
 }
 
 class TaskAdded extends StatelessWidget {
+  final title;
+  final subtitle;
+  //final void Function()? onTap;
+
   const TaskAdded({
     Key? key,
+    required this.title,
+    required this.subtitle,
+    //required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_typing_uninitialized_variables
-    CollectionReference tasks = FirebaseFirestore.instance
-        .collection('Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-    var task = tasks.doc("0HyIqs5QvSFQquZ3Siyt");
-    var doNothing;
-    return Slidable(
-      key: const ValueKey(0),
-      startActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        dismissible: DismissiblePane(onDismissed: () {}),
-        children: [
-          SlidableAction(
-            borderRadius: BorderRadius.circular(20),
-            onPressed: doNothing,
-            backgroundColor: const Color(0xFF21B7CA),
-            foregroundColor: Colors.white,
-            icon: Icons.edit,
-            label: 'Düzenle',
-          ),
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        dismissible: DismissiblePane(onDismissed: () {}),
-        children: [
-          SlidableAction(
-            borderRadius: BorderRadius.circular(20),
-            onPressed: doNothing,
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Sil',
-          ),
-        ],
-      ),
-      child: Center(
+    // CollectionReference tasks = FirebaseFirestore.instance
+    //     .collection('Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+    // var task = tasks.doc("0HyIqs5QvSFQquZ3Siyt");
+    // var doNothing;
+    // return Slidable(
+    //   key: const ValueKey(0),
+    //   startActionPane: ActionPane(
+    //     motion: const ScrollMotion(),
+    //     dismissible: DismissiblePane(onDismissed: () {}),
+    //     children: [
+    //       SlidableAction(
+    //         borderRadius: BorderRadius.circular(20),
+    //         onPressed: doNothing,
+    //         backgroundColor: const Color(0xFF21B7CA),
+    //         foregroundColor: Colors.white,
+    //         icon: Icons.edit,
+    //         label: 'Düzenle',
+    //       ),
+    //     ],
+    //   ),
+    //   endActionPane: ActionPane(
+    //     motion: const ScrollMotion(),
+    //     dismissible: DismissiblePane(onDismissed: () {}),
+    //     children: [
+    //       SlidableAction(
+    //         borderRadius: BorderRadius.circular(20),
+    //         onPressed: doNothing,
+    //         backgroundColor: const Color(0xFFFE4A49),
+    //         foregroundColor: Colors.white,
+    //         icon: Icons.delete,
+    //         label: 'Sil',
+    //       ),
+    //     ],
+    //   ),
+    return Center(
         child: Card(
             shadowColor: Colors.red,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            // shape:
+            //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             color: Colors.blueGrey[50],
             child: Column(
               children: [
@@ -262,35 +276,13 @@ class TaskAdded extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(15),
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                   //minVerticalPadding: 15,
-                  leading: const Icon(Icons.numbers),
-                  title: StreamBuilder(
-                      stream: task.snapshots(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 5.0, left: 4),
-                          child: Text(
-                            "${asyncSnapshot.data.data()["taskName"]}",
-                          ),
-                        );
-                      }),
-                  subtitle: StreamBuilder(
-                      stream: task.snapshots(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 5.0, left: 4),
-                          child: Text(
-                            "${asyncSnapshot.data.data()["taskInfo"]}",
-                          ),
-                        );
-                      }),
+                  //leading: const Icon(Icons.numbers),
+                  title: Text(title),
+                  subtitle: Text(subtitle),
                   onTap: () {},
                 )
               ],
-            )),
-      ),
-    );
+            )));
   }
 }
 
@@ -322,8 +314,7 @@ class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(
-            builder: (context) => PersonInfo()),
+        MaterialPageRoute(builder: (context) => PersonInfo()),
         ModalRoute.withName("/Task"));
   }
 
