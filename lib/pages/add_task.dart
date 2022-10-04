@@ -109,6 +109,11 @@ class AddTask extends StatelessWidget {
                             'taskInfo': _taskInfoController.text,
                             "isDone": isDone,
                           });
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TaskView()),
+                              ModalRoute.withName("/Task"));
                         },
                         child: const Text("Kaydet"))),
               ],
