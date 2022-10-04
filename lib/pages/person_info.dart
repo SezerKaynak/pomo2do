@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -11,6 +12,8 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
+    CollectionReference users = FirebaseFirestore.instance.collection("Users");
+    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,47 +29,42 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
             }),
       ),
       body: Column(
-        children: const [
+        children: [
           TaskAdded(
-            title: "Profil İsmi",
+            title: StreamBuilder(
+                stream: user.snapshots(),
+                builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                  return Text(
+                    "${asyncSnapshot.data.data()["name"]}"
+                    " ${asyncSnapshot.data.data()["surname"]}",
+                  );
+                }),
             subtitle: "Profilinizi düzenleyebilirsiniz",
-            //onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: "Şifreyi Değiştir",
             subtitle: "Şifrenizi Değiştirebilirsiniz",
-            //onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: "Bildirim Ayarı",
             subtitle:
                 "Bu kısımda almak istediğiniz bildirimleri seçebilirsiniz",
-            //onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: "Pomodoro Ayarı",
             subtitle:
                 "Bu kısımda pomodoro ve ara dakikalarını,sayısını değiştirebilirsiniz",
-            //onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
-            title: "Çıkış Yap",
-            subtitle: "Hesaptan çıkış yapın",
-            // onTap: () async {
-            //   await _authService.signOut();
-            // },
+            title: const Text("Çıkış Yap"),
+            subtitle: "Hesaptan çıkış yapın", onTouch: () async {
+              await _authService.signOut();
+            },
           ),
-          // SizedBox(
-          //     width: 400,
-          //     height: 60,
-          //     child: ElevatedButton(
-          //         style: ElevatedButton.styleFrom(
-          //             shape: RoundedRectangleBorder(
-          //                 borderRadius: BorderRadius.circular(20))),
-          //         onPressed: () async {
-          //           await _authService.signOut();
-          //         },
-          //         child: const Text("Çıkış Yap"))),
         ],
       ),
     );

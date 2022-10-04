@@ -299,15 +299,16 @@ class Task extends State<TaskView> {
 class TaskAdded extends StatelessWidget {
   final title;
   final subtitle;
-  //final void Function()? onTap;
+  final void Function()? onTouch;
 
   const TaskAdded({
     Key? key,
     required this.title,
     required this.subtitle,
-    //required this.onTap,
+    required this.onTouch
   }) : super(key: key);
 
+  
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_typing_uninitialized_variables
@@ -359,9 +360,9 @@ class TaskAdded extends StatelessWidget {
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                   //minVerticalPadding: 15,
                   //leading: const Icon(Icons.numbers),
-                  title: Text(title),
+                  title: title,
                   subtitle: Text(subtitle),
-                  onTap: () {},
+                  onTap: onTouch,
                 )
               ],
             )));
