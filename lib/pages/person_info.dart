@@ -40,29 +40,29 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
                   );
                 }),
             subtitle: "Profilinizi düzenleyebilirsiniz",
-            onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: const Text("Şifreyi Değiştir"),
             subtitle: "Şifrenizi Değiştirebilirsiniz",
-            onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: const Text("Bildirim Ayarı"),
             subtitle:
                 "Bu kısımda almak istediğiniz bildirimleri seçebilirsiniz",
-            onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: const Text("Pomodoro Ayarı"),
             subtitle:
                 "Bu kısımda pomodoro ve ara dakikalarını,sayısını değiştirebilirsiniz",
-            onTap: () {},
+            onTouch: () {},
           ),
           TaskAdded(
             title: const Text("Çıkış Yap"),
             subtitle: "Hesaptan çıkış yapın",
-            onTap: () async {
+            onTouch: () async {
               await _authService.signOut();
             },
           ),
