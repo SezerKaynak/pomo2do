@@ -74,7 +74,7 @@ class AddTask extends StatelessWidget {
                     textPosition: TextAlign.left),
                 ScreenTextField(
                     textLabel: textLabel3,
-                    obscure: true,
+                    obscure: false,
                     controller: _taskTypeController,
                     height: 70,
                     maxLines: 1),
