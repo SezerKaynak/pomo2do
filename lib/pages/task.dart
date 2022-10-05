@@ -2,6 +2,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:animation_search_bar/animation_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
@@ -38,17 +39,20 @@ class Task extends State<TaskView> {
           backgroundColor: ProjectThemeOptions().backGroundColor,
           actions: [
             AnimationSearchBar(
-              previousScreen: PersonInfo(),
-              searchFieldDecoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.white),
-              backIcon: Icons.tune,
-              centerTitleStyle: const TextStyle(color: Colors.white, fontSize: 18),
-              backIconColor: Colors.white,
-              searchIconColor: Colors.white,
-              closeIconColor: Colors.white,
-              centerTitle: 'PomoTodo',
-              onChanged: (text) => debugPrint(text),
-              searchTextEditingController: textController,
-              horizontalPadding: 5)
+                previousScreen: PersonInfo(),
+                searchFieldDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white),
+                backIcon: Icons.tune,
+                centerTitleStyle:
+                    const TextStyle(color: Colors.white, fontSize: 18),
+                backIconColor: Colors.white,
+                searchIconColor: Colors.white,
+                closeIconColor: Colors.white,
+                centerTitle: 'PomoTodo',
+                onChanged: (text) => debugPrint(text),
+                searchTextEditingController: textController,
+                horizontalPadding: 5)
           ]),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -76,110 +80,119 @@ class Task extends State<TaskView> {
                                 height: 10,
                               ),
                           itemBuilder: (context, index) {
-                            return Slidable(
-                                key: const ValueKey(0),
-                                startActionPane: ActionPane(
-                                    motion: const ScrollMotion(),
-                                    dismissible: DismissiblePane(
-                                        key: UniqueKey(),
-                                        resizeDuration:
-                                            const Duration(milliseconds: 200),
-                                        onDismissed: () {
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditTask(
-                                                        isDone:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .isDone,
-                                                        taskInfo:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskInfo,
-                                                        taskName:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskName,
-                                                        taskType:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskType,
-                                                        id: retrievedTaskList![
+                            return Dismissible(
+                                onDismissed: ((direction) async {
+                                  if (direction ==
+                                      DismissDirection.endToStart) {
+                                    await service.deleteTask(
+                                        retrievedTaskList![index]
+                                            .id
+                                            .toString());
+                                    _refresh();
+                                    _dismiss();
+                                    
+                                  } else {
+                                    {
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => EditTask(
+                                                    isDone: retrievedTaskList![
+                                                            index]
+                                                        .isDone,
+                                                    taskInfo:
+                                                        retrievedTaskList![
                                                                 index]
-                                                            .id
-                                                            .toString(),
-                                                      )),
-                                              ModalRoute.withName("/EditTask"));
-                                        }),
-                                    children: [
-                                      SlidableAction(
-                                        onPressed:
-                                            (context) =>
-                                                Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder:
-                                                            (context) =>
-                                                                EditTask(
-                                                                  isDone: retrievedTaskList![
-                                                                          index]
-                                                                      .isDone,
-                                                                  taskInfo: retrievedTaskList![
-                                                                          index]
-                                                                      .taskInfo,
-                                                                  taskName: retrievedTaskList![
-                                                                          index]
-                                                                      .taskName,
-                                                                  taskType: retrievedTaskList![
-                                                                          index]
-                                                                      .taskType,
-                                                                  id: retrievedTaskList![
-                                                                          index]
-                                                                      .id
-                                                                      .toString(),
-                                                                )),
-                                                    ModalRoute.withName(
-                                                        "/EditTask")),
-                                        borderRadius: BorderRadius.circular(20),
-                                        backgroundColor:
-                                            const Color(0xFF21B7CA),
-                                        foregroundColor: Colors.white,
-                                        icon: Icons.edit,
-                                        label: 'Düzenle',
-                                      )
-                                    ]),
-                                endActionPane: ActionPane(
-                                    motion: const ScrollMotion(),
-                                    dismissible: DismissiblePane(
-                                        key: UniqueKey(),
-                                        resizeDuration:
-                                            const Duration(milliseconds: 200),
-                                        onDismissed: () async {
-                                          await service.deleteTask(
-                                              retrievedTaskList![index]
-                                                  .id
-                                                  .toString());
-                                          _dismiss();
-                                        }),
-                                    children: [
-                                      SlidableAction(
-                                        onPressed: (context) => () async {
-                                          await service.deleteTask(
-                                              retrievedTaskList![index]
-                                                  .id
-                                                  .toString());
-                                          _dismiss();
-                                        },
-                                        borderRadius: BorderRadius.circular(20),
-                                        backgroundColor:
-                                            const Color(0xFFFE4A49),
-                                        foregroundColor: Colors.white,
-                                        icon: Icons.delete,
-                                        label: 'Sil',
-                                      )
-                                    ]),
+                                                            .taskInfo,
+                                                    taskName:
+                                                        retrievedTaskList![
+                                                                index]
+                                                            .taskName,
+                                                    taskType:
+                                                        retrievedTaskList![
+                                                                index]
+                                                            .taskType,
+                                                    id: retrievedTaskList![
+                                                            index]
+                                                        .id
+                                                        .toString(),
+                                                  )),
+                                          ModalRoute.withName("/EditTask"));
+                                    }
+                                  }
+                                }),
+                                confirmDismiss:
+                                    (DismissDirection direction) async {
+                                  if (direction ==
+                                      DismissDirection.endToStart) {
+                                    return await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text("Görev Silinecek!"),
+                                          content: const Text(
+                                              "Görevi silmek istediğinize emin misiniz?"),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(true),
+                                              child: Text(
+                                                "Onayla",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1
+                                                    ?.copyWith(
+                                                        color: Colors.white),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context)
+                                                      .pop(false),
+                                              child: Text(
+                                                "İptal Et",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1
+                                                    ?.copyWith(
+                                                        color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                  return true;
+                                },
+                                background: Container(
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xFF21B7CA),
+                                      borderRadius:
+                                          BorderRadius.circular(16.0)),
+                                  padding: const EdgeInsets.only(left: 28.0),
+                                  alignment: AlignmentDirectional.centerStart,
+                                  child: const Text(
+                                    "DÜZENLE",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                secondaryBackground: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius:
+                                          BorderRadius.circular(16.0)),
+                                  padding: const EdgeInsets.only(right: 28.0),
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  child: const Text(
+                                    "SİL",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                resizeDuration:
+                                    const Duration(milliseconds: 200),
+                                key: UniqueKey(),
                                 child: Center(
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -287,7 +300,18 @@ class Task extends State<TaskView> {
   }
 
   void _dismiss() {
-    taskList = service.retrieveTasks();
+    if (retrievedTaskList!.isEmpty) {
+      Center(
+          child: ListView(
+        children: const <Widget>[
+          Align(
+              alignment: AlignmentDirectional.center,
+              child: Text('Görev bulunamadı!')),
+        ],
+      ));
+    } else {
+      taskList = service.retrieveTasks();
+    }
   }
 
   Future<void> _initRetrieval() async {
@@ -301,51 +325,15 @@ class TaskAdded extends StatelessWidget {
   final subtitle;
   final void Function()? onTouch;
 
-  const TaskAdded({
-    Key? key,
-    required this.title,
-    required this.subtitle,
-    required this.onTouch
-  }) : super(key: key);
+  const TaskAdded(
+      {Key? key,
+      required this.title,
+      required this.subtitle,
+      required this.onTouch})
+      : super(key: key);
 
-  
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_typing_uninitialized_variables
-    // CollectionReference tasks = FirebaseFirestore.instance
-    //     .collection('Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-    // var task = tasks.doc("0HyIqs5QvSFQquZ3Siyt");
-    // var doNothing;
-    // return Slidable(
-    //   key: const ValueKey(0),
-    //   startActionPane: ActionPane(
-    //     motion: const ScrollMotion(),
-    //     dismissible: DismissiblePane(onDismissed: () {}),
-    //     children: [
-    //       SlidableAction(
-    //         borderRadius: BorderRadius.circular(20),
-    //         onPressed: doNothing,
-    //         backgroundColor: const Color(0xFF21B7CA),
-    //         foregroundColor: Colors.white,
-    //         icon: Icons.edit,
-    //         label: 'Düzenle',
-    //       ),
-    //     ],
-    //   ),
-    //   endActionPane: ActionPane(
-    //     motion: const ScrollMotion(),
-    //     dismissible: DismissiblePane(onDismissed: () {}),
-    //     children: [
-    //       SlidableAction(
-    //         borderRadius: BorderRadius.circular(20),
-    //         onPressed: doNothing,
-    //         backgroundColor: const Color(0xFFFE4A49),
-    //         foregroundColor: Colors.white,
-    //         icon: Icons.delete,
-    //         label: 'Sil',
-    //       ),
-    //     ],
-    //   ),
     return Center(
         child: Card(
             //shadowColor: Colors.red,
