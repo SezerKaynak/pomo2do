@@ -1,8 +1,4 @@
-import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:animation_search_bar/animation_search_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
@@ -10,7 +6,6 @@ import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -300,18 +295,7 @@ class Task extends State<TaskView> {
   }
 
   void _dismiss() {
-    if (retrievedTaskList!.isEmpty) {
-      Center(
-          child: ListView(
-        children: const <Widget>[
-          Align(
-              alignment: AlignmentDirectional.center,
-              child: Text('Görev bulunamadı!')),
-        ],
-      ));
-    } else {
       taskList = service.retrieveTasks();
-    }
   }
 
   Future<void> _initRetrieval() async {
