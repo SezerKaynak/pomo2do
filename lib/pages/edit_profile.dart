@@ -8,11 +8,12 @@ import 'package:flutter_application_1/service/firebase_service.dart';
 class EditProfile extends StatelessWidget {
   const EditProfile({
     super.key,
+    required this.email,
   });
+  final String email;
 
   @override
   Widget build(BuildContext context) {
-    final AuthService repository = AuthService();
     var title = "Profil Düzenleme Sayfası";
     var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
     var resim = "Profil Resminiz";
@@ -23,7 +24,8 @@ class EditProfile extends StatelessWidget {
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _surnameController = TextEditingController();
     final TextEditingController _birthdayController = TextEditingController();
-
+    CollectionReference users = FirebaseFirestore.instance.collection("Users");
+    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
@@ -61,36 +63,123 @@ class EditProfile extends StatelessWidget {
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
-                ScreenTextField(
-                    textLabel: _nameGet().toString(),
-                    obscure: false,
-                    controller: _nameController,
-                    height: 70,
-                    maxLines: 1),
+                StreamBuilder(
+                    stream: user.snapshots(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                      if (asyncSnapshot.hasError) {
+                        return ScreenTextField(
+                          textLabel: "Something went wrong",
+                          obscure: false,
+                          controller: _nameController,
+                          height: 70,
+                          maxLines: 1,
+                        );
+                      }
+
+                      if (asyncSnapshot.connectionState ==
+                          ConnectionState.active) {
+                        _nameController.text =
+                            asyncSnapshot.data.data()["name"];
+                        return ScreenTextField(
+                          textLabel: "${asyncSnapshot.data.data()["name"]}",
+                          obscure: false,
+                          controller: _nameController,
+                          height: 70,
+                          maxLines: 1,
+                        );
+                      }
+
+                      return ScreenTextField(
+                        textLabel: "Loading",
+                        obscure: false,
+                        controller: _nameController,
+                        height: 70,
+                        maxLines: 1,
+                      );
+                    }),
                 const SizedBox(height: 20),
                 ScreenTexts(
                     title: surname,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
-                ScreenTextField(
-                    textLabel: surname,
-                    obscure: true,
-                    controller: _surnameController,
-                    height: 70,
-                    maxLines: 1),
+                StreamBuilder(
+                    stream: user.snapshots(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                      if (asyncSnapshot.hasError) {
+                        return ScreenTextField(
+                          textLabel: "Something went wrong",
+                          obscure: false,
+                          controller: _surnameController,
+                          height: 70,
+                          maxLines: 1,
+                        );
+                      }
+
+                      if (asyncSnapshot.connectionState ==
+                          ConnectionState.active) {
+                        _surnameController.text =
+                            asyncSnapshot.data.data()["surname"];
+                        return ScreenTextField(
+                          textLabel: "${asyncSnapshot.data.data()["surname"]}",
+                          obscure: false,
+                          controller: _surnameController,
+                          height: 70,
+                          maxLines: 1,
+                        );
+                      }
+
+                      return ScreenTextField(
+                        textLabel: "Loading",
+                        obscure: false,
+                        controller: _surnameController,
+                        height: 70,
+                        maxLines: 1,
+                      );
+                    }),
                 const SizedBox(height: 20),
                 ScreenTexts(
                     title: birthday,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
-                ScreenTextField(
-                    textLabel: birthday,
-                    obscure: false,
-                    controller: _birthdayController,
-                    height: 70,
-                    maxLines: 1),
+                StreamBuilder(
+                    stream: user.snapshots(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                      if (asyncSnapshot.hasError) {
+                        return ScreenTextField(
+                          textLabel: "Something went wrong",
+                          obscure: false,
+                          controller: _birthdayController,
+                          height: 70,
+                          maxLines: 1,
+                        );
+                      }
+
+                      if (asyncSnapshot.connectionState ==
+                          ConnectionState.active) {
+                        _birthdayController.text =
+                            asyncSnapshot.data.data()["birthday"];
+                        return ScreenTextField(
+                          textLabel: "${asyncSnapshot.data.data()["birthday"]}",
+                          obscure: false,
+                          controller: _birthdayController,
+                          height: 70,
+                          maxLines: 1,
+                        );
+                      }
+
+                      return ScreenTextField(
+                        textLabel: "Loading",
+                        obscure: false,
+                        controller: _birthdayController,
+                        height: 70,
+                        maxLines: 1,
+                      );
+                    }),
                 const SizedBox(height: 50),
                 SizedBox(
                     width: 400,
@@ -100,17 +189,17 @@ class EditProfile extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
-                          CollectionReference users = FirebaseFirestore.instance
-                              .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                          // var task = users.doc(id);
+                          CollectionReference users =
+                              FirebaseFirestore.instance.collection('Users');
+                          var user =
+                              users.doc(FirebaseAuth.instance.currentUser!.uid);
 
-                          // task.set({
-                          //   'taskName': _taskNameController.text,
-                          //   'taskType': _taskTypeController.text,
-                          //   'taskInfo': _taskInfoController.text,
-                          //   "isDone": isDone,
-                          // });
+                          user.set({
+                            'name': _nameController.text,
+                            'surname': _surnameController.text,
+                            'birthday': _birthdayController.text,
+                            'email': email,
+                          });
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -122,21 +211,5 @@ class EditProfile extends StatelessWidget {
             ),
           ),
         ));
-  }
-
-  _nameGet() async {
-    // CollectionReference users = FirebaseFirestore.instance.collection("Users");
-    // var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
-    var document = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    print(document.data()!['name']);
-    return Text(document.data()!['name']);
-    // StreamBuilder(
-    //     stream: user.snapshots(),
-    //     builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-    //       return asyncSnapshot.data.data()["name"];
-    //     });
   }
 }
