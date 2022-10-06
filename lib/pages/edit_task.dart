@@ -69,7 +69,7 @@ class EditTask extends StatelessWidget {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: taskName,
+                    textLabel: _taskNameController.text = taskName,
                     obscure: false,
                     controller: _taskNameController,
                     height: 70,
@@ -81,8 +81,8 @@ class EditTask extends StatelessWidget {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: taskType,
-                    obscure: true,
+                    textLabel: _taskTypeController.text = taskType,
+                    obscure: false,
                     controller: _taskTypeController,
                     height: 70,
                     maxLines: 1),
@@ -93,7 +93,7 @@ class EditTask extends StatelessWidget {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: taskInfo,
+                    textLabel: _taskInfoController.text = taskInfo,
                     obscure: false,
                     controller: _taskInfoController,
                     height: 120,

@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_application_1/pages/edit_profile.dart';
-
-
-
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -21,6 +17,7 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         systemOverlayStyle: ProjectThemeOptions().systemTheme,
         backgroundColor: ProjectThemeOptions().backGroundColor,
@@ -86,11 +83,11 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-
-                            builder: (context) => const EditProfile()),
-
-                           
-
+                            builder: (context) => EditProfile(
+                                  email: FirebaseAuth
+                                      .instance.currentUser!.email
+                                      .toString(),
+                                )),
                         ModalRoute.withName("/Profil"));
                   },
                 ),
