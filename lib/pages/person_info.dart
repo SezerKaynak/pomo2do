@@ -31,6 +31,7 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
             }),
       ),
       body: Column(
+        
         children: [
           Expanded(
             flex: 2,
