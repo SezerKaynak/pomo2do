@@ -21,6 +21,7 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         systemOverlayStyle: ProjectThemeOptions().systemTheme,
         backgroundColor: ProjectThemeOptions().backGroundColor,
@@ -34,6 +35,7 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
             }),
       ),
       body: Column(
+        
         children: [
           Expanded(
             flex: 2,
