@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/edit_profil.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -30,52 +31,87 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
       ),
       body: Column(
         children: [
-          TaskAdded(
-            title: StreamBuilder(
-                stream: user.snapshots(),
-                builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: Container(
+                // child: StreamBuilder(
+                //     stream: user1.snapshots(),
+                //     builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                //       return Image.network("${asyncSnapshot.data.data()["resim"]}");
+                //     }),
+                width: 140,
+                height: 140,
 
-                  if(asyncSnapshot.hasError){
-                    return const Text("Something went wrong");
-                  }
+                decoration: BoxDecoration(
+                    image: const DecorationImage(
+                        image: AssetImage("assets/person.png")),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.blue),
+                    borderRadius: BorderRadius.all(Radius.circular(100))),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 8,
+            child: Column(
+              children: [
+                TaskAdded(
+                  title: StreamBuilder(
+                      stream: user.snapshots(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                        if (asyncSnapshot.hasError) {
+                          return const Text("Something went wrong");
+                        }
 
-                  if(asyncSnapshot.hasData && !asyncSnapshot.data!.exists){
-                    return const Text("Document does not exist");
-                  }
+                        if (asyncSnapshot.hasData &&
+                            !asyncSnapshot.data!.exists) {
+                          return const Text("Document does not exist");
+                        }
 
-                  if (asyncSnapshot.connectionState == ConnectionState.active){
-                    return Text(
-                    "${asyncSnapshot.data.data()["name"]}"
-                    " ${asyncSnapshot.data.data()["surname"]}");
-                  }
-                  return const Text("Loading");
-                }),
-            subtitle: "Profilinizi düzenleyebilirsiniz",
-            onTouch: () {},
-          ),
-          TaskAdded(
-            title: const Text("Şifreyi Değiştir"),
-            subtitle: "Şifrenizi Değiştirebilirsiniz",
-            onTouch: () {},
-          ),
-          TaskAdded(
-            title: const Text("Bildirim Ayarı"),
-            subtitle:
-                "Bu kısımda almak istediğiniz bildirimleri seçebilirsiniz",
-            onTouch: () {},
-          ),
-          TaskAdded(
-            title: const Text("Pomodoro Ayarı"),
-            subtitle:
-                "Bu kısımda pomodoro ve ara dakikalarını,sayısını değiştirebilirsiniz",
-            onTouch: () {},
-          ),
-          TaskAdded(
-            title: const Text("Çıkış Yap"),
-            subtitle: "Hesaptan çıkış yapın",
-            onTouch: () async {
-              await _authService.signOut();
-            },
+                        if (asyncSnapshot.connectionState ==
+                            ConnectionState.active) {
+                          return Text("${asyncSnapshot.data.data()["name"]}"
+                              " ${asyncSnapshot.data.data()["surname"]}");
+                        }
+                        return const Text("Loading");
+                      }),
+                  subtitle: "Profilinizi düzenleyebilirsiniz",
+                  onTouch: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EditProfil()),
+                        ModalRoute.withName("/Profil"));
+                  },
+                ),
+                TaskAdded(
+                  title: const Text("Şifreyi Değiştir"),
+                  subtitle: "Şifrenizi Değiştirebilirsiniz",
+                  onTouch: () {},
+                ),
+                TaskAdded(
+                  title: const Text("Bildirim Ayarı"),
+                  subtitle:
+                      "Bu kısımda almak istediğiniz bildirimleri seçebilirsiniz",
+                  onTouch: () {},
+                ),
+                TaskAdded(
+                  title: const Text("Pomodoro Ayarı"),
+                  subtitle:
+                      "Bu kısımda pomodoro ve ara dakikalarını,sayısını değiştirebilirsiniz",
+                  onTouch: () {},
+                ),
+                TaskAdded(
+                  title: const Text("Çıkış Yap"),
+                  subtitle: "Hesaptan çıkış yapın",
+                  onTouch: () async {
+                    await _authService.signOut();
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),

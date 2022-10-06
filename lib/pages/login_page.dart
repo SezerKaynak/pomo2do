@@ -153,7 +153,7 @@ class ScreenTextField extends StatelessWidget {
     required this.height,
     required this.maxLines,
   }) : super(key: key);
-  final String textLabel;
+  final textLabel;
   final bool obscure;
   final TextEditingController controller;
   final double height;

@@ -21,11 +21,13 @@ class RegisterPage extends StatelessWidget {
     var password = "Şifre";
     var yourName = "Adınız";
     var yourSurname = "Soyadınız";
+    var yourBirthday = "Doğum Tarihiniz";
 
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _surnameController = TextEditingController();
+    final TextEditingController _birthdayController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
@@ -98,6 +100,17 @@ class RegisterPage extends StatelessWidget {
                   controller: _passwordController,
                   height: 70,
                   maxLines: 1),
+              ScreenTexts(
+                  title: yourBirthday,
+                  theme: Theme.of(context).textTheme.subtitle1,
+                  fontW: FontWeight.w500,
+                  textPosition: TextAlign.left),
+              ScreenTextField(
+                  textLabel: yourBirthday,
+                  obscure: false,
+                  controller: _birthdayController,
+                  height: 70,
+                  maxLines: 1),
               Container(height: 30),
               SizedBox(
                   width: 400,
@@ -134,7 +147,8 @@ class RegisterPage extends StatelessWidget {
                         users.doc(FirebaseAuth.instance.currentUser!.uid).set({
                           'email': _emailController.text,
                           'name': _nameController.text,
-                          'surname': _surnameController.text
+                          'surname': _surnameController.text,
+                          'birthday': _birthdayController.text
                         });
                       },
                       child: const Text("Kayıt Ol"))),
