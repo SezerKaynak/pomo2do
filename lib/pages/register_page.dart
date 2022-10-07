@@ -32,6 +32,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -43,7 +44,7 @@ class RegisterPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: ScreenPadding().screenPadding,
+          padding: ScreenPadding().screenPadding.copyWith(top: 0),
           child: Column(
             children: [
               ScreenTexts(

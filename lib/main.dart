@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
+import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/widgets/auth_widget.dart';
@@ -29,12 +30,10 @@ class MyApp extends StatelessWidget {
       ],
       child: AuthWidgetBuilder(
         onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) => MaterialApp(
-          
-          title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
           theme: ThemeData().copyWith(
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.transparent,
+            appBarTheme: AppBarTheme(
+              backgroundColor: ProjectThemeOptions().backGroundColor,
               elevation: 0.0,
               systemOverlayStyle: SystemUiOverlayStyle.dark,
             ),

@@ -4,6 +4,7 @@ import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 
@@ -207,9 +208,16 @@ class Task extends State<TaskView> {
                                       contentPadding: const EdgeInsets.all(15),
                                       leading: const Icon(Icons.numbers),
                                       onTap: () {
-                                        Navigator.pushNamed(context, "/edit",
-                                            arguments:
-                                                retrievedTaskList![index]);
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => PomodoroView(
+                                                    task: retrievedTaskList![index],
+                                                  )),
+                                          ModalRoute.withName("/pomodoro"));
+                                        // Navigator.pushNamed(context, "/edit",
+                                        //     arguments:
+                                        //         retrievedTaskList![index]);
                                       },
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
