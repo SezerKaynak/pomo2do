@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             appBarTheme: AppBarTheme(
               backgroundColor: ProjectThemeOptions().backGroundColor,
               elevation: 0.0,
-              systemOverlayStyle: SystemUiOverlayStyle.dark,
+              systemOverlayStyle: SystemUiOverlayStyle.light,
             ),
           ),
           home: AuthWidget(snapShot: snapShot),
