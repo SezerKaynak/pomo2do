@@ -58,6 +58,14 @@ class Task extends State<TaskView> {
               child: Container(
                 color: Colors.black45,
                 height: 60,
+                child: Row(
+                  children: [
+                    const Expanded(child: Text("0", textAlign: TextAlign.center, style: TextStyle(fontSize: 20),)),
+                    Expanded(child: Container(color: Colors.blue)),
+                    Expanded(child: Container(color: Colors.green)),
+                    Expanded(child: Container(color: Colors.red)),
+                  ],
+                ),
               )),
           Expanded(
             flex: 12,
