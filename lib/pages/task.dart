@@ -85,7 +85,6 @@ class Task extends State<TaskView> {
                                             .toString());
                                     _refresh();
                                     _dismiss();
-                                    
                                   } else {
                                     {
                                       Navigator.pushAndRemoveUntil(
@@ -168,23 +167,33 @@ class Task extends State<TaskView> {
                                           BorderRadius.circular(16.0)),
                                   padding: const EdgeInsets.only(left: 28.0),
                                   alignment: AlignmentDirectional.centerStart,
-                                  child: const Text(
-                                    "DÜZENLE",
-                                    style: TextStyle(color: Colors.white),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.edit, color: Colors.white),
+                                      Text(
+                                        "DÜZENLE",
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    ],
                                   ),
                                 ),
                                 secondaryBackground: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius:
-                                          BorderRadius.circular(16.0)),
-                                  padding: const EdgeInsets.only(right: 28.0),
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: const Text(
-                                    "SİL",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:
+                                            BorderRadius.circular(16.0)),
+                                    padding: const EdgeInsets.only(right: 28.0),
+                                    alignment: AlignmentDirectional.centerEnd,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.delete, color: Colors.white),
+                                        Text("SİL",
+                                            style:
+                                                TextStyle(color: Colors.white))
+                                      ],
+                                    )),
                                 resizeDuration:
                                     const Duration(milliseconds: 200),
                                 key: UniqueKey(),
@@ -295,7 +304,7 @@ class Task extends State<TaskView> {
   }
 
   void _dismiss() {
-      taskList = service.retrieveTasks();
+    taskList = service.retrieveTasks();
   }
 
   Future<void> _initRetrieval() async {
