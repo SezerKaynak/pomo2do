@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -107,11 +108,34 @@ class RegisterPage extends StatelessWidget {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: yourBirthday,
-                  obscure: false,
-                  controller: _birthdayController,
-                  height: 70,
-                  maxLines: 1),
+                onTouch: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1950),
+                      //DateTime.now() - not to allow to choose before today.
+                      lastDate: DateTime(2100));
+
+                  if (pickedDate != null) {
+                    print(
+                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                    String formattedDate =
+                        DateFormat('dd.MM.yyyy').format(pickedDate);
+                    print(
+                        formattedDate); //formatted date output using intl package =>  2021-03-16
+
+                    _birthdayController.text =
+                        formattedDate; //set output date to TextField value.
+
+                  } else {}
+                },
+                con: const Icon(Icons.calendar_today),
+                textLabel: yourBirthday,
+                obscure: false,
+                controller: _birthdayController,
+                height: 70,
+                maxLines: 1,
+              ),
               Container(height: 30),
               SizedBox(
                   width: 400,
@@ -135,12 +159,6 @@ class RegisterPage extends StatelessWidget {
                         } catch (e) {
                           print(e);
                         }
-                        // DatabaseReference ref = FirebaseDatabase.instance.ref('users/${FirebaseAuth.instance.currentUser!.uid}');
-                        // await ref.set({
-                        //   "email": _emailController.text,
-                        //   "name": _nameController.text,
-                        //   "surname": _surnameController.text
-                        // });
 
                         CollectionReference users =
                             FirebaseFirestore.instance.collection('Users');
