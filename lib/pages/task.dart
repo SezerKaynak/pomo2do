@@ -4,6 +4,7 @@ import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 
@@ -57,6 +58,47 @@ class Task extends State<TaskView> {
               child: Container(
                 color: Colors.black45,
                 height: 60,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(width: 0.5))),
+                            child: FutureBuilder(
+                                future: taskList,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<TaskModel>> snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data!.isNotEmpty) {
+                                    return Center(child: Text(
+                                        retrievedTaskList!.length.toString(), style: const TextStyle(fontSize: 20),));
+                                  } else if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      retrievedTaskList!.isEmpty) {
+                                        return const Center(child: Text("0", style: TextStyle(fontSize: 20)));
+                                      }
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }))),
+                    Expanded(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(width: 0.5))),
+                            child: const Center(
+                                child: Text("0",
+                                    style: TextStyle(fontSize: 20))))),
+                    Expanded(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(width: 0.5))),
+                            child: const Center(
+                                child: Text("0",
+                                    style: TextStyle(fontSize: 20))))),
+                    const Expanded(
+                        child: Center(
+                            child: Text("0", style: TextStyle(fontSize: 20)))),
+                  ],
+                ),
               )),
           Expanded(
             flex: 12,
@@ -85,7 +127,6 @@ class Task extends State<TaskView> {
                                             .toString());
                                     _refresh();
                                     _dismiss();
-                                    
                                   } else {
                                     {
                                       Navigator.pushAndRemoveUntil(
@@ -168,23 +209,34 @@ class Task extends State<TaskView> {
                                           BorderRadius.circular(16.0)),
                                   padding: const EdgeInsets.only(left: 28.0),
                                   alignment: AlignmentDirectional.centerStart,
-                                  child: const Text(
-                                    "DÜZENLE",
-                                    style: TextStyle(color: Colors.white),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.edit, color: Colors.white),
+                                      Text(
+                                        "DÜZENLE",
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    ],
                                   ),
                                 ),
                                 secondaryBackground: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius:
-                                          BorderRadius.circular(16.0)),
-                                  padding: const EdgeInsets.only(right: 28.0),
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: const Text(
-                                    "SİL",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:
+                                            BorderRadius.circular(16.0)),
+                                    padding: const EdgeInsets.only(right: 28.0),
+                                    alignment: AlignmentDirectional.centerEnd,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.delete, color: Colors.white),
+                                        Text("SİL",
+                                            style:
+                                                TextStyle(color: Colors.white))
+                                      ],
+                                    )),
                                 resizeDuration:
                                     const Duration(milliseconds: 200),
                                 key: UniqueKey(),
@@ -198,9 +250,15 @@ class Task extends State<TaskView> {
                                       contentPadding: const EdgeInsets.all(15),
                                       leading: const Icon(Icons.numbers),
                                       onTap: () {
-                                        Navigator.pushNamed(context, "/edit",
-                                            arguments:
-                                                retrievedTaskList![index]);
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PomodoroView(
+                                                      task: retrievedTaskList![
+                                                          index],
+                                                    )),
+                                            ModalRoute.withName("/pomodoro"));
                                       },
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -295,7 +353,7 @@ class Task extends State<TaskView> {
   }
 
   void _dismiss() {
-      taskList = service.retrieveTasks();
+    taskList = service.retrieveTasks();
   }
 
   Future<void> _initRetrieval() async {
