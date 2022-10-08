@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/task.dart';
 
-
 class PomodoroView extends StatelessWidget {
   const PomodoroView({super.key, required this.task});
 

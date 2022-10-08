@@ -36,6 +36,9 @@ dependencies:
   firebase_auth: ^3.11.0
   firebase_core: ^1.24.0
   firebase_database: ^9.1.6
+  firestore_search: 
+    git: 
+      url: https://github.com/SezerKaynak/firestore_search.git
   flutter:
     sdk: flutter
   flutter_slidable: ^2.0.0

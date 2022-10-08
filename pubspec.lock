@@ -20,7 +20,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "478454f070c1942d52bd288039b09abc77609c4a"
+      resolved-ref: e52ee69d3f6baa5118f6df017faaa540d311ee01
       url: "https://github.com/SezerKaynak/animation_search_bar.git"
     source: git
     version: "0.0.9"
@@ -157,6 +157,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1+8"
+  firestore_search:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "758a9aab57ecb7643614a99cd704b1c59736722a"
+      url: "https://github.com/SezerKaynak/firestore_search.git"
+    source: git
+    version: "0.1.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -186,6 +195,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  get:
+    dependency: transitive
+    description:
+      name: get
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.6.5"
   http_parser:
     dependency: transitive
     description:

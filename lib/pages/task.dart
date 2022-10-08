@@ -1,10 +1,11 @@
-import 'package:animation_search_bar/animation_search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 
@@ -33,22 +34,25 @@ class Task extends State<TaskView> {
       appBar: AppBar(
           systemOverlayStyle: ProjectThemeOptions().systemTheme,
           backgroundColor: ProjectThemeOptions().backGroundColor,
+          title: const Text("PomoTodo", style: TextStyle(color: Colors.white, fontSize: 18)),
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SearchView()),
+                    ModalRoute.withName("/search"));
+              },
+              icon: const Icon(Icons.tune)),
           actions: [
-            AnimationSearchBar(
-                previousScreen: PersonInfo(),
-                searchFieldDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white),
-                backIcon: Icons.tune,
-                centerTitleStyle:
-                    const TextStyle(color: Colors.white, fontSize: 18),
-                backIconColor: Colors.white,
-                searchIconColor: Colors.white,
-                closeIconColor: Colors.white,
-                centerTitle: 'PomoTodo',
-                onChanged: (text) => debugPrint(text),
-                searchTextEditingController: textController,
-                horizontalPadding: 5)
+            IconButton(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SearchView()),
+                      ModalRoute.withName("/search"));
+                },
+                icon: const Icon(Icons.search))
           ]),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,7 +61,6 @@ class Task extends State<TaskView> {
               flex: 1,
               child: Container(
                 color: Colors.black45,
-                height: 60,
                 child: Row(
                   children: [
                     Expanded(
@@ -70,13 +73,18 @@ class Task extends State<TaskView> {
                                     AsyncSnapshot<List<TaskModel>> snapshot) {
                                   if (snapshot.hasData &&
                                       snapshot.data!.isNotEmpty) {
-                                    return Center(child: Text(
-                                        retrievedTaskList!.length.toString(), style: const TextStyle(fontSize: 20),));
+                                    return Center(
+                                        child: Text(
+                                      retrievedTaskList!.length.toString(),
+                                      style: const TextStyle(fontSize: 20),
+                                    ));
                                   } else if (snapshot.connectionState ==
                                           ConnectionState.done &&
                                       retrievedTaskList!.isEmpty) {
-                                        return const Center(child: Text("0", style: TextStyle(fontSize: 20)));
-                                      }
+                                    return const Center(
+                                        child: Text("0",
+                                            style: TextStyle(fontSize: 20)));
+                                  }
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 }))),
@@ -436,4 +444,27 @@ class ButtonsOnPressed {
   void timerButton() {}
   void doneButton() {}
   void stackedBarButton() {}
+}
+
+class DataModel {
+  final String? taskInfo;
+  final String? taskName;
+  final String? taskType;
+
+  DataModel({this.taskInfo, this.taskName, this.taskType});
+
+  //Create a method to convert QuerySnapshot from Cloud Firestore to a list of objects of this DataModel
+  //This function in essential to the working of FirestoreSearchScaffold
+
+  List<DataModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
+    return querySnapshot.docs.map((snapshot) {
+      final Map<String, dynamic> dataMap =
+          snapshot.data() as Map<String, dynamic>;
+
+      return DataModel(
+          taskInfo: dataMap['taskInfo'],
+          taskName: dataMap['taskName'],
+          taskType: dataMap['taskType']);
+    }).toList();
+  }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatelessWidget {
