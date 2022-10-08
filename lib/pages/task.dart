@@ -60,10 +60,10 @@ class Task extends State<TaskView> {
                 height: 60,
                 child: Row(
                   children: [
-                    const Expanded(child: Text("0", textAlign: TextAlign.center, style: TextStyle(fontSize: 20),)),
-                    Expanded(child: Container(color: Colors.blue)),
-                    Expanded(child: Container(color: Colors.green)),
-                    Expanded(child: Container(color: Colors.red)),
+                    Expanded(child: Container(decoration: const BoxDecoration(border: Border(right: BorderSide(width: 0.5))),child: const Center(child: Text("0", style: TextStyle(fontSize: 20))))),
+                    Expanded(child: Container(decoration: const BoxDecoration(border: Border(right: BorderSide(width: 0.5))),child: const Center(child: Text("0", style: TextStyle(fontSize: 20))))),
+                    Expanded(child: Container(decoration: const BoxDecoration(border: Border(right: BorderSide(width: 0.5))),child: const Center(child: Text("0", style: TextStyle(fontSize: 20))))),
+                    const Expanded(child: Center(child: Text("0", style: TextStyle(fontSize: 20)))),
                   ],
                 ),
               )),
@@ -223,9 +223,6 @@ class Task extends State<TaskView> {
                                                     task: retrievedTaskList![index],
                                                   )),
                                           ModalRoute.withName("/pomodoro"));
-                                        // Navigator.pushNamed(context, "/edit",
-                                        //     arguments:
-                                        //         retrievedTaskList![index]);
                                       },
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
