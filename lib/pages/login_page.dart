@@ -154,12 +154,15 @@ class ScreenTextField extends StatelessWidget {
     required this.controller,
     required this.height,
     required this.maxLines,
+    this.valid,
   }) : super(key: key);
   final textLabel;
   final bool obscure;
   final TextEditingController controller;
   final double height;
   final int maxLines;
+  final valid;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -168,6 +171,7 @@ class ScreenTextField extends StatelessWidget {
         child: TextFormField(
           maxLines: maxLines,
           controller: controller,
+          validator: valid,
           obscureText: obscure,
           decoration: InputDecoration(
             labelText: textLabel,

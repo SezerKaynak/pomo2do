@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/edit_password.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
@@ -31,7 +32,6 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
             }),
       ),
       body: Column(
-        
         children: [
           Expanded(
             flex: 2,
@@ -95,7 +95,13 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
                 TaskAdded(
                   title: const Text("Şifreyi Değiştir"),
                   subtitle: "Şifrenizi Değiştirebilirsiniz",
-                  onTouch: () {},
+                  onTouch: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EditPassword()),
+                        ModalRoute.withName("/Password"));
+                  },
                 ),
                 TaskAdded(
                   title: const Text("Bildirim Ayarı"),
