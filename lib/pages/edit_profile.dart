@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 class EditProfile extends StatelessWidget {
   const EditProfile({
@@ -12,12 +19,13 @@ class EditProfile extends StatelessWidget {
     required this.email,
   });
   final String email;
-
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection("Users");
+
+    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
     var title = "Profil Düzenleme Sayfası";
     var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
-    var resim = "Profil Resminiz";
     var name = "Adınız";
     var surname = "Soyadınız";
     var birthday = "Doğum Tarihiniz";
@@ -25,8 +33,7 @@ class EditProfile extends StatelessWidget {
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _surnameController = TextEditingController();
     final TextEditingController _birthdayController = TextEditingController();
-    CollectionReference users = FirebaseFirestore.instance.collection("Users");
-    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
+
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
@@ -59,6 +66,7 @@ class EditProfile extends StatelessWidget {
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 const SizedBox(height: 40),
+                const Bottom(),
                 ScreenTexts(
                     title: name,
                     theme: Theme.of(context).textTheme.subtitle1,
@@ -170,7 +178,7 @@ class EditProfile extends StatelessWidget {
                                 context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime(1950),
-                                //DateTime.now() - not to allow to choose before today.
+                                //DateTime.now() - not to allow to Bottom before today.
                                 lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
@@ -234,5 +242,97 @@ class EditProfile extends StatelessWidget {
             ),
           ),
         ));
+  }
+}
+
+class Bottom extends StatefulWidget {
+  const Bottom({super.key});
+
+  @override
+  State<Bottom> createState() => _BottomState();
+}
+
+class _BottomState extends State<Bottom> {
+  File? image;
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      //final imageTemporary = File(image.path);
+      final imagePermanent = await saveImagePermanently(image.path);
+      setState(() => this.image = imagePermanent);
+      FirebaseStorage storage = FirebaseStorage.instance;
+      var snapshot = storage
+          .ref()
+          .child("profilresimleri")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .child("profilResmi.png")
+          .putFile(imagePermanent);
+    } on PlatformException catch (e) {
+      print("Failed to pick image:$e");
+    }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+    return File(imagePath).copy(image.path);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Stack(children: [
+        CircleAvatar(
+          radius: 80.0,
+          backgroundImage: image != null
+              ? FileImage(image!) as ImageProvider
+              : const AssetImage("assets/person.png"),
+        ),
+        Positioned(
+            bottom: 20,
+            right: 20,
+            child: InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context, builder: ((builder) => choose()));
+              },
+              child: const Icon(
+                Icons.camera_alt,
+                color: Colors.teal,
+                size: 28,
+              ),
+            ))
+      ]),
+    );
+  }
+
+  Widget choose() {
+    return Container(
+      height: 100,
+      //width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          const Text("Profil Resmi Seçin", style: TextStyle(fontSize: 20)),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              TextButton.icon(
+                icon: const Icon(Icons.camera),
+                label: const Text("Kamera"),
+                onPressed: () => pickImage(ImageSource.camera),
+              ),
+              TextButton.icon(
+                icon: const Icon(Icons.image),
+                label: const Text("Galeri"),
+                onPressed: () => pickImage(ImageSource.gallery),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
