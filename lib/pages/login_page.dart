@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/register_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
@@ -157,6 +158,7 @@ class ScreenTextField extends StatelessWidget {
     this.valid,
     this.onTouch,
     this.con,
+    this.textFieldInputType = TextInputType.text,
   }) : super(key: key);
   final textLabel;
   final bool obscure;
@@ -166,13 +168,14 @@ class ScreenTextField extends StatelessWidget {
   final valid;
   final onTouch;
   final con;
-
+  final TextInputType? textFieldInputType;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
       child: Center(
         child: TextFormField(
+          keyboardType:textFieldInputType,
           onTap: onTouch,
           maxLines: maxLines,
           controller: controller,

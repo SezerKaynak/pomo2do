@@ -108,10 +108,11 @@ class _EditPasswordState extends State<EditPassword> {
                             });
                             await currentUser!.updatePassword(newPassword);
                             FirebaseAuth.instance.signOut();
+                            // ignore: use_build_context_synchronously
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginPage()),
+                                    builder: (context) => const LoginPage()),
                                 ModalRoute.withName("/Login"));
                           }
                         },

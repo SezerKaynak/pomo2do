@@ -165,7 +165,9 @@ class EditProfile extends StatelessWidget {
                         _birthdayController.text =
                             asyncSnapshot.data.data()["birthday"];
                         return ScreenTextField(
+                          textFieldInputType: TextInputType.none,
                           onTouch: () async {
+
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
