@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
+import 'package:intl/intl.dart';
 
 class EditProfile extends StatelessWidget {
   const EditProfile({
@@ -164,6 +165,28 @@ class EditProfile extends StatelessWidget {
                         _birthdayController.text =
                             asyncSnapshot.data.data()["birthday"];
                         return ScreenTextField(
+                          onTouch: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1950),
+                                //DateTime.now() - not to allow to choose before today.
+                                lastDate: DateTime(2100));
+
+                            if (pickedDate != null) {
+                              print(
+                                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                              String formattedDate =
+                                  DateFormat('dd.MM.yyyy').format(pickedDate);
+                              print(
+                                  formattedDate); //formatted date output using intl package =>  2021-03-16
+
+                              _birthdayController.text =
+                                  formattedDate; //set output date to TextField value.
+
+                            } else {}
+                          },
+                          con: const Icon(Icons.calendar_today),
                           textLabel: "${asyncSnapshot.data.data()["birthday"]}",
                           obscure: false,
                           controller: _birthdayController,

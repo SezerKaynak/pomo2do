@@ -155,6 +155,8 @@ class ScreenTextField extends StatelessWidget {
     required this.height,
     required this.maxLines,
     this.valid,
+    this.onTouch,
+    this.con,
   }) : super(key: key);
   final textLabel;
   final bool obscure;
@@ -162,6 +164,8 @@ class ScreenTextField extends StatelessWidget {
   final double height;
   final int maxLines;
   final valid;
+  final onTouch;
+  final con;
 
   @override
   Widget build(BuildContext context) {
@@ -169,11 +173,13 @@ class ScreenTextField extends StatelessWidget {
       height: height,
       child: Center(
         child: TextFormField(
+          onTap: onTouch,
           maxLines: maxLines,
           controller: controller,
           validator: valid,
           obscureText: obscure,
           decoration: InputDecoration(
+            icon: con,
             labelText: textLabel,
             filled: true,
             fillColor: Colors.grey[200],
