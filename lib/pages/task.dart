@@ -64,9 +64,22 @@ class Task extends State<TaskView> {
                         child: Container(
                             decoration: const BoxDecoration(
                                 border: Border(right: BorderSide(width: 0.5))),
-                            child: const Center(
-                                child: Text("0",
-                                    style: TextStyle(fontSize: 20))))),
+                            child: FutureBuilder(
+                                future: taskList,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<TaskModel>> snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data!.isNotEmpty) {
+                                    return Center(child: Text(
+                                        retrievedTaskList!.length.toString(), style: const TextStyle(fontSize: 20),));
+                                  } else if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      retrievedTaskList!.isEmpty) {
+                                        return const Center(child: Text("0", style: TextStyle(fontSize: 20)));
+                                      }
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }))),
                     Expanded(
                         child: Container(
                             decoration: const BoxDecoration(
