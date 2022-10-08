@@ -60,10 +60,30 @@ class Task extends State<TaskView> {
                 height: 60,
                 child: Row(
                   children: [
-                    Expanded(child: Container(decoration: const BoxDecoration(border: Border(right: BorderSide(width: 0.5))),child: const Center(child: Text("0", style: TextStyle(fontSize: 20))))),
-                    Expanded(child: Container(decoration: const BoxDecoration(border: Border(right: BorderSide(width: 0.5))),child: const Center(child: Text("0", style: TextStyle(fontSize: 20))))),
-                    Expanded(child: Container(decoration: const BoxDecoration(border: Border(right: BorderSide(width: 0.5))),child: const Center(child: Text("0", style: TextStyle(fontSize: 20))))),
-                    const Expanded(child: Center(child: Text("0", style: TextStyle(fontSize: 20)))),
+                    Expanded(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(width: 0.5))),
+                            child: const Center(
+                                child: Text("0",
+                                    style: TextStyle(fontSize: 20))))),
+                    Expanded(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(width: 0.5))),
+                            child: const Center(
+                                child: Text("0",
+                                    style: TextStyle(fontSize: 20))))),
+                    Expanded(
+                        child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(right: BorderSide(width: 0.5))),
+                            child: const Center(
+                                child: Text("0",
+                                    style: TextStyle(fontSize: 20))))),
+                    const Expanded(
+                        child: Center(
+                            child: Text("0", style: TextStyle(fontSize: 20)))),
                   ],
                 ),
               )),
@@ -195,7 +215,8 @@ class Task extends State<TaskView> {
                                     padding: const EdgeInsets.only(right: 28.0),
                                     alignment: AlignmentDirectional.centerEnd,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: const [
                                         Icon(Icons.delete, color: Colors.white),
                                         Text("SİL",
@@ -217,12 +238,14 @@ class Task extends State<TaskView> {
                                       leading: const Icon(Icons.numbers),
                                       onTap: () {
                                         Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => PomodoroView(
-                                                    task: retrievedTaskList![index],
-                                                  )),
-                                          ModalRoute.withName("/pomodoro"));
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PomodoroView(
+                                                      task: retrievedTaskList![
+                                                          index],
+                                                    )),
+                                            ModalRoute.withName("/pomodoro"));
                                       },
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
