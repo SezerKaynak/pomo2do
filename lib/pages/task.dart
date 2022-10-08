@@ -34,7 +34,8 @@ class Task extends State<TaskView> {
       appBar: AppBar(
           systemOverlayStyle: ProjectThemeOptions().systemTheme,
           backgroundColor: ProjectThemeOptions().backGroundColor,
-          title: const Text("PomoTodo", style: TextStyle(color: Colors.white, fontSize: 18)),
+          title: const Text("PomoTodo",
+              style: TextStyle(color: Colors.white, fontSize: 18)),
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
@@ -49,7 +50,8 @@ class Task extends State<TaskView> {
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const SearchView()),
+                      MaterialPageRoute(
+                          builder: (context) => const SearchView()),
                       ModalRoute.withName("/search"));
                 },
                 icon: const Icon(Icons.search))
@@ -444,27 +446,4 @@ class ButtonsOnPressed {
   void timerButton() {}
   void doneButton() {}
   void stackedBarButton() {}
-}
-
-class DataModel {
-  final String? taskInfo;
-  final String? taskName;
-  final String? taskType;
-
-  DataModel({this.taskInfo, this.taskName, this.taskType});
-
-  //Create a method to convert QuerySnapshot from Cloud Firestore to a list of objects of this DataModel
-  //This function in essential to the working of FirestoreSearchScaffold
-
-  List<DataModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
-    return querySnapshot.docs.map((snapshot) {
-      final Map<String, dynamic> dataMap =
-          snapshot.data() as Map<String, dynamic>;
-
-      return DataModel(
-          taskInfo: dataMap['taskInfo'],
-          taskName: dataMap['taskName'],
-          taskType: dataMap['taskType']);
-    }).toList();
-  }
 }
