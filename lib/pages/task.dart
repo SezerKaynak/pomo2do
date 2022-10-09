@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
@@ -77,7 +76,8 @@ class Task extends State<TaskView> {
                                       snapshot.data!.isNotEmpty) {
                                     return Center(
                                         child: Text(
-                                      retrievedTaskList!.length.toString(),
+                                      retrievedTaskList?.length.toString() ??
+                                          "0",
                                       style: const TextStyle(fontSize: 20),
                                     ));
                                   } else if (snapshot.connectionState ==
@@ -121,169 +121,190 @@ class Task extends State<TaskView> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<TaskModel>> snapshot) {
                     if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      return ListView.separated(
-                          itemCount: retrievedTaskList!.length,
-                          separatorBuilder: (context, index) => const SizedBox(
-                                height: 10,
-                              ),
-                          itemBuilder: (context, index) {
-                            return Dismissible(
-                                onDismissed: ((direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    await service.deleteTask(
-                                        retrievedTaskList![index]
-                                            .id
-                                            .toString());
-                                    _refresh();
-                                    _dismiss();
-                                  } else {
-                                    {
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => EditTask(
-                                                    isDone: retrievedTaskList![
-                                                            index]
-                                                        .isDone,
-                                                    taskInfo:
-                                                        retrievedTaskList![
-                                                                index]
-                                                            .taskInfo,
-                                                    taskName:
-                                                        retrievedTaskList![
-                                                                index]
-                                                            .taskName,
-                                                    taskType:
-                                                        retrievedTaskList![
-                                                                index]
-                                                            .taskType,
-                                                    id: retrievedTaskList![
-                                                            index]
-                                                        .id
-                                                        .toString(),
-                                                  )),
-                                          ModalRoute.withName("/EditTask"));
-                                    }
-                                  }
-                                }),
-                                confirmDismiss:
-                                    (DismissDirection direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    return await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text("Görev Silinecek!"),
-                                          content: const Text(
-                                              "Görevi silmek istediğinize emin misiniz?"),
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context)
-                                                      .pop(true),
-                                              child: Text(
-                                                "Onayla",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1
-                                                    ?.copyWith(
-                                                        color: Colors.white),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context)
-                                                      .pop(false),
-                                              child: Text(
-                                                "İptal Et",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1
-                                                    ?.copyWith(
-                                                        color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                  return true;
-                                },
-                                background: Container(
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF21B7CA),
-                                      borderRadius:
-                                          BorderRadius.circular(16.0)),
-                                  padding: const EdgeInsets.only(left: 28.0),
-                                  alignment: AlignmentDirectional.centerStart,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Icons.edit, color: Colors.white),
-                                      Text(
-                                        "DÜZENLE",
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
+                      try {
+                        return ListView.separated(
+                            itemCount: retrievedTaskList!.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                                secondaryBackground: Container(
+                            itemBuilder: (context, index) {
+                              return Dismissible(
+                                  onDismissed: ((direction) async {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      await service.deleteTask(
+                                          retrievedTaskList![index]
+                                              .id
+                                              .toString());
+                                      _refresh();
+                                      _dismiss();
+                                    } else {
+                                      {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EditTask(
+                                                      isDone:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .isDone,
+                                                      taskInfo:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .taskInfo,
+                                                      taskName:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .taskName,
+                                                      taskType:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .taskType,
+                                                      id: retrievedTaskList![
+                                                              index]
+                                                          .id
+                                                          .toString(),
+                                                    )),
+                                            ModalRoute.withName("/EditTask"));
+                                      }
+                                    }
+                                  }),
+                                  confirmDismiss:
+                                      (DismissDirection direction) async {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      return await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text("Görev Silinecek!"),
+                                            content: const Text(
+                                                "Görevi silmek istediğinize emin misiniz?"),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(true),
+                                                child: Text(
+                                                  "Onayla",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .subtitle1
+                                                      ?.copyWith(
+                                                          color: Colors.white),
+                                                ),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false),
+                                                child: Text(
+                                                  "İptal Et",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .subtitle1
+                                                      ?.copyWith(
+                                                          color: Colors.white),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                    return true;
+                                  },
+                                  background: Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.red,
+                                        color: const Color(0xFF21B7CA),
                                         borderRadius:
                                             BorderRadius.circular(16.0)),
-                                    padding: const EdgeInsets.only(right: 28.0),
-                                    alignment: AlignmentDirectional.centerEnd,
+                                    padding: const EdgeInsets.only(left: 28.0),
+                                    alignment: AlignmentDirectional.centerStart,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: const [
-                                        Icon(Icons.delete, color: Colors.white),
-                                        Text("SİL",
-                                            style:
-                                                TextStyle(color: Colors.white))
+                                        Icon(Icons.edit, color: Colors.white),
+                                        Text(
+                                          "DÜZENLE",
+                                          style: TextStyle(color: Colors.white),
+                                        )
                                       ],
-                                    )),
-                                resizeDuration:
-                                    const Duration(milliseconds: 200),
-                                key: UniqueKey(),
-                                child: Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.blueGrey[50],
-                                        borderRadius:
-                                            BorderRadius.circular(16.0)),
-                                    child: ListTile(
-                                      contentPadding: const EdgeInsets.all(15),
-                                      leading: const Icon(Icons.numbers),
-                                      onTap: () {
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PomodoroView(
-                                                      task: retrievedTaskList![
-                                                          index],
-                                                    )),
-                                            ModalRoute.withName("/pomodoro"));
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      title: Text(
-                                          retrievedTaskList![index].taskName),
-                                      subtitle: Text(
-                                          retrievedTaskList![index].taskInfo),
-                                      trailing:
-                                          const Icon(Icons.arrow_right_sharp),
                                     ),
                                   ),
-                                ));
-                          });
+                                  secondaryBackground: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      padding:
+                                          const EdgeInsets.only(right: 28.0),
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.delete,
+                                              color: Colors.white),
+                                          Text("SİL",
+                                              style: TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      )),
+                                  resizeDuration:
+                                      const Duration(milliseconds: 200),
+                                  key: UniqueKey(),
+                                  child: Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.blueGrey[50],
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.all(15),
+                                        leading: const Icon(Icons.numbers),
+                                        onTap: () {
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PomodoroView(
+                                                        task:
+                                                            retrievedTaskList![
+                                                                index],
+                                                      )),
+                                              ModalRoute.withName("/pomodoro"));
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        title: Text(
+                                            retrievedTaskList![index].taskName),
+                                        subtitle: Text(
+                                            retrievedTaskList![index].taskInfo),
+                                        trailing:
+                                            const Icon(Icons.arrow_right_sharp),
+                                      ),
+                                    ),
+                                  ));
+                            });
+                      } catch (e) {
+                        return Center(
+                          child: ListView(
+                            children: const <Widget>[
+                              Align(
+                                  alignment: AlignmentDirectional.center,
+                                  child: Text(
+                                      'Görevler yüklenemedi, lütfen sayfayı yenileyin.')),
+                            ],
+                          ),
+                        );
+                      }
                     } else if (snapshot.connectionState ==
                             ConnectionState.done &&
                         retrievedTaskList!.isEmpty) {
