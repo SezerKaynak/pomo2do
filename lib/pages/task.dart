@@ -41,7 +41,7 @@ class Task extends State<TaskView> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchView()),
+                    MaterialPageRoute(builder: (context) => PersonInfo()),
                     ModalRoute.withName("/search"));
               },
               icon: const Icon(Icons.tune)),
