@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/search_task_model.dart';
+import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/task.dart';
 
 class SearchView extends StatelessWidget {
@@ -40,17 +41,29 @@ class SearchView extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${data.taskName}',
-                        style: Theme.of(context).textTheme.headline6,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blueGrey[50],
+                            borderRadius: BorderRadius.circular(16.0)),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(15),
+                          leading: const Icon(Icons.numbers),
+                          onTap: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TaskView()),
+                                ModalRoute.withName("/pomodoro"));
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          title: Text('${data.taskName}'),
+                          subtitle: Text('${data.taskInfo}'),
+                          trailing: const Icon(Icons.arrow_right_sharp),
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 8.0, left: 8.0, right: 8.0),
-                      child: Text('${data.taskInfo}',
-                          style: Theme.of(context).textTheme.bodyText1),
-                    )
                   ],
                 );
               });
