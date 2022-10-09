@@ -14,16 +14,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({
+  EditProfile({
     super.key,
     required this.email,
   });
   final String email;
+  File? image;
+  String? downloadUrl;
+
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
-
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
+
     var title = "Profil Düzenleme Sayfası";
     var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
     var name = "Adınız";
@@ -40,7 +43,7 @@ class EditProfile extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios,
-              color: Colors.black,
+              color: Colors.white,
             ),
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -66,7 +69,31 @@ class EditProfile extends StatelessWidget {
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 const SizedBox(height: 40),
-                const Bottom(),
+                Center(
+                  child: Stack(children: [
+                    CircleAvatar(
+                      radius: 80.0,
+                      backgroundImage: image != null
+                          ? FileImage(image!) as ImageProvider
+                          : const AssetImage("assets/person.png"),
+                    ),
+                    Positioned(
+                        bottom: 20,
+                        right: 20,
+                        child: InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: ((builder) => choose()));
+                          },
+                          child: const Icon(
+                            Icons.camera_alt,
+                            color: Colors.teal,
+                            size: 28,
+                          ),
+                        ))
+                  ]),
+                ),
                 ScreenTexts(
                     title: name,
                     theme: Theme.of(context).textTheme.subtitle1,
@@ -231,6 +258,7 @@ class EditProfile extends StatelessWidget {
                             'birthday': _birthdayController.text,
                             'email': email,
                           });
+                          uploadImage();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -243,70 +271,40 @@ class EditProfile extends StatelessWidget {
           ),
         ));
   }
-}
 
-class Bottom extends StatefulWidget {
-  const Bottom({super.key});
+  void uploadImage() async {
+    FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+    var ss = firebaseStorage
+        .ref()
+        .child("profilresimleri")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("profilResmi.png")
+        .putFile(image!);
+  }
 
-  @override
-  State<Bottom> createState() => _BottomState();
-}
-
-class _BottomState extends State<Bottom> {
-  File? image;
   Future pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
+      final pp = await ImagePicker().pickImage(source: source);
+      if (pp == null) return;
       //final imageTemporary = File(image.path);
-      final imagePermanent = await saveImagePermanently(image.path);
-      setState(() => this.image = imagePermanent);
-      FirebaseStorage storage = FirebaseStorage.instance;
-      var snapshot = storage
-          .ref()
-          .child("profilresimleri")
-          .child(FirebaseAuth.instance.currentUser!.uid)
-          .child("profilResmi.png")
-          .putFile(imagePermanent);
+      final imagePermanent = await saveImagePermanently(pp.path);
+      image = imagePermanent;
+      print(image);
     } on PlatformException catch (e) {
       print("Failed to pick image:$e");
     }
   }
 
   Future<File> saveImagePermanently(String imagePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final name = basename(imagePath);
-    final image = File('${directory.path}/$name');
-    return File(imagePath).copy(image.path);
+    final pp = File('//storage/emulated/0/DCIM/profile.png');
+    print(pp);
+    return File(imagePath).copy('//storage/emulated/0/DCIM/profile.png');
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Stack(children: [
-        CircleAvatar(
-          radius: 80.0,
-          backgroundImage: image != null
-              ? FileImage(image!) as ImageProvider
-              : const AssetImage("assets/person.png"),
-        ),
-        Positioned(
-            bottom: 20,
-            right: 20,
-            child: InkWell(
-              onTap: () {
-                showModalBottomSheet(
-                    context: context, builder: ((builder) => choose()));
-              },
-              child: const Icon(
-                Icons.camera_alt,
-                color: Colors.teal,
-                size: 28,
-              ),
-            ))
-      ]),
-    );
-  }
+  // Future<Image> loadImagePermanently(String imagePath) async {
+  //   final image = File('//storage/emulated/0/DCIM/profile.png');
+  //   return Image.file(image);
+  // }
 
   Widget choose() {
     return Container(
