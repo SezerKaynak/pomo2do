@@ -99,12 +99,7 @@ class _PersonInfoState extends State<PersonInfo> {
                   onTouch: () {
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => EditProfile(
-                                  email: FirebaseAuth
-                                      .instance.currentUser!.email
-                                      .toString(),
-                                )),
+                        MaterialPageRoute(builder: (context) => const EditProfile()),
                         ModalRoute.withName("/Profil"));
                   },
                 ),
