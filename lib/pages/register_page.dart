@@ -129,10 +129,8 @@ class RegisterPage extends StatelessWidget {
                       lastDate: DateTime(2100));
 
                   if (pickedDate != null) {
-                    print(pickedDate);
                     String formattedDate =
                         DateFormat('dd.MM.yyyy').format(pickedDate);
-                    print(formattedDate);
 
                     _birthdayController.text = formattedDate;
                   } else {}
