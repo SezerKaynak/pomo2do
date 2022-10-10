@@ -15,10 +15,7 @@ class PomodoroView extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskView()),
-                  ModalRoute.withName("task"));
+              Navigator.pop(context);
             },
           ),
         ),

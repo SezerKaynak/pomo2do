@@ -162,7 +162,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: edc96e0ed312e41619f7803c6a91ba88f83ca209
+      resolved-ref: "6cffa85d4c7bc85fe6296bbb55482750277d9609"
       url: "https://github.com/SezerKaynak/firestore_search.git"
     source: git
     version: "0.1.9"

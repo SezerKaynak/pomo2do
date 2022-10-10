@@ -29,13 +29,9 @@ class AddTask extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios,
-              color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskView()),
-                  ModalRoute.withName("/Task"));
+              Navigator.pop(context);
             },
           ),
         ),
@@ -105,6 +101,7 @@ class AddTask extends StatelessWidget {
 
                           users.add({
                             'taskName': _taskNameController.text,
+                            'taskNameCaseInsensitive' : _taskNameController.text.toLowerCase(),
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
                             "isDone": isDone,

@@ -25,10 +25,7 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
         leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskView()),
-                  ModalRoute.withName("/Task"));
+              Navigator.pop(context);
             }),
       ),
       body: Column(

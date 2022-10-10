@@ -12,14 +12,11 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FirestoreSearchScaffold(
       pressed: () {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => TaskView()),
-            ModalRoute.withName("/search"));
+        Navigator.pop(context);
       },
       firestoreCollectionName:
           'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks',
-      searchBy: 'taskName',
+      searchBy: 'taskNameCaseInsensitive',
       dataListFromSnapshot: DataModel().dataListFromSnapshot,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -49,11 +46,10 @@ class SearchView extends StatelessWidget {
                           contentPadding: const EdgeInsets.all(15),
                           leading: const Icon(Icons.numbers),
                           onTap: () {
-                            Navigator.pushAndRemoveUntil(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TaskView()),
-                                ModalRoute.withName("/pomodoro"));
+                                    builder: (context) => TaskView()));
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),

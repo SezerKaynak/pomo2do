@@ -35,10 +35,7 @@ class RegisterPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                  ModalRoute.withName("/Home"));
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
       ),

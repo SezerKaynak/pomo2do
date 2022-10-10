@@ -38,20 +38,18 @@ class Task extends State<TaskView> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PersonInfo()),
-                    ModalRoute.withName("/search"));
+                    MaterialPageRoute(builder: (context) => PersonInfo()));
               },
               icon: const Icon(Icons.tune)),
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SearchView()),
-                      ModalRoute.withName("/search"));
+                          builder: (context) => const SearchView()));
                 },
                 icon: const Icon(Icons.search))
           ]),
@@ -268,7 +266,7 @@ class Task extends State<TaskView> {
                                             const EdgeInsets.all(15),
                                         leading: const Icon(Icons.numbers),
                                         onTap: () {
-                                          Navigator.pushAndRemoveUntil(
+                                          Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
@@ -276,8 +274,7 @@ class Task extends State<TaskView> {
                                                         task:
                                                             retrievedTaskList![
                                                                 index],
-                                                      )),
-                                              ModalRoute.withName("/pomodoro"));
+                                                      )));
                                         },
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
