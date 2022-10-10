@@ -27,17 +27,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  anim_search_bar: ^2.0.2
-  animation_search_bar:
-    git:
-      url: https://github.com/SezerKaynak/animation_search_bar.git
   cloud_firestore: ^3.5.0
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.11.0
   firebase_core: ^1.24.0
   firebase_database: ^9.1.6
-  firestore_search: 
-    git: 
+  firestore_search:
+    git:
       url: https://github.com/SezerKaynak/firestore_search.git
   flutter:
     sdk: flutter

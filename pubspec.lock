@@ -8,22 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  anim_search_bar:
-    dependency: "direct main"
-    description:
-      name: anim_search_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
-  animation_search_bar:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e52ee69d3f6baa5118f6df017faaa540d311ee01
-      url: "https://github.com/SezerKaynak/animation_search_bar.git"
-    source: git
-    version: "0.0.9"
   async:
     dependency: transitive
     description:
