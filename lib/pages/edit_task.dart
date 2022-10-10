@@ -40,10 +40,7 @@ class EditTask extends StatelessWidget {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskView()),
-                  ModalRoute.withName("/Task"));
+              Navigator.pop(context);
             },
           ),
         ),

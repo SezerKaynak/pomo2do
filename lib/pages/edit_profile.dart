@@ -35,10 +35,7 @@ class EditProfile extends StatelessWidget {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => PersonInfo()),
-                  ModalRoute.withName("/PersonInfo"));
+              Navigator.pop(context);
             },
           ),
         ),

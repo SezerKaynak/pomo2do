@@ -52,10 +52,7 @@ class _EditPasswordState extends State<EditPassword> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => PersonInfo()),
-                  ModalRoute.withName("/Person"));
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
       ),

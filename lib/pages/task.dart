@@ -42,8 +42,7 @@ class Task extends State<TaskView> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PersonInfo()));
+                ButtonsOnPressed().personInfoButton(context);
               },
               icon: const Icon(Icons.tune)),
           actions: [
@@ -142,7 +141,7 @@ class Task extends State<TaskView> {
                                       _dismiss();
                                     } else {
                                       {
-                                        Navigator.pushAndRemoveUntil(
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => EditTask(
@@ -166,8 +165,7 @@ class Task extends State<TaskView> {
                                                               index]
                                                           .id
                                                           .toString(),
-                                                    )),
-                                            ModalRoute.withName("/EditTask"));
+                                                    )));
                                       }
                                     }
                                   }),
@@ -444,10 +442,8 @@ class TaskPageIconButton extends StatelessWidget {
 
 class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => PersonInfo()),
-        ModalRoute.withName("/Task"));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => PersonInfo()));
   }
 
   void searchButton() {}

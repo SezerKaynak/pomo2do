@@ -78,26 +78,24 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
                       }),
                   subtitle: "Profilinizi düzenleyebilirsiniz",
                   onTouch: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditProfile(
                                   email: FirebaseAuth
                                       .instance.currentUser!.email
                                       .toString(),
-                                )),
-                        ModalRoute.withName("/Profil"));
+                                )));
                   },
                 ),
                 TaskAdded(
                   title: const Text("Şifreyi Değiştir"),
                   subtitle: "Şifrenizi Değiştirebilirsiniz",
                   onTouch: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditPassword()),
-                        ModalRoute.withName("/Password"));
+                            builder: (context) => const EditPassword()));
                   },
                 ),
                 TaskAdded(
