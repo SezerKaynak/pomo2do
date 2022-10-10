@@ -110,6 +110,8 @@ class EditTask extends StatelessWidget {
                           var task = users.doc(id);
 
                           task.set({
+                            'taskNameCaseInsensitive':
+                                _taskNameController.text.toLowerCase(),
                             'taskName': _taskNameController.text,
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
