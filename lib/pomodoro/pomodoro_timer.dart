@@ -164,6 +164,13 @@ class PomodoroTimerState extends State<PomodoroTimer>
 
       widget.controller?.start();
     }
+    else{
+      if (widget.isReverse) {
+        _controller?.value = 1 - (widget.initialDuration / widget.duration);
+      } else {
+        _controller?.value = (widget.initialDuration / widget.duration);
+      }
+    }
   }
 
   String _getTime(Duration duration) {
@@ -246,7 +253,7 @@ class PomodoroTimerState extends State<PomodoroTimer>
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: widget.width,
         height: widget.width,
         child: AnimatedBuilder(

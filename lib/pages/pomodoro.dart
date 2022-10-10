@@ -3,13 +3,17 @@ import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 
-class PomodoroView extends StatelessWidget {
+class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});
-
   final TaskModel task;
   @override
+  State<PomodoroView> createState() => _PomodoroViewState();
+}
+
+class _PomodoroViewState extends State<PomodoroView> {
+  final CountDownController controller = CountDownController();
+  @override
   Widget build(BuildContext context) {
-    final CountDownController controller = CountDownController();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Pomodoro"),
@@ -30,12 +34,12 @@ class PomodoroView extends StatelessWidget {
                   child: Column(
                     children: [
                       ScreenTexts(
-                          title: task.taskName,
+                          title: widget.task.taskName,
                           theme: Theme.of(context).textTheme.headline6,
                           fontW: FontWeight.w400,
                           textPosition: TextAlign.left),
                       ScreenTexts(
-                          title: task.taskInfo,
+                          title: widget.task.taskInfo,
                           theme: Theme.of(context).textTheme.subtitle1,
                           fontW: FontWeight.w400,
                           textPosition: TextAlign.left)
@@ -48,7 +52,9 @@ class PomodoroView extends StatelessWidget {
                     PomodoroTimer(
                       width: 300,
                       isReverse: true,
+                      isReverseAnimation: true,
                       duration: 25 * 60,
+                      autoStart: false,
                       controller: controller,
                       isTimerTextShown: true,
                       neumorphicEffect: true,
