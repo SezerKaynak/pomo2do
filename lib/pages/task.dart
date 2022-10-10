@@ -38,8 +38,7 @@ class Task extends State<TaskView> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
+                Navigator.push(context,
                     MaterialPageRoute(builder: (context) => PersonInfo()));
               },
               icon: const Icon(Icons.tune)),
@@ -291,16 +290,7 @@ class Task extends State<TaskView> {
                                   ));
                             });
                       } catch (e) {
-                        return Center(
-                          child: ListView(
-                            children: const <Widget>[
-                              Align(
-                                  alignment: AlignmentDirectional.center,
-                                  child: Text(
-                                      'Görevler yüklenemedi, lütfen sayfayı yenileyin.')),
-                            ],
-                          ),
-                        );
+                        _refresh();
                       }
                     } else if (snapshot.connectionState ==
                             ConnectionState.done &&
@@ -314,9 +304,9 @@ class Task extends State<TaskView> {
                           ],
                         ),
                       );
-                    } else {
+                    } 
                       return const Center(child: CircularProgressIndicator());
-                    }
+                    
                   },
                 ),
               ),
