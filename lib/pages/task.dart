@@ -27,6 +27,10 @@ class Task extends State<TaskView> {
     _initRetrieval();
   }
 
+  String alertTitle = "Görev Silinecek!";
+  String alertSubtitle = "Görevi silmek istediğinize emin misiniz?";
+  String alertApprove = "Onayla";
+  String alertReject = "İptal Et";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,40 +178,7 @@ class Task extends State<TaskView> {
                                       return await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title:
-                                                const Text("Görev Silinecek!"),
-                                            content: const Text(
-                                                "Görevi silmek istediğinize emin misiniz?"),
-                                            actions: [
-                                              ElevatedButton(
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(true),
-                                                child: Text(
-                                                  "Onayla",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1
-                                                      ?.copyWith(
-                                                          color: Colors.white),
-                                                ),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () =>
-                                                    Navigator.of(context)
-                                                        .pop(false),
-                                                child: Text(
-                                                  "İptal Et",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1
-                                                      ?.copyWith(
-                                                          color: Colors.white),
-                                                ),
-                                              ),
-                                            ],
-                                          );
+                                          return alert(context);
                                         },
                                       );
                                     }
@@ -304,9 +275,8 @@ class Task extends State<TaskView> {
                           ],
                         ),
                       );
-                    } 
-                      return const Center(child: CircularProgressIndicator());
-                    
+                    }
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
@@ -377,6 +347,37 @@ class Task extends State<TaskView> {
   Future<void> _initRetrieval() async {
     taskList = service.retrieveTasks();
     retrievedTaskList = await service.retrieveTasks();
+  }
+
+  AlertDialog alert(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      title: Text(Task().alertTitle),
+      content: Text(Task().alertSubtitle),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(
+            Task().alertApprove,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(
+            Task().alertReject,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+          ),
+        ),
+      ],
+    );
   }
 }
 
