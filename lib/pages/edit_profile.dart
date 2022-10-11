@@ -307,11 +307,11 @@ class _EditProfileState extends State<EditProfile> {
     try {
       final pp = await ImagePicker().pickImage(source: source);
       if (pp == null) return;
-      //final imageTemporary = File(image.path);
-      final imagePermanent = await saveImagePermanently(pp.path);
+      final imageTemporary = File(pp.path);
+      //final imagePermanent = await saveImagePermanently(pp.path);
       print(pp.path);
       setState(() {
-        image = imagePermanent;
+        image = imageTemporary;
       });
       print(image);
     } on PlatformException catch (e) {
@@ -319,12 +319,12 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  Future<File> saveImagePermanently(String imagePath) async {
-    final pp = File('//storage/emulated/0/DCIM/profile.png');
-    final name = basename(imagePath);
-    print(pp);
-    return File(imagePath).copy('//storage/emulated/0/DCIM/$name');
-  }
+  // Future<File> saveImagePermanently(String imagePath) async {
+  //   final pp = File('//storage/emulated/0/DCIM/profile.png');
+  //   final name = basename(imagePath);
+  //   print(pp);
+  //   return File(imagePath).copy('//storage/emulated/0/DCIM/$name');
+  // }
 
   // Future<Image> loadImagePermanently(String imagePath) async {
   //   final image = File('//storage/emulated/0/DCIM/profile.png');
@@ -374,35 +374,13 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     if (downloadUrl == null && image == null) {
       return const CircleAvatar(
-          radius: 80.0,
-          // backgroundImage: image != null
-          //     //? NetworkImage(downloadUrl!) as ImageProvider
-          //     ? FileImage(image!) as ImageProvider
-          //     : const AssetImage("assets/person.png")
-          backgroundImage: AssetImage("assets/person.png"));
+          radius: 80.0, backgroundImage: AssetImage("assets/person.png"));
     } else if (downloadUrl != null && image == null) {
       return CircleAvatar(
-          radius: 80.0,
-          // backgroundImage: image != null
-          //     //? NetworkImage(downloadUrl!) as ImageProvider
-          //     ? FileImage(image!) as ImageProvider
-          //     : const AssetImage("assets/person.png")
-          backgroundImage: NetworkImage(downloadUrl!));
+          radius: 80.0, backgroundImage: NetworkImage(downloadUrl!));
     } else if (downloadUrl == null && image != null) {
-      return CircleAvatar(
-          radius: 80.0,
-          // backgroundImage: image != null
-          //     //? NetworkImage(downloadUrl!) as ImageProvider
-          //     ? FileImage(image!) as ImageProvider
-          //     : const AssetImage("assets/person.png")
-          backgroundImage: FileImage(image!));
+      return CircleAvatar(radius: 80.0, backgroundImage: FileImage(image!));
     }
-    return CircleAvatar(
-        radius: 80.0,
-        // backgroundImage: image != null
-        //     //? NetworkImage(downloadUrl!) as ImageProvider
-        //     ? FileImage(image!) as ImageProvider
-        //     : const AssetImage("assets/person.png")
-        backgroundImage: FileImage(image!));
+    return CircleAvatar(radius: 80.0, backgroundImage: FileImage(image!));
   }
 }
