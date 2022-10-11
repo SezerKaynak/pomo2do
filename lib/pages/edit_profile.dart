@@ -1,22 +1,60 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
-import 'package:intl/intl.dart';
 
-class EditProfile extends StatelessWidget {
-  const EditProfile({
-    super.key,
-    required this.email,
-  });
-  final String email;
+import 'package:flutter_application_1/service/firebase_service.dart';
+import 'package:flutter_application_1/service/i_auth_service.dart';
+
+import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
+
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
+
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  File? image;
+  String? downloadUrl;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
+    super.initState();
+  }
+
+  baglantiAl() async {
+    String yol = await FirebaseStorage.instance
+        .ref()
+        .child("profilresimleri")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("profilResmi.png")
+        .getDownloadURL();
+
+    setState(() {
+      downloadUrl = yol;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _authService = Provider.of<IAuthService>(context, listen: false);
+    CollectionReference users = FirebaseFirestore.instance.collection("Users");
+    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
+
     var title = "Profil Düzenleme Sayfası";
     var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
-    var resim = "Profil Resminiz";
     var name = "Adınız";
     var surname = "Soyadınız";
     var birthday = "Doğum Tarihiniz";
@@ -24,15 +62,14 @@ class EditProfile extends StatelessWidget {
     final TextEditingController _nameController = TextEditingController();
     final TextEditingController _surnameController = TextEditingController();
     final TextEditingController _birthdayController = TextEditingController();
-    CollectionReference users = FirebaseFirestore.instance.collection("Users");
-    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
+
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios,
-              color: Colors.black,
+              color: Colors.white,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -55,6 +92,26 @@ class EditProfile extends StatelessWidget {
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 const SizedBox(height: 40),
+                Center(
+                  child: Stack(children: [
+                    Avatar(downloadUrl: downloadUrl, image: image),
+                    Positioned(
+                        bottom: 20,
+                        right: 20,
+                        child: InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: ((builder) => choose()));
+                          },
+                          child: const Icon(
+                            Icons.camera_alt,
+                            color: Colors.teal,
+                            size: 28,
+                          ),
+                        ))
+                  ]),
+                ),
                 ScreenTexts(
                     title: name,
                     theme: Theme.of(context).textTheme.subtitle1,
@@ -168,7 +225,7 @@ class EditProfile extends StatelessWidget {
                                 context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime(1950),
-                                //DateTime.now() - not to allow to choose before today.
+                                //DateTime.now() - not to allow to Bottom before today.
                                 lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
@@ -219,8 +276,10 @@ class EditProfile extends StatelessWidget {
                             'name': _nameController.text,
                             'surname': _surnameController.text,
                             'birthday': _birthdayController.text,
-                            'email': email,
+                            'email': FirebaseAuth.instance.currentUser!.email
+                                .toString(),
                           });
+                          uploadImage();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -232,5 +291,118 @@ class EditProfile extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  void uploadImage() async {
+    FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+    var ss = firebaseStorage
+        .ref()
+        .child("profilresimleri")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("profilResmi.png")
+        .putFile(image!);
+  }
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final pp = await ImagePicker().pickImage(source: source);
+      if (pp == null) return;
+      //final imageTemporary = File(image.path);
+      final imagePermanent = await saveImagePermanently(pp.path);
+      print(pp.path);
+      setState(() {
+        image = imagePermanent;
+      });
+      print(image);
+    } on PlatformException catch (e) {
+      print("Failed to pick image:$e");
+    }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final pp = File('//storage/emulated/0/DCIM/profile.png');
+    final name = basename(imagePath);
+    print(pp);
+    return File(imagePath).copy('//storage/emulated/0/DCIM/$name');
+  }
+
+  // Future<Image> loadImagePermanently(String imagePath) async {
+  //   final image = File('//storage/emulated/0/DCIM/profile.png');
+  //   return Image.file(image);
+  // }
+
+  Widget choose() {
+    return Container(
+      height: 100,
+      //width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          const Text("Profil Resmi Seçin", style: TextStyle(fontSize: 20)),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              TextButton.icon(
+                icon: const Icon(Icons.camera),
+                label: const Text("Kamera"),
+                onPressed: () => pickImage(ImageSource.camera),
+              ),
+              TextButton.icon(
+                icon: const Icon(Icons.image),
+                label: const Text("Galeri"),
+                onPressed: () => pickImage(ImageSource.gallery),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class Avatar extends StatelessWidget {
+  const Avatar({
+    Key? key,
+    required this.downloadUrl,
+    required this.image,
+  }) : super(key: key);
+
+  final String? downloadUrl;
+  final File? image;
+
+  @override
+  Widget build(BuildContext context) {
+    if (downloadUrl == null && image == null) {
+      return const CircleAvatar(
+          radius: 80.0,
+          // backgroundImage: image != null
+          //     //? NetworkImage(downloadUrl!) as ImageProvider
+          //     ? FileImage(image!) as ImageProvider
+          //     : const AssetImage("assets/person.png")
+          backgroundImage: AssetImage("assets/person.png"));
+    } else if (downloadUrl != null && image == null) {
+      return CircleAvatar(
+          radius: 80.0,
+          // backgroundImage: image != null
+          //     //? NetworkImage(downloadUrl!) as ImageProvider
+          //     ? FileImage(image!) as ImageProvider
+          //     : const AssetImage("assets/person.png")
+          backgroundImage: NetworkImage(downloadUrl!));
+    } else if (downloadUrl == null && image != null) {
+      return CircleAvatar(
+          radius: 80.0,
+          // backgroundImage: image != null
+          //     //? NetworkImage(downloadUrl!) as ImageProvider
+          //     ? FileImage(image!) as ImageProvider
+          //     : const AssetImage("assets/person.png")
+          backgroundImage: FileImage(image!));
+    }
+    return CircleAvatar(
+        radius: 80.0,
+        // backgroundImage: image != null
+        //     //? NetworkImage(downloadUrl!) as ImageProvider
+        //     ? FileImage(image!) as ImageProvider
+        //     : const AssetImage("assets/person.png")
+        backgroundImage: FileImage(image!));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
@@ -8,15 +9,40 @@ import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 
-class PersonInfo extends StatelessWidget with ProjectThemeOptions {
+class PersonInfo extends StatefulWidget with ProjectThemeOptions {
   PersonInfo({super.key});
+
+  @override
+  State<PersonInfo> createState() => _PersonInfoState();
+}
+
+class _PersonInfoState extends State<PersonInfo> {
+  String? downloadUrl;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
+    super.initState();
+  }
+
+  baglantiAl() async {
+    String yol = await FirebaseStorage.instance
+        .ref()
+        .child("profilresimleri")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child("profilResmi.png")
+        .getDownloadURL();
+
+    setState(() {
+      downloadUrl = yol;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -33,21 +59,11 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
           Expanded(
             flex: 2,
             child: Center(
-              child: Container(
-                // child: StreamBuilder(
-                //     stream: user1.snapshots(),
-                //     builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                //       return Image.network("${asyncSnapshot.data.data()["resim"]}");
-                //     }),
-                width: 140,
-                height: 140,
-
-                decoration: BoxDecoration(
-                    image: const DecorationImage(
-                        image: AssetImage("assets/person.png")),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.blue),
-                    borderRadius: BorderRadius.all(Radius.circular(100))),
+              child: CircleAvatar(
+                radius: 70.0,
+                backgroundImage: downloadUrl != null
+                    ? NetworkImage(downloadUrl!) as ImageProvider
+                    : const AssetImage("assets/person.png"),
               ),
             ),
           ),
@@ -80,12 +96,10 @@ class PersonInfo extends StatelessWidget with ProjectThemeOptions {
                   onTouch: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => EditProfile(
-                                  email: FirebaseAuth
-                                      .instance.currentUser!.email
-                                      .toString(),
-                                )));
+
+                        MaterialPageRoute(builder: (context) => const EditProfile()),
+                        ModalRoute.withName("/Profile"));
+
                   },
                 ),
                 TaskAdded(
