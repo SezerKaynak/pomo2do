@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/pages/task.dart';
 
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -220,7 +221,6 @@ class _EditProfileState extends State<EditProfile> {
                         return ScreenTextField(
                           textFieldInputType: TextInputType.none,
                           onTouch: () async {
-
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
@@ -283,8 +283,8 @@ class _EditProfileState extends State<EditProfile> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PersonInfo()),
-                              ModalRoute.withName("/Task"));
+                                  builder: (context) => TaskView()),
+                              ModalRoute.withName("/Person"));
                         },
                         child: const Text("Güncelle"))),
               ],

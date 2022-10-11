@@ -166,6 +166,9 @@ class Task extends State<TaskView> {
                                                           .id
                                                           .toString(),
                                                     )));
+                                        setState(() {
+                                          _refresh;
+                                        });
                                       }
                                     }
                                   }),

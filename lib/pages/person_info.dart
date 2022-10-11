@@ -96,10 +96,8 @@ class _PersonInfoState extends State<PersonInfo> {
                   onTouch: () {
                     Navigator.push(
                         context,
-
-                        MaterialPageRoute(builder: (context) => const EditProfile()),
-                        ModalRoute.withName("/Profile"));
-
+                        MaterialPageRoute(
+                            builder: (context) => const EditProfile()));
                   },
                 ),
                 TaskAdded(

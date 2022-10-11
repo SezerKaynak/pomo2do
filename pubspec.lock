@@ -7,9 +7,7 @@ packages:
       name: _flutterfire_internals
       url: "https://pub.dartlang.org"
     source: hosted
-
-    version: "1.0.1"
-
+    version: "1.0.2"
   async:
     dependency: transitive
     description:
@@ -164,17 +162,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1+8"
-
-  firestore_search:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "6cffa85d4c7bc85fe6296bbb55482750277d9609"
-      url: "https://github.com/SezerKaynak/firestore_search.git"
-    source: git
-    version: "0.1.9"
-
   firebase_storage:
     dependency: "direct main"
     description:
@@ -196,7 +183,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.9"
-
+  firestore_search:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "6cffa85d4c7bc85fe6296bbb55482750277d9609"
+      url: "https://github.com/SezerKaynak/firestore_search.git"
+    source: git
+    version: "0.1.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -233,7 +228,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-
   get:
     dependency: transitive
     description:
@@ -241,7 +235,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.6.5"
-
   http:
     dependency: transitive
     description:
@@ -249,7 +242,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.13.5"
-
   http_parser:
     dependency: transitive
     description:
