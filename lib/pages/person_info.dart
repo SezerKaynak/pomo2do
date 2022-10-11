@@ -51,10 +51,7 @@ class _PersonInfoState extends State<PersonInfo> {
         leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskView()),
-                  ModalRoute.withName("/Task"));
+              Navigator.pop(context);
             }),
       ),
       body: Column(
@@ -97,21 +94,22 @@ class _PersonInfoState extends State<PersonInfo> {
                       }),
                   subtitle: "Profilinizi düzenleyebilirsiniz",
                   onTouch: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                         context,
+
                         MaterialPageRoute(builder: (context) => const EditProfile()),
-                        ModalRoute.withName("/Profil"));
+                        ModalRoute.withName("/Profile"));
+
                   },
                 ),
                 TaskAdded(
                   title: const Text("Şifreyi Değiştir"),
                   subtitle: "Şifrenizi Değiştirebilirsiniz",
                   onTouch: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditPassword()),
-                        ModalRoute.withName("/Password"));
+                            builder: (context) => const EditPassword()));
                   },
                 ),
                 TaskAdded(

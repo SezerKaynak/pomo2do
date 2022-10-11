@@ -52,10 +52,7 @@ class _EditPasswordState extends State<EditPassword> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => PersonInfo()),
-                  ModalRoute.withName("/Person"));
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
       ),
@@ -108,10 +105,11 @@ class _EditPasswordState extends State<EditPassword> {
                             });
                             await currentUser!.updatePassword(newPassword);
                             FirebaseAuth.instance.signOut();
+                            // ignore: use_build_context_synchronously
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginPage()),
+                                    builder: (context) => const LoginPage()),
                                 ModalRoute.withName("/Login"));
                           }
                         },

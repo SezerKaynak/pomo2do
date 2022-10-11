@@ -7,23 +7,9 @@ packages:
       name: _flutterfire_internals
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
-  anim_search_bar:
-    dependency: "direct main"
-    description:
-      name: anim_search_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
-  animation_search_bar:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "478454f070c1942d52bd288039b09abc77609c4a"
-      url: "https://github.com/SezerKaynak/animation_search_bar.git"
-    source: git
-    version: "0.0.9"
+
+    version: "1.0.1"
+
   async:
     dependency: transitive
     description:
@@ -178,6 +164,17 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1+8"
+
+  firestore_search:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "6cffa85d4c7bc85fe6296bbb55482750277d9609"
+      url: "https://github.com/SezerKaynak/firestore_search.git"
+    source: git
+    version: "0.1.9"
+
   firebase_storage:
     dependency: "direct main"
     description:
@@ -199,6 +196,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.9"
+
   flutter:
     dependency: "direct main"
     description: flutter
@@ -235,6 +233,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+
+  get:
+    dependency: transitive
+    description:
+      name: get
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.6.5"
+
   http:
     dependency: transitive
     description:
@@ -242,6 +249,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.13.5"
+
   http_parser:
     dependency: transitive
     description:

@@ -4,7 +4,6 @@ import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -23,6 +22,23 @@ class RegisterPage extends StatelessWidget {
     var yourName = "Adınız";
     var yourSurname = "Soyadınız";
     var yourBirthday = "Doğum Tarihiniz";
+    var weakPassword = "Güçsüz Şifre!";
+    var weakPasswordSubtitle = "Girdiğiniz şifre minimum 6 haneden oluşmalı!";
+    var emailAlreadyInUse = "Geçersiz E-Posta!";
+    var emailAlreadyInUseSubtitle =
+        "Girdiğiniz E-posta adresi başka bir hesaba bağlı!";
+    var emailAlert = "E-Posta Alanı Boş Bırakılamaz!";
+    var emailAlertSubtitle = "Lütfen e-postanızı girin.";
+    var passwordAlert = "Şifre Alanı Boş Bırakılamaz!";
+    var passwordAlertSubtitle = "Lütfen şifrenizi girin.";
+    var nameAlert = "İsim Alanı Boş Bırakılamaz!";
+    var nameAlertSubtitle = "Lütfen isminizi girin.";
+    var surnameAlert = "Soy İsim Alanı Boş Bırakılamaz!";
+    var surnameAlertSubtitle = "Lütfen soy isminizi girin.";
+    var birthdayAlert = "Doğum Tarihi Alanı Boş Bırakılamaz!";
+    var birthdayAlertSubtitle = "Lütfen doğum tarihinizi seçin.";
+    var invalidEmail = "Geçersiz E-Mail Adresi!";
+    var invalidEmailSubtitle = "Lütfen geçerli bir E-Mail adresi girin.";
 
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
@@ -36,10 +52,7 @@ class RegisterPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                  ModalRoute.withName("/Home"));
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
       ),
@@ -113,20 +126,13 @@ class RegisterPage extends StatelessWidget {
                       context: context,
                       initialDate: DateTime.now(),
                       firstDate: DateTime(1950),
-                      //DateTime.now() - not to allow to choose before today.
                       lastDate: DateTime(2100));
 
                   if (pickedDate != null) {
-                    print(
-                        pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                     String formattedDate =
                         DateFormat('dd.MM.yyyy').format(pickedDate);
-                    print(
-                        formattedDate); //formatted date output using intl package =>  2021-03-16
 
-                    _birthdayController.text =
-                        formattedDate; //set output date to TextField value.
-
+                    _birthdayController.text = formattedDate;
                   } else {}
                 },
                 con: const Icon(Icons.calendar_today),
@@ -145,30 +151,91 @@ class RegisterPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () async {
-                        try {
-                          await _authService.createUserWithEmailAndPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text);
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'weak-password') {
-                            print('Şifre güçsüz.');
-                          } else if (e.code == 'email-already-in-use') {
-                            print(
-                                'Aynı e-posta adresine sahip başka bir hesap var.');
+                        if (_emailController.text == "") {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertWidget(
+                                    alertTitle: emailAlert,
+                                    alertSubtitle: emailAlertSubtitle);
+                              });
+                        } else if (_passwordController.text == "") {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertWidget(
+                                    alertTitle: passwordAlert,
+                                    alertSubtitle: passwordAlertSubtitle);
+                              });
+                        } else if (_nameController.text == "") {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertWidget(
+                                    alertTitle: nameAlert,
+                                    alertSubtitle: nameAlertSubtitle);
+                              });
+                        } else if (_surnameController.text == "") {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertWidget(
+                                    alertTitle: surnameAlert,
+                                    alertSubtitle: surnameAlertSubtitle);
+                              });
+                        } else if (_birthdayController.text == "") {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertWidget(
+                                    alertTitle: birthdayAlert,
+                                    alertSubtitle: birthdayAlertSubtitle);
+                              });
+                        } else {
+                          try {
+                            await _authService.createUserWithEmailAndPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text);
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'weak-password') {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertWidget(
+                                        alertTitle: weakPassword,
+                                        alertSubtitle: weakPasswordSubtitle);
+                                  });
+                            } else if (e.code == 'email-already-in-use') {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertWidget(
+                                        alertTitle: emailAlreadyInUse,
+                                        alertSubtitle:
+                                            emailAlreadyInUseSubtitle);
+                                  });
+                            } else if (e.code == 'invalid-email') {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertWidget(
+                                        alertTitle: invalidEmail,
+                                        alertSubtitle: invalidEmailSubtitle);
+                                  });
+                            }
                           }
-                        } catch (e) {
-                          print(e);
+                          CollectionReference users =
+                              FirebaseFirestore.instance.collection('Users');
+
+                          users
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .set({
+                            'email': _emailController.text,
+                            'name': _nameController.text,
+                            'surname': _surnameController.text,
+                            'birthday': _birthdayController.text
+                          });
                         }
-
-                        CollectionReference users =
-                            FirebaseFirestore.instance.collection('Users');
-
-                        users.doc(FirebaseAuth.instance.currentUser!.uid).set({
-                          'email': _emailController.text,
-                          'name': _nameController.text,
-                          'surname': _surnameController.text,
-                          'birthday': _birthdayController.text
-                        });
                       },
                       child: const Text("Kayıt Ol"))),
             ],

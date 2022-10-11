@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/register_page.dart';
+import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,17 @@ class LoginPage extends StatelessWidget {
     var textLabel3 = 'Şifrenizi Girin';
     var loginWithAccount = 'Hesabınızla Giriş Yapın';
     var dontHaveAccount = 'Henüz bir hesabınız yok mu?';
+    var emailAlert = "E-Posta Alanı Boş Bırakılamaz!";
+    var emailAlertSubtitle = "Lütfen e-postanızı girin.";
+    var passwordAlert = "Şifre Alanı Boş Bırakılamaz!";
+    var passwordAlertSubtitle = "Lütfen şifrenizi girin.";
+    var userNotFound = "Kullanıcı Bulunamadı!";
+    var userNotFoundSubtitle =
+        "Hesabınız yoksa aşağıdaki kayıt ol butonunu kullanarak kayıt olabilirsiniz.";
+    var wrongPassword = "Şifre Yanlış!";
+    var wrongPasswordSubtitle =
+        "Şifrenizi yanlış girdiniz, lütfen tekrar deneyin...";
+
     final _authService = Provider.of<IAuthService>(context, listen: false);
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
@@ -80,16 +92,45 @@ class LoginPage extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
-                          try {
-                            await _authService.signInEmailAndPassword(
-                                email: _emailController.text,
-                                password: _passwordController.text);
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              print(
-                                  'Bu email adresiyle ilişkilendirilmiş bir kullanıcı bulunamadı.');
-                            } else if (e.code == 'wrong-password') {
-                              print('Yanlış şifre girdiniz.');
+                          if (_emailController.text == "") {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertWidget(
+                                      alertTitle: emailAlert,
+                                      alertSubtitle: emailAlertSubtitle);
+                                });
+                          } else if (_passwordController.text == "") {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertWidget(
+                                      alertTitle: passwordAlert,
+                                      alertSubtitle: passwordAlertSubtitle);
+                                });
+                          } else {
+                            try {
+                              await _authService.signInEmailAndPassword(
+                                  email: _emailController.text,
+                                  password: _passwordController.text);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertWidget(
+                                          alertTitle: userNotFound,
+                                          alertSubtitle: userNotFoundSubtitle);
+                                    });
+                              } else if (e.code == 'wrong-password') {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertWidget(
+                                          alertTitle: wrongPassword,
+                                          alertSubtitle: wrongPasswordSubtitle);
+                                    });
+                              }
                             }
                           }
                         },
@@ -114,6 +155,38 @@ class LoginPage extends StatelessWidget {
             ),
           ),
         ));
+  }
+}
+
+class AlertWidget extends StatelessWidget {
+  const AlertWidget({
+    Key? key,
+    required this.alertTitle,
+    required this.alertSubtitle,
+  }) : super(key: key);
+
+  final String alertTitle;
+  final String alertSubtitle;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      title: Text(alertTitle),
+      content: Text(alertSubtitle),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            "Kapat",
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -157,6 +230,7 @@ class ScreenTextField extends StatelessWidget {
     this.valid,
     this.onTouch,
     this.con,
+    this.textFieldInputType = TextInputType.text,
   }) : super(key: key);
   final textLabel;
   final bool obscure;
@@ -166,13 +240,14 @@ class ScreenTextField extends StatelessWidget {
   final valid;
   final onTouch;
   final con;
-
+  final TextInputType? textFieldInputType;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
       child: Center(
         child: TextFormField(
+          keyboardType: textFieldInputType,
           onTap: onTouch,
           maxLines: maxLines,
           controller: controller,

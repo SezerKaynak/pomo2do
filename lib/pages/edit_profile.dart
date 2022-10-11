@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
+
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -70,10 +72,7 @@ class _EditProfileState extends State<EditProfile> {
               color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => PersonInfo()),
-                  ModalRoute.withName("/PersonInfo"));
+              Navigator.pop(context);
             },
           ),
         ),
@@ -219,7 +218,9 @@ class _EditProfileState extends State<EditProfile> {
                         _birthdayController.text =
                             asyncSnapshot.data.data()["birthday"];
                         return ScreenTextField(
+                          textFieldInputType: TextInputType.none,
                           onTouch: () async {
+
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),

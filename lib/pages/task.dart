@@ -1,10 +1,10 @@
-import 'package:animation_search_bar/animation_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 
@@ -27,28 +27,33 @@ class Task extends State<TaskView> {
     _initRetrieval();
   }
 
+  String alertTitle = "Görev Silinecek!";
+  String alertSubtitle = "Görevi silmek istediğinize emin misiniz?";
+  String alertApprove = "Onayla";
+  String alertReject = "İptal Et";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           systemOverlayStyle: ProjectThemeOptions().systemTheme,
           backgroundColor: ProjectThemeOptions().backGroundColor,
+          title: const Text("PomoTodo",
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                ButtonsOnPressed().personInfoButton(context);
+              },
+              icon: const Icon(Icons.tune)),
           actions: [
-            AnimationSearchBar(
-                previousScreen: PersonInfo(),
-                searchFieldDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white),
-                backIcon: Icons.tune,
-                centerTitleStyle:
-                    const TextStyle(color: Colors.white, fontSize: 18),
-                backIconColor: Colors.white,
-                searchIconColor: Colors.white,
-                closeIconColor: Colors.white,
-                centerTitle: 'PomoTodo',
-                onChanged: (text) => debugPrint(text),
-                searchTextEditingController: textController,
-                horizontalPadding: 5)
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SearchView()));
+                },
+                icon: const Icon(Icons.search))
           ]),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,7 +62,6 @@ class Task extends State<TaskView> {
               flex: 1,
               child: Container(
                 color: Colors.black45,
-                height: 60,
                 child: Row(
                   children: [
                     Expanded(
@@ -70,13 +74,19 @@ class Task extends State<TaskView> {
                                     AsyncSnapshot<List<TaskModel>> snapshot) {
                                   if (snapshot.hasData &&
                                       snapshot.data!.isNotEmpty) {
-                                    return Center(child: Text(
-                                        retrievedTaskList!.length.toString(), style: const TextStyle(fontSize: 20),));
+                                    return Center(
+                                        child: Text(
+                                      retrievedTaskList?.length.toString() ??
+                                          "0",
+                                      style: const TextStyle(fontSize: 20),
+                                    ));
                                   } else if (snapshot.connectionState ==
                                           ConnectionState.done &&
                                       retrievedTaskList!.isEmpty) {
-                                        return const Center(child: Text("0", style: TextStyle(fontSize: 20)));
-                                      }
+                                    return const Center(
+                                        child: Text("0",
+                                            style: TextStyle(fontSize: 20)));
+                                  }
                                   return const Center(
                                       child: CircularProgressIndicator());
                                 }))),
@@ -111,169 +121,146 @@ class Task extends State<TaskView> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<TaskModel>> snapshot) {
                     if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      return ListView.separated(
-                          itemCount: retrievedTaskList!.length,
-                          separatorBuilder: (context, index) => const SizedBox(
-                                height: 10,
-                              ),
-                          itemBuilder: (context, index) {
-                            return Dismissible(
-                                onDismissed: ((direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    await service.deleteTask(
-                                        retrievedTaskList![index]
-                                            .id
-                                            .toString());
-                                    _refresh();
-                                    _dismiss();
-                                  } else {
-                                    {
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => EditTask(
-                                                    isDone: retrievedTaskList![
-                                                            index]
-                                                        .isDone,
-                                                    taskInfo:
-                                                        retrievedTaskList![
-                                                                index]
-                                                            .taskInfo,
-                                                    taskName:
-                                                        retrievedTaskList![
-                                                                index]
-                                                            .taskName,
-                                                    taskType:
-                                                        retrievedTaskList![
-                                                                index]
-                                                            .taskType,
-                                                    id: retrievedTaskList![
-                                                            index]
-                                                        .id
-                                                        .toString(),
-                                                  )),
-                                          ModalRoute.withName("/EditTask"));
-                                    }
-                                  }
-                                }),
-                                confirmDismiss:
-                                    (DismissDirection direction) async {
-                                  if (direction ==
-                                      DismissDirection.endToStart) {
-                                    return await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text("Görev Silinecek!"),
-                                          content: const Text(
-                                              "Görevi silmek istediğinize emin misiniz?"),
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context)
-                                                      .pop(true),
-                                              child: Text(
-                                                "Onayla",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1
-                                                    ?.copyWith(
-                                                        color: Colors.white),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context)
-                                                      .pop(false),
-                                              child: Text(
-                                                "İptal Et",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1
-                                                    ?.copyWith(
-                                                        color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                  return true;
-                                },
-                                background: Container(
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF21B7CA),
-                                      borderRadius:
-                                          BorderRadius.circular(16.0)),
-                                  padding: const EdgeInsets.only(left: 28.0),
-                                  alignment: AlignmentDirectional.centerStart,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Icons.edit, color: Colors.white),
-                                      Text(
-                                        "DÜZENLE",
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
+                      try {
+                        return ListView.separated(
+                            itemCount: retrievedTaskList!.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                                secondaryBackground: Container(
+                            itemBuilder: (context, index) {
+                              return Dismissible(
+                                  onDismissed: ((direction) async {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      await service.deleteTask(
+                                          retrievedTaskList![index]
+                                              .id
+                                              .toString());
+                                      _refresh();
+                                      _dismiss();
+                                    } else {
+                                      {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => EditTask(
+                                                      isDone:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .isDone,
+                                                      taskInfo:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .taskInfo,
+                                                      taskName:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .taskName,
+                                                      taskType:
+                                                          retrievedTaskList![
+                                                                  index]
+                                                              .taskType,
+                                                      id: retrievedTaskList![
+                                                              index]
+                                                          .id
+                                                          .toString(),
+                                                    )));
+                                      }
+                                    }
+                                  }),
+                                  confirmDismiss:
+                                      (DismissDirection direction) async {
+                                    if (direction ==
+                                        DismissDirection.endToStart) {
+                                      return await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return alert(context);
+                                        },
+                                      );
+                                    }
+                                    return true;
+                                  },
+                                  background: Container(
                                     decoration: BoxDecoration(
-                                        color: Colors.red,
+                                        color: const Color(0xFF21B7CA),
                                         borderRadius:
                                             BorderRadius.circular(16.0)),
-                                    padding: const EdgeInsets.only(right: 28.0),
-                                    alignment: AlignmentDirectional.centerEnd,
+                                    padding: const EdgeInsets.only(left: 28.0),
+                                    alignment: AlignmentDirectional.centerStart,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: const [
-                                        Icon(Icons.delete, color: Colors.white),
-                                        Text("SİL",
-                                            style:
-                                                TextStyle(color: Colors.white))
+                                        Icon(Icons.edit, color: Colors.white),
+                                        Text(
+                                          "DÜZENLE",
+                                          style: TextStyle(color: Colors.white),
+                                        )
                                       ],
-                                    )),
-                                resizeDuration:
-                                    const Duration(milliseconds: 200),
-                                key: UniqueKey(),
-                                child: Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.blueGrey[50],
-                                        borderRadius:
-                                            BorderRadius.circular(16.0)),
-                                    child: ListTile(
-                                      contentPadding: const EdgeInsets.all(15),
-                                      leading: const Icon(Icons.numbers),
-                                      onTap: () {
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PomodoroView(
-                                                      task: retrievedTaskList![
-                                                          index],
-                                                    )),
-                                            ModalRoute.withName("/pomodoro"));
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      title: Text(
-                                          retrievedTaskList![index].taskName),
-                                      subtitle: Text(
-                                          retrievedTaskList![index].taskInfo),
-                                      trailing:
-                                          const Icon(Icons.arrow_right_sharp),
                                     ),
                                   ),
-                                ));
-                          });
+                                  secondaryBackground: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      padding:
+                                          const EdgeInsets.only(right: 28.0),
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.delete,
+                                              color: Colors.white),
+                                          Text("SİL",
+                                              style: TextStyle(
+                                                  color: Colors.white))
+                                        ],
+                                      )),
+                                  resizeDuration:
+                                      const Duration(milliseconds: 200),
+                                  key: UniqueKey(),
+                                  child: Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.blueGrey[50],
+                                          borderRadius:
+                                              BorderRadius.circular(16.0)),
+                                      child: ListTile(
+                                        contentPadding:
+                                            const EdgeInsets.all(15),
+                                        leading: const Icon(Icons.numbers),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PomodoroView(
+                                                        task:
+                                                            retrievedTaskList![
+                                                                index],
+                                                      )));
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        title: Text(
+                                            retrievedTaskList![index].taskName),
+                                        subtitle: Text(
+                                            retrievedTaskList![index].taskInfo),
+                                        trailing:
+                                            const Icon(Icons.arrow_right_sharp),
+                                      ),
+                                    ),
+                                  ));
+                            });
+                      } catch (e) {
+                        _refresh();
+                      }
                     } else if (snapshot.connectionState ==
                             ConnectionState.done &&
                         retrievedTaskList!.isEmpty) {
@@ -286,9 +273,8 @@ class Task extends State<TaskView> {
                           ],
                         ),
                       );
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
                     }
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
@@ -360,6 +346,37 @@ class Task extends State<TaskView> {
     taskList = service.retrieveTasks();
     retrievedTaskList = await service.retrieveTasks();
   }
+
+  AlertDialog alert(BuildContext context) {
+    return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      title: Text(Task().alertTitle),
+      content: Text(Task().alertSubtitle),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(
+            Task().alertApprove,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(
+            Task().alertReject,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class TaskAdded extends StatelessWidget {
@@ -425,10 +442,8 @@ class TaskPageIconButton extends StatelessWidget {
 
 class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => PersonInfo()),
-        ModalRoute.withName("/Task"));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => PersonInfo()));
   }
 
   void searchButton() {}
