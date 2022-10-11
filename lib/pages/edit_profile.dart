@@ -218,7 +218,6 @@ class _EditProfileState extends State<EditProfile> {
                         return ScreenTextField(
                           textFieldInputType: TextInputType.none,
                           onTouch: () async {
-
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
@@ -279,10 +278,12 @@ class _EditProfileState extends State<EditProfile> {
                           });
                           uploadImage();
                           Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PersonInfo()),
-                              ModalRoute.withName("/Task"));
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    PersonInfo()),
+                            ModalRoute.withName('/task'),
+                          );
                         },
                         child: const Text("Güncelle"))),
               ],

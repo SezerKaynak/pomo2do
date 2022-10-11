@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
+import 'package:flutter_application_1/pages/edit_profile.dart';
+import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -25,22 +28,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        Provider<IAuthService>(create: (_) => AuthService())
-      ],
+      providers: [Provider<IAuthService>(create: (_) => AuthService())],
       child: AuthWidgetBuilder(
-        onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData().copyWith(
-            appBarTheme: AppBarTheme(
-              backgroundColor: ProjectThemeOptions().backGroundColor,
-              elevation: 0.0,
-              systemOverlayStyle: SystemUiOverlayStyle.light,
-            ),
-          ),
-          home: AuthWidget(snapShot: snapShot),
-        )
-      ),
+          onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
+              MaterialApp(
+                initialRoute: '/',
+                routes: {
+                  '/task': (context) => TaskView(),
+                  '/person': (context) => PersonInfo(),
+                  '/editProfile': (context) => const EditProfile(),
+                },
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData().copyWith(
+                  appBarTheme: AppBarTheme(
+                    backgroundColor: ProjectThemeOptions().backGroundColor,
+                    elevation: 0.0,
+                    systemOverlayStyle: SystemUiOverlayStyle.light,
+                  ),
+                ),
+                home: AuthWidget(snapShot: snapShot),
+              )),
     );
   }
 }
