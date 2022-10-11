@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
-
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
-
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
