@@ -16,10 +16,13 @@ class _EditPasswordState extends State<EditPassword> {
   var register = "Şifreyi Değiştir";
   var subtitle =
       "Aşağıdaki alanları doldurarak şifrenizi yenileyebilirsiniz 🙂";
+  var oldPassword = "Eski Şifre";
+  var oldPasswordHint = "Eski Şifrenizi Girin";
   var password = "Yeni Şifre";
+  var passwordHint = "Yeni Şifrenizi Girin";
 
   final TextEditingController _passwordController = TextEditingController();
-
+  final TextEditingController _oldpasswordController = TextEditingController();
   @override
   void dispose() {
     _passwordController.dispose();
@@ -74,12 +77,29 @@ class _EditPasswordState extends State<EditPassword> {
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 ScreenTexts(
+                    title: oldPassword,
+                    theme: Theme.of(context).textTheme.subtitle1,
+                    fontW: FontWeight.w500,
+                    textPosition: TextAlign.left),
+                ScreenTextField(
+                    textLabel: oldPasswordHint,
+                    obscure: true,
+                    controller: _oldpasswordController,
+                    valid: (value) {
+                      if (value == null) {
+                        return "Please enter password";
+                      }
+                      return null;
+                    },
+                    height: 70,
+                    maxLines: 1),
+                ScreenTexts(
                     title: password,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: password,
+                    textLabel: passwordHint,
                     obscure: true,
                     controller: _passwordController,
                     valid: (value) {
@@ -103,6 +123,11 @@ class _EditPasswordState extends State<EditPassword> {
                             setState(() {
                               newPassword = _passwordController.text;
                             });
+                            AuthCredential authCredential = EmailAuthProvider.credential(
+                              email: currentUser!.email ?? '',
+                              password: _oldpasswordController.text,
+                            );
+                            await currentUser?.reauthenticateWithCredential(authCredential);
                             await currentUser!.updatePassword(newPassword);
                             FirebaseAuth.instance.signOut();
                             // ignore: use_build_context_synchronously
