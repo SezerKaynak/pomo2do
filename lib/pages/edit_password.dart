@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
-import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/service/firebase_service.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({super.key});
@@ -30,7 +30,7 @@ class _EditPasswordState extends State<EditPassword> {
   }
 
   final currentUser = FirebaseAuth.instance.currentUser;
-
+  final AuthService _authService = AuthService();
   // changePassword() async {
   //   try {
   //     await currentUser!.updatePassword(newPassword);
@@ -127,9 +127,9 @@ class _EditPasswordState extends State<EditPassword> {
                               email: currentUser!.email ?? '',
                               password: _oldpasswordController.text,
                             );
-                            await currentUser?.reauthenticateWithCredential(authCredential);
+                            await currentUser!.reauthenticateWithCredential(authCredential);
                             await currentUser!.updatePassword(newPassword);
-                            FirebaseAuth.instance.signOut();
+                            _authService.signOut();
                             // ignore: use_build_context_synchronously
                             Navigator.pushAndRemoveUntil(
                                 context,
