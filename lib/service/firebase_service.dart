@@ -31,4 +31,8 @@ class AuthService with ConvertUser implements IAuthService{
   Future<void> signOut() async {
     await _authInstance.signOut();
   }
+  @override
+  Future<void> resetPassword({required String email}) async {
+    await _authInstance.sendPasswordResetEmail(email: email);
+  } 
 }

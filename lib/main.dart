@@ -10,6 +10,7 @@ import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/widgets/auth_widget.dart';
 import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
       child: AuthWidgetBuilder(
           onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
               MaterialApp(
+                navigatorObservers: [FlutterSmartDialog.observer],
+                builder: FlutterSmartDialog.init(),
                 initialRoute: '/',
                 routes: {
                   '/task': (context) => TaskView(),
