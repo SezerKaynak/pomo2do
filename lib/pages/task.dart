@@ -167,7 +167,7 @@ class Task extends State<TaskView> {
                                                           .toString(),
                                                     )));
                                         setState(() {
-                                          _refresh;
+                                          _refresh();
                                         });
                                       }
                                     }
@@ -445,8 +445,8 @@ class TaskPageIconButton extends StatelessWidget {
 
 class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PersonInfo()));
+    Navigator.pushNamed(
+        context, '/person');
   }
 
   void searchButton() {}

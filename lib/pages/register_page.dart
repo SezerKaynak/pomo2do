@@ -156,32 +156,32 @@ class RegisterPage extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
-                                    alertTitle: emailAlert,
-                                    alertSubtitle: emailAlertSubtitle);
+                                    alertTitle: nameAlert,
+                                    alertSubtitle: nameAlertSubtitle);
                               });
                         } else if (_passwordController.text == "") {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
-                                    alertTitle: passwordAlert,
-                                    alertSubtitle: passwordAlertSubtitle);
+                                    alertTitle: surnameAlert,
+                                    alertSubtitle: surnameAlertSubtitle);
                               });
                         } else if (_nameController.text == "") {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
-                                    alertTitle: nameAlert,
-                                    alertSubtitle: nameAlertSubtitle);
+                                    alertTitle: emailAlert,
+                                    alertSubtitle: emailAlertSubtitle);
                               });
                         } else if (_surnameController.text == "") {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
-                                    alertTitle: surnameAlert,
-                                    alertSubtitle: surnameAlertSubtitle);
+                                    alertTitle: passwordAlert,
+                                    alertSubtitle: passwordAlertSubtitle);
                               });
                         } else if (_birthdayController.text == "") {
                           showDialog(

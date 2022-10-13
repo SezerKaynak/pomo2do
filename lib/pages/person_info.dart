@@ -94,10 +94,9 @@ class _PersonInfoState extends State<PersonInfo> {
                       }),
                   subtitle: "Profilinizi düzenleyebilirsiniz",
                   onTouch: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditProfile()));
+                        '/editProfile');
                   },
                 ),
                 TaskAdded(
