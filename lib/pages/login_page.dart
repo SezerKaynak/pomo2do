@@ -33,6 +33,7 @@ class LoginPage extends StatelessWidget {
     var enterEmail = "E-posta adresinizi girin.";
     var enterEmailHint =
         "Şifresini sıfırlamak istediğiniz hesabınızın e-mail adresini girin:";
+    var checkEmail = 'E-posta adresinizi kontrol edin.';
 
     final _authService = Provider.of<IAuthService>(context, listen: false);
     final TextEditingController _emailController = TextEditingController();
@@ -132,16 +133,17 @@ class LoginPage extends StatelessWidget {
                                   actions: [
                                     TextButton(
                                         onPressed: () async {
+                                          FocusManager.instance.primaryFocus?.unfocus();
                                           try {
                                             await _authService.resetPassword(
                                                 email:
                                                     _resetEmailController.text);
                                             SmartDialog.showToast(
-                                                'E-posta adresinizi kontrol edin.');
+                                                checkEmail);
                                           } on FirebaseAuthException catch (e) {
                                             if (e.code == 'user-not-found') {
                                               SmartDialog.showToast(
-                                                  'Kullanıcı bulunamadı!');
+                                                  userNotFound);
                                             }
                                           }
                                         },

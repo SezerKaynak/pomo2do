@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
-import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
@@ -398,18 +397,11 @@ class TaskAdded extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Card(
-            //shadowColor: Colors.red,
-            // shape:
-            //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             color: Colors.blueGrey[50],
             child: Column(
               children: [
                 ListTile(
-                  //tileColor: Colors.red,
                   contentPadding: const EdgeInsets.all(15),
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                  //minVerticalPadding: 15,
-                  //leading: const Icon(Icons.numbers),
                   title: title,
                   subtitle: Text(subtitle),
                   onTap: onTouch,
