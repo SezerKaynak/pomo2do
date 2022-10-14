@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -62,9 +63,35 @@ class _PersonInfoState extends State<PersonInfo> {
               child: Center(
                 child: CircleAvatar(
                   radius: 70.0,
-                  backgroundImage: downloadUrl != null
-                      ? NetworkImage(downloadUrl!) as ImageProvider
-                      : const AssetImage("assets/person.png"),
+                  // backgroundImage: downloadUrl != null
+                  //     ? NetworkImage(downloadUrl!) as ImageProvider
+                  //     : const AssetImage("assets/person.png"),
+                  child: downloadUrl != null
+                      ? ClipOval(
+                          child: SizedBox.fromSize(
+                            size : const Size.fromRadius(70),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: downloadUrl!,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(
+                                value: downloadProgress.progress,
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                          ),
+                        )
+                      : ClipOval(
+                          child: SizedBox.fromSize(
+                            size: const Size.fromRadius(70),
+                            child: Image.asset(
+                              'assets/person.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -96,9 +123,7 @@ class _PersonInfoState extends State<PersonInfo> {
                       }),
                   subtitle: "Profilinizi düzenleyebilirsiniz",
                   onTouch: () {
-                    Navigator.pushNamed(
-                        context,
-                        '/editProfile');
+                    Navigator.pushNamed(context, '/editProfile');
                   },
                 ),
                 TaskAdded(
