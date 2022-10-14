@@ -30,10 +30,12 @@ class LoginPage extends StatelessWidget {
     var wrongPasswordSubtitle =
         "Şifrenizi yanlış girdiniz, lütfen tekrar deneyin...";
     var resetPassword = "Şifre Sıfırlama";
-    var enterEmail = "E-posta adresinizi girin.";
-    var enterEmailHint =
+    var enterEmailHint = "E-posta adresinizi girin.";
+    var enterEmail =
         "Şifresini sıfırlamak istediğiniz hesabınızın e-mail adresini girin:";
     var checkEmail = 'E-posta adresinizi kontrol edin.';
+    var invalidEmail = "Geçersiz E-Mail Adresi!";
+    var invalidEmailSubtitle = "Lütfen geçerli bir E-Mail adresi girin.";
 
     final _authService = Provider.of<IAuthService>(context, listen: false);
     final TextEditingController _emailController = TextEditingController();
@@ -133,17 +135,20 @@ class LoginPage extends StatelessWidget {
                                   actions: [
                                     TextButton(
                                         onPressed: () async {
-                                          FocusManager.instance.primaryFocus?.unfocus();
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
                                           try {
                                             await _authService.resetPassword(
                                                 email:
                                                     _resetEmailController.text);
-                                            SmartDialog.showToast(
-                                                checkEmail);
+                                            SmartDialog.showToast(checkEmail);
                                           } on FirebaseAuthException catch (e) {
                                             if (e.code == 'user-not-found') {
                                               SmartDialog.showToast(
                                                   userNotFound);
+                                            } else if (e.code ==
+                                                'invalid-email') {
+                                              SmartDialog.showToast(invalidEmailSubtitle);
                                             }
                                           }
                                         },
@@ -208,6 +213,14 @@ class LoginPage extends StatelessWidget {
                                       return AlertWidget(
                                           alertTitle: wrongPassword,
                                           alertSubtitle: wrongPasswordSubtitle);
+                                    });
+                              } else if (e.code == 'invalid-email') {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertWidget(
+                                          alertTitle: invalidEmail,
+                                          alertSubtitle: invalidEmailSubtitle);
                                     });
                               }
                             }
