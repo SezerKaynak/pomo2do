@@ -58,12 +58,15 @@ class _PersonInfoState extends State<PersonInfo> {
         children: [
           Expanded(
             flex: 2,
-            child: Center(
-              child: CircleAvatar(
-                radius: 70.0,
-                backgroundImage: downloadUrl != null
-                    ? NetworkImage(downloadUrl!) as ImageProvider
-                    : const AssetImage("assets/person.png"),
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Center(
+                child: CircleAvatar(
+                  radius: 70.0,
+                  backgroundImage: downloadUrl != null
+                      ? NetworkImage(downloadUrl!) as ImageProvider
+                      : const AssetImage("assets/person.png"),
+                ),
               ),
             ),
           ),
