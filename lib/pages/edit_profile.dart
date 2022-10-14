@@ -282,7 +282,7 @@ class _EditProfileState extends State<EditProfile> {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     PersonInfo()),
-                            ModalRoute.withName('/task'),
+                            ModalRoute.withName('/'),
                           );
 
                         },
