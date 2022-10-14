@@ -75,7 +75,7 @@ class _PersonInfoState extends State<PersonInfo> {
                               imageUrl: downloadUrl!,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) =>
-                                      CircularProgressIndicator(
+                                      CircularProgressIndicator(color: Colors.red,
                                 value: downloadProgress.progress,
                               ),
                               errorWidget: (context, url, error) =>
