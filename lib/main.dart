@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
+import 'package:flutter_application_1/pages/completed_tasks.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
                 routes: {
                   '/task': (context) => TaskView(),
                   '/person': (context) => PersonInfo(),
+                  '/done' : (context) => const CompletedTasks(),
                   '/editProfile': (context) => const EditProfile(),
                 },
                 debugShowCheckedModeBanner: false,

@@ -305,7 +305,7 @@ class Task extends State<TaskView> {
             TaskPageIconButton(
                 taskIcons: Icons.done,
                 onPressIconButton: () {
-                  ButtonsOnPressed().doneButton;
+                  ButtonsOnPressed().doneButton(context);
                 }),
             TaskPageIconButton(
                 taskIcons: Icons.stacked_bar_chart,
@@ -437,13 +437,15 @@ class TaskPageIconButton extends StatelessWidget {
 
 class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
-    Navigator.pushNamed(
-        context, '/person');
+    Navigator.pushNamed(context, '/person');
   }
 
   void searchButton() {}
   void homeButton() {}
   void timerButton() {}
-  void doneButton() {}
+  void doneButton(BuildContext context) {
+    Navigator.pushNamed(context, '/done');
+  }
+
   void stackedBarButton() {}
 }
