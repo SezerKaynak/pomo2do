@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
-import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
@@ -56,118 +56,130 @@ class _PersonInfoState extends State<PersonInfo> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: Center(
-              child: CircleAvatar(
-                radius: 70.0,
-                child: downloadUrl != null
-                    ? CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: downloadUrl!,
-                        imageBuilder: (context, imageProvider) {
-                          return ClipOval(
-                              child: SizedBox.fromSize(
-                                  size: const Size.fromRadius(70),
-                                  child: Image(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover)));
-                        },
-                        placeholder: (context, url) {
-                          return ClipOval(
-                              child: SizedBox.fromSize(
-                            size: const Size.fromRadius(20),
-                            child: const CircularProgressIndicator(
-                                color: Colors.red),
-                          ));
-                        },
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      )
-                    : ClipOval(
-                        child: SizedBox.fromSize(
-                          size: const Size.fromRadius(70),
-                          child: Image.asset(
-                            'assets/person.png',
-                            fit: BoxFit.cover,
+          Expanded(
+            flex: 0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center, 
+              children: [
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: CircleAvatar(
+                  radius: 45.0,
+                  child: downloadUrl != null
+                      ? CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: downloadUrl!,
+                          imageBuilder: (context, imageProvider) {
+                            return ClipOval(
+                                child: SizedBox.fromSize(
+                                    size: const Size.fromRadius(45),
+                                    child: Image(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover)));
+                          },
+                          placeholder: (context, url) {
+                            return ClipOval(
+                                child: SizedBox.fromSize(
+                              size: const Size.fromRadius(20),
+                              child: const CircularProgressIndicator(
+                                  color: Colors.white),
+                            ));
+                          },
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        )
+                      : ClipOval(
+                          child: SizedBox.fromSize(
+                            size: const Size.fromRadius(70),
+                            child: Image.asset(
+                              'assets/person.png',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: StreamBuilder(
+                        stream: user.snapshots(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                          if (asyncSnapshot.hasError) {
+                            return const Text("Something went wrong");
+                          }
+      
+                          if (asyncSnapshot.hasData &&
+                              !asyncSnapshot.data!.exists) {
+                            return const Text("Document does not exist");
+                          }
+      
+                          if (asyncSnapshot.connectionState ==
+                              ConnectionState.active) {
+                            return Text(
+                              "${asyncSnapshot.data.data()["name"]}"
+                              " ${asyncSnapshot.data.data()["surname"]}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w400, fontSize: 26),
+                            );
+                          }
+                          return const Text("Loading");
+                        }),
+              ),
+            ]),
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                const Divider(thickness: 1),
-                Settings(
-                  settingIcon: Icons.account_circle,
-                  title: StreamBuilder(
-                      stream: user.snapshots(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                        if (asyncSnapshot.hasError) {
-                          return const Text("Something went wrong");
-                        }
-
-                        if (asyncSnapshot.hasData &&
-                            !asyncSnapshot.data!.exists) {
-                          return const Text("Document does not exist");
-                        }
-
-                        if (asyncSnapshot.connectionState ==
-                            ConnectionState.active) {
-                          return Text(
-                            "${asyncSnapshot.data.data()["name"]}"
-                            " ${asyncSnapshot.data.data()["surname"]}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w400, fontSize: 18),
-                          );
-                        }
-                        return const Text("Loading");
-                      }),
-                  subtitle: "Profilinizi düzenleyebilirsiniz.",
-                  tap: () {
-                    Navigator.pushNamed(context, '/editProfile');
-                  },
-                ),
-                const Divider(thickness: 1),
-                Settings(
-                  settingIcon: Icons.password,
-                  subtitle: "Şifrenizi değiştirebilirsiniz.",
-                  title: settingTitle(context, 'Şifreyi Değiştir'),
-                  tap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditPassword()));
-                  },
-                ),
-                const Divider(thickness: 1),
-                Settings(
-                    settingIcon: Icons.notifications,
-                    subtitle: "Bildirim ayarlarını yapabilirsiniz.",
-                    title: settingTitle(context, 'Bildirim Ayarları'),
-                    tap: () {}),
-                const Divider(thickness: 1),
-                Settings(
-                    settingIcon: Icons.watch,
-                    subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
-                    title: settingTitle(context, 'Pomodoro Ayarları'),
-                    tap: () {}),
-                const Divider(thickness: 1),
-                Settings(
-                    settingIcon: Icons.logout,
-                    subtitle: "Hesaptan çıkış yapın.",
-                    title: settingTitle(context, 'Çıkış Yap'),
-                    tap: () async {
-                      await _authService.signOut();
-                    }),
-                const Divider(thickness: 1)
-              ],
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: [Column(
+                  children: [
+                    const Divider(thickness: 1),
+                    Settings(
+                      settingIcon: Icons.account_circle,
+                      title: settingTitle(context, "Hesap Ayarları"),
+                      subtitle: "Profilinizi düzenleyebilirsiniz.",
+                      tap: () {
+                        Navigator.pushNamed(context, '/editProfile');
+                      },
+                    ),
+                    const Divider(thickness: 1),
+                    Settings(
+                      settingIcon: Icons.password,
+                      subtitle: "Şifrenizi değiştirebilirsiniz.",
+                      title: settingTitle(context, 'Şifreyi Değiştir'),
+                      tap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EditPassword()));
+                      },
+                    ),
+                    const Divider(thickness: 1),
+                    Settings(
+                        settingIcon: Icons.notifications,
+                        subtitle: "Bildirim ayarlarını yapabilirsiniz.",
+                        title: settingTitle(context, 'Bildirim Ayarları'),
+                        tap: () {}),
+                    const Divider(thickness: 1),
+                    Settings(
+                        settingIcon: Icons.watch,
+                        subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
+                        title: settingTitle(context, 'Pomodoro Ayarları'),
+                        tap: () {}),
+                    const Divider(thickness: 1),
+                    Settings(
+                        settingIcon: Icons.logout,
+                        subtitle: "Hesaptan çıkış yapın.",
+                        title: settingTitle(context, 'Çıkış Yap'),
+                        tap: () async {
+                          await _authService.signOut();
+                        }),
+                    const Divider(thickness: 1),
+                  ],
+              ),]
             ),
           ),
         ],

@@ -391,7 +391,7 @@ class Avatar extends StatelessWidget {
             return ClipOval(
                 child: SizedBox.fromSize(
               size: const Size.fromRadius(20),
-              child: const CircularProgressIndicator(color: Colors.red),
+              child: const CircularProgressIndicator(color: Colors.white),
             ));
           },
           errorWidget: (context, url, error) => const Icon(Icons.error),
