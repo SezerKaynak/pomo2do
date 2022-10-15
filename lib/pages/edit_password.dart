@@ -49,12 +49,11 @@ class _EditPasswordState extends State<EditPassword> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white)),
         actions: [
           if (isLoading)
             Padding(
