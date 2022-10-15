@@ -64,7 +64,7 @@ class _PersonInfoState extends State<PersonInfo> {
               Padding(
                 padding: const EdgeInsets.all(5),
                 child: CircleAvatar(
-                  radius: 45.0,
+                  radius: 50.0,
                   child: downloadUrl != null
                       ? CachedNetworkImage(
                           fit: BoxFit.cover,
@@ -72,7 +72,7 @@ class _PersonInfoState extends State<PersonInfo> {
                           imageBuilder: (context, imageProvider) {
                             return ClipOval(
                                 child: SizedBox.fromSize(
-                                    size: const Size.fromRadius(45),
+                                    size: const Size.fromRadius(50),
                                     child: Image(
                                         image: imageProvider,
                                         fit: BoxFit.cover)));
