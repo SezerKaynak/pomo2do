@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,12 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
-import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
@@ -52,7 +48,7 @@ class _EditProfileState extends State<EditProfile> {
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
 
-    var title = "Profil Düzenleme Sayfası";
+    var title = "Profil Düzenleme";
     var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
     var name = "Adınız";
     var surname = "Soyadınız";
@@ -77,26 +73,29 @@ class _EditProfileState extends State<EditProfile> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: ScreenPadding().screenPadding,
+            padding: ScreenPadding().screenPadding.copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(
                     title: title,
                     theme: Theme.of(context).textTheme.headline4,
                     fontW: FontWeight.w600,
-                    textPosition: TextAlign.left),
+                    textPosition: TextAlign.left,
+                    customPadding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    ),
                 ScreenTexts(
                     title: subtitle,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w400,
-                    textPosition: TextAlign.left),
-                const SizedBox(height: 40),
+                    textPosition: TextAlign.left,
+                    customPadding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                const SizedBox(height: 25),
                 Center(
                   child: Stack(children: [
                     Avatar(downloadUrl: downloadUrl, image: image),
                     Positioned(
                         bottom: 20,
-                        right: 20,
+                        right: 25,
                         child: InkWell(
                           onTap: () {
                             showModalBottomSheet(
@@ -105,7 +104,7 @@ class _EditProfileState extends State<EditProfile> {
                           },
                           child: const Icon(
                             Icons.camera_alt,
-                            color: Colors.teal,
+                            color: Colors.white,
                             size: 28,
                           ),
                         ))
@@ -256,7 +255,7 @@ class _EditProfileState extends State<EditProfile> {
                         maxLines: 1,
                       );
                     }),
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
                 SizedBox(
                     width: 400,
                     height: 60,

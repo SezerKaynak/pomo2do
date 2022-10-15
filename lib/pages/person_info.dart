@@ -121,9 +121,9 @@ class _PersonInfoState extends State<PersonInfo> {
                               " ${asyncSnapshot.data.data()["surname"]}",
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .headline4
                                   ?.copyWith(
-                                      fontWeight: FontWeight.w400, fontSize: 26),
+                                      fontWeight: FontWeight.w600, fontSize: 26, color: Colors.black),
                             );
                           }
                           return const Text("Loading");

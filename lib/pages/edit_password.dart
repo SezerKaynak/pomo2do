@@ -68,7 +68,7 @@ class _EditPasswordState extends State<EditPassword> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: ScreenPadding().screenPadding.copyWith(top: 0),
+            padding: ScreenPadding().screenPadding.copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(
