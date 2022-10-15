@@ -63,25 +63,28 @@ class _PersonInfoState extends State<PersonInfo> {
               child: Center(
                 child: CircleAvatar(
                   radius: 70.0,
-                  // backgroundImage: downloadUrl != null
-                  //     ? NetworkImage(downloadUrl!) as ImageProvider
-                  //     : const AssetImage("assets/person.png"),
                   child: downloadUrl != null
-                      ? ClipOval(
-                          child: SizedBox.fromSize(
-                            size : const Size.fromRadius(70),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: downloadUrl!,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) =>
-                                      CircularProgressIndicator(color: Colors.red,
-                                value: downloadProgress.progress,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
+                      ? CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: downloadUrl!,
+                          imageBuilder: (context, imageProvider) {
+                            return ClipOval(
+                                child: SizedBox.fromSize(
+                                    size: const Size.fromRadius(70),
+                                    child: Image(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover)));
+                          },
+                          placeholder: (context, url) {
+                            return ClipOval(
+                                child: SizedBox.fromSize(
+                              size: const Size.fromRadius(20),
+                              child: const CircularProgressIndicator(
+                                  color: Colors.red),
+                            ));
+                          },
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         )
                       : ClipOval(
                           child: SizedBox.fromSize(
