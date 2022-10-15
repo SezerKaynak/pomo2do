@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -377,7 +378,30 @@ class Avatar extends StatelessWidget {
           radius: 80.0, backgroundImage: AssetImage("assets/person.png"));
     } else if (downloadUrl != null && image == null) {
       return CircleAvatar(
-          radius: 80.0, backgroundImage: NetworkImage(downloadUrl!));
+        radius: 80.0,
+        child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: downloadUrl!,
+                            imageBuilder: (context, imageProvider) {
+                              return ClipOval(
+                                  child: SizedBox.fromSize(
+                                      size: const Size.fromRadius(80),
+                                      child: Image(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover)));
+                            },
+                            placeholder: (context, url) {
+                              return ClipOval(
+                                  child: SizedBox.fromSize(
+                                size: const Size.fromRadius(20),
+                                child: const CircularProgressIndicator(
+                                    color: Colors.red),
+                              ));
+                            },
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+      );
     } else if (downloadUrl == null && image != null) {
       return CircleAvatar(radius: 80.0, backgroundImage: FileImage(image!));
     }
