@@ -381,36 +381,6 @@ class Task extends State<TaskView> {
   }
 }
 
-class TaskAdded extends StatelessWidget {
-  final title;
-  final subtitle;
-  final void Function()? onTouch;
-
-  const TaskAdded(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.onTouch})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Card(
-            color: Colors.blueGrey[50],
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.all(15),
-                  title: title,
-                  subtitle: Text(subtitle),
-                  onTap: onTouch,
-                )
-              ],
-            )));
-  }
-}
-
 class TaskPageIconButton extends StatelessWidget {
   const TaskPageIconButton({
     Key? key,
