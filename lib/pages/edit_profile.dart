@@ -285,7 +285,6 @@ class _EditProfileState extends State<EditProfile> {
                                     PersonInfo()),
                             ModalRoute.withName('/'),
                           );
-
                         },
                         child: const Text("Güncelle"))),
               ],
@@ -380,27 +379,23 @@ class Avatar extends StatelessWidget {
       return CircleAvatar(
         radius: 80.0,
         child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: downloadUrl!,
-                            imageBuilder: (context, imageProvider) {
-                              return ClipOval(
-                                  child: SizedBox.fromSize(
-                                      size: const Size.fromRadius(80),
-                                      child: Image(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover)));
-                            },
-                            placeholder: (context, url) {
-                              return ClipOval(
-                                  child: SizedBox.fromSize(
-                                size: const Size.fromRadius(20),
-                                child: const CircularProgressIndicator(
-                                    color: Colors.red),
-                              ));
-                            },
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+          fit: BoxFit.cover,
+          imageUrl: downloadUrl!,
+          imageBuilder: (context, imageProvider) {
+            return ClipOval(
+                child: SizedBox.fromSize(
+                    size: const Size.fromRadius(80),
+                    child: Image(image: imageProvider, fit: BoxFit.cover)));
+          },
+          placeholder: (context, url) {
+            return ClipOval(
+                child: SizedBox.fromSize(
+              size: const Size.fromRadius(20),
+              child: const CircularProgressIndicator(color: Colors.red),
+            ));
+          },
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
       );
     } else if (downloadUrl == null && image != null) {
       return CircleAvatar(radius: 80.0, backgroundImage: FileImage(image!));
