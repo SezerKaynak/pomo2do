@@ -40,7 +40,7 @@ class _PersonInfoState extends State<PersonInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<IAuthService>(context, listen: false);
+    var _authService = Provider.of<IAuthService>(context, listen: false);
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
     return Scaffold(
@@ -56,54 +56,52 @@ class _PersonInfoState extends State<PersonInfo> {
       ),
       body: Column(
         children: [
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Center(
-                child: CircleAvatar(
-                  radius: 70.0,
-                  child: downloadUrl != null
-                      ? CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: downloadUrl!,
-                          imageBuilder: (context, imageProvider) {
-                            return ClipOval(
-                                child: SizedBox.fromSize(
-                                    size: const Size.fromRadius(70),
-                                    child: Image(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover)));
-                          },
-                          placeholder: (context, url) {
-                            return ClipOval(
-                                child: SizedBox.fromSize(
-                              size: const Size.fromRadius(20),
-                              child: const CircularProgressIndicator(
-                                  color: Colors.red),
-                            ));
-                          },
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        )
-                      : ClipOval(
-                          child: SizedBox.fromSize(
-                            size: const Size.fromRadius(70),
-                            child: Image.asset(
-                              'assets/person.png',
-                              fit: BoxFit.cover,
-                            ),
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: Center(
+              child: CircleAvatar(
+                radius: 70.0,
+                child: downloadUrl != null
+                    ? CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: downloadUrl!,
+                        imageBuilder: (context, imageProvider) {
+                          return ClipOval(
+                              child: SizedBox.fromSize(
+                                  size: const Size.fromRadius(70),
+                                  child: Image(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover)));
+                        },
+                        placeholder: (context, url) {
+                          return ClipOval(
+                              child: SizedBox.fromSize(
+                            size: const Size.fromRadius(20),
+                            child: const CircularProgressIndicator(
+                                color: Colors.red),
+                          ));
+                        },
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      )
+                    : ClipOval(
+                        child: SizedBox.fromSize(
+                          size: const Size.fromRadius(70),
+                          child: Image.asset(
+                            'assets/person.png',
+                            fit: BoxFit.cover,
                           ),
                         ),
-                ),
+                      ),
               ),
             ),
           ),
-          Expanded(
-            flex: 8,
+          SingleChildScrollView(
             child: Column(
               children: [
-                TaskAdded(
+                const Divider(thickness: 1),
+                Settings(
+                  settingIcon: Icons.account_circle,
                   title: StreamBuilder(
                       stream: user.snapshots(),
                       builder:
@@ -119,49 +117,123 @@ class _PersonInfoState extends State<PersonInfo> {
 
                         if (asyncSnapshot.connectionState ==
                             ConnectionState.active) {
-                          return Text("${asyncSnapshot.data.data()["name"]}"
-                              " ${asyncSnapshot.data.data()["surname"]}");
+                          return Text(
+                            "${asyncSnapshot.data.data()["name"]}"
+                            " ${asyncSnapshot.data.data()["surname"]}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w400, fontSize: 18),
+                          );
                         }
                         return const Text("Loading");
                       }),
-                  subtitle: "Profilinizi düzenleyebilirsiniz",
-                  onTouch: () {
+                  subtitle: "Profilinizi düzenleyebilirsiniz.",
+                  tap: () {
                     Navigator.pushNamed(context, '/editProfile');
                   },
                 ),
-                TaskAdded(
-                  title: const Text("Şifreyi Değiştir"),
-                  subtitle: "Şifrenizi Değiştirebilirsiniz",
-                  onTouch: () {
+                const Divider(thickness: 1),
+                Settings(
+                  settingIcon: Icons.password,
+                  subtitle: "Şifrenizi değiştirebilirsiniz.",
+                  title: settingTitle(context, 'Şifreyi Değiştir'),
+                  tap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const EditPassword()));
                   },
                 ),
-                TaskAdded(
-                  title: const Text("Bildirim Ayarı"),
-                  subtitle:
-                      "Bu kısımda almak istediğiniz bildirimleri seçebilirsiniz",
-                  onTouch: () {},
-                ),
-                TaskAdded(
-                  title: const Text("Pomodoro Ayarı"),
-                  subtitle:
-                      "Bu kısımda pomodoro ve ara dakikalarını,sayısını değiştirebilirsiniz",
-                  onTouch: () {},
-                ),
-                TaskAdded(
-                  title: const Text("Çıkış Yap"),
-                  subtitle: "Hesaptan çıkış yapın",
-                  onTouch: () async {
-                    await _authService.signOut();
-                  },
-                ),
+                const Divider(thickness: 1),
+                Settings(
+                    settingIcon: Icons.notifications,
+                    subtitle: "Bildirim ayarlarını yapabilirsiniz.",
+                    title: settingTitle(context, 'Bildirim Ayarları'),
+                    tap: () {}),
+                const Divider(thickness: 1),
+                Settings(
+                    settingIcon: Icons.watch,
+                    subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
+                    title: settingTitle(context, 'Pomodoro Ayarları'),
+                    tap: () {}),
+                const Divider(thickness: 1),
+                Settings(
+                    settingIcon: Icons.logout,
+                    subtitle: "Hesaptan çıkış yapın.",
+                    title: settingTitle(context, 'Çıkış Yap'),
+                    tap: () async {
+                      await _authService.signOut();
+                    }),
+                const Divider(thickness: 1)
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Text settingTitle(BuildContext context, String textTitle) => Text(
+        textTitle,
+        style: Theme.of(context)
+            .textTheme
+            .headline6
+            ?.copyWith(fontWeight: FontWeight.w400, fontSize: 18),
+      );
+}
+
+class Settings extends StatelessWidget {
+  const Settings({
+    Key? key,
+    required this.settingIcon,
+    required this.subtitle,
+    required this.title,
+    required this.tap,
+  }) : super(key: key);
+
+  final IconData settingIcon;
+  final String subtitle;
+  final Widget title;
+  final Function() tap;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: tap,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              settingIcon,
+              size: 40,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [title, const Icon(Icons.arrow_right_sharp)],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: Text(
+                        subtitle,
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 16.0),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
