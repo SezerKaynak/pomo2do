@@ -15,6 +15,7 @@ class CompletedTasks extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
+      body: Column(children: const [Text("Görev")]),
     );
   }
 }
