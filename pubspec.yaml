@@ -27,21 +27,20 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.2.2
   cloud_firestore: ^3.5.0
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.11.0
   firebase_core: ^1.24.0
   firebase_database: ^9.1.6
-
+  firebase_storage: ^10.3.11
   firestore_search:
     git:
       url: https://github.com/SezerKaynak/firestore_search.git
-
-  firebase_storage: ^10.3.11
-
   flutter:
     sdk: flutter
   flutter_slidable: ^2.0.0
+  flutter_smart_dialog: ^4.5.5+6
   image_picker: ^0.8.6
   intl: ^0.17.0
   path_provider: ^2.0.11

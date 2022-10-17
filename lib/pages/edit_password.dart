@@ -49,12 +49,11 @@ class _EditPasswordState extends State<EditPassword> {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white)),
         actions: [
           if (isLoading)
             Padding(
@@ -69,7 +68,7 @@ class _EditPasswordState extends State<EditPassword> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: ScreenPadding().screenPadding.copyWith(top: 0),
+            padding: ScreenPadding().screenPadding.copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(

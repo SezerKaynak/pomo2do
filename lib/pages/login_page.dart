@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/register_page.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
@@ -28,10 +29,18 @@ class LoginPage extends StatelessWidget {
     var wrongPassword = "Şifre Yanlış!";
     var wrongPasswordSubtitle =
         "Şifrenizi yanlış girdiniz, lütfen tekrar deneyin...";
+    var resetPassword = "Şifre Sıfırlama";
+    var enterEmailHint = "E-posta adresinizi girin.";
+    var enterEmail =
+        "Şifresini sıfırlamak istediğiniz hesabınızın e-mail adresini girin:";
+    var checkEmail = 'E-posta adresinizi kontrol edin.';
+    var invalidEmail = "Geçersiz E-Mail Adresi!";
+    var invalidEmailSubtitle = "Lütfen geçerli bir E-Mail adresi girin.";
 
     final _authService = Provider.of<IAuthService>(context, listen: false);
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController _resetEmailController = TextEditingController();
 
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
@@ -78,11 +87,86 @@ class LoginPage extends StatelessWidget {
                     controller: _passwordController,
                     height: 70,
                     maxLines: 1),
-                ScreenTexts(
-                    title: forgotPassword,
-                    theme: Theme.of(context).textTheme.subtitle1,
-                    fontW: FontWeight.w300,
-                    textPosition: TextAlign.right),
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0))),
+                                  title: Text(resetPassword),
+                                  content: Builder(
+                                    builder: (context) {
+                                      var height =
+                                          MediaQuery.of(context).size.height;
+                                      var width =
+                                          MediaQuery.of(context).size.width;
+
+                                      return SizedBox(
+                                        height: height / 6,
+                                        width: width - 100,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ScreenTexts(
+                                                title: enterEmail,
+                                                theme: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle1,
+                                                fontW: FontWeight.w400,
+                                                textPosition: TextAlign.left),
+                                            ScreenTextField(
+                                              controller: _resetEmailController,
+                                              height: 70,
+                                              maxLines: 1,
+                                              obscure: false,
+                                              textLabel: enterEmailHint,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                          try {
+                                            await _authService.resetPassword(
+                                                email:
+                                                    _resetEmailController.text);
+                                            SmartDialog.showToast(checkEmail);
+                                          } on FirebaseAuthException catch (e) {
+                                            if (e.code == 'user-not-found') {
+                                              SmartDialog.showToast(
+                                                  userNotFound);
+                                            } else if (e.code ==
+                                                'invalid-email') {
+                                              SmartDialog.showToast(invalidEmailSubtitle);
+                                            }
+                                          }
+                                        },
+                                        child: const Text('Onayla')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('İptal Et')),
+                                  ],
+                                );
+                              });
+                        },
+                        child: Text(forgotPassword,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                ?.copyWith(fontWeight: FontWeight.w300)))),
                 const SizedBox(height: 50),
                 SizedBox(
                     width: 400,
@@ -129,6 +213,14 @@ class LoginPage extends StatelessWidget {
                                       return AlertWidget(
                                           alertTitle: wrongPassword,
                                           alertSubtitle: wrongPasswordSubtitle);
+                                    });
+                              } else if (e.code == 'invalid-email') {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertWidget(
+                                          alertTitle: invalidEmail,
+                                          alertSubtitle: invalidEmailSubtitle);
                                     });
                               }
                             }
@@ -232,14 +324,14 @@ class ScreenTextField extends StatelessWidget {
     this.con,
     this.textFieldInputType = TextInputType.text,
   }) : super(key: key);
-  final textLabel;
+  final String? textLabel;
   final bool obscure;
   final TextEditingController controller;
   final double height;
   final int maxLines;
-  final valid;
-  final onTouch;
-  final con;
+  final String? Function(String?)? valid;
+  final Function()? onTouch;
+  final Widget? con;
   final TextInputType? textFieldInputType;
   @override
   Widget build(BuildContext context) {
@@ -269,6 +361,7 @@ class ScreenTextField extends StatelessWidget {
 class ScreenTexts extends StatelessWidget {
   const ScreenTexts({
     Key? key,
+    this.customPadding,
     required this.title,
     required this.theme,
     required this.fontW,
@@ -278,12 +371,13 @@ class ScreenTexts extends StatelessWidget {
   final TextStyle? theme;
   final FontWeight fontW;
   final TextAlign textPosition;
+  final EdgeInsetsGeometry? customPadding;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
         width: 400,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: customPadding ?? const EdgeInsets.fromLTRB(0,10,0,10),
           child: Text(title,
               textAlign: textPosition,
               style: theme?.copyWith(fontWeight: fontW, color: Colors.black)),

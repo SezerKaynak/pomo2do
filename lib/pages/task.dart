@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
-import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
@@ -306,7 +305,7 @@ class Task extends State<TaskView> {
             TaskPageIconButton(
                 taskIcons: Icons.done,
                 onPressIconButton: () {
-                  ButtonsOnPressed().doneButton;
+                  ButtonsOnPressed().doneButton(context);
                 }),
             TaskPageIconButton(
                 taskIcons: Icons.stacked_bar_chart,
@@ -382,43 +381,6 @@ class Task extends State<TaskView> {
   }
 }
 
-class TaskAdded extends StatelessWidget {
-  final title;
-  final subtitle;
-  final void Function()? onTouch;
-
-  const TaskAdded(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.onTouch})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Card(
-            //shadowColor: Colors.red,
-            // shape:
-            //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            color: Colors.blueGrey[50],
-            child: Column(
-              children: [
-                ListTile(
-                  //tileColor: Colors.red,
-                  contentPadding: const EdgeInsets.all(15),
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                  //minVerticalPadding: 15,
-                  //leading: const Icon(Icons.numbers),
-                  title: title,
-                  subtitle: Text(subtitle),
-                  onTap: onTouch,
-                )
-              ],
-            )));
-  }
-}
-
 class TaskPageIconButton extends StatelessWidget {
   const TaskPageIconButton({
     Key? key,
@@ -445,13 +407,15 @@ class TaskPageIconButton extends StatelessWidget {
 
 class ButtonsOnPressed {
   void personInfoButton(BuildContext context) {
-    Navigator.pushNamed(
-        context, '/person');
+    Navigator.pushNamed(context, '/person');
   }
 
   void searchButton() {}
   void homeButton() {}
   void timerButton() {}
-  void doneButton() {}
+  void doneButton(BuildContext context) {
+    Navigator.pushNamed(context, '/done');
+  }
+
   void stackedBarButton() {}
 }
