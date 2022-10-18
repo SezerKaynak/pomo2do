@@ -1,9 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 
-class CompletedTasks extends StatelessWidget {
+
+class CompletedTasks extends StatefulWidget {
   const CompletedTasks({super.key});
 
+  @override
+  State<CompletedTasks> createState() => _CompletedTasksState();
+}
+
+class _CompletedTasksState extends State<CompletedTasks> {
+  
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
@@ -36,7 +45,20 @@ class CompletedTasks extends StatelessWidget {
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(15),
                     leading: const Icon(Icons.numbers),
-                    onTap: () {},
+                    onTap: () async {
+                          CollectionReference users = FirebaseFirestore.instance
+                              .collection(
+                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                          var task = users.doc(data.id);
+                          task.set({
+                            "taskName" : data.taskName,
+                            "taskInfo" : data.taskInfo,
+                            "taskType" : data.taskType,
+                            "isDone": false,
+                          });
+                          tasks.removeAt(index);
+                          setState(() {});
+                        },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -51,5 +73,6 @@ class CompletedTasks extends StatelessWidget {
         },
       ),
     );
-  } 
+  }
 }
+
