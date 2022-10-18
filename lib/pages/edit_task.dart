@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
 
-class EditTask extends StatelessWidget {
+class EditTask extends StatefulWidget {
   const EditTask({
     super.key,
     required this.taskName,
@@ -19,6 +19,12 @@ class EditTask extends StatelessWidget {
   final bool isDone;
   final String id;
 
+  @override
+  State<EditTask> createState() => _EditTaskState();
+}
+
+class _EditTaskState extends State<EditTask> {
+  bool isChecked = true;
   @override
   Widget build(BuildContext context) {
     var title = "Görev Düzenleme Sayfası";
@@ -45,27 +51,29 @@ class EditTask extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: ScreenPadding().screenPadding,
+            padding: ScreenPadding()
+                .screenPadding
+                .copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(
-                    title: title,
-                    theme: Theme.of(context).textTheme.headline4,
-                    fontW: FontWeight.w600,
-                    textPosition: TextAlign.left),
+                  title: title,
+                  theme: Theme.of(context).textTheme.headline4,
+                  fontW: FontWeight.w600,
+                  textPosition: TextAlign.left,
+                ),
                 ScreenTexts(
                     title: subtitle,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
-                const SizedBox(height: 40),
                 ScreenTexts(
                     title: taskN,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: _taskNameController.text = taskName,
+                    textLabel: _taskNameController.text = widget.taskName,
                     obscure: false,
                     controller: _taskNameController,
                     height: 70,
@@ -77,7 +85,7 @@ class EditTask extends StatelessWidget {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: _taskTypeController.text = taskType,
+                    textLabel: _taskTypeController.text = widget.taskType,
                     obscure: false,
                     controller: _taskTypeController,
                     height: 70,
@@ -89,12 +97,33 @@ class EditTask extends StatelessWidget {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: _taskInfoController.text = taskInfo,
+                    textLabel: _taskInfoController.text = widget.taskInfo,
                     obscure: false,
                     controller: _taskInfoController,
                     height: 120,
                     maxLines: 3),
-                const SizedBox(height: 50),
+                FormField(
+                  initialValue: widget.isDone,
+                  builder: (FormFieldState state) {
+                    return Column(
+                      children: [
+                        CheckboxListTile(
+                          title: const Text('Görevi tamamlandı mı?'),
+                          activeColor: Colors.blue,
+                          value: state.value,
+                          onChanged: (value) {
+                            setState(() {
+                              state.didChange(value);
+                              isChecked = state.value;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.platform,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 40),
                 SizedBox(
                     width: 400,
                     height: 60,
@@ -106,15 +135,14 @@ class EditTask extends StatelessWidget {
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
                                   'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                          var task = users.doc(id);
-
+                          var task = users.doc(widget.id);
                           task.set({
                             'taskNameCaseInsensitive':
                                 _taskNameController.text.toLowerCase(),
                             'taskName': _taskNameController.text,
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
-                            "isDone": isDone,
+                            "isDone": isChecked,
                           });
                           Navigator.pushAndRemoveUntil(
                               context,
