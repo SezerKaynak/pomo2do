@@ -10,7 +10,7 @@ class CompletedTasks extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as List<TaskModel>;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tamamlanmış Görevler"),
+        title: Text(tasks.length.toString()),
         centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -19,9 +19,9 @@ class CompletedTasks extends StatelessWidget {
             }),
       ),
       body: ListView.builder(
-        itemCount: numberOfCompletedTasks(tasks).length,
+        itemCount: tasks.length,
         itemBuilder: (context, index) {
-          final TaskModel data = numberOfCompletedTasks(tasks)[index];
+          final TaskModel data = tasks[index];
           return Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,15 +51,5 @@ class CompletedTasks extends StatelessWidget {
         },
       ),
     );
-  }
-
-  List numberOfCompletedTasks(List<TaskModel> tasks) {
-    var completedTasks = [];
-    for (int i = 0; i < tasks.length; i++) {
-      if (tasks[i].isDone == true) {
-        completedTasks.add(tasks[i]);
-      }
-    }
-    return completedTasks;
-  }
+  } 
 }
