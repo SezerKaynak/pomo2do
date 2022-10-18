@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
+import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/pages/task.dart';
 
 class PomodoroSettings extends StatefulWidget {
@@ -163,8 +164,11 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                       onPressed: () async {
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => TaskView()),
-                            ModalRoute.withName("/Person"));
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    PersonInfo()),
+                            ModalRoute.withName('/'),
+                          );
                       },
                       child: const Text("Güncelle"))),
             ],
