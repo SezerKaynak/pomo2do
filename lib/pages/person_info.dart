@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
+import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,10 @@ class _PersonInfoState extends State<PersonInfo> {
     });
   }
 
+  String alertTitle = "Çıkış Yapılacak!";
+  String alertSubtitle = "Çıkış yapmak istediğinizden emin misiniz?";
+  String alertApprove = "Onayla";
+  String alertReject = "İptal Et";
   @override
   Widget build(BuildContext context) {
     var _authService = Provider.of<IAuthService>(context, listen: false);
@@ -58,9 +63,8 @@ class _PersonInfoState extends State<PersonInfo> {
         children: [
           Expanded(
             flex: 0,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center, 
-              children: [
+            child:
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               Padding(
                 padding: const EdgeInsets.all(5),
                 child: CircleAvatar(
@@ -102,85 +106,124 @@ class _PersonInfoState extends State<PersonInfo> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: StreamBuilder(
-                        stream: user.snapshots(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                          if (asyncSnapshot.hasError) {
-                            return const Text("Something went wrong");
-                          }
-      
-                          if (asyncSnapshot.hasData &&
-                              !asyncSnapshot.data!.exists) {
-                            return const Text("Document does not exist");
-                          }
-      
-                          if (asyncSnapshot.connectionState ==
-                              ConnectionState.active) {
-                            return Text(
-                              "${asyncSnapshot.data.data()["name"]}"
-                              " ${asyncSnapshot.data.data()["surname"]}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline4
-                                  ?.copyWith(
-                                      fontWeight: FontWeight.w600, fontSize: 26, color: Colors.black),
-                            );
-                          }
-                          return const Text("Loading");
-                        }),
+                    stream: user.snapshots(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                      if (asyncSnapshot.hasError) {
+                        return const Text("Something went wrong");
+                      }
+
+                      if (asyncSnapshot.hasData &&
+                          !asyncSnapshot.data!.exists) {
+                        return const Text("Document does not exist");
+                      }
+
+                      if (asyncSnapshot.connectionState ==
+                          ConnectionState.active) {
+                        return Text(
+                          "${asyncSnapshot.data.data()["name"]}"
+                          " ${asyncSnapshot.data.data()["surname"]}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4
+                              ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 26,
+                                  color: Colors.black),
+                        );
+                      }
+                      return const Text("Loading");
+                    }),
               ),
             ]),
           ),
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: [Column(
-                  children: [
-                    const Divider(thickness: 1),
-                    Settings(
-                      settingIcon: Icons.account_circle,
-                      title: settingTitle(context, "Hesap Ayarları"),
-                      subtitle: "Profilinizi düzenleyebilirsiniz.",
+            child: ListView(scrollDirection: Axis.vertical, children: [
+              Column(
+                children: [
+                  const Divider(thickness: 1),
+                  Settings(
+                    settingIcon: Icons.account_circle,
+                    title: settingTitle(context, "Hesap Ayarları"),
+                    subtitle: "Profilinizi düzenleyebilirsiniz.",
+                    tap: () {
+                      Navigator.pushNamed(context, '/editProfile');
+                    },
+                  ),
+                  const Divider(thickness: 1),
+                  Settings(
+                    settingIcon: Icons.password,
+                    subtitle: "Şifrenizi değiştirebilirsiniz.",
+                    title: settingTitle(context, 'Şifreyi Değiştir'),
+                    tap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EditPassword()));
+                    },
+                  ),
+                  const Divider(thickness: 1),
+                  Settings(
+                      settingIcon: Icons.notifications,
+                      subtitle: "Bildirim ayarlarını yapabilirsiniz.",
+                      title: settingTitle(context, 'Bildirim Ayarları'),
+                      tap: () {}),
+                  const Divider(thickness: 1),
+                  Settings(
+                      settingIcon: Icons.watch,
+                      subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
+                      title: settingTitle(context, 'Pomodoro Ayarları'),
+                      tap: () {}),
+                  const Divider(thickness: 1),
+                  Settings(
+                      settingIcon: Icons.logout,
+                      subtitle: "Hesaptan çıkış yapın.",
+                      title: settingTitle(context, 'Çıkış Yap'),
                       tap: () {
-                        Navigator.pushNamed(context, '/editProfile');
-                      },
-                    ),
-                    const Divider(thickness: 1),
-                    Settings(
-                      settingIcon: Icons.password,
-                      subtitle: "Şifrenizi değiştirebilirsiniz.",
-                      title: settingTitle(context, 'Şifreyi Değiştir'),
-                      tap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EditPassword()));
-                      },
-                    ),
-                    const Divider(thickness: 1),
-                    Settings(
-                        settingIcon: Icons.notifications,
-                        subtitle: "Bildirim ayarlarını yapabilirsiniz.",
-                        title: settingTitle(context, 'Bildirim Ayarları'),
-                        tap: () {}),
-                    const Divider(thickness: 1),
-                    Settings(
-                        settingIcon: Icons.watch,
-                        subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
-                        title: settingTitle(context, 'Pomodoro Ayarları'),
-                        tap: () {}),
-                    const Divider(thickness: 1),
-                    Settings(
-                        settingIcon: Icons.logout,
-                        subtitle: "Hesaptan çıkış yapın.",
-                        title: settingTitle(context, 'Çıkış Yap'),
-                        tap: () async {
-                          await _authService.signOut();
-                        }),
-                    const Divider(thickness: 1),
-                  ],
-              ),]
-            ),
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20.0))),
+                                title: Text(alertTitle),
+                                content: Text(alertSubtitle),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () async =>
+                                        await _authService.signOut(),
+                                    child: Text(
+                                      alertApprove,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.copyWith(
+                                              color: ProjectThemeOptions()
+                                                  .backGroundColor),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                    child: Text(
+                                      alertReject,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.copyWith(
+                                              color: ProjectThemeOptions()
+                                                  .backGroundColor),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
+                      }),
+                  const Divider(thickness: 1),
+                ],
+              ),
+            ]),
           ),
         ],
       ),
