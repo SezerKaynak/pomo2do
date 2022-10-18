@@ -148,7 +148,8 @@ class LoginPage extends StatelessWidget {
                                                   userNotFound);
                                             } else if (e.code ==
                                                 'invalid-email') {
-                                              SmartDialog.showToast(invalidEmailSubtitle);
+                                              SmartDialog.showToast(
+                                                  invalidEmailSubtitle);
                                             }
                                           }
                                         },
@@ -323,6 +324,7 @@ class ScreenTextField extends StatelessWidget {
     this.onTouch,
     this.con,
     this.textFieldInputType = TextInputType.text,
+    this.suffix,
   }) : super(key: key);
   final String? textLabel;
   final bool obscure;
@@ -333,6 +335,7 @@ class ScreenTextField extends StatelessWidget {
   final Function()? onTouch;
   final Widget? con;
   final TextInputType? textFieldInputType;
+  final Widget? suffix;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -346,6 +349,7 @@ class ScreenTextField extends StatelessWidget {
           validator: valid,
           obscureText: obscure,
           decoration: InputDecoration(
+            suffixIcon: suffix,
             icon: con,
             labelText: textLabel,
             filled: true,
@@ -377,7 +381,7 @@ class ScreenTexts extends StatelessWidget {
     return SizedBox(
         width: 400,
         child: Padding(
-          padding: customPadding ?? const EdgeInsets.fromLTRB(0,10,0,10),
+          padding: customPadding ?? const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Text(title,
               textAlign: textPosition,
               style: theme?.copyWith(fontWeight: fontW, color: Colors.black)),

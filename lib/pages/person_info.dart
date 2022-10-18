@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
+import 'package:flutter_application_1/pages/pomodoro_settings.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
@@ -171,7 +172,12 @@ class _PersonInfoState extends State<PersonInfo> {
                       settingIcon: Icons.watch,
                       subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
                       title: settingTitle(context, 'Pomodoro Ayarları'),
-                      tap: () {}),
+                      tap: () {
+                         Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PomodoroSettings()));
+                      }),
                   const Divider(thickness: 1),
                   Settings(
                       settingIcon: Icons.logout,
