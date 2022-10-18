@@ -102,45 +102,22 @@ class _EditTaskState extends State<EditTask> {
                     controller: _taskInfoController,
                     height: 120,
                     maxLines: 3),
-                // CheckboxListTile(
-                //   title: const Text("Görevi tamamlandı mı?"),
-                //   value: isChecked,
-                //   autofocus: true,
-                //   onChanged: (bool? newValue) {
-                //     if (widget.isDone) {
-                //       print('ilk durum true');
-                //       newValue = false;
-                //     } else {
-                //       print('ikinci durum false');
-                //       newValue = true;
-                //     }
-                //     setState(() {
-                //       print(widget.isDone.toString());
-                //       isChecked = newValue!;
-                //     });
-                //     print('ischecked ' + isChecked.toString());
-                //   },
-                //   controlAffinity:
-                //       ListTileControlAffinity.platform, //  <-- leading Checkbox
-                // ),
                 FormField(
                   initialValue: widget.isDone,
                   builder: (FormFieldState state) {
                     return Column(
                       children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                                activeColor: Colors.blue,
-                                value: state.value,
-                                onChanged: (value) {
-                                  setState(() {
-                                    state.didChange(value);
-                                    isChecked = state.value;
-                                  });
-                                }),
-                            Expanded(child: Text('Sample checkbox')),
-                          ],
+                        CheckboxListTile(
+                          title: const Text('Görevi tamamlandı mı?'),
+                          activeColor: Colors.blue,
+                          value: state.value,
+                          onChanged: (value) {
+                            setState(() {
+                              state.didChange(value);
+                              isChecked = state.value;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.platform,
                         ),
                       ],
                     );
@@ -159,7 +136,6 @@ class _EditTaskState extends State<EditTask> {
                               .collection(
                                   'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
                           var task = users.doc(widget.id);
-                          print('son durum ' + isChecked.toString());
                           task.set({
                             'taskNameCaseInsensitive':
                                 _taskNameController.text.toLowerCase(),
