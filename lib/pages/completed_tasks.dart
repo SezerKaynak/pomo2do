@@ -31,7 +31,7 @@ class CompletedTasks extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.blueGrey[50],
+                      color: Colors.green[100],
                       borderRadius: BorderRadius.circular(16.0)),
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(15),
