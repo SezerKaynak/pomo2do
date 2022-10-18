@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
 
-
-
 class EditTask extends StatefulWidget {
   const EditTask({
     super.key,
@@ -26,7 +24,7 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  bool isChecked = false;
+  bool isChecked = true;
   @override
   Widget build(BuildContext context) {
     var title = "Görev Düzenleme Sayfası";
@@ -53,20 +51,22 @@ class _EditTaskState extends State<EditTask> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: ScreenPadding().screenPadding,
+            padding: ScreenPadding()
+                .screenPadding
+                .copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(
-                    title: title,
-                    theme: Theme.of(context).textTheme.headline4,
-                    fontW: FontWeight.w600,
-                    textPosition: TextAlign.left),
+                  title: title,
+                  theme: Theme.of(context).textTheme.headline4,
+                  fontW: FontWeight.w600,
+                  textPosition: TextAlign.left,
+                ),
                 ScreenTexts(
                     title: subtitle,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
-                const SizedBox(height: 40),
                 ScreenTexts(
                     title: taskN,
                     theme: Theme.of(context).textTheme.subtitle1,
@@ -102,17 +102,51 @@ class _EditTaskState extends State<EditTask> {
                     controller: _taskInfoController,
                     height: 120,
                     maxLines: 3),
-                const SizedBox(height: 50),
-                CheckboxListTile(
-                      title: Text("title text"),
-                      value: isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked = value!;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-                    ),
+                // CheckboxListTile(
+                //   title: const Text("Görevi tamamlandı mı?"),
+                //   value: isChecked,
+                //   autofocus: true,
+                //   onChanged: (bool? newValue) {
+                //     if (widget.isDone) {
+                //       print('ilk durum true');
+                //       newValue = false;
+                //     } else {
+                //       print('ikinci durum false');
+                //       newValue = true;
+                //     }
+                //     setState(() {
+                //       print(widget.isDone.toString());
+                //       isChecked = newValue!;
+                //     });
+                //     print('ischecked ' + isChecked.toString());
+                //   },
+                //   controlAffinity:
+                //       ListTileControlAffinity.platform, //  <-- leading Checkbox
+                // ),
+                FormField(
+                  initialValue: widget.isDone,
+                  builder: (FormFieldState state) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                                activeColor: Colors.blue,
+                                value: state.value,
+                                onChanged: (value) {
+                                  setState(() {
+                                    state.didChange(value);
+                                    isChecked = state.value;
+                                  });
+                                }),
+                            Expanded(child: Text('Sample checkbox')),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 40),
                 SizedBox(
                     width: 400,
                     height: 60,
@@ -125,7 +159,7 @@ class _EditTaskState extends State<EditTask> {
                               .collection(
                                   'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
                           var task = users.doc(widget.id);
-
+                          print('son durum ' + isChecked.toString());
                           task.set({
                             'taskNameCaseInsensitive':
                                 _taskNameController.text.toLowerCase(),
