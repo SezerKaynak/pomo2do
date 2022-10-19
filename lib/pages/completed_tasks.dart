@@ -12,13 +12,14 @@ class CompletedTasks extends StatefulWidget {
 
 class _CompletedTasksState extends State<CompletedTasks> {
   List selectedIndexes = [];
+  bool buttonVisible = false;
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
         ModalRoute.of(context)!.settings.arguments as List<TaskModel>;
     return Scaffold(
       appBar: AppBar(
-        title: Text(tasks.length.toString()),
+        title: const Text("Tamamlanmış Görevler"),
         centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -54,8 +55,10 @@ class _CompletedTasksState extends State<CompletedTasks> {
                               setState(() {
                                 if (selectedIndexes.contains(index)) {
                                   selectedIndexes.remove(index);
+                                  buttonVisible = false;
                                 } else {
                                   selectedIndexes.add(index);
+                                  buttonVisible = true;
                                 }
                               });
                             },
@@ -64,8 +67,10 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             setState(() {
                               if (selectedIndexes.contains(index)) {
                                 selectedIndexes.remove(index);
+                                buttonVisible = false;
                               } else {
                                 selectedIndexes.add(index);
+                                buttonVisible = true;
                               }
                             });
                           },
@@ -82,38 +87,42 @@ class _CompletedTasksState extends State<CompletedTasks> {
                 },
               ),
             ),
-            Expanded(
-              flex: 0,
-              child: SizedBox(
-                width: 400,
-                height: 60,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    onPressed: () {
-                      for (int i = 0; i < selectedIndexes.length; i++) {
-                        final TaskModel data = tasks[selectedIndexes[i]];
-                        CollectionReference users = FirebaseFirestore.instance
-                            .collection(
-                                'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                        var task = users.doc(data.id);
-                        task.set({
-                          "taskName": data.taskName,
-                          "taskInfo": data.taskInfo,
-                          "taskType": data.taskType,
-                          "taskNameCaseInsensitive":
-                              data.taskName.toLowerCase(),
-                          "isDone": false,
-                        });
-                      }
-                      tasks.removeRange(0, selectedIndexes.length);
-                      setState(() {});
-                    },
-                    child: const Text(
-                        "Seçili görevleri tamamlanmamış olarak işaretle")),
-              ),
-            )
+            if (buttonVisible)
+              Expanded(
+                flex: 0,
+                child: SizedBox(
+                  width: 400,
+                  height: 60,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: () {
+                        int selectedNumber = selectedIndexes.length;
+                        for (int i = 0; i < selectedNumber; i++) {
+                          final TaskModel data = tasks[selectedIndexes[i]];
+                          CollectionReference users = FirebaseFirestore.instance
+                              .collection(
+                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                          var task = users.doc(data.id);
+                          task.set({
+                            "taskName": data.taskName,
+                            "taskInfo": data.taskInfo,
+                            "taskType": data.taskType,
+                            "taskNameCaseInsensitive":
+                                data.taskName.toLowerCase(),
+                            "isDone": false,
+                          });
+                          selectedIndexes.remove(i);
+                        }
+                        tasks.removeRange(0, selectedNumber);
+                        selectedIndexes.isEmpty ? buttonVisible = false : buttonVisible = true;
+                        setState(() {});
+                      },
+                      child: const Text(
+                          "Seçili görevleri tamamlanmamış olarak işaretle")),
+                ),
+              )
           ],
         ),
       ),
