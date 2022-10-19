@@ -118,7 +118,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             "isDone": false,
                           });
                         }
-                        
+
                         for (int i = 0; i < selectedIndexes.length; i++) {
                           if (selectedIndexes.length == 1) {
                             tasks.removeAt(selectedIndexes[i]);
@@ -131,11 +131,8 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             }
                           }
                         }
-
-                        //selectedIndexes.removeRange(0, selectedIndexes.length);
-                        selectedIndexes.isEmpty
-                            ? buttonVisible = false
-                            : buttonVisible = true;
+                        selectedIndexes.clear();
+                        buttonVisible = false;
                         setState(() {});
                       },
                       child: const Text(
