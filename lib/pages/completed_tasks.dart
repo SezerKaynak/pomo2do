@@ -120,16 +120,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                         }
 
                         for (int i = 0; i < selectedIndexes.length; i++) {
-                          if (selectedIndexes.length == 1) {
-                            tasks.removeAt(selectedIndexes[i]);
-                          } else {
-                            if(i == 0){
-                              tasks.removeAt(selectedIndexes[i]);
-                            }
-                            else{
-                              tasks.removeAt(selectedIndexes[i] - i);
-                            }
-                          }
+                          tasks.removeAt(selectedIndexes[i] - i);
                         }
                         selectedIndexes.clear();
                         buttonVisible = false;
