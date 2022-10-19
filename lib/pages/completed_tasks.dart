@@ -54,6 +54,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             "taskName" : data.taskName,
                             "taskInfo" : data.taskInfo,
                             "taskType" : data.taskType,
+                            "taskNameCaseInsensitive" : data.taskName.toLowerCase(),
                             "isDone": false,
                           });
                           tasks.removeAt(index);
