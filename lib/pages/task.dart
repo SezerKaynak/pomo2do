@@ -18,6 +18,7 @@ class Task extends State<TaskView> {
   DatabaseService service = DatabaseService();
   Future<List<TaskModel>>? taskList;
   List<TaskModel>? retrievedTaskList;
+  List<TaskModel>? tasks;
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -305,7 +306,7 @@ class Task extends State<TaskView> {
             TaskPageIconButton(
                 taskIcons: Icons.done,
                 onPressIconButton: () {
-                  ButtonsOnPressed().doneButton(context, retrievedTaskList);
+                  ButtonsOnPressed().doneButton(context, taskLists()[0]);
                 }),
             TaskPageIconButton(
                 taskIcons: Icons.stacked_bar_chart,
@@ -336,8 +337,24 @@ class Task extends State<TaskView> {
 
   Future<void> _refresh() async {
     taskList = service.retrieveTasks();
-    retrievedTaskList = await service.retrieveTasks();
+    tasks = await service.retrieveTasks();
+    retrievedTaskList = taskLists()[1];
     setState(() {});
+  }
+
+  List<dynamic> taskLists() {
+    List<TaskModel> incompletedTasks = [];
+    List<TaskModel> completedTasks = [];
+    List newList = [];
+    for (int i = 0; i < tasks!.length; i++) {
+      if (tasks![i].isDone == false) {
+        incompletedTasks.add(tasks![i]);
+      } else {
+        completedTasks.add(tasks![i]);
+      }
+    }
+    newList.addAll([completedTasks, incompletedTasks]);
+    return newList;
   }
 
   void _dismiss() {
@@ -346,7 +363,7 @@ class Task extends State<TaskView> {
 
   Future<void> _initRetrieval() async {
     taskList = service.retrieveTasks();
-    retrievedTaskList = await service.retrieveTasks();
+    tasks = await service.retrieveTasks();
   }
 
   AlertDialog alert(BuildContext context) {
@@ -413,8 +430,8 @@ class ButtonsOnPressed {
   void searchButton() {}
   void homeButton() {}
   void timerButton() {}
-  void doneButton(BuildContext context, List<TaskModel>? tasks) {
-    Navigator.pushNamed(context, '/done', arguments: tasks);
+  void doneButton(BuildContext context, List<TaskModel> completedTasks) {
+    Navigator.pushNamed(context, '/done', arguments: completedTasks);
   }
 
   void stackedBarButton() {}
