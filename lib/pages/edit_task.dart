@@ -24,7 +24,7 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  bool isChecked = true;
+  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     var title = "Görev Düzenleme Sayfası";
