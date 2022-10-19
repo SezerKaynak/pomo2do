@@ -103,7 +103,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                       onPressed: () {
                         int selectedNumber = selectedIndexes.length;
                         for (int i = 0; i < selectedNumber; i++) {
-                          final TaskModel data = tasks[selectedIndexes[i]];
+                          final TaskModel data = tasks[selectedIndexes[0]];
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
                                   'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
@@ -116,7 +116,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                 data.taskName.toLowerCase(),
                             "isDone": false,
                           });
-                          selectedIndexes.remove(i);
+                          selectedIndexes.removeAt(0);
                         }
                         tasks.removeRange(0, selectedNumber);
                         selectedIndexes.isEmpty
