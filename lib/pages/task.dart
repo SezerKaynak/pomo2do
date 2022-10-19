@@ -304,10 +304,16 @@ class Task extends State<TaskView> {
                   ButtonsOnPressed().timerButton;
                 }),
             TaskPageIconButton(
-                taskIcons: Icons.done,
-                onPressIconButton: () {
-                  ButtonsOnPressed().doneButton(context, taskLists()[0]);
-                }),
+              taskIcons: Icons.done,
+              onPressIconButton: () {
+                //ButtonsOnPressed().doneButton(context, taskLists()[0]);
+                
+                Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
+                    .then((_) {
+                  _refresh();
+                });
+              },
+            ),
             TaskPageIconButton(
                 taskIcons: Icons.stacked_bar_chart,
                 onPressIconButton: () {
@@ -431,7 +437,7 @@ class ButtonsOnPressed {
   void homeButton() {}
   void timerButton() {}
   void doneButton(BuildContext context, List<TaskModel> completedTasks) {
-    Navigator.pushNamed(context, '/done', arguments: completedTasks);
+    //Navigator.pushNamed(context, '/done', arguments: completedTasks);
   }
 
   void stackedBarButton() {}

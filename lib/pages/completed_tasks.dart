@@ -31,27 +31,40 @@ class _CompletedTasksState extends State<CompletedTasks> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Expanded(
-              child: ListView.separated(
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10),
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  final TaskModel data = tasks[index];
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.green[100],
-                            borderRadius: BorderRadius.circular(16.0)),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(15),
-                          leading: Checkbox(
-                            value: selectedIndexes.contains(index),
-                            onChanged: (_) {
+            if (tasks.isNotEmpty)
+              Expanded(
+                child: ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
+                  itemCount: tasks.length,
+                  itemBuilder: (context, index) {
+                    final TaskModel data = tasks[index];
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.green[100],
+                              borderRadius: BorderRadius.circular(16.0)),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(15),
+                            leading: Checkbox(
+                              value: selectedIndexes.contains(index),
+                              onChanged: (_) {
+                                setState(() {
+                                  if (selectedIndexes.contains(index)) {
+                                    selectedIndexes.remove(index);
+                                    buttonVisible = false;
+                                  } else {
+                                    selectedIndexes.add(index);
+                                    buttonVisible = true;
+                                  }
+                                });
+                              },
+                            ),
+                            onTap: () async {
                               setState(() {
                                 if (selectedIndexes.contains(index)) {
                                   selectedIndexes.remove(index);
@@ -62,31 +75,21 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                 }
                               });
                             },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            title: Text(data.taskName),
+                            subtitle: Text(data.taskInfo),
+                            trailing: const Icon(Icons.arrow_right_sharp),
                           ),
-                          onTap: () async {
-                            setState(() {
-                              if (selectedIndexes.contains(index)) {
-                                selectedIndexes.remove(index);
-                                buttonVisible = false;
-                              } else {
-                                selectedIndexes.add(index);
-                                buttonVisible = true;
-                              }
-                            });
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          title: Text(data.taskName),
-                          subtitle: Text(data.taskInfo),
-                          trailing: const Icon(Icons.arrow_right_sharp),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
+                      ],
+                    );
+                  },
+                ),
+              )
+            else
+              const Center(child: Text("Tamamlanmış görev bulunamadı!")),
             if (buttonVisible)
               Expanded(
                 flex: 0,
@@ -116,7 +119,9 @@ class _CompletedTasksState extends State<CompletedTasks> {
                           selectedIndexes.remove(i);
                         }
                         tasks.removeRange(0, selectedNumber);
-                        selectedIndexes.isEmpty ? buttonVisible = false : buttonVisible = true;
+                        selectedIndexes.isEmpty
+                            ? buttonVisible = false
+                            : buttonVisible = true;
                         setState(() {});
                       },
                       child: const Text(
