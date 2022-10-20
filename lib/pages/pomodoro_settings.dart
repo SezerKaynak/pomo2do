@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
-import 'package:flutter_application_1/pages/task.dart';
 
 class PomodoroSettings extends StatefulWidget {
   const PomodoroSettings({super.key});
@@ -16,24 +15,46 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
     var pomodoroTitle = "Pomodoro Ayarları";
     var pomodoroSubtitle =
         "Aşağıdaki alanlardan pomodoro zamanlayıcısının ayarlarını yapabilirsiniz.🙂";
+    final TextEditingController workTimerController = TextEditingController();
+    final TextEditingController breakTimerController = TextEditingController();
+    final TextEditingController longBreakTimerController =
+        TextEditingController();
+    final TextEditingController longBreakNumberController =
+        TextEditingController();
     var workTimer = "Çalışma Zamanı Süresi";
     var breakTimer = "Mola Süresi";
     var longBreakTimer = "Uzun Mola Süresi";
     var longBreakNumber = "Uzun Molanın Kaçıncı Arada Verileceği";
+    var workTimerSelect = "Çalışma Zamanı Süresini Seçiniz";
+    var breakTimerSelect = "Mola Süresini Seçiniz";
+    var longBreakTimerSelect = "Uzun Mola Süresini Seçiniz";
+    var longBreakNumberSelect =
+        "Uzun Molanın Kaçıncı Arada Verileceğini Seçiniz";
 
-    var items = [
-      'Working a lot harder',
-      'Being a lot smarter',
-      'Being a self-starter',
-      'Placed in charge of trading charter'
+    var workTimerList = [
+      '20 dakika',
+      '25 dakika',
+      '30 dakika',
+      '35 dakika',
+      '40 dakika'
     ];
-
-    final TextEditingController _workTimerController = TextEditingController();
-    final TextEditingController _breakTimerController = TextEditingController();
-    final TextEditingController _longBreakTimerController =
-        TextEditingController();
-    final TextEditingController _longBreakNumberController =
-        TextEditingController();
+    var breakTimerList = [
+      '5 dakika',
+      '6 dakika',
+      '7 dakika',
+      '8 dakika',
+      '9 dakika',
+      '10 dakika'
+    ];
+    var longBreakTimerList = [
+      '15 dakika',
+      '16 dakika',
+      '17 dakika',
+      '18 dakika',
+      '19 dakika',
+      '20 dakika'
+    ];
+    var longBreakNumberList = ['1', '2', '3', '4', '5'];
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
@@ -66,18 +87,18 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: workTimer,
+                  textLabel: workTimerSelect,
                   obscure: false,
-                  controller: _workTimerController,
+                  controller: workTimerController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      _workTimerController.text = value;
+                      workTimerController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
-                      return items.map<PopupMenuItem<String>>((String value) {
-                        return new PopupMenuItem(
-                            child: new Text(value), value: value);
+                      return workTimerList
+                          .map<PopupMenuItem<String>>((String value) {
+                        return PopupMenuItem(value: value, child: Text(value));
                       }).toList();
                     },
                   ),
@@ -89,18 +110,18 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: breakTimer,
+                  textLabel: breakTimerSelect,
                   obscure: false,
-                  controller: _breakTimerController,
+                  controller: breakTimerController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      _breakTimerController.text = value;
+                      breakTimerController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
-                      return items.map<PopupMenuItem<String>>((String value) {
-                        return new PopupMenuItem(
-                            child: new Text(value), value: value);
+                      return breakTimerList
+                          .map<PopupMenuItem<String>>((String value) {
+                        return PopupMenuItem(value: value, child: Text(value));
                       }).toList();
                     },
                   ),
@@ -112,18 +133,18 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: longBreakTimer,
+                  textLabel: longBreakTimerSelect,
                   obscure: false,
-                  controller: _longBreakTimerController,
+                  controller: longBreakTimerController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      _longBreakTimerController.text = value;
+                      longBreakTimerController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
-                      return items.map<PopupMenuItem<String>>((String value) {
-                        return new PopupMenuItem(
-                            child: new Text(value), value: value);
+                      return longBreakTimerList
+                          .map<PopupMenuItem<String>>((String value) {
+                        return PopupMenuItem(value: value, child: Text(value));
                       }).toList();
                     },
                   ),
@@ -135,18 +156,18 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: longBreakNumber,
+                  textLabel: longBreakNumberSelect,
                   obscure: false,
-                  controller: _longBreakNumberController,
+                  controller: longBreakNumberController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      _longBreakNumberController.text = value;
+                      longBreakNumberController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
-                      return items.map<PopupMenuItem<String>>((String value) {
-                        return new PopupMenuItem(
-                            child: new Text(value), value: value);
+                      return longBreakNumberList
+                          .map<PopupMenuItem<String>>((String value) {
+                        return PopupMenuItem(value: value, child: Text(value));
                       }).toList();
                     },
                   ),
@@ -162,13 +183,18 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () async {
+                        print(workTimerSelect);
+                        setState(() {
+                          workTimerSelect = workTimerController.text;
+                        });
+                        print(workTimerSelect);
+
                         Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    PersonInfo()),
-                            ModalRoute.withName('/'),
-                          );
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => PersonInfo()),
+                          ModalRoute.withName('/'),
+                        );
                       },
                       child: const Text("Güncelle"))),
             ],
