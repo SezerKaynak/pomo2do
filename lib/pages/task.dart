@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
+import 'package:flutter_application_1/pages/deleted_tasks.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:provider/provider.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -299,15 +301,15 @@ class Task extends State<TaskView> {
                   ButtonsOnPressed().homeButton;
                 }),
             TaskPageIconButton(
-                taskIcons: Icons.timer,
+                taskIcons: Icons.stacked_bar_chart,
                 onPressIconButton: () {
-                  ButtonsOnPressed().timerButton;
+                  ButtonsOnPressed().stackedBarButton;
                 }),
             TaskPageIconButton(
               taskIcons: Icons.done,
               onPressIconButton: () {
                 //ButtonsOnPressed().doneButton(context, taskLists()[0]);
-                
+
                 Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
                     .then((_) {
                   _refresh();
@@ -315,9 +317,10 @@ class Task extends State<TaskView> {
               },
             ),
             TaskPageIconButton(
-                taskIcons: Icons.stacked_bar_chart,
+                taskIcons: Icons.delete,
                 onPressIconButton: () {
-                  ButtonsOnPressed().stackedBarButton;
+                  //ChangeNotifierProvider<ListUpdate>(create: (context) => ListUpdate(), child: const DeletedTasks());
+                  Navigator.pushNamed(context, '/deleted');
                 }),
           ],
         ),
@@ -435,7 +438,7 @@ class ButtonsOnPressed {
 
   void searchButton() {}
   void homeButton() {}
-  void timerButton() {}
+  void trashBoxButton() {}
   void doneButton(BuildContext context, List<TaskModel> completedTasks) {
     //Navigator.pushNamed(context, '/done', arguments: completedTasks);
   }

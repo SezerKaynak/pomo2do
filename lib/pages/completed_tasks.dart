@@ -104,7 +104,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                         int selectedNumber = selectedIndexes.length;
                         for (int i = 0; i < selectedNumber; i++) {
                           final TaskModel data = tasks[selectedIndexes[i]];
-                          print(selectedIndexes[0]);
+                          
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
                                   'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
