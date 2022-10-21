@@ -344,7 +344,7 @@ class Task extends State<TaskView> {
                 taskIcons: Icons.delete,
                 onPressIconButton: () {
                   Navigator.pushNamed(context, '/deleted',
-                      arguments: taskLists()[2]);
+                      arguments: taskLists()[2]).then((_) => _refresh());
                 }),
           ],
         ),
