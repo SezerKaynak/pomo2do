@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
@@ -32,7 +33,9 @@ class DeletedTasks extends StatelessWidget {
           children: [
             if (tasks.isNotEmpty)
               Expanded(
-                child: ListView.separated(
+                child: Consumer<ListUpdate>(
+                  builder:(context, value, child) {
+                    return ListView.separated(
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   itemCount: tasks.length,
@@ -80,7 +83,12 @@ class DeletedTasks extends StatelessWidget {
                       ],
                     );
                   },
-                ),
+                );
+                  },
+
+                )
+                
+                
               )
             else
               const Center(child: Text("Tamamlanmış görev bulunamadı!")),
@@ -88,42 +96,50 @@ class DeletedTasks extends StatelessWidget {
               Expanded(
                 flex: 0,
                 child: SizedBox(
-                  width: 400,
-                  height: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
-                        // int selectedNumber = selectedIndexes.length;
-                        // for (int i = 0; i < selectedNumber; i++) {
-                        //   final TaskModel data = tasks[selectedIndexes[i]];
+                    width: 400,
+                    height: 60,
+                    child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                            onPressed: () {
+                              var elevatedButtonWorks =
+                                  context.read<ListUpdate>();
+                              elevatedButtonWorks.elevatedButtonWorks(
+                                  selectedIndexes,
+                                  tasks,
+                                  buttonVisible,
+                                  context);
+                              // int selectedNumber = selectedIndexes.length;
+                              // for (int i = 0; i < selectedNumber; i++) {
+                              //   final TaskModel data = tasks[selectedIndexes[i]];
 
-                        //   CollectionReference users = FirebaseFirestore.instance
-                        //       .collection(
-                        //           'Users/${Provider.of<PomotodoUser>(context).userId}/tasks');
-                        //   var task = users.doc(data.id);
-                        //   task.set({
-                        //     "taskName": data.taskName,
-                        //     "taskInfo": data.taskInfo,
-                        //     "taskType": data.taskType,
-                        //     "taskNameCaseInsensitive":
-                        //         data.taskName.toLowerCase(),
-                        //     "isDone": false,
-                        //     "isActive" : true,
-                        //   });
-                        // }
+                              //   CollectionReference users = FirebaseFirestore.instance
+                              //       .collection(
+                              //           'Users/${Provider.of<PomotodoUser>(context).userId}/tasks');
+                              //   var task = users.doc(data.id);
+                              //   task.set({
+                              //     "taskName": data.taskName,
+                              //     "taskInfo": data.taskInfo,
+                              //     "taskType": data.taskType,
+                              //     "taskNameCaseInsensitive":
+                              //         data.taskName.toLowerCase(),
+                              //     "isDone": false,
+                              //     "isActive" : true,
+                              //   });
+                              // }
 
-                        // for (int i = 0; i < selectedIndexes.length; i++) {
-                        //   tasks.removeAt(selectedIndexes[i] - i);
-                        // }
-                        // selectedIndexes.clear();
-                        // buttonVisible = false;
-                        // setState(() {});
-                      },
-                      child: const Text(
-                          "Seçili görevleri tamamlanmamış olarak işaretle")),
-                ),
+                              // for (int i = 0; i < selectedIndexes.length; i++) {
+                              //   tasks.removeAt(selectedIndexes[i] - i);
+                              // }
+                              // selectedIndexes.clear();
+                              // buttonVisible = false;
+                              // setState(() {});
+                            },
+                            child: const Text(
+                                "Seçili görevleri tamamlanmamış olarak işaretle")),
+                      
+                    ),
               )
           ],
         ),
@@ -141,6 +157,33 @@ class ListUpdate extends ChangeNotifier {
       selectedIndexes.add(index);
       buttonVisible = true;
     }
+    notifyListeners();
+  }
+
+  void elevatedButtonWorks(List selectedIndexes, List<TaskModel> tasks,
+      bool buttonVisible, BuildContext context) {
+    int selectedNumber = selectedIndexes.length;
+    for (int i = 0; i < selectedNumber; i++) {
+      final TaskModel data = tasks[selectedIndexes[i]];
+
+      CollectionReference users = FirebaseFirestore.instance.collection(
+          'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+      var task = users.doc(data.id);
+      task.set({
+        "taskName": data.taskName,
+        "taskInfo": data.taskInfo,
+        "taskType": data.taskType,
+        "taskNameCaseInsensitive": data.taskName.toLowerCase(),
+        "isDone": false,
+        "isActive": true,
+      });
+    }
+
+    for (int i = 0; i < selectedIndexes.length; i++) {
+      tasks.removeAt(selectedIndexes[i] - i);
+    }
+    selectedIndexes.clear();
+    buttonVisible = false;
     notifyListeners();
   }
 }
