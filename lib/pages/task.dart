@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
-import 'package:flutter_application_1/pages/deleted_tasks.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
-import 'package:provider/provider.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -31,8 +29,8 @@ class Task extends State<TaskView> {
     _initRetrieval();
   }
 
-  String alertTitle = "Görev Silinecek!";
-  String alertSubtitle = "Görevi silmek istediğinize emin misiniz?";
+  String alertTitle = "Görev Çöp Kutusuna Taşınacak!";
+  String alertSubtitle = "Görev çöp kutusuna taşınsın mı?";
   String alertApprove = "Onayla";
   String alertReject = "İptal Et";
   @override
@@ -332,8 +330,6 @@ class Task extends State<TaskView> {
             TaskPageIconButton(
               taskIcons: Icons.done,
               onPressIconButton: () {
-                //ButtonsOnPressed().doneButton(context, taskLists()[0]);
-
                 Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
                     .then((_) {
                   _refresh();

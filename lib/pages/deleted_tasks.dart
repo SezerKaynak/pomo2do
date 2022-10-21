@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class DeletedTasks extends StatelessWidget {
   const DeletedTasks({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     List selectedIndexes = [];
@@ -59,16 +59,14 @@ class DeletedTasks extends StatelessWidget {
                                             var checkBoxWork =
                                                 context.read<ListUpdate>();
                                             checkBoxWork.checkBoxWorks(
-                                                selectedIndexes,
-                                                index);
+                                                selectedIndexes, index);
                                           },
                                         ),
                                         onTap: () {
                                           var checkBoxWork =
                                               context.read<ListUpdate>();
                                           checkBoxWork.checkBoxWorks(
-                                              selectedIndexes,
-                                              index);
+                                              selectedIndexes, index);
                                         },
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -93,21 +91,53 @@ class DeletedTasks extends StatelessWidget {
                     // ignore: dead_code
                     Expanded(
                       flex: 0,
-                      child: SizedBox(
-                        width: 400,
-                        height: 60,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            onPressed: () {
-                              var elevatedButtonWorks =
-                                  context.read<ListUpdate>();
-                              elevatedButtonWorks.elevatedButtonWorks(
-                                  selectedIndexes, tasks);
-                            },
-                            child:
-                                const Text("Seçili görevleri tekrar aktif et")),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: SizedBox(
+                                height: 60,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20))),
+                                    onPressed: () {
+                                      var elevatedButtonWorks =
+                                          context.read<ListUpdate>();
+                                      elevatedButtonWorks.elevatedButtonWorks(
+                                          selectedIndexes, tasks);
+                                    },
+                                    child: const Text(
+                                        "Seçili görevleri tekrar aktif et")),
+                              ),
+                            ),
+                            const VerticalDivider(
+                              thickness: 1,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: SizedBox(
+                                height: 60,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20))),
+                                    onPressed: () {
+                                      var elevatedButtonWorks =
+                                          context.read<ListUpdate>();
+                                      elevatedButtonWorks.elevatedButtonWorks(
+                                          selectedIndexes, tasks);
+                                    },
+                                    child: const Text(
+                                        "Seçili görevleri tekrar aktif et")),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                 ],
@@ -128,8 +158,7 @@ class ListUpdate extends ChangeNotifier {
     notifyListeners();
   }
 
-  void elevatedButtonWorks(
-      List selectedIndexes, List<TaskModel> tasks) {
+  void elevatedButtonWorks(List selectedIndexes, List<TaskModel> tasks) {
     int selectedNumber = selectedIndexes.length;
     for (int i = 0; i < selectedNumber; i++) {
       final TaskModel data = tasks[selectedIndexes[i]];
