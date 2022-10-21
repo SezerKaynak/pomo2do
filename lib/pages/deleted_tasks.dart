@@ -44,44 +44,39 @@ class DeletedTasks extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          decoration: BoxDecoration(
-                              color: Colors.green[100],
-                              borderRadius: BorderRadius.circular(16.0)),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(15),
-                            leading: Consumer<ListUpdate>(
+                            decoration: BoxDecoration(
+                                color: Colors.green[100],
+                                borderRadius: BorderRadius.circular(16.0)),
+                            child: Consumer<ListUpdate>(
                               builder: (context, value, child) {
-                                return Checkbox(
-                                  value: selectedIndexes.contains(index),
-                                  onChanged: (_) {
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.all(15),
+                                  leading: Checkbox(
+                                    value: selectedIndexes.contains(index),
+                                    onChanged: (_) {
+                                      var checkBoxWork =
+                                          context.read<ListUpdate>();
+                                      checkBoxWork.checkBoxWorks(
+                                          selectedIndexes,
+                                          index,
+                                          buttonVisible);
+                                    },
+                                  ),
+                                  onTap: () {
                                     var checkBoxWork =
                                         context.read<ListUpdate>();
                                     checkBoxWork.checkBoxWorks(
                                         selectedIndexes, index, buttonVisible);
                                   },
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  title: Text(data.taskName),
+                                  subtitle: Text(data.taskInfo),
+                                  trailing: const Icon(Icons.arrow_right_sharp),
                                 );
                               },
-                            ),
-                            onTap: () async {
-                              // setState(() {
-                              //   if (selectedIndexes.contains(index)) {
-                              //     selectedIndexes.remove(index);
-                              //     buttonVisible = false;
-                              //   } else {
-                              //     selectedIndexes.add(index);
-                              //     buttonVisible = true;
-                              //   }
-                              // }
-                              // );
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            title: Text(data.taskName),
-                            subtitle: Text(data.taskInfo),
-                            trailing: const Icon(Icons.arrow_right_sharp),
-                          ),
-                        ),
+                            )),
                       ],
                     );
                   },
