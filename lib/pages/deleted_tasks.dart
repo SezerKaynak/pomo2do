@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:provider/provider.dart';
 
 class DeletedTasks extends StatelessWidget {
@@ -107,11 +108,11 @@ class DeletedTasks extends StatelessWidget {
                                     onPressed: () {
                                       var elevatedButtonWorks =
                                           context.read<ListUpdate>();
-                                      elevatedButtonWorks.elevatedButtonWorks(
+                                      elevatedButtonWorks.taskActivationButton(
                                           selectedIndexes, tasks);
                                     },
                                     child: const Text(
-                                        "Seçili görevleri tekrar aktif et")),
+                                        "Görevleri tekrar aktif et")),
                               ),
                             ),
                             const VerticalDivider(
@@ -129,11 +130,10 @@ class DeletedTasks extends StatelessWidget {
                                     onPressed: () {
                                       var elevatedButtonWorks =
                                           context.read<ListUpdate>();
-                                      elevatedButtonWorks.elevatedButtonWorks(
+                                      elevatedButtonWorks.deleteTasksButton(
                                           selectedIndexes, tasks);
                                     },
-                                    child: const Text(
-                                        "Seçili görevleri tekrar aktif et")),
+                                    child: const Text("Görevleri tamamen sil")),
                               ),
                             ),
                           ],
@@ -158,7 +158,7 @@ class ListUpdate extends ChangeNotifier {
     notifyListeners();
   }
 
-  void elevatedButtonWorks(List selectedIndexes, List<TaskModel> tasks) {
+  void taskActivationButton(List selectedIndexes, List<TaskModel> tasks) {
     int selectedNumber = selectedIndexes.length;
     for (int i = 0; i < selectedNumber; i++) {
       final TaskModel data = tasks[selectedIndexes[i]];
@@ -176,6 +176,21 @@ class ListUpdate extends ChangeNotifier {
       });
     }
 
+    for (int i = 0; i < selectedIndexes.length; i++) {
+      tasks.removeAt(selectedIndexes[i] - i);
+    }
+    selectedIndexes.clear();
+    notifyListeners();
+  }
+
+  void deleteTasksButton(List selectedIndexes, List<TaskModel> tasks) async {
+    DatabaseService service = DatabaseService();
+    int selectedNumber = selectedIndexes.length;
+
+    for(int i = 0; i < selectedNumber; i++){
+      await service.deleteTask(tasks[selectedIndexes[i]].id.toString());
+    }
+    
     for (int i = 0; i < selectedIndexes.length; i++) {
       tasks.removeAt(selectedIndexes[i] - i);
     }

@@ -135,11 +135,6 @@ class Task extends State<TaskView> {
                                   onDismissed: ((direction) async {
                                     if (direction ==
                                         DismissDirection.endToStart) {
-                                      // await service.deleteTask(
-                                      //     retrievedTaskList![index]
-                                      //         .id
-                                      //         .toString());
-
                                       CollectionReference users =
                                           FirebaseFirestore.instance.collection(
                                               'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
@@ -340,7 +335,8 @@ class Task extends State<TaskView> {
                 taskIcons: Icons.delete,
                 onPressIconButton: () {
                   Navigator.pushNamed(context, '/deleted',
-                      arguments: taskLists()[2]).then((_) => _refresh());
+                          arguments: taskLists()[2])
+                      .then((_) => _refresh());
                 }),
           ],
         ),
