@@ -108,33 +108,7 @@ class DeletedTasks extends StatelessWidget {
                               elevatedButtonWorks.elevatedButtonWorks(
                                   selectedIndexes,
                                   tasks,
-                                  buttonVisible,
-                                  context);
-                              // int selectedNumber = selectedIndexes.length;
-                              // for (int i = 0; i < selectedNumber; i++) {
-                              //   final TaskModel data = tasks[selectedIndexes[i]];
-
-                              //   CollectionReference users = FirebaseFirestore.instance
-                              //       .collection(
-                              //           'Users/${Provider.of<PomotodoUser>(context).userId}/tasks');
-                              //   var task = users.doc(data.id);
-                              //   task.set({
-                              //     "taskName": data.taskName,
-                              //     "taskInfo": data.taskInfo,
-                              //     "taskType": data.taskType,
-                              //     "taskNameCaseInsensitive":
-                              //         data.taskName.toLowerCase(),
-                              //     "isDone": false,
-                              //     "isActive" : true,
-                              //   });
-                              // }
-
-                              // for (int i = 0; i < selectedIndexes.length; i++) {
-                              //   tasks.removeAt(selectedIndexes[i] - i);
-                              // }
-                              // selectedIndexes.clear();
-                              // buttonVisible = false;
-                              // setState(() {});
+                                  buttonVisible);
                             },
                             child: const Text(
                                 "Seçili görevleri tamamlanmamış olarak işaretle")),
@@ -161,7 +135,7 @@ class ListUpdate extends ChangeNotifier {
   }
 
   void elevatedButtonWorks(List selectedIndexes, List<TaskModel> tasks,
-      bool buttonVisible, BuildContext context) {
+      bool buttonVisible) {
     int selectedNumber = selectedIndexes.length;
     for (int i = 0; i < selectedNumber; i++) {
       final TaskModel data = tasks[selectedIndexes[i]];
