@@ -116,6 +116,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             "taskNameCaseInsensitive":
                                 data.taskName.toLowerCase(),
                             "isDone": false,
+                            "isActive" : true,
                           });
                         }
 

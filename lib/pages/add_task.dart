@@ -20,6 +20,7 @@ class AddTask extends StatelessWidget {
     var buttonText = "Kaydet";
 
     bool isDone = false;
+    bool isActive = true;
     final TextEditingController _taskNameController = TextEditingController();
     final TextEditingController _taskTypeController = TextEditingController();
     final TextEditingController _taskInfoController = TextEditingController();
@@ -107,6 +108,7 @@ class AddTask extends StatelessWidget {
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
                             "isDone": isDone,
+                            'isActive' : isActive 
                           });
                           Navigator.push(context, MaterialPageRoute(builder: (context) => TaskView()));
                         },

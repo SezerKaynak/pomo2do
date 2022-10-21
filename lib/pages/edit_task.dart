@@ -12,13 +12,14 @@ class EditTask extends StatefulWidget {
     required this.taskInfo,
     required this.isDone,
     required this.id,
+    //required this.isActive,
   });
   final String taskName;
   final String taskType;
   final String taskInfo;
   final bool isDone;
   final String id;
-
+  //final bool isActive;
   @override
   State<EditTask> createState() => _EditTaskState();
 }
@@ -143,6 +144,7 @@ class _EditTaskState extends State<EditTask> {
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
                             "isDone": isChecked,
+                            "isActive" : true,
                           });
                           Navigator.pushAndRemoveUntil(
                               context,

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
@@ -22,7 +24,7 @@ class Task extends State<TaskView> {
   List<TaskModel>? retrievedTaskList;
   List<TaskModel>? tasks;
   final TextEditingController textController = TextEditingController();
-
+  List<TaskModel> deletedTasks = [];
   @override
   void initState() {
     super.initState();
@@ -135,10 +137,31 @@ class Task extends State<TaskView> {
                                   onDismissed: ((direction) async {
                                     if (direction ==
                                         DismissDirection.endToStart) {
-                                      await service.deleteTask(
-                                          retrievedTaskList![index]
-                                              .id
-                                              .toString());
+                                      // await service.deleteTask(
+                                      //     retrievedTaskList![index]
+                                      //         .id
+                                      //         .toString());
+
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance.collection(
+                                              'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                      var task = users
+                                          .doc(retrievedTaskList![index].id);
+                                      task.set({
+                                        'taskNameCaseInsensitive':
+                                            retrievedTaskList![index]
+                                                .taskName
+                                                .toLowerCase(),
+                                        'taskName':
+                                            retrievedTaskList![index].taskName,
+                                        'taskType':
+                                            retrievedTaskList![index].taskType,
+                                        'taskInfo':
+                                            retrievedTaskList![index].taskInfo,
+                                        "isDone": false,
+                                        "isActive": false,
+                                      });
+
                                       _refresh();
                                       _dismiss();
                                     } else {
@@ -147,6 +170,7 @@ class Task extends State<TaskView> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => EditTask(
+                                                      //isActive: retrievedTaskList![index].isActive,
                                                       isDone:
                                                           retrievedTaskList![
                                                                   index]
@@ -220,7 +244,7 @@ class Task extends State<TaskView> {
                                         children: const [
                                           Icon(Icons.delete,
                                               color: Colors.white),
-                                          Text("SİL",
+                                          Text("ÇÖP KUTUSUNA TAŞI",
                                               style: TextStyle(
                                                   color: Colors.white))
                                         ],
@@ -319,8 +343,8 @@ class Task extends State<TaskView> {
             TaskPageIconButton(
                 taskIcons: Icons.delete,
                 onPressIconButton: () {
-                  //ChangeNotifierProvider<ListUpdate>(create: (context) => ListUpdate(), child: const DeletedTasks());
-                  Navigator.pushNamed(context, '/deleted');
+                  Navigator.pushNamed(context, '/deleted',
+                      arguments: taskLists()[2]);
                 }),
           ],
         ),
@@ -354,15 +378,18 @@ class Task extends State<TaskView> {
   List<dynamic> taskLists() {
     List<TaskModel> incompletedTasks = [];
     List<TaskModel> completedTasks = [];
+    List<TaskModel> trashBoxTasks = [];
     List newList = [];
     for (int i = 0; i < tasks!.length; i++) {
-      if (tasks![i].isDone == false) {
+      if (!tasks![i].isDone && tasks![i].isActive) {
         incompletedTasks.add(tasks![i]);
-      } else {
+      } else if (tasks![i].isDone && tasks![i].isActive) {
         completedTasks.add(tasks![i]);
+      } else if (!tasks![i].isActive && !tasks![i].isDone) {
+        trashBoxTasks.add(tasks![i]);
       }
     }
-    newList.addAll([completedTasks, incompletedTasks]);
+    newList.addAll([completedTasks, incompletedTasks, trashBoxTasks]);
     return newList;
   }
 

@@ -6,9 +6,11 @@ class TaskModel {
   final String taskName;
   final String taskType;
   final bool isDone;
+  final bool isActive;
 
-  TaskModel(
+  TaskModel( 
       {this.id, this.isDone = false,
+      this.isActive = true,
       required this.taskInfo,
       required this.taskName,
       required this.taskType});
@@ -18,7 +20,8 @@ class TaskModel {
       'taskInfo': taskInfo,
       'taskName': taskName,
       'taskType': taskType,
-      'isDone': isDone
+      'isDone': isDone,
+      'isActive' : isActive
     };
   }
 
@@ -27,5 +30,6 @@ class TaskModel {
         taskInfo = doc.data()!["taskInfo"],
         taskName = doc.data()!["taskName"],
         taskType = doc.data()!["taskType"],
-        isDone = doc.data()!["isDone"];
+        isDone = doc.data()!["isDone"],
+        isActive = doc.data()?["isActive"] ?? true;
 }
