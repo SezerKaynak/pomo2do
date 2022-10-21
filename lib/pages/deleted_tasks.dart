@@ -6,7 +6,6 @@ import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 
-
 class DeletedTasks extends StatelessWidget {
   const DeletedTasks({super.key});
 
@@ -50,19 +49,17 @@ class DeletedTasks extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.0)),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(15),
-                            leading: Checkbox(
-                              value: selectedIndexes.contains(index),
-                              onChanged: (_) {
-                                // setState(() {
-                                //   if (selectedIndexes.contains(index)) {
-                                //     selectedIndexes.remove(index);
-                                //     buttonVisible = false;
-                                //   } else {
-                                //     selectedIndexes.add(index);
-                                //     buttonVisible = true;
-                                //   }
-                                // }
-                                // );
+                            leading: Consumer<ListUpdate>(
+                              builder: (context, value, child) {
+                                return Checkbox(
+                                  value: selectedIndexes.contains(index),
+                                  onChanged: (_) {
+                                    var checkBoxWork =
+                                        context.read<ListUpdate>();
+                                    checkBoxWork.checkBoxWorks(
+                                        selectedIndexes, index, buttonVisible);
+                                  },
+                                );
                               },
                             ),
                             onTap: () async {
@@ -106,7 +103,7 @@ class DeletedTasks extends StatelessWidget {
                         // int selectedNumber = selectedIndexes.length;
                         // for (int i = 0; i < selectedNumber; i++) {
                         //   final TaskModel data = tasks[selectedIndexes[i]];
-                          
+
                         //   CollectionReference users = FirebaseFirestore.instance
                         //       .collection(
                         //           'Users/${Provider.of<PomotodoUser>(context).userId}/tasks');
@@ -141,5 +138,14 @@ class DeletedTasks extends StatelessWidget {
 }
 
 class ListUpdate extends ChangeNotifier {
-
+  void checkBoxWorks(List selectedIndexes, int index, bool buttonVisible) {
+    if (selectedIndexes.contains(index)) {
+      selectedIndexes.remove(index);
+      buttonVisible = false;
+    } else {
+      selectedIndexes.add(index);
+      buttonVisible = true;
+    }
+    notifyListeners();
+  }
 }
