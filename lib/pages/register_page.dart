@@ -11,7 +11,6 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     var register = "Kayıt Ol";
     var subtitle = "Aşağıdaki alanları doldurarak kaydolabilirsiniz.🙂";

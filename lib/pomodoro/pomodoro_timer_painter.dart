@@ -53,7 +53,7 @@ class CustomTimerPainter extends CustomPainter {
         ..strokeWidth = strokeWidth!
         ..strokeCap = strokeCap!
         ..style = PaintingStyle.stroke
-        ..maskFilter = MaskFilter.blur(BlurStyle.inner, 4);
+        ..maskFilter = const MaskFilter.blur(BlurStyle.inner, 4);
       backgroundPaint
         ..color = backgroundColor!
         ..style = PaintingStyle.fill;

@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/search_task_model.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
-import 'package:flutter_application_1/pages/task.dart';
 
 class SearchView extends StatelessWidget {
   const SearchView({super.key});
@@ -55,8 +53,8 @@ class SearchView extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          title: Text('${data.taskName}'),
-                          subtitle: Text('${data.taskInfo}'),
+                          title: Text(data.taskName),
+                          subtitle: Text(data.taskInfo),
                           trailing: const Icon(Icons.arrow_right_sharp),
                         ),
                       ),

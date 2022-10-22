@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:flutter_application_1/pages/task.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -12,8 +11,8 @@ class DatabaseService {
         .add(taskData.toMap());
   }
 
-  updateTask(TaskModel taskData) async{
-    await _db
+  updateTask(TaskModel taskData){
+    _db
         .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks").doc(taskData.id);
   }
   Future<void> deleteTask(String documentId) async{
