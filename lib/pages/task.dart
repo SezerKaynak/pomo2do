@@ -44,7 +44,7 @@ class Task extends State<TaskView> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
-                ButtonsOnPressed().personInfoButton(context);
+                Navigator.pushNamed(context, '/person');
               },
               icon: const Icon(Icons.tune)),
           actions: [
@@ -313,15 +313,7 @@ class Task extends State<TaskView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             TaskPageIconButton(
-                taskIcons: Icons.home,
-                onPressIconButton: () {
-                  ButtonsOnPressed().homeButton;
-                }),
-            TaskPageIconButton(
-                taskIcons: Icons.stacked_bar_chart,
-                onPressIconButton: () {
-                  ButtonsOnPressed().stackedBarButton;
-                }),
+                taskIcons: Icons.stacked_bar_chart, onPressIconButton: () {}),
             TaskPageIconButton(
               taskIcons: Icons.done,
               onPressIconButton: () {
@@ -448,19 +440,4 @@ class TaskPageIconButton extends StatelessWidget {
       ),
     );
   }
-}
-
-class ButtonsOnPressed {
-  void personInfoButton(BuildContext context) {
-    Navigator.pushNamed(context, '/person');
-  }
-
-  void searchButton() {}
-  void homeButton() {}
-  void trashBoxButton() {}
-  void doneButton(BuildContext context, List<TaskModel> completedTasks) {
-    //Navigator.pushNamed(context, '/done', arguments: completedTasks);
-  }
-
-  void stackedBarButton() {}
 }

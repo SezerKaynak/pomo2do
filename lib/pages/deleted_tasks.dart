@@ -45,7 +45,7 @@ class DeletedTasks extends StatelessWidget {
                             children: [
                               Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.green[100],
+                                      color: Colors.red[200],
                                       borderRadius:
                                           BorderRadius.circular(16.0)),
                                   child: Consumer<ListUpdate>(

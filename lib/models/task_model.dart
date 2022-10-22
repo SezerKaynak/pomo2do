@@ -8,12 +8,13 @@ class TaskModel {
   final bool isDone;
   final bool isActive;
 
-  TaskModel( 
-      {this.id, this.isDone = false,
+  TaskModel(
+      {this.id,
+      this.isDone = false,
       this.isActive = true,
-      required this.taskInfo,
-      required this.taskName,
-      required this.taskType});
+      this.taskInfo = "",
+      this.taskName = "",
+      this.taskType = ""});
 
   Map<String, dynamic> toMap() {
     return {
@@ -21,7 +22,7 @@ class TaskModel {
       'taskName': taskName,
       'taskType': taskType,
       'isDone': isDone,
-      'isActive' : isActive
+      'isActive': isActive
     };
   }
 
@@ -32,4 +33,18 @@ class TaskModel {
         taskType = doc.data()!["taskType"],
         isDone = doc.data()!["isDone"],
         isActive = doc.data()?["isActive"] ?? true;
+
+  List<TaskModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
+    return querySnapshot.docs.map((snapshot) {
+      final Map<String, dynamic> dataMap =
+          snapshot.data() as Map<String, dynamic>;
+
+      return TaskModel(
+          taskInfo: dataMap['taskInfo'],
+          taskName: dataMap['taskName'],
+          taskType: dataMap['taskType'],
+          isDone: dataMap['isDone'],
+          isActive: dataMap['isActive']);
+    }).toList();
+  }
 }
