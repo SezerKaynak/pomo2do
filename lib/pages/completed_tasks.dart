@@ -102,6 +102,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () {
                         int selectedNumber = selectedIndexes.length;
+                        selectedIndexes.sort();
                         for (int i = 0; i < selectedNumber; i++) {
                           final TaskModel data = tasks[selectedIndexes[i]];
                           

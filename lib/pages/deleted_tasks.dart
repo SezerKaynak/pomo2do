@@ -160,6 +160,7 @@ class ListUpdate extends ChangeNotifier {
 
   void taskActivationButton(List selectedIndexes, List<TaskModel> tasks) {
     int selectedNumber = selectedIndexes.length;
+    selectedIndexes.sort();
     for (int i = 0; i < selectedNumber; i++) {
       final TaskModel data = tasks[selectedIndexes[i]];
 
