@@ -7,10 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
-import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -44,7 +43,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<IAuthService>(context, listen: false);
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
 
@@ -226,12 +224,8 @@ class _EditProfileState extends State<EditProfile> {
                                 lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
-                              print(
-                                  pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                               String formattedDate =
                                   DateFormat('dd.MM.yyyy').format(pickedDate);
-                              print(
-                                  formattedDate); //formatted date output using intl package =>  2021-03-16
 
                               _birthdayController.text =
                                   formattedDate; //set output date to TextField value.
@@ -307,14 +301,13 @@ class _EditProfileState extends State<EditProfile> {
       final pp = await ImagePicker().pickImage(source: source);
       if (pp == null) return;
       final imageTemporary = File(pp.path);
-      //final imagePermanent = await saveImagePermanently(pp.path);
-      print(pp.path);
+
       setState(() {
         image = imageTemporary;
       });
-      print(image);
-    } on PlatformException catch (e) {
-      print("Failed to pick image:$e");
+
+    } on PlatformException catch (_) {
+      SmartDialog.showToast("Resim seçilemedi!");
     }
   }
 

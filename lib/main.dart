@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/completed_tasks.dart';
+import 'package:flutter_application_1/pages/deleted_tasks.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
-import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
@@ -27,7 +27,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -42,6 +41,7 @@ class MyApp extends StatelessWidget {
                   '/task': (context) => TaskView(),
                   '/person': (context) => PersonInfo(),
                   '/done' : (context) => const CompletedTasks(),
+                  '/deleted' : (context) => ChangeNotifierProvider<ListUpdate>(create: (context) => ListUpdate(), child: const DeletedTasks()),
                   '/editProfile': (context) => const EditProfile(),
                 },
                 debugShowCheckedModeBanner: false,

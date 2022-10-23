@@ -293,8 +293,6 @@ class BottomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<IAuthService>(context, listen: false);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

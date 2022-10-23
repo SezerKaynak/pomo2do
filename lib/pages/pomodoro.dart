@@ -25,6 +25,7 @@ class _PomodoroViewState extends State<PomodoroView> {
             },
           ),
         ),
+        resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(

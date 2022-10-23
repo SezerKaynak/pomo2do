@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
@@ -20,15 +22,15 @@ class Task extends State<TaskView> {
   List<TaskModel>? retrievedTaskList;
   List<TaskModel>? tasks;
   final TextEditingController textController = TextEditingController();
-
+  List<TaskModel> deletedTasks = [];
   @override
   void initState() {
     super.initState();
     _initRetrieval();
   }
 
-  String alertTitle = "Görev Silinecek!";
-  String alertSubtitle = "Görevi silmek istediğinize emin misiniz?";
+  String alertTitle = "Görev Çöp Kutusuna Taşınacak!";
+  String alertSubtitle = "Görev çöp kutusuna taşınsın mı?";
   String alertApprove = "Onayla";
   String alertReject = "İptal Et";
   @override
@@ -42,7 +44,7 @@ class Task extends State<TaskView> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
-                ButtonsOnPressed().personInfoButton(context);
+                Navigator.pushNamed(context, '/person');
               },
               icon: const Icon(Icons.tune)),
           actions: [
@@ -133,10 +135,26 @@ class Task extends State<TaskView> {
                                   onDismissed: ((direction) async {
                                     if (direction ==
                                         DismissDirection.endToStart) {
-                                      await service.deleteTask(
-                                          retrievedTaskList![index]
-                                              .id
-                                              .toString());
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance.collection(
+                                              'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                      var task = users
+                                          .doc(retrievedTaskList![index].id);
+                                      task.set({
+                                        'taskNameCaseInsensitive':
+                                            retrievedTaskList![index]
+                                                .taskName
+                                                .toLowerCase(),
+                                        'taskName':
+                                            retrievedTaskList![index].taskName,
+                                        'taskType':
+                                            retrievedTaskList![index].taskType,
+                                        'taskInfo':
+                                            retrievedTaskList![index].taskInfo,
+                                        "isDone": false,
+                                        "isActive": false,
+                                      });
+
                                       _refresh();
                                       _dismiss();
                                     } else {
@@ -145,6 +163,7 @@ class Task extends State<TaskView> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => EditTask(
+                                                      //isActive: retrievedTaskList![index].isActive,
                                                       isDone:
                                                           retrievedTaskList![
                                                                   index]
@@ -218,7 +237,7 @@ class Task extends State<TaskView> {
                                         children: const [
                                           Icon(Icons.delete,
                                               color: Colors.white),
-                                          Text("SİL",
+                                          Text("ÇÖP KUTUSUNA TAŞI",
                                               style: TextStyle(
                                                   color: Colors.white))
                                         ],
@@ -294,24 +313,22 @@ class Task extends State<TaskView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             TaskPageIconButton(
-                taskIcons: Icons.home,
-                onPressIconButton: () {
-                  ButtonsOnPressed().homeButton;
-                }),
+                taskIcons: Icons.stacked_bar_chart, onPressIconButton: () {}),
             TaskPageIconButton(
-                taskIcons: Icons.timer,
-                onPressIconButton: () {
-                  ButtonsOnPressed().timerButton;
-                }),
+              taskIcons: Icons.done,
+              onPressIconButton: () {
+                Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
+                    .then((_) {
+                  _refresh();
+                });
+              },
+            ),
             TaskPageIconButton(
-                taskIcons: Icons.done,
+                taskIcons: Icons.delete,
                 onPressIconButton: () {
-                  ButtonsOnPressed().doneButton(context, taskLists()[0]);
-                }),
-            TaskPageIconButton(
-                taskIcons: Icons.stacked_bar_chart,
-                onPressIconButton: () {
-                  ButtonsOnPressed().stackedBarButton;
+                  Navigator.pushNamed(context, '/deleted',
+                          arguments: taskLists()[2])
+                      .then((_) => _refresh());
                 }),
           ],
         ),
@@ -345,15 +362,18 @@ class Task extends State<TaskView> {
   List<dynamic> taskLists() {
     List<TaskModel> incompletedTasks = [];
     List<TaskModel> completedTasks = [];
+    List<TaskModel> trashBoxTasks = [];
     List newList = [];
     for (int i = 0; i < tasks!.length; i++) {
-      if (tasks![i].isDone == false) {
+      if (!tasks![i].isDone && tasks![i].isActive) {
         incompletedTasks.add(tasks![i]);
-      } else {
+      } else if (tasks![i].isDone && tasks![i].isActive) {
         completedTasks.add(tasks![i]);
+      } else if (!tasks![i].isActive && !tasks![i].isDone) {
+        trashBoxTasks.add(tasks![i]);
       }
     }
-    newList.addAll([completedTasks, incompletedTasks]);
+    newList.addAll([completedTasks, incompletedTasks, trashBoxTasks]);
     return newList;
   }
 
@@ -420,19 +440,4 @@ class TaskPageIconButton extends StatelessWidget {
       ),
     );
   }
-}
-
-class ButtonsOnPressed {
-  void personInfoButton(BuildContext context) {
-    Navigator.pushNamed(context, '/person');
-  }
-
-  void searchButton() {}
-  void homeButton() {}
-  void timerButton() {}
-  void doneButton(BuildContext context, List<TaskModel> completedTasks) {
-    Navigator.pushNamed(context, '/done', arguments: completedTasks);
-  }
-
-  void stackedBarButton() {}
 }

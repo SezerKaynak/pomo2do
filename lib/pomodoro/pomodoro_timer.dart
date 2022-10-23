@@ -75,7 +75,7 @@ class PomodoroTimer extends StatefulWidget {
   /// Handles the timer start.
   final bool autoStart;
 
-  PomodoroTimer(
+  const PomodoroTimer(
       {required this.width,
       required this.duration,
       required this.controller,
@@ -184,7 +184,7 @@ class PomodoroTimerState extends State<PomodoroTimer>
     }
     // For ss format
     else if (widget.textFormat == TextFormat.SS) {
-      return '${(duration.inSeconds).toString().padLeft(2, '0')}';
+      return (duration.inSeconds).toString().padLeft(2, '0');
     }
     // For s format
     else if (widget.textFormat == TextFormat.S) {
