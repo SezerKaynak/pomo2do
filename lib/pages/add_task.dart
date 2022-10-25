@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:provider/provider.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
@@ -21,6 +22,7 @@ class AddTask extends StatelessWidget {
 
     bool isDone = false;
     bool isActive = true;
+    bool isArchive = false;
     final TextEditingController _taskNameController = TextEditingController();
     final TextEditingController _taskTypeController = TextEditingController();
     final TextEditingController _taskInfoController = TextEditingController();
@@ -99,7 +101,7 @@ class AddTask extends StatelessWidget {
                         onPressed: () async {
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
 
                           users.add({
                             'taskName': _taskNameController.text,
@@ -108,9 +110,13 @@ class AddTask extends StatelessWidget {
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
                             "isDone": isDone,
-                            'isActive' : isActive 
+                            'isActive': isActive,
+                            'isArchive': isArchive,
                           });
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TaskView()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TaskView()));
                         },
                         child: Text(buttonText))),
               ],

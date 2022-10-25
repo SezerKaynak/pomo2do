@@ -4,14 +4,14 @@ import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:provider/provider.dart';
 
-class CompletedTasks extends StatefulWidget {
-  const CompletedTasks({super.key});
+class ArchivedTasks extends StatefulWidget {
+  const ArchivedTasks({super.key});
 
   @override
-  State<CompletedTasks> createState() => _CompletedTasksState();
+  State<ArchivedTasks> createState() => _ArchivedTasksState();
 }
 
-class _CompletedTasksState extends State<CompletedTasks> {
+class _ArchivedTasksState extends State<ArchivedTasks> {
   List selectedIndexes = [];
   bool buttonVisible = false;
   @override
@@ -20,7 +20,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
         ModalRoute.of(context)!.settings.arguments as List<TaskModel>;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tamamlanmış Görevler"),
+        title: const Text("Arşivlenmiş Görevler"),
         centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -47,7 +47,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.green[100],
+                              color: Colors.cyan[200],
                               borderRadius: BorderRadius.circular(16.0)),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(15),
@@ -90,7 +90,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                 ),
               )
             else
-              const Center(child: Text("Tamamlanmış görev bulunamadı!")),
+              const Center(child: Text("Arşivlenmiş görev bulunamadı!")),
             if (buttonVisible)
               Expanded(
                 flex: 0,
@@ -117,9 +117,9 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             "taskType": data.taskType,
                             "taskNameCaseInsensitive":
                                 data.taskName.toLowerCase(),
-                            "isDone": false,
+                            "isArchive": false,
                             "isActive": true,
-                            "isArchive": data.isArchive,
+                            "isDone": data.isDone,
                           });
                         }
 
@@ -130,8 +130,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                         buttonVisible = false;
                         setState(() {});
                       },
-                      child: const Text(
-                          "Seçili görevleri tamamlanmamış olarak işaretle")),
+                      child: const Text("Seçili görevleri arşivden çıkar")),
                 ),
               )
           ],

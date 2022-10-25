@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:provider/provider.dart';
 
 class EditTask extends StatefulWidget {
   const EditTask({
@@ -11,13 +12,16 @@ class EditTask extends StatefulWidget {
     required this.taskType,
     required this.taskInfo,
     required this.isDone,
+    required this.isArchive,
     required this.id,
+
     //required this.isActive,
   });
   final String taskName;
   final String taskType;
   final String taskInfo;
   final bool isDone;
+  final bool isArchive;
   final String id;
   //final bool isActive;
   @override
@@ -25,7 +29,8 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  bool isChecked = false;
+  bool isCheckedDone = false;
+  bool isCheckedArchive = false;
   @override
   Widget build(BuildContext context) {
     var title = "Görev Düzenleme Sayfası";
@@ -109,13 +114,34 @@ class _EditTaskState extends State<EditTask> {
                     return Column(
                       children: [
                         CheckboxListTile(
-                          title: const Text('Görevi tamamlandı mı?'),
+                          title: const Text('Görev tamamlandı mı?'),
                           activeColor: Colors.blue,
                           value: state.value,
                           onChanged: (value) {
                             setState(() {
                               state.didChange(value);
-                              isChecked = state.value;
+                              isCheckedDone = state.value;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.platform,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                FormField(
+                  initialValue: widget.isArchive,
+                  builder: (FormFieldState state) {
+                    return Column(
+                      children: [
+                        CheckboxListTile(
+                          title: const Text('Görev arşivlensin mi?'),
+                          activeColor: Colors.blue,
+                          value: state.value,
+                          onChanged: (value) {
+                            setState(() {
+                              state.didChange(value);
+                              isCheckedArchive = state.value;
                             });
                           },
                           controlAffinity: ListTileControlAffinity.platform,
@@ -135,7 +161,7 @@ class _EditTaskState extends State<EditTask> {
                         onPressed: () async {
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
                           var task = users.doc(widget.id);
                           task.set({
                             'taskNameCaseInsensitive':
@@ -143,8 +169,9 @@ class _EditTaskState extends State<EditTask> {
                             'taskName': _taskNameController.text,
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
-                            "isDone": isChecked,
-                            "isActive" : true,
+                            "isDone": isCheckedDone,
+                            "isActive": true,
+                            "isArchive": isCheckedArchive
                           });
                           Navigator.pushAndRemoveUntil(
                               context,

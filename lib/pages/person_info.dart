@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
 import 'package:flutter_application_1/pages/pomodoro_settings.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
@@ -29,7 +29,7 @@ class _PersonInfoState extends State<PersonInfo> {
     String yol = await FirebaseStorage.instance
         .ref()
         .child("profilresimleri")
-        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child(context.read<PomotodoUser>().userId)
         .child("profilResmi.png")
         .getDownloadURL();
 
@@ -46,7 +46,7 @@ class _PersonInfoState extends State<PersonInfo> {
   Widget build(BuildContext context) {
     var _authService = Provider.of<IAuthService>(context, listen: false);
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
-    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
+    var user = users.doc(context.read<PomotodoUser>().userId);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -173,10 +173,11 @@ class _PersonInfoState extends State<PersonInfo> {
                       subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
                       title: settingTitle(context, 'Pomodoro Ayarları'),
                       tap: () {
-                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PomodoroSettings()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PomodoroSettings()));
                       }),
                   const Divider(thickness: 1),
                   Settings(

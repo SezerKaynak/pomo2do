@@ -1,15 +1,16 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -32,7 +33,7 @@ class _EditProfileState extends State<EditProfile> {
     String yol = await FirebaseStorage.instance
         .ref()
         .child("profilresimleri")
-        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child(context.read<PomotodoUser>().userId)
         .child("profilResmi.png")
         .getDownloadURL();
 
@@ -44,7 +45,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
-    var user = users.doc(FirebaseAuth.instance.currentUser!.uid);
+    var user = users.doc(context.read<PomotodoUser>().userId);
 
     var title = "Profil Düzenleme";
     var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
@@ -71,16 +72,18 @@ class _EditProfileState extends State<EditProfile> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: ScreenPadding().screenPadding.copyWith(top: 10, left: 20, right: 20),
+            padding: ScreenPadding()
+                .screenPadding
+                .copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(
-                    title: title,
-                    theme: Theme.of(context).textTheme.headline4,
-                    fontW: FontWeight.w600,
-                    textPosition: TextAlign.left,
-                    customPadding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
-                    ),
+                  title: title,
+                  theme: Theme.of(context).textTheme.headline4,
+                  fontW: FontWeight.w600,
+                  textPosition: TextAlign.left,
+                  customPadding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                ),
                 ScreenTexts(
                     title: subtitle,
                     theme: Theme.of(context).textTheme.subtitle1,
@@ -220,16 +223,13 @@ class _EditProfileState extends State<EditProfile> {
                                 context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime(1950),
-                                //DateTime.now() - not to allow to Bottom before today.
                                 lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
                               String formattedDate =
                                   DateFormat('dd.MM.yyyy').format(pickedDate);
 
-                              _birthdayController.text =
-                                  formattedDate; //set output date to TextField value.
-
+                              _birthdayController.text = formattedDate;
                             } else {}
                           },
                           con: const Icon(Icons.calendar_today),
@@ -261,13 +261,15 @@ class _EditProfileState extends State<EditProfile> {
                           CollectionReference users =
                               FirebaseFirestore.instance.collection('Users');
                           var user =
-                              users.doc(FirebaseAuth.instance.currentUser!.uid);
+                              users.doc(context.read<PomotodoUser>().userId);
 
                           user.set({
                             'name': _nameController.text,
                             'surname': _surnameController.text,
                             'birthday': _birthdayController.text,
-                            'email': FirebaseAuth.instance.currentUser!.email
+                            'email': context
+                                .read<PomotodoUser>()
+                                .userMail
                                 .toString(),
                           });
                           uploadImage();
@@ -288,10 +290,10 @@ class _EditProfileState extends State<EditProfile> {
 
   void uploadImage() async {
     FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-    var ss = firebaseStorage
+    firebaseStorage
         .ref()
         .child("profilresimleri")
-        .child(FirebaseAuth.instance.currentUser!.uid)
+        .child(context.read<PomotodoUser>().userId)
         .child("profilResmi.png")
         .putFile(image!);
   }
@@ -305,23 +307,10 @@ class _EditProfileState extends State<EditProfile> {
       setState(() {
         image = imageTemporary;
       });
-
     } on PlatformException catch (_) {
       SmartDialog.showToast("Resim seçilemedi!");
     }
   }
-
-  // Future<File> saveImagePermanently(String imagePath) async {
-  //   final pp = File('//storage/emulated/0/DCIM/profile.png');
-  //   final name = basename(imagePath);
-  //   print(pp);
-  //   return File(imagePath).copy('//storage/emulated/0/DCIM/$name');
-  // }
-
-  // Future<Image> loadImagePermanently(String imagePath) async {
-  //   final image = File('//storage/emulated/0/DCIM/profile.png');
-  //   return Image.file(image);
-  // }
 
   Widget choose() {
     return Container(

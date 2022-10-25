@@ -7,9 +7,11 @@ class TaskModel {
   final String taskType;
   final bool isDone;
   final bool isActive;
+  final bool isArchive;
 
   TaskModel(
       {this.id,
+      this.isArchive = false,
       this.isDone = false,
       this.isActive = true,
       this.taskInfo = "",
@@ -22,7 +24,8 @@ class TaskModel {
       'taskName': taskName,
       'taskType': taskType,
       'isDone': isDone,
-      'isActive': isActive
+      'isActive': isActive,
+      'isArchive': isArchive,
     };
   }
 
@@ -31,6 +34,7 @@ class TaskModel {
         taskInfo = doc.data()!["taskInfo"],
         taskName = doc.data()!["taskName"],
         taskType = doc.data()!["taskType"],
+        isArchive = doc.data()!["isArchive"] ?? false,
         isDone = doc.data()!["isDone"],
         isActive = doc.data()?["isActive"] ?? true;
 
@@ -43,6 +47,7 @@ class TaskModel {
           taskInfo: dataMap['taskInfo'],
           taskName: dataMap['taskName'],
           taskType: dataMap['taskType'],
+          isArchive: dataMap['isArchive'],
           isDone: dataMap['isDone'],
           isActive: dataMap['isActive']);
     }).toList();
