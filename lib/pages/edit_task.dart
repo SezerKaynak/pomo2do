@@ -11,13 +11,16 @@ class EditTask extends StatefulWidget {
     required this.taskType,
     required this.taskInfo,
     required this.isDone,
+    required this.isArchive,
     required this.id,
+
     //required this.isActive,
   });
   final String taskName;
   final String taskType;
   final String taskInfo;
   final bool isDone;
+  final bool isArchive;
   final String id;
   //final bool isActive;
   @override
@@ -109,7 +112,28 @@ class _EditTaskState extends State<EditTask> {
                     return Column(
                       children: [
                         CheckboxListTile(
-                          title: const Text('Görevi tamamlandı mı?'),
+                          title: const Text('Görev tamamlandı mı?'),
+                          activeColor: Colors.blue,
+                          value: state.value,
+                          onChanged: (value) {
+                            setState(() {
+                              state.didChange(value);
+                              isChecked = state.value;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.platform,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                FormField(
+                  initialValue: widget.isArchive,
+                  builder: (FormFieldState state) {
+                    return Column(
+                      children: [
+                        CheckboxListTile(
+                          title: const Text('Görev arşivlensin mi?'),
                           activeColor: Colors.blue,
                           value: state.value,
                           onChanged: (value) {
@@ -144,7 +168,8 @@ class _EditTaskState extends State<EditTask> {
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
                             "isDone": isChecked,
-                            "isActive" : true,
+                            "isActive": true,
+                            "isArchive": isChecked
                           });
                           Navigator.pushAndRemoveUntil(
                               context,

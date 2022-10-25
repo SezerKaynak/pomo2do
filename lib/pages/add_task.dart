@@ -21,6 +21,7 @@ class AddTask extends StatelessWidget {
 
     bool isDone = false;
     bool isActive = true;
+    bool isArchive = false;
     final TextEditingController _taskNameController = TextEditingController();
     final TextEditingController _taskTypeController = TextEditingController();
     final TextEditingController _taskInfoController = TextEditingController();
@@ -108,9 +109,13 @@ class AddTask extends StatelessWidget {
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
                             "isDone": isDone,
-                            'isActive' : isActive 
+                            'isActive': isActive,
+                            'isArchive': isArchive,
                           });
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TaskView()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TaskView()));
                         },
                         child: Text(buttonText))),
               ],
