@@ -68,7 +68,9 @@ class _EditPasswordState extends State<EditPassword> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: ScreenPadding().screenPadding.copyWith(top: 10, left: 20, right: 20),
+            padding: ScreenPadding()
+                .screenPadding
+                .copyWith(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 ScreenTexts(
@@ -92,7 +94,7 @@ class _EditPasswordState extends State<EditPassword> {
                     controller: _oldpasswordController,
                     valid: (value) {
                       if (value == null) {
-                        return "Please enter password";
+                        return "Lütfen şifrenizi giriniz";
                       }
                       return null;
                     },
@@ -109,7 +111,7 @@ class _EditPasswordState extends State<EditPassword> {
                     controller: _passwordController,
                     valid: (value) {
                       if (value == null) {
-                        return "Please enter password";
+                        return "Lütfen şifrenizi giriniz";
                       }
                       return null;
                     },

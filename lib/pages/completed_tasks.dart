@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:provider/provider.dart';
 
 class CompletedTasks extends StatefulWidget {
   const CompletedTasks({super.key});
@@ -105,10 +106,10 @@ class _CompletedTasksState extends State<CompletedTasks> {
                         selectedIndexes.sort();
                         for (int i = 0; i < selectedNumber; i++) {
                           final TaskModel data = tasks[selectedIndexes[i]];
-                          
+
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
                           var task = users.doc(data.id);
                           task.set({
                             "taskName": data.taskName,
@@ -117,7 +118,8 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             "taskNameCaseInsensitive":
                                 data.taskName.toLowerCase(),
                             "isDone": false,
-                            "isActive" : true,
+                            "isActive": true,
+                            "isArchive": data.isArchive,
                           });
                         }
 

@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:provider/provider.dart';
 
 class SearchView extends StatelessWidget {
   const SearchView({super.key});
@@ -14,7 +15,7 @@ class SearchView extends StatelessWidget {
         Navigator.pop(context);
       },
       firestoreCollectionName:
-          'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks',
+          'Users/${context.read<PomotodoUser>().userId}/tasks',
       searchBy: 'taskNameCaseInsensitive',
       dataListFromSnapshot: TaskModel().dataListFromSnapshot,
       builder: (context, snapshot) {
@@ -48,7 +49,9 @@ class SearchView extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PomodoroView(task: dataList[index],)));
+                                    builder: (context) => PomodoroView(
+                                          task: dataList[index],
+                                        )));
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),

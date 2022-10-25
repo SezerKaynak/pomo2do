@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:provider/provider.dart';
 
 class EditTask extends StatefulWidget {
   const EditTask({
@@ -28,7 +29,8 @@ class EditTask extends StatefulWidget {
 }
 
 class _EditTaskState extends State<EditTask> {
-  bool isChecked = false;
+  bool isCheckedDone = false;
+  bool isCheckedArchive = false;
   @override
   Widget build(BuildContext context) {
     var title = "Görev Düzenleme Sayfası";
@@ -118,7 +120,7 @@ class _EditTaskState extends State<EditTask> {
                           onChanged: (value) {
                             setState(() {
                               state.didChange(value);
-                              isChecked = state.value;
+                              isCheckedDone = state.value;
                             });
                           },
                           controlAffinity: ListTileControlAffinity.platform,
@@ -139,7 +141,7 @@ class _EditTaskState extends State<EditTask> {
                           onChanged: (value) {
                             setState(() {
                               state.didChange(value);
-                              isChecked = state.value;
+                              isCheckedArchive = state.value;
                             });
                           },
                           controlAffinity: ListTileControlAffinity.platform,
@@ -159,7 +161,7 @@ class _EditTaskState extends State<EditTask> {
                         onPressed: () async {
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
                           var task = users.doc(widget.id);
                           task.set({
                             'taskNameCaseInsensitive':
@@ -167,9 +169,9 @@ class _EditTaskState extends State<EditTask> {
                             'taskName': _taskNameController.text,
                             'taskType': _taskTypeController.text,
                             'taskInfo': _taskInfoController.text,
-                            "isDone": isChecked,
+                            "isDone": isCheckedDone,
                             "isActive": true,
-                            "isArchive": isChecked
+                            "isArchive": isCheckedArchive
                           });
                           Navigator.pushAndRemoveUntil(
                               context,

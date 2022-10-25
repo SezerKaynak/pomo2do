@@ -34,7 +34,7 @@ class TaskModel {
         taskInfo = doc.data()!["taskInfo"],
         taskName = doc.data()!["taskName"],
         taskType = doc.data()!["taskType"],
-        isArchive = doc.data()!["isArchive"],
+        isArchive = doc.data()!["isArchive"] ?? false,
         isDone = doc.data()!["isDone"],
         isActive = doc.data()?["isActive"] ?? true;
 

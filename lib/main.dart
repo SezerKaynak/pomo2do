@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
+import 'package:flutter_application_1/pages/archived_tasks.dart';
 import 'package:flutter_application_1/pages/completed_tasks.dart';
 import 'package:flutter_application_1/pages/deleted_tasks.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
@@ -40,9 +41,12 @@ class MyApp extends StatelessWidget {
                 routes: {
                   '/task': (context) => TaskView(),
                   '/person': (context) => PersonInfo(),
-                  '/done' : (context) => const CompletedTasks(),
-                  '/deleted' : (context) => ChangeNotifierProvider<ListUpdate>(create: (context) => ListUpdate(), child: const DeletedTasks()),
+                  '/done': (context) => const CompletedTasks(),
+                  '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
+                      create: (context) => ListUpdate(),
+                      child: const DeletedTasks()),
                   '/editProfile': (context) => const EditProfile(),
+                  '/archived': (context) => const ArchivedTasks(),
                 },
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData().copyWith(

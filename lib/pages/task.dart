@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
-import 'package:flutter_application_1/pages/archived_tasks.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:provider/provider.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -64,7 +64,7 @@ class Task extends State<TaskView> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.black45,
+                  color: Colors.cyan[100],
                   child: Row(
                     children: [
                       Expanded(
@@ -142,7 +142,7 @@ class Task extends State<TaskView> {
                                           DismissDirection.endToStart) {
                                         CollectionReference users =
                                             FirebaseFirestore.instance.collection(
-                                                'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                                'Users/${context.read<PomotodoUser>().userId}/tasks');
                                         var task = users
                                             .doc(retrievedTaskList![index].id);
                                         task.set({
@@ -174,7 +174,6 @@ class Task extends State<TaskView> {
                                                             retrievedTaskList![
                                                                     index]
                                                                 .isArchive,
-                                                        //isActive: retrievedTaskList![index].isActive,
                                                         isDone:
                                                             retrievedTaskList![
                                                                     index]
@@ -329,7 +328,12 @@ class Task extends State<TaskView> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               TaskPageIconButton(
-                  taskIcons: Icons.stacked_bar_chart, onPressIconButton: () {}),
+                  taskIcons: Icons.archive,
+                  onPressIconButton: () {
+                    Navigator.pushNamed(context, '/archived',
+                            arguments: taskLists()[3])
+                        .then((_) => _refresh());
+                  }),
               TaskPageIconButton(
                 taskIcons: Icons.done,
                 onPressIconButton: () {
@@ -350,42 +354,37 @@ class Task extends State<TaskView> {
             ],
           ),
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.pushNamed(context, '/archived',
-                        arguments: taskLists()[3])
-                    .then((_) => _refresh());
-              },
-              label: Text(
-                "Arşiv",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: Colors.white),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              FloatingActionButton(
+                heroTag: "btn1",
+                onPressed: () {},
+                child: const Icon(Icons.stacked_bar_chart),
               ),
-              icon: const Icon(Icons.archive),
-            ),
-            const Spacer(),
-            FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddTask()),
-                );
-              },
-              label: Text(
-                "Ekle",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: Colors.white),
+              const Spacer(),
+              FloatingActionButton.extended(
+                heroTag: "btn2",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AddTask()),
+                  );
+                },
+                label: Text(
+                  "Ekle",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      ?.copyWith(color: Colors.white),
+                ),
+                icon: const Icon(Icons.add),
               ),
-              icon: const Icon(Icons.add),
-            ),
-          ],
+            ],
+          ),
         ));
   }
 
@@ -403,14 +402,25 @@ class Task extends State<TaskView> {
     List<TaskModel> archivedTasks = [];
     List newList = [];
     for (int i = 0; i < tasks!.length; i++) {
-      if (!tasks![i].isDone && tasks![i].isActive) {
-        incompletedTasks.add(tasks![i]);
-      } else if (tasks![i].isDone && tasks![i].isActive) {
-        completedTasks.add(tasks![i]);
-      } else if (!tasks![i].isActive && !tasks![i].isDone) {
-        trashBoxTasks.add(tasks![i]);
-      } else if (tasks![i].isActive && tasks![i].isArchive) {
+      if (tasks![i].isDone && tasks![i].isActive && tasks![i].isArchive) {
         archivedTasks.add(tasks![i]);
+        completedTasks.add(tasks![i]);
+      } else if (tasks![i].isDone &&
+          tasks![i].isActive &&
+          !tasks![i].isArchive) {
+        completedTasks.add(tasks![i]);
+      } else if (!tasks![i].isDone &&
+          !tasks![i].isActive &&
+          !tasks![i].isArchive) {
+        trashBoxTasks.add(tasks![i]);
+      } else if (!tasks![i].isDone &&
+          tasks![i].isActive &&
+          tasks![i].isArchive) {
+        archivedTasks.add(tasks![i]);
+      } else if (!tasks![i].isDone &&
+          tasks![i].isActive &&
+          !tasks![i].isArchive) {
+        incompletedTasks.add(tasks![i]);
       }
     }
     newList.addAll(

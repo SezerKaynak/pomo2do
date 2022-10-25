@@ -89,7 +89,6 @@ class DeletedTasks extends StatelessWidget {
                     const Center(
                         child: Text("Çöp kutusunda görev bulunamadı!")),
                   if (selectedIndexes.isNotEmpty)
-                    // ignore: dead_code
                     Expanded(
                       flex: 0,
                       child: IntrinsicHeight(
@@ -172,8 +171,9 @@ class ListUpdate extends ChangeNotifier {
         "taskInfo": data.taskInfo,
         "taskType": data.taskType,
         "taskNameCaseInsensitive": data.taskName.toLowerCase(),
-        "isDone": false,
+        "isDone": data.isDone,
         "isActive": true,
+        "isArchive": data.isArchive,
       });
     }
 
@@ -188,10 +188,10 @@ class ListUpdate extends ChangeNotifier {
     DatabaseService service = DatabaseService();
     int selectedNumber = selectedIndexes.length;
 
-    for(int i = 0; i < selectedNumber; i++){
+    for (int i = 0; i < selectedNumber; i++) {
       await service.deleteTask(tasks[selectedIndexes[i]].id.toString());
     }
-    
+
     for (int i = 0; i < selectedIndexes.length; i++) {
       tasks.removeAt(selectedIndexes[i] - i);
     }

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:intl/intl.dart';
@@ -227,7 +228,8 @@ class RegisterPage extends StatelessWidget {
                               FirebaseFirestore.instance.collection('Users');
 
                           users
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              // ignore: use_build_context_synchronously
+                              .doc(context.read<PomotodoUser>().userId)
                               .set({
                             'email': _emailController.text,
                             'name': _nameController.text,

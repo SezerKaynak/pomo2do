@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:provider/provider.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
@@ -100,7 +101,7 @@ class AddTask extends StatelessWidget {
                         onPressed: () async {
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
 
                           users.add({
                             'taskName': _taskNameController.text,

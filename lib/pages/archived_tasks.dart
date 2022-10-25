@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:provider/provider.dart';
 
 class ArchivedTasks extends StatefulWidget {
   const ArchivedTasks({super.key});
@@ -46,7 +47,7 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.green[100],
+                              color: Colors.cyan[200],
                               borderRadius: BorderRadius.circular(16.0)),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(15),
@@ -108,7 +109,7 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
 
                           CollectionReference users = FirebaseFirestore.instance
                               .collection(
-                                  'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
                           var task = users.doc(data.id);
                           task.set({
                             "taskName": data.taskName,
@@ -118,6 +119,7 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                                 data.taskName.toLowerCase(),
                             "isArchive": false,
                             "isActive": true,
+                            "isDone": data.isDone,
                           });
                         }
 
