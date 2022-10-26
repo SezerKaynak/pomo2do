@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CompletedTasks extends StatefulWidget {
@@ -102,6 +103,11 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                         "isActive": true,
                                         "isArchive": true,
                                       });
+                                      setState(() {
+                                        tasks.removeAt(index);
+                                      });
+                                      SmartDialog.showToast(
+                                          "Görev arşive taşındı!");
                                     }),
                                 InkWell(
                                     child: const Icon(Icons.delete),
@@ -120,6 +126,11 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                         "isActive": false,
                                         "isArchive": false,
                                       });
+                                      setState(() {
+                                        tasks.removeAt(index);
+                                      });
+                                      SmartDialog.showToast(
+                                          "Görev çöp kutusuna taşındı!");
                                     })
                               ],
                             ),
