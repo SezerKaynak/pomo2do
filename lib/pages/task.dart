@@ -76,9 +76,9 @@ class Task extends State<TaskView> {
                                   future: taskList,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<List<TaskModel>> snapshot) {
-                                    if (snapshot.hasData 
-                                    //&& snapshot.data!.isNotEmpty
-                                    ) {
+                                    if (snapshot.hasData
+                                        //&& snapshot.data!.isNotEmpty
+                                        ) {
                                       return Center(
                                           child: Text(
                                         retrievedTaskList?.length.toString() ??
