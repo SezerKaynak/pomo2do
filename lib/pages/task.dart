@@ -404,7 +404,6 @@ class Task extends State<TaskView> {
     for (int i = 0; i < tasks!.length; i++) {
       if (tasks![i].isDone && tasks![i].isActive && tasks![i].isArchive) {
         archivedTasks.add(tasks![i]);
-        completedTasks.add(tasks![i]);
       } else if (tasks![i].isDone &&
           tasks![i].isActive &&
           !tasks![i].isArchive) {
