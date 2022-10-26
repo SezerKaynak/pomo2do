@@ -179,7 +179,7 @@ class ListUpdate extends ChangeNotifier {
     }
 
     for (int i = 0; i < selectedIndexes.length; i++) {
-      tasks[selectedIndexes[i] - i].isDone ? SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!") : DoNothingAction();
+      tasks[selectedIndexes[i] - i].isDone ? SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!") :SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
       tasks.removeAt(selectedIndexes[i] - i);
     }
     selectedIndexes.clear();

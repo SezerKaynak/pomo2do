@@ -121,200 +121,211 @@ class Task extends State<TaskView> {
               flex: 12,
               child: RefreshIndicator(
                 onRefresh: _refresh,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FutureBuilder(
-                    future: taskList,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<TaskModel>> snapshot) {
-                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                        try {
-                          return ListView.separated(
-                              itemCount: retrievedTaskList!.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                              itemBuilder: (context, index) {
-                                return Dismissible(
-                                    onDismissed: ((direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        CollectionReference users =
-                                            FirebaseFirestore.instance.collection(
-                                                'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                        var task = users
-                                            .doc(retrievedTaskList![index].id);
-                                        task.set({
-                                          'taskNameCaseInsensitive':
-                                              retrievedTaskList![index]
-                                                  .taskName
-                                                  .toLowerCase(),
-                                          'taskName': retrievedTaskList![index]
-                                              .taskName,
-                                          'taskType': retrievedTaskList![index]
-                                              .taskType,
-                                          'taskInfo': retrievedTaskList![index]
-                                              .taskInfo,
-                                          "isDone": false,
-                                          "isActive": false,
-                                          "isArchive": false,
-                                        });
-
-                                        _refresh();
-                                        _dismiss();
-                                      } else {
-                                        {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditTask(
-                                                        isArchive:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .isArchive,
-                                                        isDone:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .isDone,
-                                                        taskInfo:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskInfo,
-                                                        taskName:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskName,
-                                                        taskType:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskType,
-                                                        id: retrievedTaskList![
-                                                                index]
-                                                            .id
-                                                            .toString(),
-                                                      )));
-                                          setState(() {
-                                            _refresh();
-                                          });
-                                        }
-                                      }
-                                    }),
-                                    confirmDismiss:
-                                        (DismissDirection direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        return await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return alert(context);
-                                          },
-                                        );
-                                      }
-                                      return true;
-                                    },
-                                    background: Container(
-                                      decoration: BoxDecoration(
-                                          color: const Color(0xFF21B7CA),
-                                          borderRadius:
-                                              BorderRadius.circular(16.0)),
-                                      padding:
-                                          const EdgeInsets.only(left: 28.0),
-                                      alignment:
-                                          AlignmentDirectional.centerStart,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Icon(Icons.edit, color: Colors.white),
-                                          Text(
-                                            "DÜZENLE",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    secondaryBackground: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(16.0)),
-                                        padding:
-                                            const EdgeInsets.only(right: 28.0),
-                                        alignment:
-                                            AlignmentDirectional.centerEnd,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Icon(Icons.delete,
-                                                color: Colors.white),
-                                            Text("ÇÖP KUTUSUNA TAŞI",
-                                                style: TextStyle(
-                                                    color: Colors.white))
-                                          ],
-                                        )),
-                                    resizeDuration:
-                                        const Duration(milliseconds: 200),
-                                    key: UniqueKey(),
-                                    child: Center(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.blueGrey[50],
-                                            borderRadius:
-                                                BorderRadius.circular(16.0)),
-                                        child: ListTile(
-                                          contentPadding:
-                                              const EdgeInsets.all(15),
-                                          leading: const Icon(Icons.numbers),
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PomodoroView(
-                                                          task:
-                                                              retrievedTaskList![
-                                                                  index],
-                                                        )));
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          title: Text(retrievedTaskList![index]
-                                              .taskName),
-                                          subtitle: Text(
-                                              retrievedTaskList![index]
-                                                  .taskInfo),
-                                          trailing: const Icon(
-                                              Icons.arrow_right_sharp),
+                child: retrievedTaskList!.isEmpty
+                    ? const Center(child: Text("Aktif görev bulunamadı!"))
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FutureBuilder(
+                          future: taskList,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<TaskModel>> snapshot) {
+                            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                              try {
+                                return ListView.separated(
+                                    itemCount: retrievedTaskList!.length,
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(
+                                          height: 10,
                                         ),
-                                      ),
-                                    ));
-                              });
-                        } catch (e) {
-                          _refresh();
-                        }
-                      } else if (snapshot.connectionState ==
-                              ConnectionState.done &&
-                          retrievedTaskList!.isEmpty) {
-                        return Center(
-                          child: ListView(
-                            children: const <Widget>[
-                              Align(
-                                  alignment: AlignmentDirectional.center,
-                                  child: Text('Görev bulunamadı!')),
-                            ],
-                          ),
-                        );
-                      }
-                      return const Center(child: CircularProgressIndicator());
-                    },
-                  ),
-                ),
+                                    itemBuilder: (context, index) {
+                                      return Dismissible(
+                                          onDismissed: ((direction) async {
+                                            if (direction ==
+                                                DismissDirection.endToStart) {
+                                              CollectionReference users =
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                          'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                              var task = users.doc(
+                                                  retrievedTaskList![index].id);
+                                              task.set({
+                                                'taskNameCaseInsensitive':
+                                                    retrievedTaskList![index]
+                                                        .taskName
+                                                        .toLowerCase(),
+                                                'taskName':
+                                                    retrievedTaskList![index]
+                                                        .taskName,
+                                                'taskType':
+                                                    retrievedTaskList![index]
+                                                        .taskType,
+                                                'taskInfo':
+                                                    retrievedTaskList![index]
+                                                        .taskInfo,
+                                                "isDone": false,
+                                                "isActive": false,
+                                                "isArchive": false,
+                                              });
+
+                                              _refresh();
+                                              _dismiss();
+                                            } else {
+                                              {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder:
+                                                            (context) =>
+                                                                EditTask(
+                                                                  isArchive: retrievedTaskList![
+                                                                          index]
+                                                                      .isArchive,
+                                                                  isDone: retrievedTaskList![
+                                                                          index]
+                                                                      .isDone,
+                                                                  taskInfo: retrievedTaskList![
+                                                                          index]
+                                                                      .taskInfo,
+                                                                  taskName: retrievedTaskList![
+                                                                          index]
+                                                                      .taskName,
+                                                                  taskType: retrievedTaskList![
+                                                                          index]
+                                                                      .taskType,
+                                                                  id: retrievedTaskList![
+                                                                          index]
+                                                                      .id
+                                                                      .toString(),
+                                                                )));
+                                                setState(() {
+                                                  _refresh();
+                                                });
+                                              }
+                                            }
+                                          }),
+                                          confirmDismiss: (DismissDirection
+                                              direction) async {
+                                            if (direction ==
+                                                DismissDirection.endToStart) {
+                                              return await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return alert(context);
+                                                },
+                                              );
+                                            }
+                                            return true;
+                                          },
+                                          background: Container(
+                                            decoration: BoxDecoration(
+                                                color: const Color(0xFF21B7CA),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        16.0)),
+                                            padding: const EdgeInsets.only(
+                                                left: 28.0),
+                                            alignment: AlignmentDirectional
+                                                .centerStart,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Icon(Icons.edit,
+                                                    color: Colors.white),
+                                                Text(
+                                                  "DÜZENLE",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          secondaryBackground: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16.0)),
+                                              padding: const EdgeInsets.only(
+                                                  right: 28.0),
+                                              alignment: AlignmentDirectional
+                                                  .centerEnd,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(Icons.delete,
+                                                      color: Colors.white),
+                                                  Text("ÇÖP KUTUSUNA TAŞI",
+                                                      style: TextStyle(
+                                                          color: Colors.white))
+                                                ],
+                                              )),
+                                          resizeDuration:
+                                              const Duration(milliseconds: 200),
+                                          key: UniqueKey(),
+                                          child: Center(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.blueGrey[50],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16.0)),
+                                              child: ListTile(
+                                                contentPadding:
+                                                    const EdgeInsets.all(15),
+                                                leading:
+                                                    const Icon(Icons.numbers),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PomodoroView(
+                                                                task:
+                                                                    retrievedTaskList![
+                                                                        index],
+                                                              )));
+                                                },
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                title: Text(
+                                                    retrievedTaskList![index]
+                                                        .taskName),
+                                                subtitle: Text(
+                                                    retrievedTaskList![index]
+                                                        .taskInfo),
+                                                trailing: const Icon(
+                                                    Icons.arrow_right_sharp),
+                                              ),
+                                            ),
+                                          ));
+                                    });
+                              } catch (e) {
+                                _refresh();
+                              }
+                            } else if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                retrievedTaskList!.isEmpty) {
+                              return Center(
+                                child: ListView(
+                                  children: const <Widget>[
+                                    Align(
+                                        alignment: AlignmentDirectional.center,
+                                        child: Text('Görev bulunamadı!')),
+                                  ],
+                                ),
+                              );
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                        ),
+                      ),
               ),
             ),
           ],
