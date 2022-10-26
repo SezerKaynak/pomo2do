@@ -81,7 +81,48 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             ),
                             title: Text(data.taskName),
                             subtitle: Text(data.taskInfo),
-                            trailing: const Icon(Icons.arrow_right_sharp),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                InkWell(
+                                    child: const Icon(Icons.archive),
+                                    onTap: () {
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance.collection(
+                                              'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                      var task = users.doc(data.id);
+                                      task.set({
+                                        "taskName": data.taskName,
+                                        "taskInfo": data.taskInfo,
+                                        "taskType": data.taskType,
+                                        "taskNameCaseInsensitive":
+                                            data.taskName.toLowerCase(),
+                                        "isDone": true,
+                                        "isActive": true,
+                                        "isArchive": true,
+                                      });
+                                    }),
+                                InkWell(
+                                    child: const Icon(Icons.delete),
+                                    onTap: () {
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance.collection(
+                                              'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                      var task = users.doc(data.id);
+                                      task.set({
+                                        "taskName": data.taskName,
+                                        "taskInfo": data.taskInfo,
+                                        "taskType": data.taskType,
+                                        "taskNameCaseInsensitive":
+                                            data.taskName.toLowerCase(),
+                                        "isDone": true,
+                                        "isActive": false,
+                                        "isArchive": false,
+                                      });
+                                    })
+                              ],
+                            ),
                           ),
                         ),
                       ],
