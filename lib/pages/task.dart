@@ -413,6 +413,10 @@ class Task extends State<TaskView> {
           !tasks![i].isActive &&
           !tasks![i].isArchive) {
         trashBoxTasks.add(tasks![i]);
+      } else if (tasks![i].isDone &&
+          !tasks![i].isActive &&
+          !tasks![i].isArchive) {
+        trashBoxTasks.add(tasks![i]);
       } else if (!tasks![i].isDone &&
           tasks![i].isActive &&
           tasks![i].isArchive) {
