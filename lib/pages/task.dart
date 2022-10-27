@@ -82,7 +82,7 @@ class Task extends State<TaskView> {
                                         ) {
                                       return Center(
                                           child: Text(
-                                        getLengthofMap().toString(),
+                                         snapshot.data!.length.toString(),
                                         style: const TextStyle(fontSize: 20),
                                       ));
                                     } else if (snapshot.connectionState ==
@@ -491,18 +491,7 @@ class Task extends State<TaskView> {
     });
     return groups;
   }
-
-  getLengthofMap(){
-    int count = 0;
-    for(int i = 0; i < retrievedTaskList!.length; i++){
-      String key = retrievedTaskList!.keys.elementAt(i);
-      for(int j = 0; j < retrievedTaskList![key]!.length; j++){
-        count += 1;
-      }
-    }
-    return count;
-  }
-
+  
   void _dismiss() {
     taskList = service.retrieveTasks();
   }
