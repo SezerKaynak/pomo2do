@@ -494,7 +494,10 @@ class Task extends State<TaskView> {
     final groups = groupBy(tasks, (TaskModel e) {
       return e.taskType;
     });
-    return groups;
+    var sortedByKeyMap = Map.fromEntries(
+    groups.entries.toList()..sort((e1, e2) => e1.key.toLowerCase().compareTo(e2.key.toLowerCase())));
+
+    return sortedByKeyMap;
   }
 
   getLengthofMap() {
