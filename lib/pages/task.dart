@@ -134,7 +134,11 @@ class Task extends State<TaskView> {
                           return retrievedTaskList!.isEmpty
                               ? const Center(
                                   child: Text("Aktif görev bulunamadı!"))
-                              : ListView.builder(
+                              : ListView.separated(
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
                                   shrinkWrap: true,
                                   itemCount: retrievedTaskList!.length,
                                   itemBuilder: (context, index) {
