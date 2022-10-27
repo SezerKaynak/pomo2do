@@ -189,7 +189,7 @@ class ListUpdate extends ChangeNotifier {
   void deleteTasksButton(List selectedIndexes, List<TaskModel> tasks) async {
     DatabaseService service = DatabaseService();
     int selectedNumber = selectedIndexes.length;
-
+    selectedIndexes.sort();
     for (int i = 0; i < selectedNumber; i++) {
       await service.deleteTask(tasks[selectedIndexes[i]].id.toString());
     }
