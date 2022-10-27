@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 class EditTask extends StatefulWidget {
@@ -173,6 +174,15 @@ class _EditTaskState extends State<EditTask> {
                             "isActive": true,
                             "isArchive": isCheckedArchive
                           });
+                          isCheckedDone && isCheckedArchive
+                              ? SmartDialog.showToast("Görev arşive taşındı!")
+                              : isCheckedDone
+                                  ? SmartDialog.showToast(
+                                      "Görev tamamlanmış görevler sayfasına taşındı!")
+                                  : isCheckedArchive
+                                      ? SmartDialog.showToast(
+                                          "Görev arşive taşındı!")
+                                      : DoNothingAction();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

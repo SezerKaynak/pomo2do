@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class TaskView extends StatefulWidget with ProjectThemeOptions {
 class Task extends State<TaskView> {
   DatabaseService service = DatabaseService();
   Future<List<TaskModel>>? taskList;
-  List<TaskModel>? retrievedTaskList;
+  Map<String, List<TaskModel>>? retrievedTaskList;
   List<TaskModel>? tasks;
   final TextEditingController textController = TextEditingController();
   List<TaskModel> deletedTasks = [];
@@ -76,14 +77,19 @@ class Task extends State<TaskView> {
                                   future: taskList,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<List<TaskModel>> snapshot) {
-                                    if (snapshot.hasData &&
-                                        snapshot.data!.isNotEmpty) {
-                                      return Center(
-                                          child: Text(
-                                        retrievedTaskList?.length.toString() ??
-                                            "0",
-                                        style: const TextStyle(fontSize: 20),
-                                      ));
+                                    if (snapshot.hasData
+                                        //&& snapshot.data!.isNotEmpty
+                                        ) {
+                                      try {
+                                        return Center(
+                                            child: Text(
+                                          getLengthofMap().toString(),
+                                          style: const TextStyle(fontSize: 20),
+                                        ));
+                                      } catch (e) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
                                     } else if (snapshot.connectionState ==
                                             ConnectionState.done &&
                                         retrievedTaskList!.isEmpty) {
@@ -127,174 +133,227 @@ class Task extends State<TaskView> {
                     future: taskList,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TaskModel>> snapshot) {
-                      if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                      if (snapshot.hasData) {
                         try {
-                          return ListView.separated(
-                              itemCount: retrievedTaskList!.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                              itemBuilder: (context, index) {
-                                return Dismissible(
-                                    onDismissed: ((direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        CollectionReference users =
-                                            FirebaseFirestore.instance.collection(
-                                                'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                        var task = users
-                                            .doc(retrievedTaskList![index].id);
-                                        task.set({
-                                          'taskNameCaseInsensitive':
-                                              retrievedTaskList![index]
-                                                  .taskName
-                                                  .toLowerCase(),
-                                          'taskName': retrievedTaskList![index]
-                                              .taskName,
-                                          'taskType': retrievedTaskList![index]
-                                              .taskType,
-                                          'taskInfo': retrievedTaskList![index]
-                                              .taskInfo,
-                                          "isDone": false,
-                                          "isActive": false,
-                                          "isArchive": false,
-                                        });
+                          return retrievedTaskList!.isEmpty
+                              ? const Center(
+                                  child: Text("Aktif görev bulunamadı!"))
+                              : ListView.separated(
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                  shrinkWrap: true,
+                                  itemCount: retrievedTaskList!.length,
+                                  itemBuilder: (context, index) {
+                                    String key = retrievedTaskList!.keys
+                                        .elementAt(index);
+                                    return Column(
+                                      children: [
+                                        Text(key),
+                                        ListView.separated(
+                                          physics:
+                                              const ClampingScrollPhysics(),
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(height: 10),
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              retrievedTaskList![key]!.length,
+                                          itemBuilder: (context, index) {
+                                            return Dismissible(
+                                                onDismissed:
+                                                    ((direction) async {
+                                                  if (direction ==
+                                                      DismissDirection
+                                                          .endToStart) {
+                                                    CollectionReference users =
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                                    var task = users.doc(
+                                                        retrievedTaskList![
+                                                                key]![index]
+                                                            .id);
+                                                    task.set({
+                                                      'taskNameCaseInsensitive':
+                                                          retrievedTaskList![
+                                                                  key]![index]
+                                                              .taskName
+                                                              .toLowerCase(),
+                                                      'taskName':
+                                                          retrievedTaskList![
+                                                                  key]![index]
+                                                              .taskName,
+                                                      'taskType':
+                                                          retrievedTaskList![
+                                                                  key]![index]
+                                                              .taskType,
+                                                      'taskInfo':
+                                                          retrievedTaskList![
+                                                                  key]![index]
+                                                              .taskInfo,
+                                                      "isDone": false,
+                                                      "isActive": false,
+                                                      "isArchive": false,
+                                                    });
 
-                                        _refresh();
-                                        _dismiss();
-                                      } else {
-                                        {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditTask(
-                                                        isArchive:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .isArchive,
-                                                        isDone:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .isDone,
-                                                        taskInfo:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskInfo,
-                                                        taskName:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskName,
-                                                        taskType:
-                                                            retrievedTaskList![
-                                                                    index]
-                                                                .taskType,
-                                                        id: retrievedTaskList![
-                                                                index]
-                                                            .id
-                                                            .toString(),
-                                                      )));
-                                          setState(() {
-                                            _refresh();
-                                          });
-                                        }
-                                      }
-                                    }),
-                                    confirmDismiss:
-                                        (DismissDirection direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        return await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return alert(context);
+                                                    _refresh();
+                                                    _dismiss();
+                                                  } else {
+                                                    {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      EditTask(
+                                                                        isArchive:
+                                                                            retrievedTaskList![key]![index].isArchive,
+                                                                        isDone:
+                                                                            retrievedTaskList![key]![index].isDone,
+                                                                        taskInfo:
+                                                                            retrievedTaskList![key]![index].taskInfo,
+                                                                        taskName:
+                                                                            retrievedTaskList![key]![index].taskName,
+                                                                        taskType:
+                                                                            retrievedTaskList![key]![index].taskType,
+                                                                        id: retrievedTaskList![key]![index]
+                                                                            .id
+                                                                            .toString(),
+                                                                      )));
+                                                      setState(() {
+                                                        _refresh();
+                                                      });
+                                                    }
+                                                  }
+                                                }),
+                                                confirmDismiss:
+                                                    (DismissDirection
+                                                        direction) async {
+                                                  if (direction ==
+                                                      DismissDirection
+                                                          .endToStart) {
+                                                    return await showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return alert(context);
+                                                      },
+                                                    );
+                                                  }
+                                                  return true;
+                                                },
+                                                background: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFF21B7CA),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16.0)),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 28.0),
+                                                  alignment:
+                                                      AlignmentDirectional
+                                                          .centerStart,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: const [
+                                                      Icon(Icons.edit,
+                                                          color: Colors.white),
+                                                      Text(
+                                                        "DÜZENLE",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                secondaryBackground: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    16.0)),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 28.0),
+                                                    alignment:
+                                                        AlignmentDirectional
+                                                            .centerEnd,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: const [
+                                                        Icon(Icons.delete,
+                                                            color:
+                                                                Colors.white),
+                                                        Text(
+                                                            "ÇÖP KUTUSUNA TAŞI",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white))
+                                                      ],
+                                                    )),
+                                                resizeDuration: const Duration(
+                                                    milliseconds: 200),
+                                                key: UniqueKey(),
+                                                child: Center(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            Colors.blueGrey[50],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    16.0)),
+                                                    child: ListTile(
+                                                      contentPadding:
+                                                          const EdgeInsets.all(
+                                                              15),
+                                                      leading: const Icon(
+                                                          Icons.numbers),
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        PomodoroView(
+                                                                          task:
+                                                                              retrievedTaskList![key]![index],
+                                                                        )));
+                                                      },
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                      ),
+                                                      title: Text(
+                                                          retrievedTaskList![
+                                                                  key]![index]
+                                                              .taskName),
+                                                      subtitle: Text(
+                                                          retrievedTaskList![
+                                                                  key]![index]
+                                                              .taskInfo),
+                                                      trailing: const Icon(Icons
+                                                          .arrow_right_sharp),
+                                                    ),
+                                                  ),
+                                                ));
                                           },
-                                        );
-                                      }
-                                      return true;
-                                    },
-                                    background: Container(
-                                      decoration: BoxDecoration(
-                                          color: const Color(0xFF21B7CA),
-                                          borderRadius:
-                                              BorderRadius.circular(16.0)),
-                                      padding:
-                                          const EdgeInsets.only(left: 28.0),
-                                      alignment:
-                                          AlignmentDirectional.centerStart,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Icon(Icons.edit, color: Colors.white),
-                                          Text(
-                                            "DÜZENLE",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    secondaryBackground: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(16.0)),
-                                        padding:
-                                            const EdgeInsets.only(right: 28.0),
-                                        alignment:
-                                            AlignmentDirectional.centerEnd,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Icon(Icons.delete,
-                                                color: Colors.white),
-                                            Text("ÇÖP KUTUSUNA TAŞI",
-                                                style: TextStyle(
-                                                    color: Colors.white))
-                                          ],
-                                        )),
-                                    resizeDuration:
-                                        const Duration(milliseconds: 200),
-                                    key: UniqueKey(),
-                                    child: Center(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.blueGrey[50],
-                                            borderRadius:
-                                                BorderRadius.circular(16.0)),
-                                        child: ListTile(
-                                          contentPadding:
-                                              const EdgeInsets.all(15),
-                                          leading: const Icon(Icons.numbers),
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PomodoroView(
-                                                          task:
-                                                              retrievedTaskList![
-                                                                  index],
-                                                        )));
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          title: Text(retrievedTaskList![index]
-                                              .taskName),
-                                          subtitle: Text(
-                                              retrievedTaskList![index]
-                                                  .taskInfo),
-                                          trailing: const Icon(
-                                              Icons.arrow_right_sharp),
-                                        ),
-                                      ),
-                                    ));
-                              });
+                                        )
+                                      ],
+                                    );
+                                  });
                         } catch (e) {
                           _refresh();
                         }
@@ -391,7 +450,7 @@ class Task extends State<TaskView> {
   Future<void> _refresh() async {
     taskList = service.retrieveTasks();
     tasks = await service.retrieveTasks();
-    retrievedTaskList = taskLists()[1];
+    retrievedTaskList = separateLists(taskLists()[1]);
     setState(() {});
   }
 
@@ -404,12 +463,15 @@ class Task extends State<TaskView> {
     for (int i = 0; i < tasks!.length; i++) {
       if (tasks![i].isDone && tasks![i].isActive && tasks![i].isArchive) {
         archivedTasks.add(tasks![i]);
-        completedTasks.add(tasks![i]);
       } else if (tasks![i].isDone &&
           tasks![i].isActive &&
           !tasks![i].isArchive) {
         completedTasks.add(tasks![i]);
       } else if (!tasks![i].isDone &&
+          !tasks![i].isActive &&
+          !tasks![i].isArchive) {
+        trashBoxTasks.add(tasks![i]);
+      } else if (tasks![i].isDone &&
           !tasks![i].isActive &&
           !tasks![i].isArchive) {
         trashBoxTasks.add(tasks![i]);
@@ -426,6 +488,27 @@ class Task extends State<TaskView> {
     newList.addAll(
         [completedTasks, incompletedTasks, trashBoxTasks, archivedTasks]);
     return newList;
+  }
+
+  Map<String, List<TaskModel>> separateLists(List<TaskModel> tasks) {
+    final groups = groupBy(tasks, (TaskModel e) {
+      return e.taskType;
+    });
+    var sortedByKeyMap = Map.fromEntries(
+    groups.entries.toList()..sort((e1, e2) => e1.key.toLowerCase().compareTo(e2.key.toLowerCase())));
+
+    return sortedByKeyMap;
+  }
+
+  getLengthofMap() {
+    int count = 0;
+    for (int i = 0; i < retrievedTaskList!.length; i++) {
+      String key = retrievedTaskList!.keys.elementAt(i);
+      for (int j = 0; j < retrievedTaskList![key]!.length; j++) {
+        count += 1;
+      }
+    }
+    return count;
   }
 
   void _dismiss() {

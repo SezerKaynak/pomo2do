@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CompletedTasks extends StatefulWidget {
@@ -81,7 +82,58 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             ),
                             title: Text(data.taskName),
                             subtitle: Text(data.taskInfo),
-                            trailing: const Icon(Icons.arrow_right_sharp),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                InkWell(
+                                    child: const Icon(Icons.archive),
+                                    onTap: () {
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance.collection(
+                                              'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                      var task = users.doc(data.id);
+                                      task.set({
+                                        "taskName": data.taskName,
+                                        "taskInfo": data.taskInfo,
+                                        "taskType": data.taskType,
+                                        "taskNameCaseInsensitive":
+                                            data.taskName.toLowerCase(),
+                                        "isDone": true,
+                                        "isActive": true,
+                                        "isArchive": true,
+                                      });
+                                      setState(() {
+                                        tasks.removeAt(index);
+                                      });
+                                      SmartDialog.showToast(
+                                          "Görev arşive taşındı!");
+                                    }),
+                                InkWell(
+                                    child: const Icon(Icons.delete),
+                                    onTap: () {
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance.collection(
+                                              'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                      var task = users.doc(data.id);
+                                      task.set({
+                                        "taskName": data.taskName,
+                                        "taskInfo": data.taskInfo,
+                                        "taskType": data.taskType,
+                                        "taskNameCaseInsensitive":
+                                            data.taskName.toLowerCase(),
+                                        "isDone": true,
+                                        "isActive": false,
+                                        "isArchive": false,
+                                      });
+                                      setState(() {
+                                        tasks.removeAt(index);
+                                      });
+                                      SmartDialog.showToast(
+                                          "Görev çöp kutusuna taşındı!");
+                                    })
+                              ],
+                            ),
                           ),
                         ),
                       ],

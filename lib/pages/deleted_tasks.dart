@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
 class DeletedTasks extends StatelessWidget {
@@ -178,6 +179,7 @@ class ListUpdate extends ChangeNotifier {
     }
 
     for (int i = 0; i < selectedIndexes.length; i++) {
+      tasks[selectedIndexes[i] - i].isDone ? SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!") :SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
       tasks.removeAt(selectedIndexes[i] - i);
     }
     selectedIndexes.clear();
@@ -187,7 +189,7 @@ class ListUpdate extends ChangeNotifier {
   void deleteTasksButton(List selectedIndexes, List<TaskModel> tasks) async {
     DatabaseService service = DatabaseService();
     int selectedNumber = selectedIndexes.length;
-
+    selectedIndexes.sort();
     for (int i = 0; i < selectedNumber; i++) {
       await service.deleteTask(tasks[selectedIndexes[i]].id.toString());
     }
