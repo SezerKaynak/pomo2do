@@ -9,7 +9,6 @@ import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 
-//sa gökalp
 class PersonInfo extends StatefulWidget with ProjectThemeOptions {
   PersonInfo({super.key});
 
