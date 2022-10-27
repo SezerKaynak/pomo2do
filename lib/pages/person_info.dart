@@ -102,37 +102,39 @@ class _PersonInfoState extends State<PersonInfo> {
                         ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: StreamBuilder(
-                    stream: user.snapshots(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                      if (asyncSnapshot.hasError) {
-                        return const Text("Something went wrong");
-                      }
-
-                      if (asyncSnapshot.hasData &&
-                          !asyncSnapshot.data!.exists) {
-                        return const Text("Document does not exist");
-                      }
-
-                      if (asyncSnapshot.connectionState ==
-                          ConnectionState.active) {
-                        return Text(
-                          "${asyncSnapshot.data.data()["name"]}"
-                          " ${asyncSnapshot.data.data()["surname"]}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 26,
-                                  color: Colors.black),
-                        );
-                      }
-                      return const Text("Loading");
-                    }),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: StreamBuilder(
+                      stream: user.snapshots(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                        if (asyncSnapshot.hasError) {
+                          return const Text("Bir şeyler yanlış gitti");
+                        } else if (asyncSnapshot.hasData &&
+                            !asyncSnapshot.data!.exists) {
+                          return const Text(
+                            "Hesap ayarları sayfasından profil resmi seçebilirsiniz",
+                            overflow: TextOverflow.clip,
+                            maxLines: 2,
+                          );
+                        } else if (asyncSnapshot.connectionState ==
+                            ConnectionState.active) {
+                          return Text(
+                            "${asyncSnapshot.data.data()["name"]}"
+                            " ${asyncSnapshot.data.data()["surname"]}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4
+                                ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 26,
+                                    color: Colors.black),
+                          );
+                        }
+                        return const Text("Loading");
+                      }),
+                ),
               ),
             ]),
           ),
