@@ -40,7 +40,7 @@ class SearchView extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.blueGrey[50],
+                            color: getColor(data),
                             borderRadius: BorderRadius.circular(16.0)),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(15),
@@ -79,5 +79,21 @@ class SearchView extends StatelessWidget {
         );
       },
     );
+  }
+
+  getColor(TaskModel data) {
+    if (data.isDone && data.isActive && data.isArchive) {
+      return Colors.cyan[200];
+    } else if (data.isDone && data.isActive && !data.isArchive) {
+      return Colors.green[100];
+    } else if (!data.isDone && !data.isActive && !data.isArchive) {
+      return Colors.red[100];
+    } else if (data.isDone && !data.isActive && !data.isArchive) {
+      return Colors.red[100];
+    } else if (!data.isDone && data.isActive && data.isArchive) {
+      return Colors.cyan[200];
+    } else if (!data.isDone && data.isActive && !data.isArchive) {
+      return Colors.blueGrey[50];
+    }
   }
 }
