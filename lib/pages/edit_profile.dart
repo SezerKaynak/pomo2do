@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
-import 'package:flutter_application_1/pages/person_info.dart';
+import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
@@ -277,7 +277,7 @@ class _EditProfileState extends State<EditProfile> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    PersonInfo()),
+                                    TaskView()),
                             ModalRoute.withName('/'),
                           );
                         },

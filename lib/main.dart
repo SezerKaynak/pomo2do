@@ -6,7 +6,6 @@ import 'package:flutter_application_1/pages/archived_tasks.dart';
 import 'package:flutter_application_1/pages/completed_tasks.dart';
 import 'package:flutter_application_1/pages/deleted_tasks.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
-import 'package:flutter_application_1/pages/person_info.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
