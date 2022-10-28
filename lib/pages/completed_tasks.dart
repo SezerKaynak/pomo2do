@@ -29,190 +29,197 @@ class _CompletedTasksState extends State<CompletedTasks> {
             onPressed: () {
               Navigator.pop(context);
             }),
-        actions: [
-          Visibility(
-              visible: isLoading,
-              child: const Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: Center(child: CircularProgressIndicator(color: Colors.white)),
-              )),
-        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            if (tasks.isNotEmpty)
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    final TaskModel data = tasks[index];
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.green[100],
-                              borderRadius: BorderRadius.circular(16.0)),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(15),
-                            leading: Checkbox(
-                              value: selectedIndexes.contains(index),
-                              onChanged: (_) {
-                                setState(() {
-                                  if (selectedIndexes.contains(index)) {
-                                    selectedIndexes.remove(index);
-                                    buttonVisible = false;
-                                  } else {
-                                    selectedIndexes.add(index);
-                                    buttonVisible = true;
-                                  }
-                                });
-                              },
-                            ),
-                            onTap: () async {
+      body: Column(
+        children: [
+          SizedBox(
+            height: 5,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Visibility(
+                  visible: isLoading,
+                  child: LinearProgressIndicator(color: Colors.cyan[100])),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  if (tasks.isNotEmpty)
+                    Expanded(
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
+                        itemCount: tasks.length,
+                        itemBuilder: (context, index) {
+                          final TaskModel data = tasks[index];
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.green[100],
+                                    borderRadius: BorderRadius.circular(16.0)),
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.all(15),
+                                  leading: Checkbox(
+                                    value: selectedIndexes.contains(index),
+                                    onChanged: (_) {
+                                      setState(() {
+                                        if (selectedIndexes.contains(index)) {
+                                          selectedIndexes.remove(index);
+                                          buttonVisible = false;
+                                        } else {
+                                          selectedIndexes.add(index);
+                                          buttonVisible = true;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  onTap: () async {
+                                    setState(() {
+                                      if (selectedIndexes.contains(index)) {
+                                        selectedIndexes.remove(index);
+                                        buttonVisible = false;
+                                      } else {
+                                        selectedIndexes.add(index);
+                                        buttonVisible = true;
+                                      }
+                                    });
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  title: Text(data.taskName),
+                                  subtitle: Text(data.taskInfo),
+                                  trailing: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      InkWell(
+                                          child: const Icon(Icons.archive),
+                                          onTap: () async {
+                                            CollectionReference users =
+                                                FirebaseFirestore.instance
+                                                    .collection(
+                                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                            var task = users.doc(data.id);
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await task.set({
+                                              "taskName": data.taskName,
+                                              "taskInfo": data.taskInfo,
+                                              "taskType": data.taskType,
+                                              "taskNameCaseInsensitive":
+                                                  data.taskName.toLowerCase(),
+                                              "isDone": true,
+                                              "isActive": true,
+                                              "isArchive": true,
+                                            });
+                                            setState(() {
+                                              tasks.removeAt(index);
+                                              isLoading = false;
+                                            });
+                                            SmartDialog.showToast(
+                                                "Görev arşive taşındı!");
+                                          }),
+                                      InkWell(
+                                          child: const Icon(Icons.delete),
+                                          onTap: () async {
+                                            CollectionReference users =
+                                                FirebaseFirestore.instance
+                                                    .collection(
+                                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                            var task = users.doc(data.id);
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await task.set({
+                                              "taskName": data.taskName,
+                                              "taskInfo": data.taskInfo,
+                                              "taskType": data.taskType,
+                                              "taskNameCaseInsensitive":
+                                                  data.taskName.toLowerCase(),
+                                              "isDone": true,
+                                              "isActive": false,
+                                              "isArchive": false,
+                                            });
+                                            setState(() {
+                                              tasks.removeAt(index);
+                                              isLoading = false;
+                                            });
+                                            SmartDialog.showToast(
+                                                "Görev çöp kutusuna taşındı!");
+                                          })
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    )
+                  else
+                    const Center(child: Text("Tamamlanmış görev bulunamadı!")),
+                  if (buttonVisible)
+                    Expanded(
+                      flex: 0,
+                      child: SizedBox(
+                        width: 400,
+                        height: 60,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                            onPressed: () async {
+                              int selectedNumber = selectedIndexes.length;
+                              selectedIndexes.sort();
                               setState(() {
-                                if (selectedIndexes.contains(index)) {
-                                  selectedIndexes.remove(index);
-                                  buttonVisible = false;
-                                } else {
-                                  selectedIndexes.add(index);
-                                  buttonVisible = true;
-                                }
+                                isLoading = true;
+                              });
+                              for (int i = 0; i < selectedNumber; i++) {
+                                final TaskModel data =
+                                    tasks[selectedIndexes[i]];
+
+                                CollectionReference users =
+                                    FirebaseFirestore.instance.collection(
+                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                var task = users.doc(data.id);
+                                await task.set({
+                                  "taskName": data.taskName,
+                                  "taskInfo": data.taskInfo,
+                                  "taskType": data.taskType,
+                                  "taskNameCaseInsensitive":
+                                      data.taskName.toLowerCase(),
+                                  "isDone": false,
+                                  "isActive": true,
+                                  "isArchive": data.isArchive,
+                                });
+                              }
+                              for (int i = 0; i < selectedIndexes.length; i++) {
+                                tasks.removeAt(selectedIndexes[i] - i);
+                              }
+                              selectedIndexes.clear();
+                              buttonVisible = false;
+                              setState(() {
+                                isLoading = false;
                               });
                             },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            title: Text(data.taskName),
-                            subtitle: Text(data.taskInfo),
-                            trailing: Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                InkWell(
-                                    child: const Icon(Icons.archive),
-                                    onTap: () async {
-                                      CollectionReference users =
-                                          FirebaseFirestore.instance
-                                              .collection(
-                                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                      var task = users.doc(data.id);
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      await task.set({
-                                        "taskName": data.taskName,
-                                        "taskInfo": data.taskInfo,
-                                        "taskType": data.taskType,
-                                        "taskNameCaseInsensitive":
-                                            data.taskName.toLowerCase(),
-                                        "isDone": true,
-                                        "isActive": true,
-                                        "isArchive": true,
-                                      });
-                                      setState(() {
-                                        tasks.removeAt(index);
-                                        isLoading = false;
-                                      });
-                                      SmartDialog.showToast(
-                                          "Görev arşive taşındı!");
-                                    }),
-                                InkWell(
-                                    child: const Icon(Icons.delete),
-                                    onTap: () async {
-                                      CollectionReference users =
-                                          FirebaseFirestore.instance
-                                              .collection(
-                                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                      var task = users.doc(data.id);
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      await task.set({
-                                        "taskName": data.taskName,
-                                        "taskInfo": data.taskInfo,
-                                        "taskType": data.taskType,
-                                        "taskNameCaseInsensitive":
-                                            data.taskName.toLowerCase(),
-                                        "isDone": true,
-                                        "isActive": false,
-                                        "isArchive": false,
-                                      });
-                                      setState(() {
-                                        tasks.removeAt(index);
-                                        isLoading = false;
-                                      });
-                                      SmartDialog.showToast(
-                                          "Görev çöp kutusuna taşındı!");
-                                    })
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              )
-            else
-              const Center(child: Text("Tamamlanmış görev bulunamadı!")),
-            if (buttonVisible)
-              Expanded(
-                flex: 0,
-                child: SizedBox(
-                  width: 400,
-                  height: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                      onPressed: () async {
-                        int selectedNumber = selectedIndexes.length;
-                        selectedIndexes.sort();
-                        setState(() {
-                          isLoading = true;
-                        });
-                        for (int i = 0; i < selectedNumber; i++) {
-                          final TaskModel data =
-                              tasks[selectedIndexes[i]];
-
-                          CollectionReference users =
-                              FirebaseFirestore.instance.collection(
-                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
-                          var task = users.doc(data.id);
-                          await task.set({
-                            "taskName": data.taskName,
-                            "taskInfo": data.taskInfo,
-                            "taskType": data.taskType,
-                            "taskNameCaseInsensitive":
-                                data.taskName.toLowerCase(),
-                            "isDone": false,
-                            "isActive": true,
-                            "isArchive": data.isArchive,
-                          });
-                        }
-                        for (int i = 0; i < selectedIndexes.length; i++) {
-                          tasks.removeAt(selectedIndexes[i] - i);
-                        }
-                        selectedIndexes.clear();
-                        buttonVisible = false;
-                        setState(() {
-                          isLoading = false;
-                        });
-                      },
-                      child: const Text(
-                          "Seçili görevleri tamamlanmamış olarak işaretle")),
-                ),
+                            child: const Text(
+                                "Seçili görevleri tamamlanmamış olarak işaretle")),
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
