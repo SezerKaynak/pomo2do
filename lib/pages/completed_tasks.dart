@@ -15,6 +15,7 @@ class CompletedTasks extends StatefulWidget {
 class _CompletedTasksState extends State<CompletedTasks> {
   List selectedIndexes = [];
   bool buttonVisible = false;
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
@@ -28,6 +29,14 @@ class _CompletedTasksState extends State<CompletedTasks> {
             onPressed: () {
               Navigator.pop(context);
             }),
+        actions: [
+          Visibility(
+              visible: isLoading,
+              child: const Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Center(child: CircularProgressIndicator(color: Colors.white)),
+              )),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -83,17 +92,22 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             title: Text(data.taskName),
                             subtitle: Text(data.taskInfo),
                             trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 InkWell(
                                     child: const Icon(Icons.archive),
-                                    onTap: () {
+                                    onTap: () async {
                                       CollectionReference users =
-                                          FirebaseFirestore.instance.collection(
-                                              'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                          FirebaseFirestore.instance
+                                              .collection(
+                                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
                                       var task = users.doc(data.id);
-                                      task.set({
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      await task.set({
                                         "taskName": data.taskName,
                                         "taskInfo": data.taskInfo,
                                         "taskType": data.taskType,
@@ -105,18 +119,23 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                       });
                                       setState(() {
                                         tasks.removeAt(index);
+                                        isLoading = false;
                                       });
                                       SmartDialog.showToast(
                                           "Görev arşive taşındı!");
                                     }),
                                 InkWell(
                                     child: const Icon(Icons.delete),
-                                    onTap: () {
+                                    onTap: () async {
                                       CollectionReference users =
-                                          FirebaseFirestore.instance.collection(
-                                              'Users/${context.read<PomotodoUser>().userId}/tasks');
+                                          FirebaseFirestore.instance
+                                              .collection(
+                                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
                                       var task = users.doc(data.id);
-                                      task.set({
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      await task.set({
                                         "taskName": data.taskName,
                                         "taskInfo": data.taskInfo,
                                         "taskType": data.taskType,
@@ -128,6 +147,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                       });
                                       setState(() {
                                         tasks.removeAt(index);
+                                        isLoading = false;
                                       });
                                       SmartDialog.showToast(
                                           "Görev çöp kutusuna taşındı!");
@@ -153,17 +173,21 @@ class _CompletedTasksState extends State<CompletedTasks> {
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
+                      onPressed: () async {
                         int selectedNumber = selectedIndexes.length;
                         selectedIndexes.sort();
+                        setState(() {
+                          isLoading = true;
+                        });
                         for (int i = 0; i < selectedNumber; i++) {
-                          final TaskModel data = tasks[selectedIndexes[i]];
+                          final TaskModel data =
+                              tasks[selectedIndexes[i]];
 
-                          CollectionReference users = FirebaseFirestore.instance
-                              .collection(
+                          CollectionReference users =
+                              FirebaseFirestore.instance.collection(
                                   'Users/${context.read<PomotodoUser>().userId}/tasks');
                           var task = users.doc(data.id);
-                          task.set({
+                          await task.set({
                             "taskName": data.taskName,
                             "taskInfo": data.taskInfo,
                             "taskType": data.taskType,
@@ -174,18 +198,19 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             "isArchive": data.isArchive,
                           });
                         }
-
                         for (int i = 0; i < selectedIndexes.length; i++) {
                           tasks.removeAt(selectedIndexes[i] - i);
                         }
                         selectedIndexes.clear();
                         buttonVisible = false;
-                        setState(() {});
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                       child: const Text(
                           "Seçili görevleri tamamlanmamış olarak işaretle")),
                 ),
-              )
+              ),
           ],
         ),
       ),

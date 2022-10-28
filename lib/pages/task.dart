@@ -178,7 +178,6 @@ class Task extends State<TaskView> {
                       ),
                     ],
                   )),
-              const Divider(thickness: 1),
               Settings(
                 settingIcon: Icons.account_circle,
                 title: settingTitle(context, "Hesap Ayarları"),

@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
                 initialRoute: '/',
                 routes: {
                   '/task': (context) => TaskView(),
-                  '/person': (context) => PersonInfo(),
                   '/done': (context) => const CompletedTasks(),
                   '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
                       create: (context) => ListUpdate(),
