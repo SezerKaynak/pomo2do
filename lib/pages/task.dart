@@ -623,7 +623,6 @@ class Task extends State<TaskView> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               FloatingActionButton(
                 heroTag: "btn1",
