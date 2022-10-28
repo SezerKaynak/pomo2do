@@ -1,13 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
+import 'package:flutter_application_1/pages/edit_password.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:flutter_application_1/pages/pomodoro_settings.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
@@ -25,18 +30,41 @@ class Task extends State<TaskView> {
   List<TaskModel>? tasks;
   final TextEditingController textController = TextEditingController();
   List<TaskModel> deletedTasks = [];
+  String? downloadUrl;
+
   @override
   void initState() {
     super.initState();
     _initRetrieval();
+    WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
+  }
+
+  baglantiAl() async {
+    String yol = await FirebaseStorage.instance
+        .ref()
+        .child("profilresimleri")
+        .child(context.read<PomotodoUser>().userId)
+        .child("profilResmi.png")
+        .getDownloadURL();
+
+    setState(() {
+      downloadUrl = yol;
+    });
   }
 
   String alertTitle = "Görev Çöp Kutusuna Taşınacak!";
   String alertSubtitle = "Görev çöp kutusuna taşınsın mı?";
   String alertApprove = "Onayla";
   String alertReject = "İptal Et";
+  String alertTitleLogOut = "Çıkış Yapılacak!";
+  String alertSubtitleLogOut = "Çıkış yapmak istediğinizden emin misiniz?";
+  String alertApproveLogOut = "Onayla";
+  String alertRejectLogOut = "İptal Et";
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection("Users");
+    var user = users.doc(context.read<PomotodoUser>().userId);
+    var _authService = Provider.of<IAuthService>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
             systemOverlayStyle: ProjectThemeOptions().systemTheme,
@@ -44,11 +72,6 @@ class Task extends State<TaskView> {
             title: const Text("PomoTodo",
                 style: TextStyle(color: Colors.white, fontSize: 18)),
             centerTitle: true,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/person');
-                },
-                icon: const Icon(Icons.tune)),
             actions: [
               IconButton(
                   onPressed: () {
@@ -59,6 +82,190 @@ class Task extends State<TaskView> {
                   },
                   icon: const Icon(Icons.search))
             ]),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 0,
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: CircleAvatar(
+                                  radius: 50.0,
+                                  child: downloadUrl != null
+                                      ? CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: downloadUrl!,
+                                          imageBuilder:
+                                              (context, imageProvider) {
+                                            return ClipOval(
+                                                child: SizedBox.fromSize(
+                                                    size: const Size.fromRadius(
+                                                        50),
+                                                    child: Image(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover)));
+                                          },
+                                          placeholder: (context, url) {
+                                            return ClipOval(
+                                                child: SizedBox.fromSize(
+                                              size: const Size.fromRadius(20),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                      color: Colors.white),
+                                            ));
+                                          },
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        )
+                                      : ClipOval(
+                                          child: SizedBox.fromSize(
+                                            size: const Size.fromRadius(70),
+                                            child: Image.asset(
+                                              'assets/person.png',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: StreamBuilder(
+                                      stream: user.snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot asyncSnapshot) {
+                                        if (asyncSnapshot.hasError) {
+                                          return const Text(
+                                              "Bir şeyler yanlış gitti");
+                                        } else if (asyncSnapshot.hasData &&
+                                            !asyncSnapshot.data!.exists) {
+                                          return const Text(
+                                            "Hesap ayarları sayfasından profil resmi seçebilirsiniz",
+                                            overflow: TextOverflow.clip,
+                                            maxLines: 3,
+                                          );
+                                        } else if (asyncSnapshot
+                                                .connectionState ==
+                                            ConnectionState.active) {
+                                          return Text(
+                                            "${asyncSnapshot.data.data()["name"]}"
+                                            " ${asyncSnapshot.data.data()["surname"]}",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline4
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 26,
+                                                    color: Colors.black),
+                                          );
+                                        }
+                                        return const Text("Loading");
+                                      }),
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ],
+                  )),
+              const Divider(thickness: 1),
+              Settings(
+                settingIcon: Icons.account_circle,
+                title: settingTitle(context, "Hesap Ayarları"),
+                subtitle: "Profilinizi düzenleyebilirsiniz.",
+                tap: () {
+                  Navigator.pushNamed(context, '/editProfile');
+                },
+              ),
+              const Divider(thickness: 1),
+              Settings(
+                settingIcon: Icons.password,
+                subtitle: "Şifrenizi değiştirebilirsiniz.",
+                title: settingTitle(context, 'Şifreyi Değiştir'),
+                tap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditPassword()));
+                },
+              ),
+              const Divider(thickness: 1),
+              Settings(
+                  settingIcon: Icons.notifications,
+                  subtitle: "Bildirim ayarlarını yapabilirsiniz.",
+                  title: settingTitle(context, 'Bildirim Ayarları'),
+                  tap: () {}),
+              const Divider(thickness: 1),
+              Settings(
+                  settingIcon: Icons.watch,
+                  subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
+                  title: settingTitle(context, 'Pomodoro Ayarları'),
+                  tap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PomodoroSettings()));
+                  }),
+              const Divider(thickness: 1),
+              Settings(
+                  settingIcon: Icons.logout,
+                  subtitle: "Hesaptan çıkış yapın.",
+                  title: settingTitle(context, 'Çıkış Yap'),
+                  tap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                            title: Text(alertTitleLogOut),
+                            content: Text(alertSubtitleLogOut),
+                            actions: [
+                              TextButton(
+                                onPressed: () async =>
+                                    await _authService.signOut(),
+                                child: Text(
+                                  alertApproveLogOut,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      ?.copyWith(
+                                          color: ProjectThemeOptions()
+                                              .backGroundColor),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                                child: Text(
+                                  alertReject,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      ?.copyWith(
+                                          color: ProjectThemeOptions()
+                                              .backGroundColor),
+                                ),
+                              ),
+                            ],
+                          );
+                        });
+                  }),
+              const Divider(thickness: 1),
+            ],
+          ),
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -447,6 +654,13 @@ class Task extends State<TaskView> {
         ));
   }
 
+  Text settingTitle(BuildContext context, String textTitle) => Text(
+        textTitle,
+        style: Theme.of(context)
+            .textTheme
+            .headline6
+            ?.copyWith(fontWeight: FontWeight.w400, fontSize: 18),
+      );
   Future<void> _refresh() async {
     taskList = service.retrieveTasks();
     tasks = await service.retrieveTasks();
@@ -494,8 +708,8 @@ class Task extends State<TaskView> {
     final groups = groupBy(tasks, (TaskModel e) {
       return e.taskType;
     });
-    var sortedByKeyMap = Map.fromEntries(
-    groups.entries.toList()..sort((e1, e2) => e1.key.toLowerCase().compareTo(e2.key.toLowerCase())));
+    var sortedByKeyMap = Map.fromEntries(groups.entries.toList()
+      ..sort((e1, e2) => e1.key.toLowerCase().compareTo(e2.key.toLowerCase())));
 
     return sortedByKeyMap;
   }
@@ -571,6 +785,61 @@ class TaskPageIconButton extends StatelessWidget {
         taskIcons,
         color: Colors.white,
         size: 35,
+      ),
+    );
+  }
+}
+
+class Settings extends StatelessWidget {
+  const Settings({
+    Key? key,
+    required this.settingIcon,
+    required this.subtitle,
+    required this.title,
+    required this.tap,
+  }) : super(key: key);
+
+  final IconData settingIcon;
+  final String subtitle;
+  final Widget title;
+  final Function() tap;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: tap,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              settingIcon,
+              size: 40,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [title, const Icon(Icons.arrow_right_sharp)],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: Text(
+                        subtitle,
+                        style: const TextStyle(
+                            color: Colors.black45, fontSize: 16.0),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
