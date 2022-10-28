@@ -14,7 +14,6 @@ class CompletedTasks extends StatefulWidget {
 
 class _CompletedTasksState extends State<CompletedTasks> {
   List selectedIndexes = [];
-  bool buttonVisible = false;
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -33,12 +32,12 @@ class _CompletedTasksState extends State<CompletedTasks> {
       body: Column(
         children: [
           SizedBox(
-            height: 5,
+            height: 2,
             child: Align(
               alignment: Alignment.topCenter,
               child: Visibility(
                   visible: isLoading,
-                  child: LinearProgressIndicator(color: Colors.cyan[100])),
+                  child: const LinearProgressIndicator(color: Colors.red)),
             ),
           ),
           Expanded(
@@ -71,10 +70,8 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                       setState(() {
                                         if (selectedIndexes.contains(index)) {
                                           selectedIndexes.remove(index);
-                                          buttonVisible = false;
                                         } else {
                                           selectedIndexes.add(index);
-                                          buttonVisible = true;
                                         }
                                       });
                                     },
@@ -83,10 +80,8 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                     setState(() {
                                       if (selectedIndexes.contains(index)) {
                                         selectedIndexes.remove(index);
-                                        buttonVisible = false;
                                       } else {
                                         selectedIndexes.add(index);
-                                        buttonVisible = true;
                                       }
                                     });
                                   },
@@ -123,6 +118,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                             });
                                             setState(() {
                                               tasks.removeAt(index);
+                                              selectedIndexes.clear();
                                               isLoading = false;
                                             });
                                             SmartDialog.showToast(
@@ -151,6 +147,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                             });
                                             setState(() {
                                               tasks.removeAt(index);
+                                              selectedIndexes.clear();
                                               isLoading = false;
                                             });
                                             SmartDialog.showToast(
@@ -167,7 +164,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                     )
                   else
                     const Center(child: Text("Tamamlanmış görev bulunamadı!")),
-                  if (buttonVisible)
+                  if (selectedIndexes.isNotEmpty)
                     Expanded(
                       flex: 0,
                       child: SizedBox(
@@ -206,7 +203,6 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                 tasks.removeAt(selectedIndexes[i] - i);
                               }
                               selectedIndexes.clear();
-                              buttonVisible = false;
                               setState(() {
                                 isLoading = false;
                               });
