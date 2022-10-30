@@ -120,6 +120,7 @@ class RegisterPage extends StatelessWidget {
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
+                textFieldInputType: TextInputType.none,
                 onTouch: () async {
                   DateTime? pickedDate = await showDatePicker(
                       context: context,
