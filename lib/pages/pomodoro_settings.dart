@@ -57,8 +57,20 @@ class PomodoroSettings extends StatelessWidget {
       'longBreakTimerSelect',
       'longBreakNumberSelect'
     ];
+
+    Map<String, Object> values = <String, Object>{
+      'workTimerSelect': 25,
+      'breakTimerSelect': 5,
+      'longBreakTimerSelect': 15,
+      'longBreakNumberSelect': 1,
+    };
+
     getSettings() async {
       final prefs = await SharedPreferences.getInstance();
+      if (prefs.getInt('workTimerSelect') == null) {
+        SharedPreferences.setMockInitialValues(values);
+      }
+      
       workTimerController.text = '${prefs.getInt('workTimerSelect')} dakika';
       breakTimerController.text = '${prefs.getInt('breakTimerSelect')} dakika';
       longBreakTimerController.text =
