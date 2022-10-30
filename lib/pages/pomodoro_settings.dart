@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PomodoroSettings extends StatefulWidget {
+class PomodoroSettings extends StatelessWidget {
   const PomodoroSettings({super.key});
 
-  @override
-  State<PomodoroSettings> createState() => _PomodoroSettingsState();
-}
-
-class _PomodoroSettingsState extends State<PomodoroSettings> {
   @override
   Widget build(BuildContext context) {
     var pomodoroTitle = "Pomodoro Ayarları";
@@ -55,6 +51,27 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
       '20 dakika'
     ];
     var longBreakNumberList = ['1', '2', '3', '4', '5'];
+    var list = [
+      'workTimerSelect',
+      'breakTimerSelect',
+      'longBreakTimerSelect',
+      'longBreakNumberSelect'
+    ];
+    getSettings() async {
+      final prefs = await SharedPreferences.getInstance();
+      workTimerController.text = '${prefs.getInt('workTimerSelect')} dakika';
+      breakTimerController.text = '${prefs.getInt('breakTimerSelect')} dakika';
+      longBreakTimerController.text =
+          '${prefs.getInt('longBreakTimerSelect')} dakika';
+      longBreakNumberController.text =
+          '${prefs.getInt('longBreakNumberSelect')}';
+
+      // for(int i = 0; i < list.length; i++){
+      //   await prefs.remove(list[i]);
+      // }
+    }
+
+    getSettings();
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
@@ -183,12 +200,26 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () async {
-                        print(workTimerSelect);
-                        setState(() {
-                          workTimerSelect = workTimerController.text;
-                        });
-                        print(workTimerSelect);
+                        final prefs = await SharedPreferences.getInstance();
 
+                        await prefs.setInt(
+                            'workTimerSelect',
+                            int.parse(
+                                workTimerController.text.substring(0, 2)));
+                        await prefs.setInt(
+                            'breakTimerSelect',
+                            int.parse(
+                                breakTimerController.text.substring(0, 2)));
+                        await prefs.setInt(
+                            'longBreakTimerSelect',
+                            int.parse(
+                                longBreakTimerController.text.substring(0, 2)));
+                        await prefs.setInt(
+                            'longBreakNumberSelect',
+                            int.parse(longBreakNumberController.text
+                                .substring(0, 1)));
+
+                        // ignore: use_build_context_synchronously
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
