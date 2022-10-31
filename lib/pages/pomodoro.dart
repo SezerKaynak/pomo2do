@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});
@@ -11,9 +14,23 @@ class PomodoroView extends StatefulWidget {
 }
 
 class _PomodoroViewState extends State<PomodoroView> {
-  final CountDownController controller = CountDownController();
+  var count;
+  @override
+  void initState() {
+    super.initState();
+    getSettings();
+  }
+  getSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    count = prefs.getInt("workTimerSelect").toString();
+    setState(() {
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    final CountDownController controller = CountDownController();
+    final TextEditingController controller2 = TextEditingController();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Pomodoro"),
@@ -54,7 +71,7 @@ class _PomodoroViewState extends State<PomodoroView> {
                       width: 300,
                       isReverse: true,
                       isReverseAnimation: true,
-                      duration: 25 * 60,
+                      duration: int.parse(count.substring(0, 2)) * 60,
                       autoStart: false,
                       controller: controller,
                       isTimerTextShown: true,
@@ -70,24 +87,62 @@ class _PomodoroViewState extends State<PomodoroView> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(40),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      child: Column(
                         children: [
-                          IconButton(
-                              icon: const Icon(Icons.play_arrow),
-                              onPressed: () {
-                                controller.resume();
-                              }),
-                          IconButton(
-                              icon: const Icon(Icons.pause),
-                              onPressed: () {
-                                controller.pause();
-                              }),
-                          IconButton(
-                              icon: const Icon(Icons.repeat),
-                              onPressed: () {
-                                controller.restart();
-                              }),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                  icon: const Icon(Icons.play_arrow),
+                                  onPressed: () {
+                                    controller.resume();
+                                  }),
+                              IconButton(
+                                  icon: const Icon(Icons.pause),
+                                  onPressed: () async {
+                                    controller.pause();
+                                    var countDown = controller
+                                        .getTime()
+                                        .substring(0, 5)
+                                        .replaceAll(':', '.');
+
+                                    controller2.text = (double.parse(count) -
+                                            double.parse(countDown) -
+                                            1)
+                                        .toString()
+                                        .substring(0, 4);
+
+                                    print(int.parse(count.substring(0, 2)));
+
+                                    CollectionReference users =
+                                        FirebaseFirestore.instance.collection(
+                                            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                    var task = users.doc(widget.task.id);
+                                    await task.set({
+                                      'taskNameCaseInsensitive':
+                                          widget.task.taskName.toLowerCase(),
+                                      'taskName': widget.task.taskName,
+                                      'taskType': widget.task.taskType,
+                                      'taskInfo': widget.task.taskInfo,
+                                      "isDone": widget.task.isDone,
+                                      "isActive": widget.task.isActive,
+                                      "isArchive": widget.task.isArchive,
+                                      "passingTime": controller2.text
+                                    });
+                                  }),
+                              IconButton(
+                                  icon: const Icon(Icons.repeat),
+                                  onPressed: () {
+                                    controller.restart();
+                                  }),
+                            ],
+                          ),
+                          ScreenTextField(
+                              textLabel: controller2.text,
+                              obscure: false,
+                              controller: controller2,
+                              height: 60,
+                              maxLines: 1)
                         ],
                       ),
                     )
