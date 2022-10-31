@@ -178,7 +178,6 @@ class Task extends State<TaskView> {
                       ),
                     ],
                   )),
-              const Divider(thickness: 1),
               Settings(
                 settingIcon: Icons.account_circle,
                 title: settingTitle(context, "Hesap Ayarları"),
@@ -624,7 +623,6 @@ class Task extends State<TaskView> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               FloatingActionButton(
                 heroTag: "btn1",
