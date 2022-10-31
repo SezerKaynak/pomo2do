@@ -5,6 +5,7 @@ import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/archived_tasks.dart';
 import 'package:flutter_application_1/pages/completed_tasks.dart';
 import 'package:flutter_application_1/pages/deleted_tasks.dart';
+import 'package:flutter_application_1/pages/deneme.dart';
 import 'package:flutter_application_1/pages/edit_profile.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
                       child: const DeletedTasks()),
                   '/editProfile': (context) => const EditProfile(),
                   '/archived': (context) => const ArchivedTasks(),
+                  '/deneme' : (context) => const Deneme(),
                 },
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData().copyWith(

@@ -626,7 +626,9 @@ class Task extends State<TaskView> {
             children: [
               FloatingActionButton(
                 heroTag: "btn1",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/deneme');
+                },
                 child: const Icon(Icons.stacked_bar_chart),
               ),
               const Spacer(),
