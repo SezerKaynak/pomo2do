@@ -16,16 +16,24 @@ class PomodoroView extends StatefulWidget {
 class _PomodoroViewState extends State<PomodoroView>
     with TickerProviderStateMixin {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  late Future<int> _count;
+  late Future<int> _workTime;
+  late Future<int> _breakTime;
+  late Future<int> _longBreakTime;
   late TabController tabController;
   @override
   void initState() {
     super.initState();
-    _count = _prefs.then((SharedPreferences prefs) {
+    _workTime = _prefs.then((SharedPreferences prefs) {
       if (prefs.getInt('workTimerSelect') == null) {
         setPomodoroSettings(prefs);
       }
       return prefs.getInt('workTimerSelect') ?? 0;
+    });
+    _breakTime = _prefs.then((SharedPreferences prefs) {
+      return prefs.getInt('breakTimerSelect') ?? 0;
+    });
+    _longBreakTime = _prefs.then((SharedPreferences prefs) {
+      return prefs.getInt('longBreakTimerSelect') ?? 0;
     });
     tabController = TabController(initialIndex: 0, length: 3, vsync: this);
   }
@@ -102,7 +110,7 @@ class _PomodoroViewState extends State<PomodoroView>
                             child: Column(
                               children: [
                                 FutureBuilder(
-                                  future: _count,
+                                  future: _workTime,
                                   builder: (BuildContext context,
                                       AsyncSnapshot snapshot) {
                                     switch (snapshot.connectionState) {
@@ -210,8 +218,91 @@ class _PomodoroViewState extends State<PomodoroView>
                         ],
                       ),
                     ),
-                    const Text("deneme"),
-                    const Text('deneme2'),
+                    FutureBuilder(
+                      future: _breakTime,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const CircularProgressIndicator();
+                          default:
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  PomodoroTimer(
+                                    width: 300,
+                                    isReverse: true,
+                                    isReverseAnimation: true,
+                                    duration: int.parse(snapshot.data
+                                            .toString()
+                                            .substring(0, 1)) *
+                                        60,
+                                    autoStart: false,
+                                    controller: controller,
+                                    isTimerTextShown: true,
+                                    neumorphicEffect: true,
+                                    innerFillGradient: LinearGradient(colors: [
+                                      Colors.greenAccent.shade200,
+                                      Colors.blueAccent.shade400
+                                    ]),
+                                    neonGradient: LinearGradient(colors: [
+                                      Colors.greenAccent.shade200,
+                                      Colors.blueAccent.shade400
+                                    ]),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.06,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: ElevatedButton(
+                                          onPressed: () {},
+                                          child: const Text("START")))
+                                ],
+                              );
+                            }
+                        }
+                      },
+                    ),
+                    FutureBuilder(
+                      future: _longBreakTime,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const CircularProgressIndicator();
+                          default:
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return PomodoroTimer(
+                                width: 300,
+                                isReverse: true,
+                                isReverseAnimation: true,
+                                duration: int.parse(snapshot.data
+                                        .toString()
+                                        .substring(0, 2)) *
+                                    60,
+                                autoStart: false,
+                                controller: controller,
+                                isTimerTextShown: true,
+                                neumorphicEffect: true,
+                                innerFillGradient: LinearGradient(colors: [
+                                  Colors.greenAccent.shade200,
+                                  Colors.blueAccent.shade400
+                                ]),
+                                neonGradient: LinearGradient(colors: [
+                                  Colors.greenAccent.shade200,
+                                  Colors.blueAccent.shade400
+                                ]),
+                              );
+                            }
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -229,14 +320,14 @@ class _PomodoroViewState extends State<PomodoroView>
 
 class Tabs extends StatelessWidget {
   const Tabs({
-    Key? key, required this.tabName,
+    Key? key,
+    required this.tabName,
   }) : super(key: key);
   final String tabName;
   @override
   Widget build(BuildContext context) {
     return SizedBox.fromSize(
-        size: Size.fromHeight(
-            MediaQuery.of(context).size.height * 0.05),
+        size: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
         child: Center(child: Text(tabName)));
   }
 }
