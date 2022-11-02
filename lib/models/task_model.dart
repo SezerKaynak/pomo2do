@@ -8,7 +8,7 @@ class TaskModel {
   final bool isDone;
   final bool isActive;
   final bool isArchive;
-  final double passingTime;
+  final String passingTime;
   TaskModel(
       {this.id,
       this.isArchive = false,
@@ -17,7 +17,7 @@ class TaskModel {
       this.taskInfo = "",
       this.taskName = "",
       this.taskType = "",
-      this.passingTime = 0.00});
+      this.passingTime = "0.00"});
 
   Map<String, dynamic> toMap() {
     return {
@@ -39,7 +39,7 @@ class TaskModel {
         isArchive = doc.data()!["isArchive"] ?? false,
         isDone = doc.data()!["isDone"],
         isActive = doc.data()?["isActive"] ?? true,
-        passingTime = doc.data()?["passingTime"] ?? 0.00;
+        passingTime = doc.data()?["passingTime"] ?? "0.00";
 
   List<TaskModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((snapshot) {
