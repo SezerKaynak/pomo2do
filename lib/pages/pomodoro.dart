@@ -272,11 +272,16 @@ class _PomodoroViewState extends State<PomodoroView>
                                                   0.5,
                                               child: ElevatedButton(
                                                   onPressed: () {
-                                                    var startButtonWork = context.read<PageUpdate>();
-                                                    startButtonWork.startButton(controller);
+                                                    var startButtonWork =
+                                                        context
+                                                            .read<PageUpdate>();
+                                                    startButtonWork.startButton(
+                                                        controller);
                                                   },
                                                   child: const Text("START"))),
-                                          if (context.read<PageUpdate>().skipButtonVisible)
+                                          if (context
+                                              .read<PageUpdate>()
+                                              .skipButtonVisible)
                                             IconButton(
                                                 onPressed: () {},
                                                 icon:
@@ -357,7 +362,7 @@ class Tabs extends StatelessWidget {
 
 class PageUpdate extends ChangeNotifier {
   bool skipButtonVisible = false;
-  void startButton(CountDownController controller){
+  void startButton(CountDownController controller) {
     controller.resume();
     skipButtonVisible = true;
     notifyListeners();
