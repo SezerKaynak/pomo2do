@@ -14,19 +14,17 @@ class PomodoroView extends StatefulWidget {
 }
 
 class _PomodoroViewState extends State<PomodoroView> {
-  var count;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  late Future<int> _count;
+
   @override
   void initState() {
     super.initState();
-    getSettings();
-  }
-  getSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    count = prefs.getInt("workTimerSelect").toString();
-    setState(() {
-      
+    _count = _prefs.then((SharedPreferences prefs) {
+      return prefs.getInt('workTimerSelect') ?? 0;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final CountDownController controller = CountDownController();
@@ -67,23 +65,40 @@ class _PomodoroViewState extends State<PomodoroView> {
                 flex: 10,
                 child: Column(
                   children: [
-                    PomodoroTimer(
-                      width: 300,
-                      isReverse: true,
-                      isReverseAnimation: true,
-                      duration: int.parse(count.substring(0, 2)) * 60,
-                      autoStart: false,
-                      controller: controller,
-                      isTimerTextShown: true,
-                      neumorphicEffect: true,
-                      innerFillGradient: LinearGradient(colors: [
-                        Colors.greenAccent.shade200,
-                        Colors.blueAccent.shade400
-                      ]),
-                      neonGradient: LinearGradient(colors: [
-                        Colors.greenAccent.shade200,
-                        Colors.blueAccent.shade400
-                      ]),
+                    FutureBuilder(
+                      future: _count,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const CircularProgressIndicator();
+                          default:
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return PomodoroTimer(
+                                width: 300,
+                                isReverse: true,
+                                isReverseAnimation: true,
+                                duration: int.parse(snapshot.data
+                                        .toString()
+                                        .substring(0, 2)) *
+                                    60,
+                                autoStart: false,
+                                controller: controller,
+                                isTimerTextShown: true,
+                                neumorphicEffect: true,
+                                innerFillGradient: LinearGradient(colors: [
+                                  Colors.greenAccent.shade200,
+                                  Colors.blueAccent.shade400
+                                ]),
+                                neonGradient: LinearGradient(colors: [
+                                  Colors.greenAccent.shade200,
+                                  Colors.blueAccent.shade400
+                                ]),
+                              );
+                            }
+                        }
+                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.all(40),
@@ -101,18 +116,18 @@ class _PomodoroViewState extends State<PomodoroView> {
                                   icon: const Icon(Icons.pause),
                                   onPressed: () async {
                                     controller.pause();
-                                    var countDown = controller
-                                        .getTime()
-                                        .substring(0, 5)
-                                        .replaceAll(':', '.');
+                                    // var countDown = controller
+                                    //     .getTime()
+                                    //     .substring(0, 5)
+                                    //     .replaceAll(':', '.');
 
-                                    controller2.text = (double.parse(count) -
-                                            double.parse(countDown) -
-                                            1)
-                                        .toString()
-                                        .substring(0, 4);
+                                    // controller2.text = (double.parse(count) -
+                                    //         double.parse(countDown) -
+                                    //         1)
+                                    //     .toString()
+                                    //     .substring(0, 4);
 
-                                    print(int.parse(count.substring(0, 2)));
+                                    // print(int.parse(count.substring(0, 2)));
 
                                     CollectionReference users =
                                         FirebaseFirestore.instance.collection(
