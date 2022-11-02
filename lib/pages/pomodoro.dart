@@ -13,19 +13,21 @@ class PomodoroView extends StatefulWidget {
   State<PomodoroView> createState() => _PomodoroViewState();
 }
 
-class _PomodoroViewState extends State<PomodoroView> {
+class _PomodoroViewState extends State<PomodoroView>
+    with TickerProviderStateMixin {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<int> _count;
-
+  late TabController tabController;
   @override
   void initState() {
     super.initState();
     _count = _prefs.then((SharedPreferences prefs) {
-      if(prefs.getInt('workTimerSelect') == null){
+      if (prefs.getInt('workTimerSelect') == null) {
         setPomodoroSettings(prefs);
       }
       return prefs.getInt('workTimerSelect') ?? 0;
     });
+    tabController = TabController(initialIndex: 0, length: 3, vsync: this);
   }
 
   void setPomodoroSettings(SharedPreferences prefs) async {
@@ -51,131 +53,190 @@ class _PomodoroViewState extends State<PomodoroView> {
           ),
         ),
         resizeToAvoidBottomInset: false,
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      ScreenTexts(
-                          title: widget.task.taskName,
-                          theme: Theme.of(context).textTheme.headline6,
-                          fontW: FontWeight.w400,
-                          textPosition: TextAlign.left),
-                      ScreenTexts(
-                          title: widget.task.taskInfo,
-                          theme: Theme.of(context).textTheme.subtitle1,
-                          fontW: FontWeight.w400,
-                          textPosition: TextAlign.left)
-                    ],
-                  )),
-              Expanded(
-                flex: 10,
-                child: Column(
+        body: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+              width: 400,
+              child: TabBar(
+                labelColor: const Color.fromRGBO(4, 2, 46, 1),
+                indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
+                unselectedLabelColor: Colors.grey,
+                controller: tabController,
+                tabs: const [
+                  Tabs(tabName: 'Pomodoro'),
+                  Tabs(tabName: 'Kısa Ara'),
+                  Tabs(tabName: 'Uzun Ara'),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SizedBox(
+                child: TabBarView(
+                  controller: tabController,
                   children: [
-                    FutureBuilder(
-                      future: _count,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const CircularProgressIndicator();
-                          default:
-                            if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              return PomodoroTimer(
-                                width: 300,
-                                isReverse: true,
-                                isReverseAnimation: true,
-                                duration: int.parse(snapshot.data
-                                        .toString()
-                                        .substring(0, 2)) *
-                                    60,
-                                autoStart: false,
-                                controller: controller,
-                                isTimerTextShown: true,
-                                neumorphicEffect: true,
-                                innerFillGradient: LinearGradient(colors: [
-                                  Colors.greenAccent.shade200,
-                                  Colors.blueAccent.shade400
-                                ]),
-                                neonGradient: LinearGradient(colors: [
-                                  Colors.greenAccent.shade200,
-                                  Colors.blueAccent.shade400
-                                ]),
-                              );
-                            }
-                        }
-                      },
-                    ),
                     Padding(
-                      padding: const EdgeInsets.all(40),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              IconButton(
-                                  icon: const Icon(Icons.play_arrow),
-                                  onPressed: () {
-                                    controller.resume();
-                                  }),
-                              IconButton(
-                                  icon: const Icon(Icons.pause),
-                                  onPressed: () async {
-                                    controller.pause();
-                                    // var countDown = controller
-                                    //     .getTime()
-                                    //     .substring(0, 5)
-                                    //     .replaceAll(':', '.');
+                          Expanded(
+                              flex: 3,
+                              child: Column(
+                                children: [
+                                  ScreenTexts(
+                                      title: widget.task.taskName,
+                                      theme:
+                                          Theme.of(context).textTheme.headline6,
+                                      fontW: FontWeight.w400,
+                                      textPosition: TextAlign.left),
+                                  ScreenTexts(
+                                      title: widget.task.taskInfo,
+                                      theme:
+                                          Theme.of(context).textTheme.subtitle1,
+                                      fontW: FontWeight.w400,
+                                      textPosition: TextAlign.left)
+                                ],
+                              )),
+                          Expanded(
+                            flex: 10,
+                            child: Column(
+                              children: [
+                                FutureBuilder(
+                                  future: _count,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return const CircularProgressIndicator();
+                                      default:
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          return PomodoroTimer(
+                                            width: 300,
+                                            isReverse: true,
+                                            isReverseAnimation: true,
+                                            duration: int.parse(snapshot.data
+                                                    .toString()
+                                                    .substring(0, 2)) *
+                                                60,
+                                            autoStart: false,
+                                            controller: controller,
+                                            isTimerTextShown: true,
+                                            neumorphicEffect: true,
+                                            innerFillGradient: LinearGradient(
+                                                colors: [
+                                                  Colors.greenAccent.shade200,
+                                                  Colors.blueAccent.shade400
+                                                ]),
+                                            neonGradient: LinearGradient(
+                                                colors: [
+                                                  Colors.greenAccent.shade200,
+                                                  Colors.blueAccent.shade400
+                                                ]),
+                                          );
+                                        }
+                                    }
+                                  },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(40),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          IconButton(
+                                              icon:
+                                                  const Icon(Icons.play_arrow),
+                                              onPressed: () {
+                                                controller.resume();
+                                              }),
+                                          IconButton(
+                                              icon: const Icon(Icons.pause),
+                                              onPressed: () async {
+                                                controller.pause();
+                                                // var countDown = controller
+                                                //     .getTime()
+                                                //     .substring(0, 5)
+                                                //     .replaceAll(':', '.');
 
-                                    // controller2.text = (double.parse(count) -
-                                    //         double.parse(countDown) -
-                                    //         1)
-                                    //     .toString()
-                                    //     .substring(0, 4);
+                                                // controller2.text = (double.parse(count) -
+                                                //         double.parse(countDown) -
+                                                //         1)
+                                                //     .toString()
+                                                //     .substring(0, 4);
 
-                                    // print(int.parse(count.substring(0, 2)));
+                                                // print(int.parse(count.substring(0, 2)));
 
-                                    CollectionReference users =
-                                        FirebaseFirestore.instance.collection(
-                                            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                                    var task = users.doc(widget.task.id);
-                                    await task.set({
-                                      'taskNameCaseInsensitive':
-                                          widget.task.taskName.toLowerCase(),
-                                      'taskName': widget.task.taskName,
-                                      'taskType': widget.task.taskType,
-                                      'taskInfo': widget.task.taskInfo,
-                                      "isDone": widget.task.isDone,
-                                      "isActive": widget.task.isActive,
-                                      "isArchive": widget.task.isArchive,
-                                      "passingTime": controller2.text
-                                    });
-                                  }),
-                              IconButton(
-                                  icon: const Icon(Icons.repeat),
-                                  onPressed: () {
-                                    controller.restart();
-                                  }),
-                            ],
+                                                // CollectionReference users =
+                                                //     FirebaseFirestore.instance.collection(
+                                                //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                                // var task = users.doc(widget.task.id);
+                                                // await task.set({
+                                                //   'taskNameCaseInsensitive': widget
+                                                //       .task.taskName
+                                                //       .toLowerCase(),
+                                                //   'taskName': widget.task.taskName,
+                                                //   'taskType': widget.task.taskType,
+                                                //   'taskInfo': widget.task.taskInfo,
+                                                //   "isDone": widget.task.isDone,
+                                                //   "isActive": widget.task.isActive,
+                                                //   "isArchive": widget.task.isArchive,
+                                                //   "passingTime": controller2.text
+                                                // });
+                                              }),
+                                          IconButton(
+                                              icon: const Icon(Icons.repeat),
+                                              onPressed: () {
+                                                controller.restart();
+                                              }),
+                                        ],
+                                      ),
+                                      ScreenTextField(
+                                          textLabel: controller2.text,
+                                          obscure: false,
+                                          controller: controller2,
+                                          height: 60,
+                                          maxLines: 1)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                          ScreenTextField(
-                              textLabel: controller2.text,
-                              obscure: false,
-                              controller: controller2,
-                              height: 60,
-                              maxLines: 1)
                         ],
                       ),
-                    )
+                    ),
+                    const Text("deneme"),
+                    const Text('deneme2'),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ));
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+}
+
+class Tabs extends StatelessWidget {
+  const Tabs({
+    Key? key, required this.tabName,
+  }) : super(key: key);
+  final String tabName;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.fromSize(
+        size: Size.fromHeight(
+            MediaQuery.of(context).size.height * 0.05),
+        child: Center(child: Text(tabName)));
   }
 }
