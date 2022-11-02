@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroView extends StatefulWidget {
@@ -20,7 +21,7 @@ class _PomodoroViewState extends State<PomodoroView>
   late Future<int> _breakTime;
   late Future<int> _longBreakTime;
   late TabController tabController;
-  bool skipButtonVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -254,29 +255,35 @@ class _PomodoroViewState extends State<PomodoroView>
                                       Colors.blueAccent.shade400
                                     ]),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.06,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                controller.resume();
-                                                setState(() {
-                                                  skipButtonVisible = true;
-                                                });
-                                                
-                                              },
-                                              child: const Text("START"))),
-                                          if(skipButtonVisible) IconButton(onPressed: (){}, icon: const Icon(Icons.skip_next))
-                                    ],
+                                  Consumer<PageUpdate>(
+                                    builder: (context, value, child) {
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.06,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.5,
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    var startButtonWork = context.read<PageUpdate>();
+                                                    startButtonWork.startButton(controller);
+                                                  },
+                                                  child: const Text("START"))),
+                                          if (context.read<PageUpdate>().skipButtonVisible)
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon:
+                                                    const Icon(Icons.skip_next))
+                                        ],
+                                      );
+                                    },
                                   )
                                 ],
                               );
@@ -345,5 +352,14 @@ class Tabs extends StatelessWidget {
     return SizedBox.fromSize(
         size: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
         child: Center(child: Text(tabName)));
+  }
+}
+
+class PageUpdate extends ChangeNotifier {
+  bool skipButtonVisible = false;
+  void startButton(CountDownController controller){
+    controller.resume();
+    skipButtonVisible = true;
+    notifyListeners();
   }
 }

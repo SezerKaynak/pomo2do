@@ -534,12 +534,17 @@ class Task extends State<TaskView> {
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        PomodoroView(
+                                                                builder: (context) =>
+                                                                    ChangeNotifierProvider<PageUpdate>(
+                                                                        create:
+                                                                            (context) {
+                                                                          return PageUpdate();
+                                                                        },
+                                                                        child:
+                                                                            PomodoroView(
                                                                           task:
                                                                               retrievedTaskList![key]![index],
-                                                                        )));
+                                                                        ))));
                                                       },
                                                       shape:
                                                           RoundedRectangleBorder(
