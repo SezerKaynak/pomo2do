@@ -21,8 +21,18 @@ class _PomodoroViewState extends State<PomodoroView> {
   void initState() {
     super.initState();
     _count = _prefs.then((SharedPreferences prefs) {
+      if(prefs.getInt('workTimerSelect') == null){
+        setPomodoroSettings(prefs);
+      }
       return prefs.getInt('workTimerSelect') ?? 0;
     });
+  }
+
+  void setPomodoroSettings(SharedPreferences prefs) async {
+    await prefs.setInt('workTimerSelect', 25);
+    await prefs.setInt('breakTimerSelect', 5);
+    await prefs.setInt('longBreakTimerSelect', 15);
+    await prefs.setInt('longBreakNumberSelect', 1);
   }
 
   @override
