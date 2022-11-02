@@ -20,6 +20,7 @@ class _PomodoroViewState extends State<PomodoroView>
   late Future<int> _breakTime;
   late Future<int> _longBreakTime;
   late TabController tabController;
+  bool skipButtonVisible = false;
   @override
   void initState() {
     super.initState();
@@ -253,15 +254,30 @@ class _PomodoroViewState extends State<PomodoroView>
                                       Colors.blueAccent.shade400
                                     ]),
                                   ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
                                               0.06,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5,
-                                      child: ElevatedButton(
-                                          onPressed: () {},
-                                          child: const Text("START")))
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                controller.resume();
+                                                setState(() {
+                                                  skipButtonVisible = true;
+                                                });
+                                                
+                                              },
+                                              child: const Text("START"))),
+                                          if(skipButtonVisible) IconButton(onPressed: (){}, icon: const Icon(Icons.skip_next))
+                                    ],
+                                  )
                                 ],
                               );
                             }
