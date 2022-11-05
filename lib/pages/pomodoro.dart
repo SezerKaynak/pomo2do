@@ -112,7 +112,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                 ],
                               )),
                           Expanded(
-                            flex: 10,
+                            flex: 20,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -155,80 +155,93 @@ class _PomodoroViewState extends State<PomodoroView>
                                     }
                                   },
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(40),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.06,
-                                                  child: ElevatedButton(
-                                                      onPressed: () {},
-                                                      child:
-                                                          const Text("START"))),
-                                            ],
-                                          )
-                                          // IconButton(
-                                          //     icon:
-                                          //         const Icon(Icons.play_arrow),
-                                          //     onPressed: () {
-                                          //       controller.resume();
-                                          //     }),
-                                          // IconButton(
-                                          //     icon: const Icon(Icons.pause),
-                                          //     onPressed: () async {
-                                          //       controller.pause();
-                                          // var countDown = controller
-                                          //     .getTime()
-                                          //     .substring(0, 5)
-                                          //     .replaceAll(':', '.');
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Consumer<PageUpdate>(
+                                      builder: (context, value, child) {
+                                        return Row(
+                                          children: [
+                                            SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.06,
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      var startButtonWork =
+                                                          context.read<
+                                                              PageUpdate>();
+                                                      startButtonWork
+                                                          .startButton(
+                                                              controller);
+                                                    },
+                                                    child:
+                                                        const Text("START"))),
+                                            if (context
+                                                .read<PageUpdate>()
+                                                .skipButtonVisible)
+                                              IconButton(
+                                                  onPressed: () {
+                                                    tabController.index = 1;
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.skip_next))
+                                          ],
+                                        );
+                                      },
+                                    )
 
-                                          // controller2.text = (double.parse(count) -
-                                          //         double.parse(countDown) -
-                                          //         1)
-                                          //     .toString()
-                                          //     .substring(0, 4);
+                                    // IconButton(
+                                    //     icon:
+                                    //         const Icon(Icons.play_arrow),
+                                    //     onPressed: () {
+                                    //       controller.resume();
+                                    //     }),
+                                    // IconButton(
+                                    //     icon: const Icon(Icons.pause),
+                                    //     onPressed: () async {
+                                    //       controller.pause();
+                                    // var countDown = controller
+                                    //     .getTime()
+                                    //     .substring(0, 5)
+                                    //     .replaceAll(':', '.');
 
-                                          // print(int.parse(count.substring(0, 2)));
+                                    // controller2.text = (double.parse(count) -
+                                    //         double.parse(countDown) -
+                                    //         1)
+                                    //     .toString()
+                                    //     .substring(0, 4);
 
-                                          // CollectionReference users =
-                                          //     FirebaseFirestore.instance.collection(
-                                          //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                                          // var task = users.doc(widget.task.id);
-                                          // await task.set({
-                                          //   'taskNameCaseInsensitive': widget
-                                          //       .task.taskName
-                                          //       .toLowerCase(),
-                                          //   'taskName': widget.task.taskName,
-                                          //   'taskType': widget.task.taskType,
-                                          //   'taskInfo': widget.task.taskInfo,
-                                          //   "isDone": widget.task.isDone,
-                                          //   "isActive": widget.task.isActive,
-                                          //   "isArchive": widget.task.isArchive,
-                                          //   "passingTime": controller2.text
-                                          // });
-                                          //     }),
-                                          // IconButton(
-                                          //     icon: const Icon(Icons.repeat),
-                                          //     onPressed: () {
-                                          //       controller.restart();
-                                          //     }),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                    // print(int.parse(count.substring(0, 2)));
+
+                                    // CollectionReference users =
+                                    //     FirebaseFirestore.instance.collection(
+                                    //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                    // var task = users.doc(widget.task.id);
+                                    // await task.set({
+                                    //   'taskNameCaseInsensitive': widget
+                                    //       .task.taskName
+                                    //       .toLowerCase(),
+                                    //   'taskName': widget.task.taskName,
+                                    //   'taskType': widget.task.taskType,
+                                    //   'taskInfo': widget.task.taskInfo,
+                                    //   "isDone": widget.task.isDone,
+                                    //   "isActive": widget.task.isActive,
+                                    //   "isArchive": widget.task.isArchive,
+                                    //   "passingTime": controller2.text
+                                    // });
+                                    //     }),
+                                    // IconButton(
+                                    //     icon: const Icon(Icons.repeat),
+                                    //     onPressed: () {
+                                    //       controller.restart();
+                                    //     }),
+                                  ],
                                 )
                               ],
                             ),
