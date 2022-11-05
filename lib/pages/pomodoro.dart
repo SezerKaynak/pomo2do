@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
@@ -66,20 +64,26 @@ class _PomodoroViewState extends State<PomodoroView>
         body: Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-              width: 400,
-              child: TabBar(
-                labelColor: const Color.fromRGBO(4, 2, 46, 1),
-                indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
-                unselectedLabelColor: Colors.grey,
-                controller: tabController,
-                tabs: const [
-                  Tabs(tabName: 'Pomodoro'),
-                  Tabs(tabName: 'Kısa Ara'),
-                  Tabs(tabName: 'Uzun Ara'),
-                ],
-              ),
-            ),
+                height: MediaQuery.of(context).size.height * 0.05,
+                width: 400,
+                child: Consumer<PageUpdate>(
+                  builder: (context, value, child) {
+                    return TabBar(
+                      labelColor: const Color.fromRGBO(4, 2, 46, 1),
+                      indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
+                      unselectedLabelColor: Colors.grey,
+                      controller: tabController,
+                      onTap: (_) {
+                        context.read<PageUpdate>().skipButtonVisible = false;
+                      },
+                      tabs: const [
+                        Tabs(tabName: 'Pomodoro'),
+                        Tabs(tabName: 'Kısa Ara'),
+                        Tabs(tabName: 'Uzun Ara'),
+                      ],
+                    );
+                  },
+                )),
             Expanded(
               child: SizedBox(
                 child: TabBarView(
@@ -110,6 +114,7 @@ class _PomodoroViewState extends State<PomodoroView>
                           Expanded(
                             flex: 10,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 FutureBuilder(
                                   future: _workTime,
@@ -156,61 +161,72 @@ class _PomodoroViewState extends State<PomodoroView>
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.center,
                                         children: [
-                                          IconButton(
-                                              icon:
-                                                  const Icon(Icons.play_arrow),
-                                              onPressed: () {
-                                                controller.resume();
-                                              }),
-                                          IconButton(
-                                              icon: const Icon(Icons.pause),
-                                              onPressed: () async {
-                                                controller.pause();
-                                                // var countDown = controller
-                                                //     .getTime()
-                                                //     .substring(0, 5)
-                                                //     .replaceAll(':', '.');
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.5,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.06,
+                                                  child: ElevatedButton(
+                                                      onPressed: () {},
+                                                      child:
+                                                          const Text("START"))),
+                                            ],
+                                          )
+                                          // IconButton(
+                                          //     icon:
+                                          //         const Icon(Icons.play_arrow),
+                                          //     onPressed: () {
+                                          //       controller.resume();
+                                          //     }),
+                                          // IconButton(
+                                          //     icon: const Icon(Icons.pause),
+                                          //     onPressed: () async {
+                                          //       controller.pause();
+                                          // var countDown = controller
+                                          //     .getTime()
+                                          //     .substring(0, 5)
+                                          //     .replaceAll(':', '.');
 
-                                                // controller2.text = (double.parse(count) -
-                                                //         double.parse(countDown) -
-                                                //         1)
-                                                //     .toString()
-                                                //     .substring(0, 4);
+                                          // controller2.text = (double.parse(count) -
+                                          //         double.parse(countDown) -
+                                          //         1)
+                                          //     .toString()
+                                          //     .substring(0, 4);
 
-                                                // print(int.parse(count.substring(0, 2)));
+                                          // print(int.parse(count.substring(0, 2)));
 
-                                                // CollectionReference users =
-                                                //     FirebaseFirestore.instance.collection(
-                                                //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                                                // var task = users.doc(widget.task.id);
-                                                // await task.set({
-                                                //   'taskNameCaseInsensitive': widget
-                                                //       .task.taskName
-                                                //       .toLowerCase(),
-                                                //   'taskName': widget.task.taskName,
-                                                //   'taskType': widget.task.taskType,
-                                                //   'taskInfo': widget.task.taskInfo,
-                                                //   "isDone": widget.task.isDone,
-                                                //   "isActive": widget.task.isActive,
-                                                //   "isArchive": widget.task.isArchive,
-                                                //   "passingTime": controller2.text
-                                                // });
-                                              }),
-                                          IconButton(
-                                              icon: const Icon(Icons.repeat),
-                                              onPressed: () {
-                                                controller.restart();
-                                              }),
+                                          // CollectionReference users =
+                                          //     FirebaseFirestore.instance.collection(
+                                          //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                          // var task = users.doc(widget.task.id);
+                                          // await task.set({
+                                          //   'taskNameCaseInsensitive': widget
+                                          //       .task.taskName
+                                          //       .toLowerCase(),
+                                          //   'taskName': widget.task.taskName,
+                                          //   'taskType': widget.task.taskType,
+                                          //   'taskInfo': widget.task.taskInfo,
+                                          //   "isDone": widget.task.isDone,
+                                          //   "isActive": widget.task.isActive,
+                                          //   "isArchive": widget.task.isArchive,
+                                          //   "passingTime": controller2.text
+                                          // });
+                                          //     }),
+                                          // IconButton(
+                                          //     icon: const Icon(Icons.repeat),
+                                          //     onPressed: () {
+                                          //       controller.restart();
+                                          //     }),
                                         ],
                                       ),
-                                      ScreenTextField(
-                                          textLabel: controller2.text,
-                                          obscure: false,
-                                          controller: controller2,
-                                          height: 60,
-                                          maxLines: 1)
                                     ],
                                   ),
                                 )
@@ -283,7 +299,9 @@ class _PomodoroViewState extends State<PomodoroView>
                                               .read<PageUpdate>()
                                               .skipButtonVisible)
                                             IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  tabController.index = 2;
+                                                },
                                                 icon:
                                                     const Icon(Icons.skip_next))
                                         ],
@@ -362,6 +380,7 @@ class Tabs extends StatelessWidget {
 
 class PageUpdate extends ChangeNotifier {
   bool skipButtonVisible = false;
+
   void startButton(CountDownController controller) {
     controller.resume();
     skipButtonVisible = true;
