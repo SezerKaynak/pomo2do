@@ -19,6 +19,11 @@ class _PomodoroViewState extends State<PomodoroView>
   late Future<int> _breakTime;
   late Future<int> _longBreakTime;
   late TabController tabController;
+  bool startStop = true;
+  final String basla = "BAŞLAT";
+  final String durdur = "DURDUR";
+  final CountDownController controller = CountDownController();
+  final TextEditingController controller2 = TextEditingController();
 
   @override
   void initState() {
@@ -47,7 +52,9 @@ class _PomodoroViewState extends State<PomodoroView>
 
   @override
   Widget build(BuildContext context) {
+  
     final CountDownController controller = CountDownController();
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Pomodoro"),
@@ -155,20 +162,94 @@ class _PomodoroViewState extends State<PomodoroView>
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        children: [
-                                          SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              child: ElevatedButton(
+
+                                  ScreenTexts(
+                                      title: widget.task.taskName,
+                                      theme:
+                                          Theme.of(context).textTheme.headline6,
+                                      fontW: FontWeight.w400,
+                                      textPosition: TextAlign.left),
+                                  ScreenTexts(
+                                      title: widget.task.taskInfo,
+                                      theme:
+                                          Theme.of(context).textTheme.subtitle1,
+                                      fontW: FontWeight.w400,
+                                      textPosition: TextAlign.left)
+                                ],
+                              )),
+                          Expanded(
+                            flex: 20,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                FutureBuilder(
+                                  future: _workTime,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return const CircularProgressIndicator();
+                                      default:
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          return PomodoroTimer(
+                                            width: 300,
+                                            isReverse: true,
+                                            isReverseAnimation: true,
+                                            duration: int.parse(snapshot.data
+                                                    .toString()
+                                                    .substring(0, 2)) *
+                                                60,
+                                            autoStart: false,
+                                            controller: controller,
+                                            isTimerTextShown: true,
+                                            neumorphicEffect: true,
+                                            innerFillGradient: LinearGradient(
+                                                colors: [
+                                                  Colors.greenAccent.shade200,
+                                                  Colors.blueAccent.shade400
+                                                ]),
+                                            neonGradient: LinearGradient(
+                                                colors: [
+                                                  Colors.greenAccent.shade200,
+                                                  Colors.blueAccent.shade400
+                                                ]),
+                                          );
+                                        }
+                                    }
+                                  },
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Consumer<PageUpdate>(
+                                      builder: (context, value, child) {
+                                        return Row(
+                                          children: [
+                                            SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.06,
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        startOrStop();
+                                                      });
+                                                    },
+                                                    child: startStop
+                                                        ? Text(basla)
+                                                        : Text(durdur))),
+                                            if (context
+                                                .read<PageUpdate>()
+                                                .skipButtonVisible)
+                                              IconButton(
                                                   onPressed: () {
                                                     var startButtonWork =
                                                         context
@@ -176,24 +257,14 @@ class _PomodoroViewState extends State<PomodoroView>
                                                     startButtonWork.startButton(
                                                         controller);
                                                   },
-                                                  child: const Text("START"))),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {
-                                                  tabController.index = 1;
-                                                  context
-                                                          .read<PageUpdate>()
-                                                          .skipButtonVisible =
-                                                      false;
-                                                },
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
-                                  )
+                                                  
+                                                  icon: const Icon(
+                                                      Icons.skip_next)),
+                                          ],
+                                        );
+                                      },
+                                    )
+
 
                                   // IconButton(
                                   //     icon:
@@ -282,42 +353,45 @@ class _PomodoroViewState extends State<PomodoroView>
                                       Colors.blueAccent.shade400
                                     ]),
                                   ),
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    var startButtonWork =
-                                                        context
-                                                            .read<PageUpdate>();
-                                                    startButtonWork.startButton(
-                                                        controller);
-                                                  },
-                                                  child: const Text("START"))),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {
-                                                  tabController.index = 2;
-                                                },
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Consumer<PageUpdate>(
+                                        builder: (context, value, child) {
+                                          return Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.5,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.06,
+                                                  child: ElevatedButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          startOrStop();
+                                                        });
+                                                      },
+                                                      child: startStop
+                                                          ? Text(basla)
+                                                          : Text(durdur))),
+                                              if (context
+                                                  .read<PageUpdate>()
+                                                  .skipButtonVisible)
+                                                IconButton(
+                                                    onPressed: () {
+                                                      tabController.index = 2;
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.skip_next)),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
                                   )
                                 ],
                               );
@@ -360,39 +434,37 @@ class _PomodoroViewState extends State<PomodoroView>
                                       Colors.blueAccent.shade400
                                     ]),
                                   ),
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    var buttonWorks = context
-                                                        .read<PageUpdate>();
-                                                    buttonWorks.startButton(
-                                                        controller);
-                                                  },
-                                                  child: const Text("START"))),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {},
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Consumer<PageUpdate>(
+                                        builder: (context, value, child) {
+                                          return Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.5,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.06,
+                                                  child: ElevatedButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          startOrStop();
+                                                        });
+                                                      },
+                                                      child: startStop
+                                                          ? Text(basla)
+                                                          : Text(durdur))),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
+
                                   )
                                 ],
                               );
@@ -406,6 +478,29 @@ class _PomodoroViewState extends State<PomodoroView>
             ),
           ],
         ));
+  }
+
+  void startOrStop() {
+    if (startStop == true) {
+      start();
+    } else {
+      stop();
+    }
+  }
+
+  void start() {
+    setState(() {
+      startStop = false;
+      var startButtonWork = context.read<PageUpdate>();
+      startButtonWork.startButton(controller);
+    });
+  }
+
+  void stop() {
+    setState(() {
+      startStop = true;
+      controller.pause();
+    });
   }
 
   @override
