@@ -52,6 +52,9 @@ class _PomodoroViewState extends State<PomodoroView>
 
   @override
   Widget build(BuildContext context) {
+  
+    final CountDownController controller = CountDownController();
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Pomodoro"),
@@ -96,10 +99,70 @@ class _PomodoroViewState extends State<PomodoroView>
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          Expanded(
-                              flex: 3,
-                              child: Column(
+                          Column(
+                            children: [
+                              ScreenTexts(
+                                  title: widget.task.taskName,
+                                  theme: Theme.of(context).textTheme.headline6,
+                                  fontW: FontWeight.w400,
+                                  textPosition: TextAlign.left),
+                              ScreenTexts(
+                                  title: widget.task.taskInfo,
+                                  theme: Theme.of(context).textTheme.subtitle1,
+                                  fontW: FontWeight.w400,
+                                  textPosition: TextAlign.left)
+                            ],
+                          ),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.05),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FutureBuilder(
+                                future: _workTime,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return const CircularProgressIndicator();
+                                    default:
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return PomodoroTimer(
+                                          width: 300,
+                                          isReverse: true,
+                                          isReverseAnimation: true,
+                                          duration: int.parse(snapshot.data
+                                                  .toString()
+                                                  .substring(0, 2)) *
+                                              60,
+                                          autoStart: false,
+                                          controller: controller,
+                                          isTimerTextShown: true,
+                                          neumorphicEffect: true,
+                                          innerFillGradient: LinearGradient(
+                                              colors: [
+                                                Colors.greenAccent.shade200,
+                                                Colors.blueAccent.shade400
+                                              ]),
+                                          neonGradient: LinearGradient(colors: [
+                                            Colors.greenAccent.shade200,
+                                            Colors.blueAccent.shade400
+                                          ]),
+                                        );
+                                      }
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+
                                   ScreenTexts(
                                       title: widget.task.taskName,
                                       theme:
@@ -188,8 +251,13 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 .skipButtonVisible)
                                               IconButton(
                                                   onPressed: () {
-                                                    tabController.index = 1;
+                                                    var startButtonWork =
+                                                        context
+                                                            .read<PageUpdate>();
+                                                    startButtonWork.startButton(
+                                                        controller);
                                                   },
+                                                  
                                                   icon: const Icon(
                                                       Icons.skip_next)),
                                           ],
@@ -197,55 +265,55 @@ class _PomodoroViewState extends State<PomodoroView>
                                       },
                                     )
 
-                                    // IconButton(
-                                    //     icon:
-                                    //         const Icon(Icons.play_arrow),
-                                    //     onPressed: () {
-                                    //       controller.resume();
-                                    //     }),
-                                    // IconButton(
-                                    //     icon: const Icon(Icons.pause),
-                                    //     onPressed: () async {
-                                    //       controller.pause();
-                                    // var countDown = controller
-                                    //     .getTime()
-                                    //     .substring(0, 5)
-                                    //     .replaceAll(':', '.');
 
-                                    // controller2.text = (double.parse(count) -
-                                    //         double.parse(countDown) -
-                                    //         1)
-                                    //     .toString()
-                                    //     .substring(0, 4);
+                                  // IconButton(
+                                  //     icon:
+                                  //         const Icon(Icons.play_arrow),
+                                  //     onPressed: () {
+                                  //       controller.resume();
+                                  //     }),
+                                  // IconButton(
+                                  //     icon: const Icon(Icons.pause),
+                                  //     onPressed: () async {
+                                  //       controller.pause();
+                                  // var countDown = controller
+                                  //     .getTime()
+                                  //     .substring(0, 5)
+                                  //     .replaceAll(':', '.');
 
-                                    // print(int.parse(count.substring(0, 2)));
+                                  // controller2.text = (double.parse(count) -
+                                  //         double.parse(countDown) -
+                                  //         1)
+                                  //     .toString()
+                                  //     .substring(0, 4);
 
-                                    // CollectionReference users =
-                                    //     FirebaseFirestore.instance.collection(
-                                    //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                                    // var task = users.doc(widget.task.id);
-                                    // await task.set({
-                                    //   'taskNameCaseInsensitive': widget
-                                    //       .task.taskName
-                                    //       .toLowerCase(),
-                                    //   'taskName': widget.task.taskName,
-                                    //   'taskType': widget.task.taskType,
-                                    //   'taskInfo': widget.task.taskInfo,
-                                    //   "isDone": widget.task.isDone,
-                                    //   "isActive": widget.task.isActive,
-                                    //   "isArchive": widget.task.isArchive,
-                                    //   "passingTime": controller2.text
-                                    // });
-                                    //     }),
-                                    // IconButton(
-                                    //     icon: const Icon(Icons.repeat),
-                                    //     onPressed: () {
-                                    //       controller.restart();
-                                    //     }),
-                                  ],
-                                )
-                              ],
-                            ),
+                                  // print(int.parse(count.substring(0, 2)));
+
+                                  // CollectionReference users =
+                                  //     FirebaseFirestore.instance.collection(
+                                  //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+                                  // var task = users.doc(widget.task.id);
+                                  // await task.set({
+                                  //   'taskNameCaseInsensitive': widget
+                                  //       .task.taskName
+                                  //       .toLowerCase(),
+                                  //   'taskName': widget.task.taskName,
+                                  //   'taskType': widget.task.taskType,
+                                  //   'taskInfo': widget.task.taskInfo,
+                                  //   "isDone": widget.task.isDone,
+                                  //   "isActive": widget.task.isActive,
+                                  //   "isArchive": widget.task.isArchive,
+                                  //   "passingTime": controller2.text
+                                  // });
+                                  //     }),
+                                  // IconButton(
+                                  //     icon: const Icon(Icons.repeat),
+                                  //     onPressed: () {
+                                  //       controller.restart();
+                                  //     }),
+                                ],
+                              )
+                            ],
                           ),
                         ],
                       ),
@@ -396,6 +464,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                         },
                                       )
                                     ],
+
                                   )
                                 ],
                               );
