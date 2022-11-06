@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
+import 'package:flutter_application_1/pages/completed_tasks.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
@@ -316,9 +317,33 @@ class Task extends State<TaskView> {
                               decoration: const BoxDecoration(
                                   border:
                                       Border(right: BorderSide(width: 0.5))),
-                              child: const Center(
-                                  child: Text("0",
-                                      style: TextStyle(fontSize: 20))))),
+                              child: FutureBuilder(
+                                  future: taskList,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<TaskModel>> snapshot) {
+                                    if (snapshot.hasData
+                                        //&& snapshot.data!.isNotEmpty
+                                        ) {
+                                      try {
+                                        return Center(
+                                            child: Text(
+                                          taskLists()[0].length.toString(),
+                                          style: const TextStyle(fontSize: 20),
+                                        ));
+                                      } catch (e) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                    } else if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        retrievedTaskList!.isEmpty) {
+                                      return const Center(
+                                          child: Text("0",
+                                              style: TextStyle(fontSize: 20)));
+                                    }
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }))),
                       Expanded(
                           child: Container(
                               decoration: const BoxDecoration(
@@ -361,7 +386,9 @@ class Task extends State<TaskView> {
                                         .elementAt(index);
                                     return Column(
                                       children: [
-                                        Text(key, style: const TextStyle(fontWeight: FontWeight.w500)),
+                                        Text(key,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w500)),
                                         ListView.separated(
                                           physics:
                                               const ClampingScrollPhysics(),
@@ -535,7 +562,8 @@ class Task extends State<TaskView> {
                                                             context,
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
-                                                                    ChangeNotifierProvider<PageUpdate>(
+                                                                    ChangeNotifierProvider<
+                                                                            PageUpdate>(
                                                                         create:
                                                                             (context) {
                                                                           return PageUpdate();
