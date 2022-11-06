@@ -361,7 +361,7 @@ class Task extends State<TaskView> {
                                         .elementAt(index);
                                     return Column(
                                       children: [
-                                        Text(key),
+                                        Text(key, style: const TextStyle(fontWeight: FontWeight.w500)),
                                         ListView.separated(
                                           physics:
                                               const ClampingScrollPhysics(),

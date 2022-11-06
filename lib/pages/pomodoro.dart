@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
@@ -175,7 +177,10 @@ class _PomodoroViewState extends State<PomodoroView>
                                                   onPressed: () {
                                                     var btn = context
                                                         .read<PageUpdate>();
-                                                    btn.startOrStop(controller);
+                                                    btn.startOrStop(
+                                                        controller,
+                                                        widget.task,
+                                                        tabController);
                                                   },
                                                   child: context
                                                       .read<PageUpdate>()
@@ -311,7 +316,9 @@ class _PomodoroViewState extends State<PomodoroView>
                                                         var btn = context
                                                             .read<PageUpdate>();
                                                         btn.startOrStop(
-                                                            controller);
+                                                            controller,
+                                                            widget.task,
+                                                            tabController);
                                                       },
                                                       child: context
                                                           .read<PageUpdate>()
@@ -402,7 +409,9 @@ class _PomodoroViewState extends State<PomodoroView>
                                                         var btn = context
                                                             .read<PageUpdate>();
                                                         btn.startOrStop(
-                                                            controller);
+                                                            controller,
+                                                            widget.task,
+                                                            tabController);
                                                       },
                                                       child: context
                                                           .read<PageUpdate>()
@@ -477,11 +486,12 @@ class PageUpdate extends ChangeNotifier {
     notifyListeners();
   }
 
-  void startOrStop(CountDownController controller) {
+  void startOrStop(CountDownController controller, TaskModel task,
+      TabController tabController) {
     if (startStop == true) {
       startButton(controller);
     } else {
-      stop(controller);
+      stop(controller, task, tabController.index);
     }
   }
 
@@ -499,9 +509,50 @@ class PageUpdate extends ChangeNotifier {
   //   startButtonWork.startButton(controller);
   // }
 
-  void stop(CountDownController controller) {
+  void stop(CountDownController controller, TaskModel task, int index) async {
     startStop = true;
     controller.pause();
+    String passingTime;
+
+    switch (index) {
+      case 0:
+        String count = '25.60';
+        var countDown =
+            controller.getTime().substring(0, 5).replaceAll(':', '.');
+
+        passingTime = (double.parse(count) - double.parse(countDown) - 1)
+            .toString()
+            .substring(0, 4);
+        print('gecen sure $passingTime');
+        CollectionReference users = FirebaseFirestore.instance.collection(
+            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+        var tasks = users.doc(task.id);
+        await tasks.set({
+          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
+          'taskName': task.taskName,
+          'taskType': task.taskType,
+          'taskInfo': task.taskInfo,
+          "isDone": task.isDone,
+          "isActive": task.isActive,
+          "isArchive": task.isArchive,
+          "passingTime": passingTime
+        });
+        break;
+      case 1:
+        String count = '05.60';
+        var countDown =
+            controller.getTime().substring(0, 5).replaceAll(':', '.');
+
+        passingTime = (double.parse(count) - double.parse(countDown) - 1)
+            .toString()
+            .substring(0, 4);
+        print('gecen sure $passingTime');
+        break;
+      default:
+    }
+
+    //print('gecen sure: ${int.parse(gokalp.substring(0, 4))}');
+
     notifyListeners();
   }
 }
