@@ -114,6 +114,7 @@ class DeletedTasks extends StatelessWidget {
                                     height: 60,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green[500],
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(20))),
@@ -125,7 +126,7 @@ class DeletedTasks extends StatelessWidget {
                                                   selectedIndexes, tasks);
                                         },
                                         child: const Text(
-                                            "Görevleri tekrar aktif et")),
+                                            "Aktif Et")),
                                   ),
                                 ),
                                 const VerticalDivider(
@@ -137,6 +138,7 @@ class DeletedTasks extends StatelessWidget {
                                     height: 60,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red[300],
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(20))),
@@ -147,7 +149,7 @@ class DeletedTasks extends StatelessWidget {
                                               selectedIndexes, tasks);
                                         },
                                         child: const Text(
-                                            "Görevleri tamamen sil")),
+                                            "Sil")),
                                   ),
                                 ),
                               ],

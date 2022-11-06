@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
+import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -67,11 +68,9 @@ class PomodoroSettings extends StatelessWidget {
 
     getSettings() async {
       final prefs = await SharedPreferences.getInstance();
-      if (prefs.getInt('workTimerSelect') == null) {
-        // ignore: invalid_use_of_visible_for_testing_member
-        SharedPreferences.setMockInitialValues(values);
+      if(prefs.getInt('workTimerSelect') == null){
+        
       }
-      
       workTimerController.text = '${prefs.getInt('workTimerSelect')} dakika';
       breakTimerController.text = '${prefs.getInt('breakTimerSelect')} dakika';
       longBreakTimerController.text =

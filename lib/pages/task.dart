@@ -71,6 +71,10 @@ class Task extends State<TaskView> {
             backgroundColor: ProjectThemeOptions().backGroundColor,
             title: const Text("PomoTodo",
                 style: TextStyle(color: Colors.white, fontSize: 18)),
+            leading: Builder(
+                builder: (context) => IconButton(
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    icon: const Icon(Icons.menu_rounded))),
             centerTitle: true,
             actions: [
               IconButton(
@@ -83,6 +87,7 @@ class Task extends State<TaskView> {
                   icon: const Icon(Icons.search))
             ]),
         drawer: Drawer(
+          width: MediaQuery.of(context).size.width * 0.745,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -529,12 +534,17 @@ class Task extends State<TaskView> {
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        PomodoroView(
+                                                                builder: (context) =>
+                                                                    ChangeNotifierProvider<PageUpdate>(
+                                                                        create:
+                                                                            (context) {
+                                                                          return PageUpdate();
+                                                                        },
+                                                                        child:
+                                                                            PomodoroView(
                                                                           task:
                                                                               retrievedTaskList![key]![index],
-                                                                        )));
+                                                                        ))));
                                                       },
                                                       shape:
                                                           RoundedRectangleBorder(
