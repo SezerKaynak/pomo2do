@@ -20,6 +20,9 @@ class _PomodoroViewState extends State<PomodoroView>
   late Future<int> _longBreakTime;
   late TabController tabController;
 
+  final CountDownController controller = CountDownController();
+  final TextEditingController controller2 = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -170,13 +173,13 @@ class _PomodoroViewState extends State<PomodoroView>
                                                   0.06,
                                               child: ElevatedButton(
                                                   onPressed: () {
-                                                    var startButtonWork =
-                                                        context
-                                                            .read<PageUpdate>();
-                                                    startButtonWork.startButton(
-                                                        controller);
+                                                    var btn = context
+                                                        .read<PageUpdate>();
+                                                    btn.startOrStop(controller);
                                                   },
-                                                  child: const Text("START"))),
+                                                  child: context
+                                                      .read<PageUpdate>()
+                                                      .callText())),
                                           if (context
                                               .read<PageUpdate>()
                                               .skipButtonVisible)
@@ -187,6 +190,9 @@ class _PomodoroViewState extends State<PomodoroView>
                                                           .read<PageUpdate>()
                                                           .skipButtonVisible =
                                                       false;
+                                                  context
+                                                      .read<PageUpdate>()
+                                                      .startStop = true;
                                                 },
                                                 icon:
                                                     const Icon(Icons.skip_next))
@@ -297,21 +303,34 @@ class _PomodoroViewState extends State<PomodoroView>
                                                       .size
                                                       .width *
                                                   0.5,
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    var startButtonWork =
-                                                        context
+                                              child: Consumer<PageUpdate>(
+                                                builder:
+                                                    (context, value, child) {
+                                                  return ElevatedButton(
+                                                      onPressed: () {
+                                                        var btn = context
                                                             .read<PageUpdate>();
-                                                    startButtonWork.startButton(
-                                                        controller);
-                                                  },
-                                                  child: const Text("START"))),
+                                                        btn.startOrStop(
+                                                            controller);
+                                                      },
+                                                      child: context
+                                                          .read<PageUpdate>()
+                                                          .callText());
+                                                },
+                                              )),
                                           if (context
                                               .read<PageUpdate>()
                                               .skipButtonVisible)
                                             IconButton(
                                                 onPressed: () {
                                                   tabController.index = 2;
+                                                  context
+                                                      .read<PageUpdate>()
+                                                      .startStop = true;
+                                                  context
+                                                          .read<PageUpdate>()
+                                                          .skipButtonVisible =
+                                                      false;
                                                 },
                                                 icon:
                                                     const Icon(Icons.skip_next))
@@ -375,19 +394,35 @@ class _PomodoroViewState extends State<PomodoroView>
                                                       .size
                                                       .width *
                                                   0.5,
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    var buttonWorks = context
-                                                        .read<PageUpdate>();
-                                                    buttonWorks.startButton(
-                                                        controller);
-                                                  },
-                                                  child: const Text("START"))),
+                                              child: Consumer<PageUpdate>(
+                                                builder:
+                                                    (context, value, child) {
+                                                  return ElevatedButton(
+                                                      onPressed: () {
+                                                        var btn = context
+                                                            .read<PageUpdate>();
+                                                        btn.startOrStop(
+                                                            controller);
+                                                      },
+                                                      child: context
+                                                          .read<PageUpdate>()
+                                                          .callText());
+                                                },
+                                              )),
                                           if (context
                                               .read<PageUpdate>()
                                               .skipButtonVisible)
                                             IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  tabController.index = 0;
+                                                  context
+                                                      .read<PageUpdate>()
+                                                      .startStop = true;
+                                                  context
+                                                          .read<PageUpdate>()
+                                                          .skipButtonVisible =
+                                                      false;
+                                                },
                                                 icon:
                                                     const Icon(Icons.skip_next))
                                         ],
@@ -431,10 +466,42 @@ class Tabs extends StatelessWidget {
 
 class PageUpdate extends ChangeNotifier {
   bool skipButtonVisible = false;
+  bool startStop = true;
+  final String basla = "BAŞLAT";
+  final String durdur = "DURDUR";
 
   void startButton(CountDownController controller) {
     controller.resume();
     skipButtonVisible = true;
+    startStop = false;
+    notifyListeners();
+  }
+
+  void startOrStop(CountDownController controller) {
+    if (startStop == true) {
+      startButton(controller);
+    } else {
+      stop(controller);
+    }
+  }
+
+  Widget callText() {
+    if (startStop == true) {
+      return Text(basla);
+    } else {
+      return Text(durdur);
+    }
+  }
+
+  // void start() {
+  //   startStop = false;
+  //   var startButtonWork = context.read<PageUpdate>();
+  //   startButtonWork.startButton(controller);
+  // }
+
+  void stop(CountDownController controller) {
+    startStop = true;
+    controller.pause();
     notifyListeners();
   }
 }
