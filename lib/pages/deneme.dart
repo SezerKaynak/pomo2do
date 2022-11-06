@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class Deneme extends StatefulWidget {
   const Deneme({super.key});
 
@@ -18,9 +19,9 @@ class _DenemeState extends State<Deneme> {
     super.initState();
     _count = _prefs.then((SharedPreferences prefs) {
       return prefs.getInt('workTimerSelect') ?? 0;
-    });
+    }
+    );   
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,20 +31,15 @@ class _DenemeState extends State<Deneme> {
             future: _count,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return const CircularProgressIndicator();
-                default:
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return ScreenTextField(
-                        textLabel: snapshot.data.toString(),
-                        obscure: false,
-                        controller: controller,
-                        height: 60,
-                        maxLines: 1);
+                    case ConnectionState.waiting:
+                      return const CircularProgressIndicator();
+                    default:
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return ScreenTextField(textLabel: snapshot.data.toString(), obscure: false, controller: controller, height: 60, maxLines: 1);
+                      }
                   }
-              }
             },
           ),
         ),
