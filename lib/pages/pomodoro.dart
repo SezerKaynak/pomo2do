@@ -177,8 +177,10 @@ class _PomodoroViewState extends State<PomodoroView>
                                                   onPressed: () {
                                                     var btn = context
                                                         .read<PageUpdate>();
-                                                    btn.startOrStop(controller,
-                                                        widget.task, tabController);
+                                                    btn.startOrStop(
+                                                        controller,
+                                                        widget.task,
+                                                        tabController);
                                                   },
                                                   child: context
                                                       .read<PageUpdate>()
@@ -315,7 +317,8 @@ class _PomodoroViewState extends State<PomodoroView>
                                                             .read<PageUpdate>();
                                                         btn.startOrStop(
                                                             controller,
-                                                            widget.task, tabController);
+                                                            widget.task,
+                                                            tabController);
                                                       },
                                                       child: context
                                                           .read<PageUpdate>()
@@ -407,7 +410,8 @@ class _PomodoroViewState extends State<PomodoroView>
                                                             .read<PageUpdate>();
                                                         btn.startOrStop(
                                                             controller,
-                                                            widget.task, tabController);
+                                                            widget.task,
+                                                            tabController);
                                                       },
                                                       child: context
                                                           .read<PageUpdate>()
@@ -482,7 +486,8 @@ class PageUpdate extends ChangeNotifier {
     notifyListeners();
   }
 
-  void startOrStop(CountDownController controller, TaskModel task, TabController tabController) {
+  void startOrStop(CountDownController controller, TaskModel task,
+      TabController tabController) {
     if (startStop == true) {
       startButton(controller);
     } else {
@@ -519,6 +524,19 @@ class PageUpdate extends ChangeNotifier {
             .toString()
             .substring(0, 4);
         print('gecen sure $passingTime');
+        CollectionReference users = FirebaseFirestore.instance.collection(
+            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+        var tasks = users.doc(task.id);
+        await tasks.set({
+          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
+          'taskName': task.taskName,
+          'taskType': task.taskType,
+          'taskInfo': task.taskInfo,
+          "isDone": task.isDone,
+          "isActive": task.isActive,
+          "isArchive": task.isArchive,
+          "passingTime": passingTime
+        });
         break;
       case 1:
         String count = '05.60';
@@ -534,23 +552,6 @@ class PageUpdate extends ChangeNotifier {
     }
 
     //print('gecen sure: ${int.parse(gokalp.substring(0, 4))}');
-
-    // CollectionReference users =
-    //     FirebaseFirestore.instance.collection(
-    //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-    // var tasks = users.doc(task.id);
-    // await tasks.set({
-    //   'taskNameCaseInsensitive':
-    //       task.taskName
-    //       .toLowerCase(),
-    //   'taskName': task.taskName,
-    //   'taskType': task.taskType,
-    //   'taskInfo': task.taskInfo,
-    //   "isDone": task.isDone,
-    //   "isActive": task.isActive,
-    //   "isArchive": task.isArchive,
-    //   "passingTime": gokalp
-    // });
 
     notifyListeners();
   }
