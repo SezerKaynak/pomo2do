@@ -74,7 +74,10 @@ class _PomodoroViewState extends State<PomodoroView>
                       unselectedLabelColor: Colors.grey,
                       controller: tabController,
                       onTap: (_) {
-                        context.read<PageUpdate>().skipButtonVisible = false;
+                        context.read<PageUpdate>().skipButtonPomodoroVisible =
+                            false;
+                        context.read<PageUpdate>().skipButtonBreakVisible =
+                            false;
                       },
                       tabs: const [
                         Tabs(tabName: 'Pomodoro'),
@@ -166,7 +169,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.5,
+                                                    0.25,
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
@@ -177,20 +180,62 @@ class _PomodoroViewState extends State<PomodoroView>
                                                           context.read<
                                                               PageUpdate>();
                                                       startButtonWork
-                                                          .startButton(
+                                                          .startButtonPomodoro(
                                                               controller);
                                                     },
                                                     child:
-                                                        const Text("START"))),
+                                                        const Text("BAŞLA"))),
                                             if (context
                                                 .read<PageUpdate>()
-                                                .skipButtonVisible)
+                                                .stopButtonPomodoroVisible)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.06,
+                                                    child: ElevatedButton(
+                                                        onPressed: () {
+                                                          controller.pause();
+                                                        },
+                                                        child: const Text(
+                                                            "DURDUR"))),
+                                              ),
+                                            if (context
+                                                .read<PageUpdate>()
+                                                .resumeButtonPomodoroVisible)
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.06,
+                                                  child: ElevatedButton(
+                                                      onPressed: () {
+                                                        controller.resume();
+                                                      },
+                                                      child: const Text(
+                                                          "DEVAM ET"))),
+                                            if (context
+                                                .read<PageUpdate>()
+                                                .skipButtonPomodoroVisible)
                                               IconButton(
                                                   onPressed: () {
                                                     tabController.index = 1;
                                                   },
                                                   icon: const Icon(
-                                                      Icons.skip_next))
+                                                      Icons.skip_next)),
                                           ],
                                         );
                                       },
@@ -284,42 +329,91 @@ class _PomodoroViewState extends State<PomodoroView>
                                       Colors.blueAccent.shade400
                                     ]),
                                   ),
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    var startButtonWork =
-                                                        context
-                                                            .read<PageUpdate>();
-                                                    startButtonWork.startButton(
-                                                        controller);
-                                                  },
-                                                  child: const Text("START"))),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {
-                                                  tabController.index = 2;
-                                                },
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Consumer<PageUpdate>(
+                                        builder: (context, value, child) {
+                                          return Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.06,
+                                                  child: ElevatedButton(
+                                                      onPressed: () {
+                                                        var startButtonWork =
+                                                            context.read<
+                                                                PageUpdate>();
+                                                        startButtonWork
+                                                            .startButtonBreak(
+                                                                controller);
+                                                      },
+                                                      child:
+                                                          const Text("BAŞLA"))),
+                                              if (context
+                                                  .read<PageUpdate>()
+                                                  .stopButtonBreakVisible)
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.25,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.06,
+                                                      child: ElevatedButton(
+                                                          onPressed: () {
+                                                            controller.pause();
+                                                          },
+                                                          child: const Text(
+                                                              "DURDUR"))),
+                                                ),
+                                              if (context
+                                                  .read<PageUpdate>()
+                                                  .resumeButtonBreakVisible)
+                                                SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.06,
+                                                    child: ElevatedButton(
+                                                        onPressed: () {
+                                                          controller.resume();
+                                                        },
+                                                        child: const Text(
+                                                            "DEVAM ET"))),
+                                              if (context
+                                                  .read<PageUpdate>()
+                                                  .skipButtonBreakVisible)
+                                                IconButton(
+                                                    onPressed: () {
+                                                      tabController.index = 2;
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.skip_next)),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
                                   )
                                 ],
                               );
@@ -337,26 +431,109 @@ class _PomodoroViewState extends State<PomodoroView>
                             if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else {
-                              return PomodoroTimer(
-                                width: 300,
-                                isReverse: true,
-                                isReverseAnimation: true,
-                                duration: int.parse(snapshot.data
-                                        .toString()
-                                        .substring(0, 2)) *
-                                    60,
-                                autoStart: false,
-                                controller: controller,
-                                isTimerTextShown: true,
-                                neumorphicEffect: true,
-                                innerFillGradient: LinearGradient(colors: [
-                                  Colors.greenAccent.shade200,
-                                  Colors.blueAccent.shade400
-                                ]),
-                                neonGradient: LinearGradient(colors: [
-                                  Colors.greenAccent.shade200,
-                                  Colors.blueAccent.shade400
-                                ]),
+                              return Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  PomodoroTimer(
+                                    width: 300,
+                                    isReverse: true,
+                                    isReverseAnimation: true,
+                                    duration: int.parse(snapshot.data
+                                            .toString()
+                                            .substring(0, 2)) *
+                                        60,
+                                    autoStart: false,
+                                    controller: controller,
+                                    isTimerTextShown: true,
+                                    neumorphicEffect: true,
+                                    innerFillGradient: LinearGradient(colors: [
+                                      Colors.greenAccent.shade200,
+                                      Colors.blueAccent.shade400
+                                    ]),
+                                    neonGradient: LinearGradient(colors: [
+                                      Colors.greenAccent.shade200,
+                                      Colors.blueAccent.shade400
+                                    ]),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Consumer<PageUpdate>(
+                                        builder: (context, value, child) {
+                                          return Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.06,
+                                                  child: ElevatedButton(
+                                                      onPressed: () {
+                                                        var startButtonWork =
+                                                            context.read<
+                                                                PageUpdate>();
+                                                        startButtonWork
+                                                            .startButtonLongBreak(
+                                                                controller);
+                                                      },
+                                                      child:
+                                                          const Text("BAŞLA"))),
+                                              if (context
+                                                  .read<PageUpdate>()
+                                                  .stopButtonLongBreakVisible)
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
+                                                  child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.25,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.06,
+                                                      child: ElevatedButton(
+                                                          onPressed: () {
+                                                            controller.pause();
+                                                          },
+                                                          child: const Text(
+                                                              "DURDUR"))),
+                                                ),
+                                              if (context
+                                                  .read<PageUpdate>()
+                                                  .resumeButtonLongBreakVisible)
+                                                SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.06,
+                                                    child: ElevatedButton(
+                                                        onPressed: () {
+                                                          controller.resume();
+                                                        },
+                                                        child: const Text(
+                                                            "DEVAM ET"))),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  )
+                                ],
                               );
                             }
                         }
@@ -392,11 +569,35 @@ class Tabs extends StatelessWidget {
 }
 
 class PageUpdate extends ChangeNotifier {
-  bool skipButtonVisible = false;
+  bool skipButtonPomodoroVisible = false;
+  bool stopButtonPomodoroVisible = false;
+  bool resumeButtonPomodoroVisible = false;
+  bool skipButtonBreakVisible = false;
+  bool stopButtonBreakVisible = false;
+  bool resumeButtonBreakVisible = false;
+  bool stopButtonLongBreakVisible = false;
+  bool resumeButtonLongBreakVisible = false;
 
-  void startButton(CountDownController controller) {
+  void startButtonPomodoro(CountDownController controller) {
     controller.resume();
-    skipButtonVisible = true;
+    skipButtonPomodoroVisible = true;
+    stopButtonPomodoroVisible = true;
+    resumeButtonPomodoroVisible = true;
+    notifyListeners();
+  }
+
+  void startButtonBreak(CountDownController controller) {
+    controller.resume();
+    skipButtonBreakVisible = true;
+    stopButtonBreakVisible = true;
+    resumeButtonBreakVisible = true;
+    notifyListeners();
+  }
+
+  void startButtonLongBreak(CountDownController controller) {
+    controller.resume();
+    stopButtonLongBreakVisible = true;
+    resumeButtonLongBreakVisible = true;
     notifyListeners();
   }
 }
