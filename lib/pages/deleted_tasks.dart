@@ -103,58 +103,76 @@ class DeletedTasks extends StatelessWidget {
                             child: Text("Çöp kutusunda görev bulunamadı!")),
                       if (selectedIndexes.isNotEmpty)
                         Expanded(
-                          flex: 0,
-                          child: IntrinsicHeight(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: SizedBox(
-                                    height: 60,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green[500],
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20))),
-                                        onPressed: () {
-                                          var elevatedButtonWorks =
-                                              context.read<ListUpdate>();
-                                          elevatedButtonWorks
-                                              .taskActivationButton(
-                                                  selectedIndexes, tasks);
-                                        },
-                                        child: const Text(
-                                            "Aktif Et")),
-                                  ),
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                height: kToolbarHeight,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Material(
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomLeft:
+                                                    Radius.circular(8))),
+                                        color: Colors.green[500],
+                                        child: InkWell(
+                                          onTap: () {
+                                            var elevatedButtonWorks =
+                                                context.read<ListUpdate>();
+                                            elevatedButtonWorks
+                                                .taskActivationButton(
+                                                    selectedIndexes, tasks);
+                                          },
+                                          child: const SizedBox(
+                                            child: Center(
+                                              child: Text(
+                                                "Aktif Et",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Material(
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(8),
+                                                bottomRight:
+                                                    Radius.circular(8))),
+                                        color: Colors.red[300],
+                                        child: InkWell(
+                                            onTap: () {
+                                              var elevatedButtonWorks =
+                                                  context.read<ListUpdate>();
+                                              elevatedButtonWorks
+                                                  .deleteTasksButton(
+                                                      selectedIndexes, tasks);
+                                            },
+                                            child: const SizedBox(
+                                              child: Center(
+                                                  child: Text(
+                                                "Sil",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                            )),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                const VerticalDivider(
-                                  thickness: 1,
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: SizedBox(
-                                    height: 60,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red[300],
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20))),
-                                        onPressed: () {
-                                          var elevatedButtonWorks =
-                                              context.read<ListUpdate>();
-                                          elevatedButtonWorks.deleteTasksButton(
-                                              selectedIndexes, tasks);
-                                        },
-                                        child: const Text(
-                                            "Sil")),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              )),
                         )
                     ],
                   ),
