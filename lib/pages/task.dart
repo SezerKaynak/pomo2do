@@ -605,7 +605,7 @@ class Task extends State<TaskView> {
                           retrievedTaskList!.isEmpty) {
                         return Center(
                           child: ListView(
-                            children: const <Widget>[
+                            children: const [
                               Align(
                                   alignment: AlignmentDirectional.center,
                                   child: Text('Görev bulunamadı!')),
