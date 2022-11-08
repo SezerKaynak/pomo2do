@@ -97,20 +97,9 @@ class _PomodoroViewState extends State<PomodoroView>
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
-                          Column(
-                            children: [
-                              ScreenTexts(
-                                  title: widget.task.taskName,
-                                  theme: Theme.of(context).textTheme.headline6,
-                                  fontW: FontWeight.w400,
-                                  textPosition: TextAlign.left),
-                              ScreenTexts(
-                                  title: widget.task.taskInfo,
-                                  theme: Theme.of(context).textTheme.subtitle1,
-                                  fontW: FontWeight.w400,
-                                  textPosition: TextAlign.left)
-                            ],
-                          ),
+                          TaskInfoListTile(
+                              taskName: widget.task.taskName,
+                              taskInfo: widget.task.taskInfo),
                           SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * 0.05),
@@ -157,23 +146,190 @@ class _PomodoroViewState extends State<PomodoroView>
                               SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.1),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        children: [
-                                          SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              child: ElevatedButton(
+                              Consumer<PageUpdate>(
+                                builder: (context, value, child) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.06,
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                var btn =
+                                                    context.read<PageUpdate>();
+                                                btn.startOrStop(controller,
+                                                    widget.task, tabController);
+                                              },
+                                              child: context
+                                                  .read<PageUpdate>()
+                                                  .callText())),
+                                      if (context
+                                          .read<PageUpdate>()
+                                          .skipButtonVisible)
+                                        IconButton(
+                                            onPressed: () {
+                                              tabController.index = 1;
+                                              context
+                                                  .read<PageUpdate>()
+                                                  .skipButtonVisible = false;
+                                              context
+                                                  .read<PageUpdate>()
+                                                  .startStop = true;
+                                            },
+                                            icon: const Icon(Icons.skip_next))
+                                    ],
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  height: kToolbarHeight,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(width: 1),
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Material(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomLeft:
+                                                      Radius.circular(8))),
+                                          color: Colors.green[100],
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: const SizedBox(
+                                              child: Center(
+                                                child: Text(
+                                                  "Tamamlandı",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Material(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(8),
+                                                  bottomRight:
+                                                      Radius.circular(8))),
+                                          color: Colors.red[100],
+                                          child: InkWell(
+                                              onTap: () {},
+                                              child: const SizedBox(
+                                                child: Center(
+                                                    child: Text(
+                                                  'Tam Ekran',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
+                                              )),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                                // ListTile(
+                                //   shape: RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.circular(8),
+                                //       side: const BorderSide(
+                                //           color: Colors.black, width: 1)),
+                                // ),
+                                ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          TaskInfoListTile(
+                              taskName: widget.task.taskName,
+                              taskInfo: widget.task.taskInfo),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.05),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              FutureBuilder(
+                                future: _breakTime,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return const CircularProgressIndicator();
+                                    default:
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return PomodoroTimer(
+                                          width: 300,
+                                          isReverse: true,
+                                          isReverseAnimation: true,
+                                          duration: int.parse(snapshot.data
+                                                  .toString()
+                                                  .substring(0, 1)) *
+                                              60,
+                                          autoStart: false,
+                                          controller: controller,
+                                          isTimerTextShown: true,
+                                          neumorphicEffect: true,
+                                          innerFillGradient: LinearGradient(
+                                              colors: [
+                                                Colors.greenAccent.shade200,
+                                                Colors.blueAccent.shade400
+                                              ]),
+                                          neonGradient: LinearGradient(colors: [
+                                            Colors.greenAccent.shade200,
+                                            Colors.blueAccent.shade400
+                                          ]),
+                                        );
+                                      }
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1),
+                              Consumer<PageUpdate>(
+                                builder: (context, value, child) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.06,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                          child: Consumer<PageUpdate>(
+                                            builder: (context, value, child) {
+                                              return ElevatedButton(
                                                   onPressed: () {
                                                     var btn = context
                                                         .read<PageUpdate>();
@@ -184,265 +340,136 @@ class _PomodoroViewState extends State<PomodoroView>
                                                   },
                                                   child: context
                                                       .read<PageUpdate>()
-                                                      .callText())),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {
-                                                  tabController.index = 1;
-                                                  context
-                                                          .read<PageUpdate>()
-                                                          .skipButtonVisible =
-                                                      false;
-                                                  context
-                                                      .read<PageUpdate>()
-                                                      .startStop = true;
-                                                },
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
-                                  )
-
-                                  // IconButton(
-                                  //     icon:
-                                  //         const Icon(Icons.play_arrow),
-                                  //     onPressed: () {
-                                  //       controller.resume();
-                                  //     }),
-                                  // IconButton(
-                                  //     icon: const Icon(Icons.pause),
-                                  //     onPressed: () async {
-                                  //       controller.pause();
-                                  // var countDown = controller
-                                  //     .getTime()
-                                  //     .substring(0, 5)
-                                  //     .replaceAll(':', '.');
-
-                                  // controller2.text = (double.parse(count) -
-                                  //         double.parse(countDown) -
-                                  //         1)
-                                  //     .toString()
-                                  //     .substring(0, 4);
-
-                                  // print(int.parse(count.substring(0, 2)));
-
-                                  // CollectionReference users =
-                                  //     FirebaseFirestore.instance.collection(
-                                  //         'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-                                  // var task = users.doc(widget.task.id);
-                                  // await task.set({
-                                  //   'taskNameCaseInsensitive': widget
-                                  //       .task.taskName
-                                  //       .toLowerCase(),
-                                  //   'taskName': widget.task.taskName,
-                                  //   'taskType': widget.task.taskType,
-                                  //   'taskInfo': widget.task.taskInfo,
-                                  //   "isDone": widget.task.isDone,
-                                  //   "isActive": widget.task.isActive,
-                                  //   "isArchive": widget.task.isArchive,
-                                  //   "passingTime": controller2.text
-                                  // });
-                                  //     }),
-                                  // IconButton(
-                                  //     icon: const Icon(Icons.repeat),
-                                  //     onPressed: () {
-                                  //       controller.restart();
-                                  //     }),
-                                ],
-                              )
+                                                      .callText());
+                                            },
+                                          )),
+                                      if (context
+                                          .read<PageUpdate>()
+                                          .skipButtonVisible)
+                                        IconButton(
+                                            onPressed: () {
+                                              tabController.index = 2;
+                                              context
+                                                  .read<PageUpdate>()
+                                                  .startStop = true;
+                                              context
+                                                  .read<PageUpdate>()
+                                                  .skipButtonVisible = false;
+                                            },
+                                            icon: const Icon(Icons.skip_next))
+                                    ],
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    FutureBuilder(
-                      future: _breakTime,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const CircularProgressIndicator();
-                          default:
-                            if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              return Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  PomodoroTimer(
-                                    width: 300,
-                                    isReverse: true,
-                                    isReverseAnimation: true,
-                                    duration: int.parse(snapshot.data
-                                            .toString()
-                                            .substring(0, 1)) *
-                                        60,
-                                    autoStart: false,
-                                    controller: controller,
-                                    isTimerTextShown: true,
-                                    neumorphicEffect: true,
-                                    innerFillGradient: LinearGradient(colors: [
-                                      Colors.greenAccent.shade200,
-                                      Colors.blueAccent.shade400
-                                    ]),
-                                    neonGradient: LinearGradient(colors: [
-                                      Colors.greenAccent.shade200,
-                                      Colors.blueAccent.shade400
-                                    ]),
-                                  ),
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              child: Consumer<PageUpdate>(
-                                                builder:
-                                                    (context, value, child) {
-                                                  return ElevatedButton(
-                                                      onPressed: () {
-                                                        var btn = context
-                                                            .read<PageUpdate>();
-                                                        btn.startOrStop(
-                                                            controller,
-                                                            widget.task,
-                                                            tabController);
-                                                      },
-                                                      child: context
-                                                          .read<PageUpdate>()
-                                                          .callText());
-                                                },
-                                              )),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {
-                                                  tabController.index = 2;
-                                                  context
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          TaskInfoListTile(
+                              taskName: widget.task.taskName,
+                              taskInfo: widget.task.taskInfo),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.05),
+                          Column(
+                            children: [
+                              FutureBuilder(
+                                future: _longBreakTime,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return const CircularProgressIndicator();
+                                    default:
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return PomodoroTimer(
+                                          width: 300,
+                                          isReverse: true,
+                                          isReverseAnimation: true,
+                                          duration: int.parse(snapshot.data
+                                                  .toString()
+                                                  .substring(0, 2)) *
+                                              60,
+                                          autoStart: false,
+                                          controller: controller,
+                                          isTimerTextShown: true,
+                                          neumorphicEffect: true,
+                                          innerFillGradient: LinearGradient(
+                                              colors: [
+                                                Colors.greenAccent.shade200,
+                                                Colors.blueAccent.shade400
+                                              ]),
+                                          neonGradient: LinearGradient(colors: [
+                                            Colors.greenAccent.shade200,
+                                            Colors.blueAccent.shade400
+                                          ]),
+                                        );
+                                      }
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1),
+                              Consumer<PageUpdate>(
+                                builder: (context, value, child) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.06,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                          child: Consumer<PageUpdate>(
+                                            builder: (context, value, child) {
+                                              return ElevatedButton(
+                                                  onPressed: () {
+                                                    var btn = context
+                                                        .read<PageUpdate>();
+                                                    btn.startOrStop(
+                                                        controller,
+                                                        widget.task,
+                                                        tabController);
+                                                  },
+                                                  child: context
                                                       .read<PageUpdate>()
-                                                      .startStop = true;
-                                                  context
-                                                          .read<PageUpdate>()
-                                                          .skipButtonVisible =
-                                                      false;
-                                                },
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
-                                  )
-                                ],
-                              );
-                            }
-                        }
-                      },
-                    ),
-                    FutureBuilder(
-                      future: _longBreakTime,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const CircularProgressIndicator();
-                          default:
-                            if (snapshot.hasError) {
-                              return Text('Error: ${snapshot.error}');
-                            } else {
-                              return Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  PomodoroTimer(
-                                    width: 300,
-                                    isReverse: true,
-                                    isReverseAnimation: true,
-                                    duration: int.parse(snapshot.data
-                                            .toString()
-                                            .substring(0, 2)) *
-                                        60,
-                                    autoStart: false,
-                                    controller: controller,
-                                    isTimerTextShown: true,
-                                    neumorphicEffect: true,
-                                    innerFillGradient: LinearGradient(colors: [
-                                      Colors.greenAccent.shade200,
-                                      Colors.blueAccent.shade400
-                                    ]),
-                                    neonGradient: LinearGradient(colors: [
-                                      Colors.greenAccent.shade200,
-                                      Colors.blueAccent.shade400
-                                    ]),
-                                  ),
-                                  Consumer<PageUpdate>(
-                                    builder: (context, value, child) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.06,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                              child: Consumer<PageUpdate>(
-                                                builder:
-                                                    (context, value, child) {
-                                                  return ElevatedButton(
-                                                      onPressed: () {
-                                                        var btn = context
-                                                            .read<PageUpdate>();
-                                                        btn.startOrStop(
-                                                            controller,
-                                                            widget.task,
-                                                            tabController);
-                                                      },
-                                                      child: context
-                                                          .read<PageUpdate>()
-                                                          .callText());
-                                                },
-                                              )),
-                                          if (context
-                                              .read<PageUpdate>()
-                                              .skipButtonVisible)
-                                            IconButton(
-                                                onPressed: () {
-                                                  tabController.index = 0;
-                                                  context
-                                                      .read<PageUpdate>()
-                                                      .startStop = true;
-                                                  context
-                                                          .read<PageUpdate>()
-                                                          .skipButtonVisible =
-                                                      false;
-                                                },
-                                                icon:
-                                                    const Icon(Icons.skip_next))
-                                        ],
-                                      );
-                                    },
-                                  )
-                                ],
-                              );
-                            }
-                        }
-                      },
+                                                      .callText());
+                                            },
+                                          )),
+                                      if (context
+                                          .read<PageUpdate>()
+                                          .skipButtonVisible)
+                                        IconButton(
+                                            onPressed: () {
+                                              tabController.index = 0;
+                                              context
+                                                  .read<PageUpdate>()
+                                                  .startStop = true;
+                                              context
+                                                  .read<PageUpdate>()
+                                                  .skipButtonVisible = false;
+                                            },
+                                            icon: const Icon(Icons.skip_next))
+                                    ],
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -456,6 +483,29 @@ class _PomodoroViewState extends State<PomodoroView>
   void dispose() {
     tabController.dispose();
     super.dispose();
+  }
+}
+
+class TaskInfoListTile extends StatelessWidget {
+  const TaskInfoListTile({
+    Key? key,
+    required this.taskName,
+    required this.taskInfo,
+  }) : super(key: key);
+
+  final String taskName;
+  final String taskInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(color: Colors.black, width: 1)),
+      title: Text(taskName),
+      subtitle: Text(taskInfo),
+      tileColor: Colors.blueGrey[50],
+    );
   }
 }
 
