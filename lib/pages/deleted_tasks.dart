@@ -109,7 +109,7 @@ class DeletedTasks extends StatelessWidget {
                                 height: kToolbarHeight,
                                 decoration: BoxDecoration(
                                     border: Border.all(width: 1),
-                                    borderRadius: BorderRadius.circular(8)),
+                                    borderRadius: BorderRadius.circular(15)),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -117,9 +117,9 @@ class DeletedTasks extends StatelessWidget {
                                       child: Material(
                                         shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
+                                                topLeft: Radius.circular(15),
                                                 bottomLeft:
-                                                    Radius.circular(8))),
+                                                    Radius.circular(15))),
                                         color: Colors.green[500],
                                         child: InkWell(
                                           onTap: () {
@@ -147,9 +147,9 @@ class DeletedTasks extends StatelessWidget {
                                       child: Material(
                                         shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(8),
+                                                topRight: Radius.circular(15),
                                                 bottomRight:
-                                                    Radius.circular(8))),
+                                                    Radius.circular(15))),
                                         color: Colors.red[300],
                                         child: InkWell(
                                             onTap: () {
