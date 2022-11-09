@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,8 +56,7 @@ class _PomodoroViewState extends State<PomodoroView>
     return Consumer<PageUpdate>(
       builder: (context, value, child) {
         return WillPopScope(
-          onWillPop: () async =>
-            context.read<PageUpdate>().onWillPop,
+          onWillPop: () async => context.read<PageUpdate>().onWillPop,
           child: Scaffold(
               appBar: AppBar(
                 title: const Text("Pomodoro"),
@@ -66,7 +64,9 @@ class _PomodoroViewState extends State<PomodoroView>
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    Navigator.pop(context);
+                    context.read<PageUpdate>().onWillPop
+                        ? Navigator.pop(context)
+                        : DoNothingAction();
                   },
                 ),
               ),
@@ -612,6 +612,7 @@ class PageUpdate extends ChangeNotifier {
     } else {
       stop(controller, task, tabController.index);
       onWillPop = true;
+      skipButtonVisible = false;
     }
   }
 
@@ -647,16 +648,16 @@ class PageUpdate extends ChangeNotifier {
         CollectionReference users = FirebaseFirestore.instance.collection(
             'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
         var tasks = users.doc(task.id);
-        await tasks.set({
-          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
-          'taskName': task.taskName,
-          'taskType': task.taskType,
-          'taskInfo': task.taskInfo,
-          "isDone": task.isDone,
-          "isActive": task.isActive,
-          "isArchive": task.isArchive,
-          "passingTime": passingTime
-        });
+        // await tasks.set({
+        //   'taskNameCaseInsensitive': task.taskName.toLowerCase(),
+        //   'taskName': task.taskName,
+        //   'taskType': task.taskType,
+        //   'taskInfo': task.taskInfo,
+        //   "isDone": task.isDone,
+        //   "isActive": task.isActive,
+        //   "isArchive": task.isArchive,
+        //   "passingTime": passingTime
+        // });
         break;
       case 1:
         String count = '05.60';
