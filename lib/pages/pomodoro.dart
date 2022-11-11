@@ -24,7 +24,6 @@ class _PomodoroViewState extends State<PomodoroView>
 
   final CountDownController controller = CountDownController();
   final TextEditingController controller2 = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -102,8 +101,8 @@ class _PomodoroViewState extends State<PomodoroView>
                     child: SizedBox(
                       child: TabBarView(
                         physics: !context.read<PageUpdate>().startStop
-                            ? NeverScrollableScrollPhysics()
-                            : null,
+                            ? const NeverScrollableScrollPhysics()
+                            : const AlwaysScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
                           Padding(
