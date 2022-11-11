@@ -644,20 +644,21 @@ class PageUpdate extends ChangeNotifier {
         passingTime = (double.parse(count) - double.parse(countDown) - 1)
             .toString()
             .substring(0, 4);
+        print(task.passingTime);
         print('gecen sure $passingTime');
         CollectionReference users = FirebaseFirestore.instance.collection(
             'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
         var tasks = users.doc(task.id);
-        // await tasks.set({
-        //   'taskNameCaseInsensitive': task.taskName.toLowerCase(),
-        //   'taskName': task.taskName,
-        //   'taskType': task.taskType,
-        //   'taskInfo': task.taskInfo,
-        //   "isDone": task.isDone,
-        //   "isActive": task.isActive,
-        //   "isArchive": task.isArchive,
-        //   "passingTime": passingTime
-        // });
+        await tasks.set({
+          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
+          'taskName': task.taskName,
+          'taskType': task.taskType,
+          'taskInfo': task.taskInfo,
+          "isDone": task.isDone,
+          "isActive": task.isActive,
+          "isArchive": task.isArchive,
+          "passingTime": (double.parse(passingTime)+double.parse(task.passingTime)).toString()
+        });
         break;
       case 1:
         String count = '05.60';

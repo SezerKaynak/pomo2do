@@ -571,7 +571,7 @@ class Task extends State<TaskView> {
                                                                             PomodoroView(
                                                                           task:
                                                                               retrievedTaskList![key]![index],
-                                                                        ))));
+                                                                        )))).then((_) => _refresh());
                                                       },
                                                       shape:
                                                           RoundedRectangleBorder(
