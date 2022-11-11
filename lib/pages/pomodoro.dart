@@ -78,26 +78,32 @@ class _PomodoroViewState extends State<PomodoroView>
                       width: 400,
                       child: Consumer<PageUpdate>(
                         builder: (context, value, child) {
-                          return TabBar(
-                            labelColor: const Color.fromRGBO(4, 2, 46, 1),
-                            indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
-                            unselectedLabelColor: Colors.grey,
-                            controller: tabController,
-                            onTap: (_) {
-                              context.read<PageUpdate>().skipButtonVisible =
-                                  false;
-                            },
-                            tabs: const [
-                              Tabs(tabName: 'Pomodoro'),
-                              Tabs(tabName: 'Kısa Ara'),
-                              Tabs(tabName: 'Uzun Ara'),
-                            ],
+                          return IgnorePointer(
+                            ignoring: !context.read<PageUpdate>().startStop,
+                            child: TabBar(
+                              labelColor: const Color.fromRGBO(4, 2, 46, 1),
+                              indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
+                              unselectedLabelColor: Colors.grey,
+                              controller: tabController,
+                              onTap: (_) {
+                                context.read<PageUpdate>().skipButtonVisible =
+                                    false;
+                              },
+                              tabs: const [
+                                Tabs(tabName: 'Pomodoro'),
+                                Tabs(tabName: 'Kısa Ara'),
+                                Tabs(tabName: 'Uzun Ara'),
+                              ],
+                            ),
                           );
                         },
                       )),
                   Expanded(
                     child: SizedBox(
                       child: TabBarView(
+                        physics: !context.read<PageUpdate>().startStop
+                            ? NeverScrollableScrollPhysics()
+                            : null,
                         controller: tabController,
                         children: [
                           Padding(
@@ -190,7 +196,9 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 .skipButtonVisible)
                                               IconButton(
                                                   onPressed: () {
-                                                    tabController.index = 1;
+                                                    tabController.animateTo(
+                                                        tabController.index +
+                                                            1);
                                                     context
                                                             .read<PageUpdate>()
                                                             .skipButtonVisible =
@@ -401,7 +409,9 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 .skipButtonVisible)
                                               IconButton(
                                                   onPressed: () {
-                                                    tabController.index = 2;
+                                                    tabController.animateTo(
+                                                        tabController.index +
+                                                            1);
                                                     context
                                                         .read<PageUpdate>()
                                                         .startStop = true;
@@ -515,7 +525,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 .skipButtonVisible)
                                               IconButton(
                                                   onPressed: () {
-                                                    tabController.index = 0;
+                                                    tabController.animateTo(0);
                                                     context
                                                         .read<PageUpdate>()
                                                         .startStop = true;
@@ -657,7 +667,9 @@ class PageUpdate extends ChangeNotifier {
           "isDone": task.isDone,
           "isActive": task.isActive,
           "isArchive": task.isArchive,
-          "passingTime": (double.parse(passingTime)+double.parse(task.passingTime)).toString()
+          "passingTime":
+              (double.parse(passingTime) + double.parse(task.passingTime))
+                  .toString()
         });
         break;
       case 1:
