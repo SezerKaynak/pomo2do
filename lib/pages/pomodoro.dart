@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class _PomodoroViewState extends State<PomodoroView>
   late Future<int> _breakTime;
   late Future<int> _longBreakTime;
   late TabController tabController;
+  int time = 0;
 
   final CountDownController controller = CountDownController();
   final TextEditingController controller2 = TextEditingController();
@@ -131,6 +134,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                               return Text(
                                                   'Error: ${snapshot.error}');
                                             } else {
+                                              time = snapshot.data * 60;
                                               return PomodoroTimer(
                                                 width: 300,
                                                 isReverse: true,
@@ -183,6 +187,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                       var btn = context
                                                           .read<PageUpdate>();
                                                       btn.startOrStop(
+                                                          time,
                                                           controller,
                                                           widget.task,
                                                           tabController);
@@ -338,6 +343,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                               return Text(
                                                   'Error: ${snapshot.error}');
                                             } else {
+                                              time = snapshot.data * 60;
                                               return PomodoroTimer(
                                                 width: 300,
                                                 isReverse: true,
@@ -394,6 +400,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                               context.read<
                                                                   PageUpdate>();
                                                           btn.startOrStop(
+                                                              time,
                                                               controller,
                                                               widget.task,
                                                               tabController);
@@ -454,6 +461,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                               return Text(
                                                   'Error: ${snapshot.error}');
                                             } else {
+                                              time = snapshot.data * 60;
                                               return PomodoroTimer(
                                                 width: 300,
                                                 isReverse: true,
@@ -510,6 +518,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                               context.read<
                                                                   PageUpdate>();
                                                           btn.startOrStop(
+                                                              time,
                                                               controller,
                                                               widget.task,
                                                               tabController);
@@ -606,20 +615,25 @@ class PageUpdate extends ChangeNotifier {
   final String basla = "BAŞLAT";
   final String durdur = "DURDUR";
 
-  void startButton(CountDownController controller) {
+  void startButton(CountDownController controller, int time) {
     controller.resume();
     skipButtonVisible = true;
     startStop = false;
+
     notifyListeners();
   }
 
-  void startOrStop(CountDownController controller, TaskModel task,
+  void startOrStop(int time, CountDownController controller, TaskModel task,
       TabController tabController) {
     if (startStop == true) {
-      startButton(controller);
+      startButton(controller, time);
       onWillPop = false;
+      // Timer.periodic(Duration(seconds: 5), (timer) {
+      //   stop(controller, task, tabController.index, time);
+      //   print("deneme");
+      // });
     } else {
-      stop(controller, task, tabController.index);
+      stop(controller, task, tabController.index, time);
       onWillPop = true;
       skipButtonVisible = false;
     }
@@ -639,14 +653,40 @@ class PageUpdate extends ChangeNotifier {
   //   startButtonWork.startButton(controller);
   // }
 
-  void stop(CountDownController controller, TaskModel task, int index) async {
+  void stop(CountDownController controller, TaskModel task, int index,
+      int time) async {
     startStop = true;
     controller.pause();
     String passingTime;
 
     switch (index) {
       case 0:
-        String count = '25.60';
+        String count = '${time ~/ 60}.60';
+        var countDown =
+            controller.getTime().substring(0, 5).replaceAll(':', '.');
+
+        passingTime = (double.parse(count) - double.parse(countDown) - 1)
+            .toString()
+            .substring(0, 4);
+        CollectionReference users = FirebaseFirestore.instance.collection(
+            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+        var tasks = users.doc(task.id);
+        await tasks.set({
+          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
+          'taskName': task.taskName,
+          'taskType': task.taskType,
+          'taskInfo': task.taskInfo,
+          "isDone": task.isDone,
+          "isActive": task.isActive,
+          "isArchive": task.isArchive,
+          "taskPassingTime":
+              (double.parse(passingTime) + double.parse(task.taskPassingTime))
+                  .toString(),
+          'breakPassingTime': task.breakPassingTime
+        });
+        break;
+      case 1:
+        String count = '${time ~/ 60}.60';
         var countDown =
             controller.getTime().substring(0, 5).replaceAll(':', '.');
 
@@ -662,38 +702,15 @@ class PageUpdate extends ChangeNotifier {
           'taskName': task.taskName,
           'taskType': task.taskType,
           'taskInfo': task.taskInfo,
-          "isDone": task.isDone,
-          "isActive": task.isActive,
-          "isArchive": task.isArchive,
-          "taskPassingTime":
-              (double.parse(passingTime) + double.parse(task.taskPassingTime))
-                  .toString(),
-          'breakPassingTime' : task.breakPassingTime
+          'isDone': task.isDone,
+          'isActive': task.isActive,
+          'isArchive': task.isArchive,
+          'taskPassingTime': task.taskPassingTime,
+          'breakPassingTime':
+              (double.parse(passingTime) + double.parse(task.breakPassingTime))
+                  .toString()
         });
-        break;
-      case 1:
-        String count = '05.60';
-        var countDown =
-            controller.getTime().substring(0, 5).replaceAll(':', '.');
 
-        passingTime = (double.parse(count) - double.parse(countDown) - 1)
-            .toString()
-            .substring(0, 4);
-
-        CollectionReference users = FirebaseFirestore.instance.collection(
-          'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-        var tasks = users.doc(task.id);
-        await tasks.set({
-          'taskNameCaseInsensitive' : task.taskName.toLowerCase(),
-          'taskName' : task.taskName,
-          'taskType' : task.taskType,
-          'taskInfo' : task.taskInfo,
-          'isDone' : task.isDone,
-          'isActive' : task.isActive,
-          'isArchive' : task.isArchive,
-          'taskPassingTime' : task.taskPassingTime,
-          'breakPassingTime' : (double.parse(passingTime) + double.parse(task.breakPassingTime)).toString()
-        });
         break;
       default:
     }
