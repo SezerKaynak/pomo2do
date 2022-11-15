@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -345,6 +343,15 @@ class _PomodoroViewState extends State<PomodoroView>
                                             } else {
                                               time = snapshot.data * 60;
                                               return PomodoroTimer(
+                                                onComplete: () {
+                                                  context
+                                                      .read<PageUpdate>()
+                                                      .startOrStop(
+                                                          time,
+                                                          controller,
+                                                          widget.task,
+                                                          tabController);
+                                                },
                                                 width: 300,
                                                 isReverse: true,
                                                 isReverseAnimation: true,
@@ -628,10 +635,6 @@ class PageUpdate extends ChangeNotifier {
     if (startStop == true) {
       startButton(controller, time);
       onWillPop = false;
-      // Timer.periodic(Duration(seconds: 5), (timer) {
-      //   stop(controller, task, tabController.index, time);
-      //   print("deneme");
-      // });
     } else {
       stop(controller, task, tabController.index, time);
       onWillPop = true;
