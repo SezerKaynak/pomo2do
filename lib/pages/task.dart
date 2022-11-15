@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/add_task.dart';
-import 'package:flutter_application_1/pages/completed_tasks.dart';
 import 'package:flutter_application_1/pages/edit_password.dart';
 import 'package:flutter_application_1/pages/edit_task.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
@@ -572,7 +571,7 @@ class Task extends State<TaskView> {
                                                                             PomodoroView(
                                                                           task:
                                                                               retrievedTaskList![key]![index],
-                                                                        ))));
+                                                                        )))).then((_) => _refresh());
                                                       },
                                                       shape:
                                                           RoundedRectangleBorder(
@@ -606,7 +605,7 @@ class Task extends State<TaskView> {
                           retrievedTaskList!.isEmpty) {
                         return Center(
                           child: ListView(
-                            children: const <Widget>[
+                            children: const [
                               Align(
                                   alignment: AlignmentDirectional.center,
                                   child: Text('Görev bulunamadı!')),
