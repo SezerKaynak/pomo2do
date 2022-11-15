@@ -653,8 +653,7 @@ class PageUpdate extends ChangeNotifier {
         passingTime = (double.parse(count) - double.parse(countDown) - 1)
             .toString()
             .substring(0, 4);
-        print(task.passingTime);
-        print('gecen sure $passingTime');
+
         CollectionReference users = FirebaseFirestore.instance.collection(
             'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
         var tasks = users.doc(task.id);
@@ -666,9 +665,10 @@ class PageUpdate extends ChangeNotifier {
           "isDone": task.isDone,
           "isActive": task.isActive,
           "isArchive": task.isArchive,
-          "passingTime":
-              (double.parse(passingTime) + double.parse(task.passingTime))
-                  .toString()
+          "taskPassingTime":
+              (double.parse(passingTime) + double.parse(task.taskPassingTime))
+                  .toString(),
+          'breakPassingTime' : task.breakPassingTime
         });
         break;
       case 1:
@@ -679,12 +679,24 @@ class PageUpdate extends ChangeNotifier {
         passingTime = (double.parse(count) - double.parse(countDown) - 1)
             .toString()
             .substring(0, 4);
-        print('gecen sure $passingTime');
+
+        CollectionReference users = FirebaseFirestore.instance.collection(
+          'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+        var tasks = users.doc(task.id);
+        await tasks.set({
+          'taskNameCaseInsensitive' : task.taskName.toLowerCase(),
+          'taskName' : task.taskName,
+          'taskType' : task.taskType,
+          'taskInfo' : task.taskInfo,
+          'isDone' : task.isDone,
+          'isActive' : task.isActive,
+          'isArchive' : task.isArchive,
+          'taskPassingTime' : task.taskPassingTime,
+          'breakPassingTime' : (double.parse(passingTime) + double.parse(task.breakPassingTime)).toString()
+        });
         break;
       default:
     }
-
-    //print('gecen sure: ${int.parse(gokalp.substring(0, 4))}');
 
     notifyListeners();
   }
