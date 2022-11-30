@@ -439,26 +439,12 @@ class Task extends State<TaskView> {
                                                     _dismiss();
                                                   } else {
                                                     {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      EditTask(
-                                                                        isArchive:
-                                                                            retrievedTaskList![key]![index].isArchive,
-                                                                        isDone:
-                                                                            retrievedTaskList![key]![index].isDone,
-                                                                        taskInfo:
-                                                                            retrievedTaskList![key]![index].taskInfo,
-                                                                        taskName:
-                                                                            retrievedTaskList![key]![index].taskName,
-                                                                        taskType:
-                                                                            retrievedTaskList![key]![index].taskType,
-                                                                        id: retrievedTaskList![key]![index]
-                                                                            .id
-                                                                            .toString(),
-                                                                      )));
+                                                      Navigator.pushNamed(
+                                                          context, '/editTask',
+                                                          arguments:
+                                                              retrievedTaskList![
+                                                                  key]![index]);
+
                                                       setState(() {
                                                         _refresh();
                                                       });
@@ -560,18 +546,19 @@ class Task extends State<TaskView> {
                                                         Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ChangeNotifierProvider<
-                                                                            PageUpdate>(
-                                                                        create:
-                                                                            (context) {
-                                                                          return PageUpdate();
-                                                                        },
-                                                                        child:
-                                                                            PomodoroView(
-                                                                          task:
-                                                                              retrievedTaskList![key]![index],
-                                                                        )))).then((_) => _refresh());
+                                                                builder: (context) => ChangeNotifierProvider<
+                                                                        PageUpdate>(
+                                                                    create:
+                                                                        (context) {
+                                                                      return PageUpdate();
+                                                                    },
+                                                                    child:
+                                                                        PomodoroView(
+                                                                      task: retrievedTaskList![
+                                                                              key]![
+                                                                          index],
+                                                                    )))).then(
+                                                            (_) => _refresh());
                                                       },
                                                       shape:
                                                           RoundedRectangleBorder(
