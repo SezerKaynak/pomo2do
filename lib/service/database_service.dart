@@ -11,7 +11,7 @@ class DatabaseService {
         .add(taskData.toMap());
   }
 
-  updateTask(TaskModel taskData) async {
+  Future<void> updateTask(TaskModel taskData) async {
     await _db
         .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
         .doc(taskData.id)
