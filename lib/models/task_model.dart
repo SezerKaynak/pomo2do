@@ -10,6 +10,7 @@ class TaskModel {
   final bool isArchive;
   final String taskPassingTime;
   final String breakPassingTime;
+  final String longBreakPassingTime;
   TaskModel(
       {this.id,
       this.isArchive = false,
@@ -18,8 +19,9 @@ class TaskModel {
       this.taskInfo = "",
       this.taskName = "",
       this.taskType = "",
-      this.taskPassingTime = "0.00",
-      this.breakPassingTime = "0.00"});
+      this.taskPassingTime = "0",
+      this.breakPassingTime = "0",
+      this.longBreakPassingTime = "0"});
 
   Map<String, dynamic> toMap() {
     return {
@@ -30,7 +32,8 @@ class TaskModel {
       'isActive': isActive,
       'isArchive': isArchive,
       'taskPassingTime': taskPassingTime,
-      'breakPassingTime' : breakPassingTime
+      'breakPassingTime': breakPassingTime,
+      'longBreakPassingTime': longBreakPassingTime
     };
   }
 
@@ -42,8 +45,9 @@ class TaskModel {
         isArchive = doc.data()!["isArchive"] ?? false,
         isDone = doc.data()!["isDone"],
         isActive = doc.data()?["isActive"] ?? true,
-        taskPassingTime = doc.data()?["taskPassingTime"] ?? "0.00",
-        breakPassingTime = doc.data()?["breakPassingTime"] ?? "0.00";
+        taskPassingTime = doc.data()?["taskPassingTime"] ?? "0",
+        breakPassingTime = doc.data()?["breakPassingTime"] ?? "0",
+        longBreakPassingTime = doc.data()?["longBreakPassingTime"] ?? "0";
 
   List<TaskModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((snapshot) {
@@ -58,7 +62,8 @@ class TaskModel {
           isDone: dataMap['isDone'],
           isActive: dataMap['isActive'],
           taskPassingTime: dataMap['taskPassingTime'],
-          breakPassingTime: dataMap['breakPassingTime']);
+          breakPassingTime: dataMap['breakPassingTime'],
+          longBreakPassingTime: dataMap['longBreakPassingTime']);
     }).toList();
   }
 }

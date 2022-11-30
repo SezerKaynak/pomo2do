@@ -660,17 +660,13 @@ class PageUpdate extends ChangeNotifier {
       int time) async {
     startStop = true;
     controller.pause();
-    String passingTime;
+    int passingTime;
 
     switch (index) {
       case 0:
-        String count = '${time ~/ 60}.60';
-        var countDown =
-            controller.getTime().substring(0, 5).replaceAll(':', '.');
+        var countDown = controller.getTimeInSeconds();
+        passingTime = time - countDown;
 
-        passingTime = (double.parse(count) - double.parse(countDown) - 1)
-            .toString()
-            .substring(0, 4);
         CollectionReference users = FirebaseFirestore.instance.collection(
             'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
         var tasks = users.doc(task.id);
@@ -683,19 +679,14 @@ class PageUpdate extends ChangeNotifier {
           "isActive": task.isActive,
           "isArchive": task.isArchive,
           "taskPassingTime":
-              (double.parse(passingTime) + double.parse(task.taskPassingTime))
-                  .toString(),
-          'breakPassingTime': task.breakPassingTime
+              (passingTime + int.parse(task.taskPassingTime)).toString(),
+          'breakPassingTime': task.breakPassingTime,
+          'longBreakPassingTime': task.longBreakPassingTime
         });
         break;
       case 1:
-        String count = '${time ~/ 60}.60';
-        var countDown =
-            controller.getTime().substring(0, 5).replaceAll(':', '.');
-
-        passingTime = (double.parse(count) - double.parse(countDown) - 1)
-            .toString()
-            .substring(0, 4);
+        var countDown = controller.getTimeInSeconds();
+        passingTime = time - countDown;
 
         CollectionReference users = FirebaseFirestore.instance.collection(
             'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
@@ -710,14 +701,34 @@ class PageUpdate extends ChangeNotifier {
           'isArchive': task.isArchive,
           'taskPassingTime': task.taskPassingTime,
           'breakPassingTime':
-              (double.parse(passingTime) + double.parse(task.breakPassingTime))
-                  .toString()
+              (passingTime + int.parse(task.breakPassingTime)).toString(),
+          'longBreakPassingTime': task.longBreakPassingTime
         });
 
         break;
+      case 2:
+        var countDown = controller.getTimeInSeconds();
+        passingTime = time - countDown;
+
+        CollectionReference users = FirebaseFirestore.instance.collection(
+            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
+        var tasks = users.doc(task.id);
+        await tasks.set({
+          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
+          'taskName': task.taskName,
+          'taskType': task.taskType,
+          'taskInfo': task.taskInfo,
+          'isDone': task.isDone,
+          'isActive': task.isActive,
+          'isArchive': task.isArchive,
+          'taskPassingTime': task.taskPassingTime,
+          'breakPassingTime': task.breakPassingTime,
+          'longBreakPassingTime':
+              (passingTime + int.parse(task.longBreakPassingTime)).toString()
+        });
+        break;
       default:
     }
-
     notifyListeners();
   }
 }
