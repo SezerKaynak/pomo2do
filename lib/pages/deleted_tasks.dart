@@ -188,6 +188,7 @@ class DeletedTasks extends StatelessWidget {
 
 class ListUpdate extends ChangeNotifier {
   bool isLoading = false;
+  DatabaseService dbService = DatabaseService();
   void checkBoxWorks(List selectedIndexes, int index) {
     if (selectedIndexes.contains(index)) {
       selectedIndexes.remove(index);
@@ -204,19 +205,8 @@ class ListUpdate extends ChangeNotifier {
     notifyListeners();
     for (int i = 0; i < selectedNumber; i++) {
       final TaskModel data = tasks[selectedIndexes[i]];
-
-      CollectionReference users = FirebaseFirestore.instance
-          .collection('Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-      var task = users.doc(data.id);
-      await task.set({
-        "taskName": data.taskName,
-        "taskInfo": data.taskInfo,
-        "taskType": data.taskType,
-        "taskNameCaseInsensitive": data.taskName.toLowerCase(),
-        "isDone": data.isDone,
-        "isActive": true,
-        "isArchive": data.isArchive,
-      });
+      data.isActive = true;
+      await dbService.updateTask(data);
     }
 
     for (int i = 0; i < selectedIndexes.length; i++) {
@@ -233,11 +223,10 @@ class ListUpdate extends ChangeNotifier {
   }
 
   void deleteTasksButton(List selectedIndexes, List<TaskModel> tasks) async {
-    DatabaseService service = DatabaseService();
     int selectedNumber = selectedIndexes.length;
     selectedIndexes.sort();
     for (int i = 0; i < selectedNumber; i++) {
-      await service.deleteTask(tasks[selectedIndexes[i]].id.toString());
+      await dbService.deleteTask(tasks[selectedIndexes[i]].id.toString());
     }
 
     for (int i = 0; i < selectedIndexes.length; i++) {

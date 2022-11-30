@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class CompletedTasks extends StatefulWidget {
 class _CompletedTasksState extends State<CompletedTasks> {
   List selectedIndexes = [];
   bool isLoading = false;
+  DatabaseService dbService = DatabaseService();
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
@@ -98,24 +100,15 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                       InkWell(
                                           child: const Icon(Icons.archive),
                                           onTap: () async {
-                                            CollectionReference users =
-                                                FirebaseFirestore.instance
-                                                    .collection(
-                                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                            var task = users.doc(data.id);
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            await task.set({
-                                              "taskName": data.taskName,
-                                              "taskInfo": data.taskInfo,
-                                              "taskType": data.taskType,
-                                              "taskNameCaseInsensitive":
-                                                  data.taskName.toLowerCase(),
-                                              "isDone": true,
-                                              "isActive": true,
-                                              "isArchive": true,
-                                            });
+
+                                            data.isDone = true;
+                                            data.isActive = true;
+                                            data.isArchive = true;
+                                            await dbService.updateTask(data);
+
                                             setState(() {
                                               tasks.removeAt(index);
                                               selectedIndexes.clear();
@@ -127,24 +120,15 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                       InkWell(
                                           child: const Icon(Icons.delete),
                                           onTap: () async {
-                                            CollectionReference users =
-                                                FirebaseFirestore.instance
-                                                    .collection(
-                                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                            var task = users.doc(data.id);
                                             setState(() {
                                               isLoading = true;
                                             });
-                                            await task.set({
-                                              "taskName": data.taskName,
-                                              "taskInfo": data.taskInfo,
-                                              "taskType": data.taskType,
-                                              "taskNameCaseInsensitive":
-                                                  data.taskName.toLowerCase(),
-                                              "isDone": true,
-                                              "isActive": false,
-                                              "isArchive": false,
-                                            });
+
+                                            data.isDone = true;
+                                            data.isActive = false;
+                                            data.isArchive = false;
+                                            await dbService.updateTask(data);
+
                                             setState(() {
                                               tasks.removeAt(index);
                                               selectedIndexes.clear();
@@ -184,20 +168,9 @@ class _CompletedTasksState extends State<CompletedTasks> {
                                 final TaskModel data =
                                     tasks[selectedIndexes[i]];
 
-                                CollectionReference users =
-                                    FirebaseFirestore.instance.collection(
-                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                var task = users.doc(data.id);
-                                await task.set({
-                                  "taskName": data.taskName,
-                                  "taskInfo": data.taskInfo,
-                                  "taskType": data.taskType,
-                                  "taskNameCaseInsensitive":
-                                      data.taskName.toLowerCase(),
-                                  "isDone": false,
-                                  "isActive": true,
-                                  "isArchive": data.isArchive,
-                                });
+                                data.isDone = false;
+                                data.isActive = true;
+                                await dbService.updateTask(data);
                               }
                               for (int i = 0; i < selectedIndexes.length; i++) {
                                 tasks.removeAt(selectedIndexes[i] - i);
