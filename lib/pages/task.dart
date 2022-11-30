@@ -30,7 +30,7 @@ class Task extends State<TaskView> {
   final TextEditingController textController = TextEditingController();
   List<TaskModel> deletedTasks = [];
   String? downloadUrl;
-
+  DatabaseService dbService = DatabaseService();
   @override
   void initState() {
     super.initState();
@@ -402,37 +402,12 @@ class Task extends State<TaskView> {
                                                   if (direction ==
                                                       DismissDirection
                                                           .endToStart) {
-                                                    CollectionReference users =
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                                    var task = users.doc(
+                                                    retrievedTaskList![key]![
+                                                            index]
+                                                        .isActive = false;
+                                                    dbService.updateTask(
                                                         retrievedTaskList![
-                                                                key]![index]
-                                                            .id);
-                                                    task.set({
-                                                      'taskNameCaseInsensitive':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskName
-                                                              .toLowerCase(),
-                                                      'taskName':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskName,
-                                                      'taskType':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskType,
-                                                      'taskInfo':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskInfo,
-                                                      "isDone": false,
-                                                      "isActive": false,
-                                                      "isArchive": false,
-                                                    });
+                                                            key]![index]);
 
                                                     _refresh();
                                                     _dismiss();
