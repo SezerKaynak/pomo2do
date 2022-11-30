@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -621,7 +622,7 @@ class PageUpdate extends ChangeNotifier {
   bool onWillPop = true;
   final String basla = "BAŞLAT";
   final String durdur = "DURDUR";
-
+  DatabaseService dbService = DatabaseService();
   void startButton(CountDownController controller, int time) {
     controller.resume();
     skipButtonVisible = true;
@@ -666,66 +667,23 @@ class PageUpdate extends ChangeNotifier {
       case 0:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-
-        CollectionReference users = FirebaseFirestore.instance.collection(
-            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-        var tasks = users.doc(task.id);
-        await tasks.set({
-          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
-          'taskName': task.taskName,
-          'taskType': task.taskType,
-          'taskInfo': task.taskInfo,
-          "isDone": task.isDone,
-          "isActive": task.isActive,
-          "isArchive": task.isArchive,
-          "taskPassingTime":
-              (passingTime + int.parse(task.taskPassingTime)).toString(),
-          'breakPassingTime': task.breakPassingTime,
-          'longBreakPassingTime': task.longBreakPassingTime
-        });
+        task.taskPassingTime =
+            (passingTime + int.parse(task.taskPassingTime)).toString();
+        dbService.updateTask(task);
         break;
       case 1:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-
-        CollectionReference users = FirebaseFirestore.instance.collection(
-            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-        var tasks = users.doc(task.id);
-        await tasks.set({
-          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
-          'taskName': task.taskName,
-          'taskType': task.taskType,
-          'taskInfo': task.taskInfo,
-          'isDone': task.isDone,
-          'isActive': task.isActive,
-          'isArchive': task.isArchive,
-          'taskPassingTime': task.taskPassingTime,
-          'breakPassingTime':
-              (passingTime + int.parse(task.breakPassingTime)).toString(),
-          'longBreakPassingTime': task.longBreakPassingTime
-        });
-
+        task.breakPassingTime =
+            (passingTime + int.parse(task.breakPassingTime)).toString();
+        dbService.updateTask(task);
         break;
       case 2:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-
-        CollectionReference users = FirebaseFirestore.instance.collection(
-            'Users/${FirebaseAuth.instance.currentUser!.uid}/tasks');
-        var tasks = users.doc(task.id);
-        await tasks.set({
-          'taskNameCaseInsensitive': task.taskName.toLowerCase(),
-          'taskName': task.taskName,
-          'taskType': task.taskType,
-          'taskInfo': task.taskInfo,
-          'isDone': task.isDone,
-          'isActive': task.isActive,
-          'isArchive': task.isArchive,
-          'taskPassingTime': task.taskPassingTime,
-          'breakPassingTime': task.breakPassingTime,
-          'longBreakPassingTime':
-              (passingTime + int.parse(task.longBreakPassingTime)).toString()
-        });
+        task.longBreakPassingTime =
+            (passingTime + int.parse(task.longBreakPassingTime)).toString();
+        dbService.updateTask(task);
         break;
       default:
     }

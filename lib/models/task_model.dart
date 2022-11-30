@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
-  final String? id;
-  final String taskInfo;
-  final String taskName;
-  final String taskType;
-  final bool isDone;
-  final bool isActive;
-  final bool isArchive;
-  final String taskPassingTime;
-  final String breakPassingTime;
-  final String longBreakPassingTime;
+  String? id;
+  String taskInfo;
+  String taskName;
+  String taskType;
+  bool isDone;
+  bool isActive;
+  bool isArchive;
+  String taskPassingTime;
+  String breakPassingTime;
+  String longBreakPassingTime;
   TaskModel(
       {this.id,
       this.isArchive = false,

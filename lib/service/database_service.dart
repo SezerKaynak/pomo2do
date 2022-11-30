@@ -11,17 +11,35 @@ class DatabaseService {
         .add(taskData.toMap());
   }
 
-  updateTask(TaskModel taskData){
-    _db
-        .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks").doc(taskData.id);
+  updateTask(TaskModel taskData) async {
+    await _db
+        .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
+        .doc(taskData.id)
+        .set({
+      'taskNameCaseInsensitive': taskData.taskName.toLowerCase(),
+      'taskName': taskData.taskName,
+      'taskType': taskData.taskType,
+      'taskInfo': taskData.taskInfo,
+      'isDone': taskData.isDone,
+      'isActive': taskData.isActive,
+      'isArchive': taskData.isArchive,
+      'taskPassingTime': taskData.taskPassingTime,
+      'breakPassingTime': taskData.breakPassingTime,
+      'longBreakPassingTime': taskData.longBreakPassingTime
+    });
   }
-  Future<void> deleteTask(String documentId) async{
-    await _db.collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks").doc(documentId).delete();
+
+  Future<void> deleteTask(String documentId) async {
+    await _db
+        .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
+        .doc(documentId)
+        .delete();
   }
 
   Future<List<TaskModel>> retrieveTasks() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks").get();
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+        .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
+        .get();
     return snapshot.docs
         .map((docSnapshot) => TaskModel.fromDocumentSnapshot(docSnapshot))
         .toList();
