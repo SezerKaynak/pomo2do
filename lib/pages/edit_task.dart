@@ -4,6 +4,7 @@ import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,11 @@ class EditTask extends StatefulWidget {
 class _EditTaskState extends State<EditTask> {
   bool isCheckedDone = false;
   bool isCheckedArchive = false;
+  DatabaseService dbService = DatabaseService();
   @override
   Widget build(BuildContext context) {
-    TaskModel selectedTask = ModalRoute.of(context)!.settings.arguments as TaskModel;
+    TaskModel selectedTask =
+        ModalRoute.of(context)!.settings.arguments as TaskModel;
     var title = "Görev Düzenleme Sayfası";
     var subtitle = "Görevin ismi,türü ve açıklamasını düzenleyebilirsiniz👋";
     var taskN = "Görev İsmi";
@@ -147,20 +150,14 @@ class _EditTaskState extends State<EditTask> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
-                          CollectionReference users = FirebaseFirestore.instance
-                              .collection(
-                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
-                          var task = users.doc(selectedTask.id);
-                          task.set({
-                            'taskNameCaseInsensitive':
-                                _taskNameController.text.toLowerCase(),
-                            'taskName': _taskNameController.text,
-                            'taskType': _taskTypeController.text,
-                            'taskInfo': _taskInfoController.text,
-                            "isDone": isCheckedDone,
-                            "isActive": true,
-                            "isArchive": isCheckedArchive
-                          });
+                          selectedTask.taskName = _taskNameController.text;
+                          selectedTask.taskType = _taskTypeController.text;
+                          selectedTask.taskInfo = _taskInfoController.text;
+                          selectedTask.isDone = isCheckedDone;
+                          selectedTask.isArchive = isCheckedArchive;
+                          selectedTask.isActive = true;
+                          await dbService.updateTask(selectedTask);
+
                           isCheckedDone && isCheckedArchive
                               ? SmartDialog.showToast("Görev arşive taşındı!")
                               : isCheckedDone
@@ -170,6 +167,7 @@ class _EditTaskState extends State<EditTask> {
                                       ? SmartDialog.showToast(
                                           "Görev arşive taşındı!")
                                       : DoNothingAction();
+                          // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
