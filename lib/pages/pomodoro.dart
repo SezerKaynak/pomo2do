@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
-import 'package:flutter_application_1/service/database_service.dart';
-import 'package:flutter_application_1/service/pomodoro_controller.dart';
+import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -590,6 +587,18 @@ class TaskInfoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      trailing: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          const Icon(Icons.schedule),
+          const Icon(Icons.close),
+          Text(
+            '0',
+            style:
+                Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 22),
+          ),
+        ],
+      ),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: const BorderSide(color: Colors.black, width: 1)),
@@ -613,4 +622,3 @@ class Tabs extends StatelessWidget {
         child: Center(child: Text(tabName)));
   }
 }
-
