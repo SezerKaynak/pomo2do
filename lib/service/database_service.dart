@@ -5,28 +5,32 @@ import 'package:flutter_application_1/models/task_model.dart';
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  addTask(TaskModel taskData) async {
+  Future<void> addTask(TaskModel taskData) async {
     await _db
         .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
         .add(taskData.toMap());
   }
 
   Future<void> updateTask(TaskModel taskData) async {
+    // await _db
+    //     .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
+    //     .doc(taskData.id)
+    //     .set({
+    //   'taskNameCaseInsensitive': taskData.taskName.toLowerCase(),
+    //   'taskName': taskData.taskName,
+    //   'taskType': taskData.taskType,
+    //   'taskInfo': taskData.taskInfo,
+    //   'isDone': taskData.isDone,
+    //   'isActive': taskData.isActive,
+    //   'isArchive': taskData.isArchive,
+    //   'taskPassingTime': taskData.taskPassingTime,
+    //   'breakPassingTime': taskData.breakPassingTime,
+    //   'longBreakPassingTime': taskData.longBreakPassingTime
+    // });
     await _db
         .collection("Users/${FirebaseAuth.instance.currentUser!.uid}/tasks")
         .doc(taskData.id)
-        .set({
-      'taskNameCaseInsensitive': taskData.taskName.toLowerCase(),
-      'taskName': taskData.taskName,
-      'taskType': taskData.taskType,
-      'taskInfo': taskData.taskInfo,
-      'isDone': taskData.isDone,
-      'isActive': taskData.isActive,
-      'isArchive': taskData.isArchive,
-      'taskPassingTime': taskData.taskPassingTime,
-      'breakPassingTime': taskData.breakPassingTime,
-      'longBreakPassingTime': taskData.longBreakPassingTime
-    });
+        .set(taskData.toMap());
   }
 
   Future<void> deleteTask(String documentId) async {

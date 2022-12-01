@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/pomotodo_user.dart';
+import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
@@ -20,12 +19,10 @@ class AddTask extends StatelessWidget {
     var textLabel4 = 'Matematik 20 soru çözülecek';
     var buttonText = "Kaydet";
 
-    bool isDone = false;
-    bool isActive = true;
-    bool isArchive = false;
     final TextEditingController _taskNameController = TextEditingController();
     final TextEditingController _taskTypeController = TextEditingController();
     final TextEditingController _taskInfoController = TextEditingController();
+    DatabaseService dbService = DatabaseService();
 
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
@@ -99,20 +96,13 @@ class AddTask extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
-                          CollectionReference users = FirebaseFirestore.instance
-                              .collection(
-                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
+                          TaskModel newTask = TaskModel();
+                          newTask.taskName = _taskNameController.text;
+                          newTask.taskType = _taskTypeController.text;
+                          newTask.taskInfo = _taskInfoController.text;
+                          await dbService.addTask(newTask);
 
-                          users.add({
-                            'taskName': _taskNameController.text,
-                            'taskNameCaseInsensitive':
-                                _taskNameController.text.toLowerCase(),
-                            'taskType': _taskTypeController.text,
-                            'taskInfo': _taskInfoController.text,
-                            "isDone": isDone,
-                            'isActive': isActive,
-                            'isArchive': isArchive,
-                          });
+                          // ignore: use_build_context_synchronously
                           Navigator.push(
                               context,
                               MaterialPageRoute(

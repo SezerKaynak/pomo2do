@@ -26,6 +26,7 @@ class TaskModel {
   Map<String, dynamic> toMap() {
     return {
       'taskInfo': taskInfo,
+      'taskNameCaseInsensitive' : taskName.toLowerCase(),
       'taskName': taskName,
       'taskType': taskType,
       'isDone': isDone,
