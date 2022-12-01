@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_application_1/service/pomodoro_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -138,11 +139,16 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 width: 300,
                                                 isReverse: true,
                                                 isReverseAnimation: true,
-                                                duration: int.parse(snapshot
-                                                        .data
-                                                        .toString()
-                                                        .substring(0, 2)) *
-                                                    60,
+                                                onComplete: () {
+                                                  context
+                                                      .read<PageUpdate>()
+                                                      .startOrStop(
+                                                          time,
+                                                          controller,
+                                                          widget.task,
+                                                          tabController);
+                                                },
+                                                duration: snapshot.data * 60,
                                                 autoStart: false,
                                                 controller: controller,
                                                 isTimerTextShown: true,
@@ -356,11 +362,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 width: 300,
                                                 isReverse: true,
                                                 isReverseAnimation: true,
-                                                duration: int.parse(snapshot
-                                                        .data
-                                                        .toString()
-                                                        .substring(0, 1)) *
-                                                    60,
+                                                duration: snapshot.data * 60,
                                                 autoStart: false,
                                                 controller: controller,
                                                 isTimerTextShown: true,
@@ -474,11 +476,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                 width: 300,
                                                 isReverse: true,
                                                 isReverseAnimation: true,
-                                                duration: int.parse(snapshot
-                                                        .data
-                                                        .toString()
-                                                        .substring(0, 2)) *
-                                                    60,
+                                                duration: snapshot.data * 60,
                                                 autoStart: false,
                                                 controller: controller,
                                                 isTimerTextShown: true,
@@ -616,77 +614,3 @@ class Tabs extends StatelessWidget {
   }
 }
 
-class PageUpdate extends ChangeNotifier {
-  bool skipButtonVisible = false;
-  bool startStop = true;
-  bool onWillPop = true;
-  final String basla = "BAŞLAT";
-  final String durdur = "DURDUR";
-  DatabaseService dbService = DatabaseService();
-  void startButton(CountDownController controller, int time) {
-    controller.resume();
-    skipButtonVisible = true;
-    startStop = false;
-
-    notifyListeners();
-  }
-
-  void startOrStop(int time, CountDownController controller, TaskModel task,
-      TabController tabController) {
-    if (startStop == true) {
-      startButton(controller, time);
-      onWillPop = false;
-    } else {
-      stop(controller, task, tabController.index, time);
-      onWillPop = true;
-      skipButtonVisible = false;
-    }
-  }
-
-  Widget callText() {
-    if (startStop == true) {
-      return Text(basla);
-    } else {
-      return Text(durdur);
-    }
-  }
-
-  // void start() {
-  //   startStop = false;
-  //   var startButtonWork = context.read<PageUpdate>();
-  //   startButtonWork.startButton(controller);
-  // }
-
-  void stop(CountDownController controller, TaskModel task, int index,
-      int time) async {
-    startStop = true;
-    controller.pause();
-    int passingTime;
-
-    switch (index) {
-      case 0:
-        var countDown = controller.getTimeInSeconds();
-        passingTime = time - countDown;
-        task.taskPassingTime =
-            (passingTime + int.parse(task.taskPassingTime)).toString();
-        dbService.updateTask(task);
-        break;
-      case 1:
-        var countDown = controller.getTimeInSeconds();
-        passingTime = time - countDown;
-        task.breakPassingTime =
-            (passingTime + int.parse(task.breakPassingTime)).toString();
-        dbService.updateTask(task);
-        break;
-      case 2:
-        var countDown = controller.getTimeInSeconds();
-        passingTime = time - countDown;
-        task.longBreakPassingTime =
-            (passingTime + int.parse(task.longBreakPassingTime)).toString();
-        dbService.updateTask(task);
-        break;
-      default:
-    }
-    notifyListeners();
-  }
-}

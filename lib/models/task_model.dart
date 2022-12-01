@@ -2,15 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
   String? id;
-  String taskInfo;
-  String taskName;
-  String taskType;
-  bool isDone;
-  bool isActive;
-  bool isArchive;
-  String taskPassingTime;
-  String breakPassingTime;
-  String longBreakPassingTime;
+  String taskInfo,
+      taskName,
+      taskType,
+      taskPassingTime,
+      breakPassingTime,
+      longBreakPassingTime;
+  bool isDone, isActive, isArchive;
   TaskModel(
       {this.id,
       this.isArchive = false,
@@ -26,7 +24,7 @@ class TaskModel {
   Map<String, dynamic> toMap() {
     return {
       'taskInfo': taskInfo,
-      'taskNameCaseInsensitive' : taskName.toLowerCase(),
+      'taskNameCaseInsensitive': taskName.toLowerCase(),
       'taskName': taskName,
       'taskType': taskType,
       'isDone': isDone,

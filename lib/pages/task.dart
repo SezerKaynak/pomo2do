@@ -12,6 +12,8 @@ import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_application_1/service/pomodoro_controller.dart';
+//import 'package:flutter_application_1/service/pomodoro_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
