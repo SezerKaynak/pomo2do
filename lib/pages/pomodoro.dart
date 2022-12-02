@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});
@@ -139,7 +142,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                   width: 300,
                                                   isReverse: true,
                                                   isReverseAnimation: true,
-                                                  onComplete: () {
+                                                  onComplete: () async {
                                                     context
                                                         .read<PageUpdate>()
                                                         .startOrStop(
@@ -147,6 +150,25 @@ class _PomodoroViewState extends State<PomodoroView>
                                                             controller,
                                                             widget.task,
                                                             tabController);
+                                                    await FlutterLocalNotificationsPlugin().zonedSchedule(
+                                                        0,
+                                                        'scheduled title',
+                                                        'scheduled body',
+                                                        tz.TZDateTime.now(
+                                                                tz.local)
+                                                            .add(const Duration(
+                                                                seconds: 5)),
+                                                        const NotificationDetails(
+                                                            android: AndroidNotificationDetails(
+                                                                'your channel id',
+                                                                'your channel name',
+                                                                channelDescription:
+                                                                    'your channel description')),
+                                                        androidAllowWhileIdle:
+                                                            true,
+                                                        uiLocalNotificationDateInterpretation:
+                                                            UILocalNotificationDateInterpretation
+                                                                .absoluteTime);
                                                   },
                                                   duration: snapshot.data * 60,
                                                   autoStart: false,
@@ -350,7 +372,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                               } else {
                                                 time = snapshot.data * 60;
                                                 return PomodoroTimer(
-                                                  onComplete: () {
+                                                  onComplete: () async {
                                                     context
                                                         .read<PageUpdate>()
                                                         .startOrStop(
@@ -358,6 +380,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                             controller,
                                                             widget.task,
                                                             tabController);
+                                                    
                                                   },
                                                   width: 300,
                                                   isReverse: true,
