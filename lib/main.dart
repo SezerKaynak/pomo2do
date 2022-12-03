@@ -17,12 +17,24 @@ import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  WidgetsFlutterBinding.ensureInitialized();
+  var initializationSettingsAndroid =
+      const AndroidInitializationSettings("google");
+  var initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 
@@ -48,7 +60,7 @@ class MyApp extends StatelessWidget {
                       child: const DeletedTasks()),
                   '/editProfile': (context) => const EditProfile(),
                   '/archived': (context) => const ArchivedTasks(),
-                  '/deneme' : (context) => const Deneme(),
+                  '/deneme': (context) => const Deneme(),
                 },
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData().copyWith(
