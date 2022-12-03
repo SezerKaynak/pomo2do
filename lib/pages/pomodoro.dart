@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/pages/pomodoro_tabs/long_break_view.dart';
+import 'package:flutter_application_1/pages/pomodoro_tabs/short_break_view.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_application_1/pages/pomodoro_tabs/focus_view.dart';
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});
   final TaskModel task;
+  
   @override
   State<PomodoroView> createState() => _PomodoroViewState();
 }
@@ -23,9 +23,9 @@ class _PomodoroViewState extends State<PomodoroView>
   late Future<int> _breakTime;
   late Future<int> _longBreakTime;
   late TabController tabController;
+  late CountDownController controller;
   int time = 0;
 
-  final CountDownController controller = CountDownController();
   final TextEditingController controller2 = TextEditingController();
   @override
   void initState() {
@@ -34,15 +34,16 @@ class _PomodoroViewState extends State<PomodoroView>
       if (prefs.getInt('workTimerSelect') == null) {
         setPomodoroSettings(prefs);
       }
-      return prefs.getInt('workTimerSelect') ?? 0;
+      return prefs.getInt('workTimerSelect')!;
     });
     _breakTime = _prefs.then((SharedPreferences prefs) {
-      return prefs.getInt('breakTimerSelect') ?? 0;
+      return prefs.getInt('breakTimerSelect')!;
     });
     _longBreakTime = _prefs.then((SharedPreferences prefs) {
-      return prefs.getInt('longBreakTimerSelect') ?? 0;
+      return prefs.getInt('longBreakTimerSelect')!;
     });
     tabController = TabController(initialIndex: 0, length: 3, vsync: this);
+    controller = CountDownController();
   }
 
   void setPomodoroSettings(SharedPreferences prefs) async {
@@ -54,9 +55,6 @@ class _PomodoroViewState extends State<PomodoroView>
 
   @override
   Widget build(BuildContext context) {
-    final CountDownController controller = CountDownController();
-    return Consumer<PageUpdate>(
-      builder: (context, value, child) {
         return WillPopScope(
           onWillPop: () async => context.read<PageUpdate>().onWillPop,
           child: Scaffold(
@@ -103,487 +101,14 @@ class _PomodoroViewState extends State<PomodoroView>
                   Expanded(
                     child: SizedBox(
                       child: TabBarView(
-                        physics: !context.read<PageUpdate>().startStop
+                        physics: !context.watch<PageUpdate>().startStop
                             ? const NeverScrollableScrollPhysics()
                             : const AlwaysScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              children: [
-                                TaskInfoListTile(
-                                    taskName: widget.task.taskName,
-                                    taskInfo: widget.task.taskInfo),
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.5,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      FutureBuilder(
-                                        future: _workTime,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot snapshot) {
-                                          switch (snapshot.connectionState) {
-                                            case ConnectionState.waiting:
-                                              return const CircularProgressIndicator();
-                                            default:
-                                              if (snapshot.hasError) {
-                                                return Text(
-                                                    'Error: ${snapshot.error}');
-                                              } else {
-                                                time = snapshot.data * 60;
-                                                return PomodoroTimer(
-                                                  width: 300,
-                                                  isReverse: true,
-                                                  isReverseAnimation: true,
-                                                  onComplete: () async {
-                                                    context
-                                                        .read<PageUpdate>()
-                                                        .startOrStop(
-                                                            time,
-                                                            controller,
-                                                            widget.task,
-                                                            tabController);
-                                                    await FlutterLocalNotificationsPlugin().zonedSchedule(
-                                                        0,
-                                                        'scheduled title',
-                                                        'scheduled body',
-                                                        tz.TZDateTime.now(
-                                                                tz.local).add(const Duration(seconds: 1)),
-                                                        const NotificationDetails(
-                                                            android: AndroidNotificationDetails(
-                                                                'your channel id',
-                                                                'your channel name',
-                                                                channelDescription:
-                                                                    'your channel description',
-                                                                importance:
-                                                                    Importance
-                                                                        .max)),
-                                                        androidAllowWhileIdle:
-                                                            true,
-                                                        uiLocalNotificationDateInterpretation:
-                                                            UILocalNotificationDateInterpretation
-                                                                .absoluteTime);
-                                                  },
-                                                  duration: snapshot.data * 60,
-                                                  autoStart: false,
-                                                  controller: controller,
-                                                  isTimerTextShown: true,
-                                                  neumorphicEffect: true,
-                                                  innerFillGradient:
-                                                      LinearGradient(colors: [
-                                                    Colors.greenAccent.shade200,
-                                                    Colors.blueAccent.shade400
-                                                  ]),
-                                                  neonGradient:
-                                                      LinearGradient(colors: [
-                                                    Colors.greenAccent.shade200,
-                                                    Colors.blueAccent.shade400
-                                                  ]),
-                                                );
-                                              }
-                                          }
-                                        },
-                                      ),
-                                      Consumer<PageUpdate>(
-                                        builder: (context, value, child) {
-                                          return Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.06,
-                                                  child: ElevatedButton(
-                                                      onPressed: () {
-                                                        var btn = context
-                                                            .read<PageUpdate>();
-                                                        btn.startOrStop(
-                                                            time,
-                                                            controller,
-                                                            widget.task,
-                                                            tabController);
-                                                      },
-                                                      child: context
-                                                          .read<PageUpdate>()
-                                                          .callText())),
-                                              if (context
-                                                  .read<PageUpdate>()
-                                                  .skipButtonVisible)
-                                                IconButton(
-                                                    onPressed: () {
-                                                      tabController.animateTo(
-                                                          tabController.index +
-                                                              1);
-                                                      context
-                                                              .read<PageUpdate>()
-                                                              .skipButtonVisible =
-                                                          false;
-                                                      context
-                                                          .read<PageUpdate>()
-                                                          .startStop = true;
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.skip_next))
-                                            ],
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Container(
-                                        height: kToolbarHeight,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: Material(
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8))),
-                                                color: Colors.green[100],
-                                                child: InkWell(
-                                                  onTap: () {},
-                                                  child: const SizedBox(
-                                                    child: Center(
-                                                      child: Text(
-                                                        "Tamamlandı",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Material(
-                                                shape: const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topRight: Radius
-                                                                .circular(8),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    8))),
-                                                color: Colors.red[100],
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      SystemChrome
-                                                          .setEnabledSystemUIMode(
-                                                              SystemUiMode
-                                                                  .immersiveSticky);
-                                                    },
-                                                    onLongPress: () {
-                                                      SystemChrome
-                                                          .setEnabledSystemUIMode(
-                                                        SystemUiMode.manual,
-                                                        overlays: [
-                                                          SystemUiOverlay.top,
-                                                          SystemUiOverlay.bottom
-                                                        ],
-                                                      );
-                                                    },
-                                                    child: const SizedBox(
-                                                      child: Center(
-                                                          child: Text(
-                                                        'Tam Ekran',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      )),
-                                                    )),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                      // ListTile(
-                                      //   shape: RoundedRectangleBorder(
-                                      //       borderRadius: BorderRadius.circular(8),
-                                      //       side: const BorderSide(
-                                      //           color: Colors.black, width: 1)),
-                                      // ),
-                                      ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              children: [
-                                TaskInfoListTile(
-                                    taskName: widget.task.taskName,
-                                    taskInfo: widget.task.taskInfo),
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.5,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      FutureBuilder(
-                                        future: _breakTime,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot snapshot) {
-                                          switch (snapshot.connectionState) {
-                                            case ConnectionState.waiting:
-                                              return const CircularProgressIndicator();
-                                            default:
-                                              if (snapshot.hasError) {
-                                                return Text(
-                                                    'Error: ${snapshot.error}');
-                                              } else {
-                                                time = snapshot.data * 60;
-                                                return PomodoroTimer(
-                                                  onComplete: () async {
-                                                    context
-                                                        .read<PageUpdate>()
-                                                        .startOrStop(
-                                                            time,
-                                                            controller,
-                                                            widget.task,
-                                                            tabController);
-                                                  },
-                                                  width: 300,
-                                                  isReverse: true,
-                                                  isReverseAnimation: true,
-                                                  duration: snapshot.data * 60,
-                                                  autoStart: false,
-                                                  controller: controller,
-                                                  isTimerTextShown: true,
-                                                  neumorphicEffect: true,
-                                                  innerFillGradient:
-                                                      LinearGradient(colors: [
-                                                    Colors.greenAccent.shade200,
-                                                    Colors.blueAccent.shade400
-                                                  ]),
-                                                  neonGradient:
-                                                      LinearGradient(colors: [
-                                                    Colors.greenAccent.shade200,
-                                                    Colors.blueAccent.shade400
-                                                  ]),
-                                                );
-                                              }
-                                          }
-                                        },
-                                      ),
-                                      Consumer<PageUpdate>(
-                                        builder: (context, value, child) {
-                                          return Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.06,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  child: Consumer<PageUpdate>(
-                                                    builder: (context, value,
-                                                        child) {
-                                                      return ElevatedButton(
-                                                          onPressed: () {
-                                                            var btn =
-                                                                context.read<
-                                                                    PageUpdate>();
-                                                            btn.startOrStop(
-                                                                time,
-                                                                controller,
-                                                                widget.task,
-                                                                tabController);
-                                                          },
-                                                          child: context
-                                                              .read<
-                                                                  PageUpdate>()
-                                                              .callText());
-                                                    },
-                                                  )),
-                                              if (context
-                                                  .read<PageUpdate>()
-                                                  .skipButtonVisible)
-                                                IconButton(
-                                                    onPressed: () {
-                                                      tabController.animateTo(
-                                                          tabController.index +
-                                                              1);
-                                                      context
-                                                          .read<PageUpdate>()
-                                                          .startStop = true;
-                                                      context
-                                                              .read<PageUpdate>()
-                                                              .skipButtonVisible =
-                                                          false;
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.skip_next))
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              children: [
-                                TaskInfoListTile(
-                                    taskName: widget.task.taskName,
-                                    taskInfo: widget.task.taskInfo),
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.5,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      FutureBuilder(
-                                        future: _longBreakTime,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot snapshot) {
-                                          switch (snapshot.connectionState) {
-                                            case ConnectionState.waiting:
-                                              return const CircularProgressIndicator();
-                                            default:
-                                              if (snapshot.hasError) {
-                                                return Text(
-                                                    'Error: ${snapshot.error}');
-                                              } else {
-                                                time = snapshot.data * 60;
-                                                return PomodoroTimer(
-                                                  width: 300,
-                                                  isReverse: true,
-                                                  isReverseAnimation: true,
-                                                  duration: snapshot.data * 60,
-                                                  autoStart: false,
-                                                  controller: controller,
-                                                  isTimerTextShown: true,
-                                                  neumorphicEffect: true,
-                                                  innerFillGradient:
-                                                      LinearGradient(colors: [
-                                                    Colors.greenAccent.shade200,
-                                                    Colors.blueAccent.shade400
-                                                  ]),
-                                                  neonGradient:
-                                                      LinearGradient(colors: [
-                                                    Colors.greenAccent.shade200,
-                                                    Colors.blueAccent.shade400
-                                                  ]),
-                                                );
-                                              }
-                                          }
-                                        },
-                                      ),
-                                      Consumer<PageUpdate>(
-                                        builder: (context, value, child) {
-                                          return Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.06,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  child: Consumer<PageUpdate>(
-                                                    builder: (context, value,
-                                                        child) {
-                                                      return ElevatedButton(
-                                                          onPressed: () {
-                                                            var btn =
-                                                                context.read<
-                                                                    PageUpdate>();
-                                                            btn.startOrStop(
-                                                                time,
-                                                                controller,
-                                                                widget.task,
-                                                                tabController);
-                                                          },
-                                                          child: context
-                                                              .read<
-                                                                  PageUpdate>()
-                                                              .callText());
-                                                    },
-                                                  )),
-                                              if (context
-                                                  .read<PageUpdate>()
-                                                  .skipButtonVisible)
-                                                IconButton(
-                                                    onPressed: () {
-                                                      tabController
-                                                          .animateTo(0);
-                                                      context
-                                                          .read<PageUpdate>()
-                                                          .startStop = true;
-                                                      context
-                                                              .read<PageUpdate>()
-                                                              .skipButtonVisible =
-                                                          false;
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.skip_next))
-                                            ],
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          FocusView(widget: widget, workTime: _workTime, time: time, controller: controller, tabController: tabController),
+                          ShortBreak(widget: widget, breakTime: _breakTime, time: time, controller: controller, tabController: tabController),
+                          LongBreak(widget: widget, longBreakTime: _longBreakTime, controller: controller, time: time, tabController: tabController),
                         ],
                       ),
                     ),
@@ -591,8 +116,6 @@ class _PomodoroViewState extends State<PomodoroView>
                 ],
               )),
         );
-      },
-    );
   }
 
   @override
@@ -601,6 +124,7 @@ class _PomodoroViewState extends State<PomodoroView>
     super.dispose();
   }
 }
+
 
 class TaskInfoListTile extends StatelessWidget {
   const TaskInfoListTile({
