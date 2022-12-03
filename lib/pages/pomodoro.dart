@@ -150,6 +150,26 @@ class _PomodoroViewState extends State<PomodoroView>
                                                             controller,
                                                             widget.task,
                                                             tabController);
+                                                    await FlutterLocalNotificationsPlugin().zonedSchedule(
+                                                        0,
+                                                        'scheduled title',
+                                                        'scheduled body',
+                                                        tz.TZDateTime.now(
+                                                                tz.local).add(const Duration(seconds: 1)),
+                                                        const NotificationDetails(
+                                                            android: AndroidNotificationDetails(
+                                                                'your channel id',
+                                                                'your channel name',
+                                                                channelDescription:
+                                                                    'your channel description',
+                                                                importance:
+                                                                    Importance
+                                                                        .max)),
+                                                        androidAllowWhileIdle:
+                                                            true,
+                                                        uiLocalNotificationDateInterpretation:
+                                                            UILocalNotificationDateInterpretation
+                                                                .absoluteTime);
                                                   },
                                                   duration: snapshot.data * 60,
                                                   autoStart: false,
@@ -187,7 +207,7 @@ class _PomodoroViewState extends State<PomodoroView>
                                                           .height *
                                                       0.06,
                                                   child: ElevatedButton(
-                                                      onPressed: () async {
+                                                      onPressed: () {
                                                         var btn = context
                                                             .read<PageUpdate>();
                                                         btn.startOrStop(
@@ -195,29 +215,6 @@ class _PomodoroViewState extends State<PomodoroView>
                                                             controller,
                                                             widget.task,
                                                             tabController);
-                                                        await FlutterLocalNotificationsPlugin().zonedSchedule(
-                                                            0,
-                                                            'scheduled title',
-                                                            'scheduled body',
-                                                            tz.TZDateTime.now(
-                                                                    tz.local)
-                                                                .add(const Duration(
-                                                                    seconds:
-                                                                        5)),
-                                                            const NotificationDetails(
-                                                                android: AndroidNotificationDetails(
-                                                                    'your channel id',
-                                                                    'your channel name',
-                                                                    channelDescription:
-                                                                        'your channel description',
-                                                                    importance:
-                                                                        Importance
-                                                                            .max)),
-                                                            androidAllowWhileIdle:
-                                                                true,
-                                                            uiLocalNotificationDateInterpretation:
-                                                                UILocalNotificationDateInterpretation
-                                                                    .absoluteTime);
                                                       },
                                                       child: context
                                                           .read<PageUpdate>()

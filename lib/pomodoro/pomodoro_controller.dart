@@ -52,7 +52,9 @@ class PageUpdate extends ChangeNotifier {
         task.taskPassingTime =
             (passingTime + int.parse(task.taskPassingTime)).toString();
         await dbService.updateTask(task);
-        tabController.index = 1;
+        if(passingTime == time){
+          tabController.animateTo(1);
+        }
         break;
       case 1:
         var countDown = controller.getTimeInSeconds();
