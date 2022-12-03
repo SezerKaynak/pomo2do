@@ -16,6 +16,7 @@ import 'package:flutter_application_1/widgets/auth_widget.dart';
 import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -35,7 +36,14 @@ Future<void> main() async {
       InitializationSettings(android: initializationSettingsAndroid);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   tz.initializeTimeZones();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+    Provider.value(value: await SharedPreferences.getInstance()),
+  ],
+  child: const MaterialApp(home: MyApp()),
+  ),
+    );
 }
 
 class MyApp extends StatelessWidget {
