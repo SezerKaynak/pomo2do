@@ -5,7 +5,6 @@ import 'package:flutter_application_1/pages/pomodoro_tabs/short_break_view.dart'
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application_1/pages/pomodoro_tabs/focus_view.dart';
 
 class PomodoroView extends StatefulWidget {
@@ -18,10 +17,6 @@ class PomodoroView extends StatefulWidget {
 
 class _PomodoroViewState extends State<PomodoroView>
     with TickerProviderStateMixin {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  late Future<int> _workTime;
-  late Future<int> _breakTime;
-  late Future<int> _longBreakTime;
   late TabController tabController;
   late CountDownController controller;
   int time = 0;
@@ -30,27 +25,8 @@ class _PomodoroViewState extends State<PomodoroView>
   @override
   void initState() {
     super.initState();
-    _workTime = _prefs.then((SharedPreferences prefs) {
-      if (prefs.getInt('workTimerSelect') == null) {
-        setPomodoroSettings(prefs);
-      }
-      return prefs.getInt('workTimerSelect')!;
-    });
-    _breakTime = _prefs.then((SharedPreferences prefs) {
-      return prefs.getInt('breakTimerSelect')!;
-    });
-    _longBreakTime = _prefs.then((SharedPreferences prefs) {
-      return prefs.getInt('longBreakTimerSelect')!;
-    });
     tabController = TabController(initialIndex: 0, length: 3, vsync: this);
     controller = CountDownController();
-  }
-
-  void setPomodoroSettings(SharedPreferences prefs) async {
-    await prefs.setInt('workTimerSelect', 25);
-    await prefs.setInt('breakTimerSelect', 5);
-    await prefs.setInt('longBreakTimerSelect', 15);
-    await prefs.setInt('longBreakNumberSelect', 1);
   }
 
   @override
@@ -104,20 +80,15 @@ class _PomodoroViewState extends State<PomodoroView>
                     children: [
                       FocusView(
                           widget: widget,
-                          workTime: _workTime,
                           controller: controller,
                           tabController: tabController),
                       ShortBreak(
                           widget: widget,
-                          breakTime: _breakTime,
-                          time: time,
                           controller: controller,
                           tabController: tabController),
                       LongBreak(
                           widget: widget,
-                          longBreakTime: _longBreakTime,
                           controller: controller,
-                          time: time,
                           tabController: tabController),
                     ],
                   ),

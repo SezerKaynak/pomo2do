@@ -3,13 +3,25 @@ import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/pages/login_page.dart';
 import 'package:flutter_application_1/pages/task.dart';
 import 'package:flutter_application_1/widgets/error_page.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({super.key, required this.snapShot});
   final AsyncSnapshot<PomotodoUser?> snapShot;
   @override
   Widget build(BuildContext context) {
+    final pomodoroSettings = Provider.of<SharedPreferences>(context);
     if (snapShot.connectionState == ConnectionState.active) {
+      void setPomodoroSettings() {
+        if (pomodoroSettings.getInt('workTimerSelect') == null) {
+          pomodoroSettings.setInt('workTimerSelect', 25);
+          pomodoroSettings.setInt('breakTimerSelect', 5);
+          pomodoroSettings.setInt('longBreakTimerSelect', 15);
+          pomodoroSettings.setInt('longBreakNumberSelect', 1);
+        }
+      }
+      setPomodoroSettings();
       return snapShot.hasData ? TaskView() : const LoginPage();
     }
     return const ErrorPage();
