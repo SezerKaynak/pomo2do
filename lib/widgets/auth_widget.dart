@@ -14,14 +14,15 @@ class AuthWidget extends StatelessWidget {
     final pomodoroSettings = Provider.of<SharedPreferences>(context);
     if (snapShot.connectionState == ConnectionState.active) {
       void setPomodoroSettings() {
-        if (pomodoroSettings.getInt('workTimerSelect') == null) {
-          pomodoroSettings.setInt('workTimerSelect', 25);
-          pomodoroSettings.setInt('breakTimerSelect', 5);
-          pomodoroSettings.setInt('longBreakTimerSelect', 15);
-          pomodoroSettings.setInt('longBreakNumberSelect', 1);
-        }
+        pomodoroSettings.setInt('workTimerSelect', 25);
+        pomodoroSettings.setInt('breakTimerSelect', 5);
+        pomodoroSettings.setInt('longBreakTimerSelect', 15);
+        pomodoroSettings.setInt('longBreakNumberSelect', 1);
       }
-      setPomodoroSettings();
+      if (pomodoroSettings.getInt('workTimerSelect') == null) {
+        setPomodoroSettings();
+      }
+
       return snapShot.hasData ? TaskView() : const LoginPage();
     }
     return const ErrorPage();
