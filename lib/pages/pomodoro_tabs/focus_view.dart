@@ -9,12 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-// ignore: must_be_immutable
 class FocusView extends StatelessWidget {
-  FocusView({
+  const FocusView({
     Key? key,
     required this.widget,
-    required Future<int> workTime,
     required this.controller,
     required this.tabController,
   }) : super(key: key);
@@ -64,9 +62,8 @@ class FocusView extends StatelessWidget {
                         uiLocalNotificationDateInterpretation:
                             UILocalNotificationDateInterpretation.absoluteTime);
                   },
-                  duration: context
-                          .read<SharedPreferences>()
-                          .getInt("workTimerSelect")! *
+                  duration: context.select((SharedPreferences prefs) =>
+                          prefs.getInt("workTimerSelect"))! *
                       60,
                   autoStart: false,
                   controller: controller,
@@ -89,7 +86,7 @@ class FocusView extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.06,
                         child: ElevatedButton(
                             onPressed: () {
-                              var btn = context.watch<PageUpdate>();
+                              var btn = context.read<PageUpdate>();
                               btn.startOrStop(
                                   context
                                       .read<SharedPreferences>()
@@ -98,8 +95,10 @@ class FocusView extends StatelessWidget {
                                   widget.task,
                                   tabController);
                             },
-                            child: context.read<PageUpdate>().callText())),
-                    if (context.read<PageUpdate>().skipButtonVisible)
+                            child: context.select((PageUpdate pageNotifier) =>
+                                pageNotifier.callText()))),
+                    if (context.select((PageUpdate pageNotifier) =>
+                        pageNotifier.skipButtonVisible))
                       IconButton(
                           onPressed: () {
                             tabController.animateTo(tabController.index + 1);
@@ -177,14 +176,7 @@ class FocusView extends StatelessWidget {
                       )
                     ],
                   ),
-                )
-                // ListTile(
-                //   shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(8),
-                //       side: const BorderSide(
-                //           color: Colors.black, width: 1)),
-                // ),
-                ),
+                )),
           )
         ],
       ),
