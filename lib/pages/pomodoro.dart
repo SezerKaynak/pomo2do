@@ -106,7 +106,7 @@ class _PomodoroViewState extends State<PomodoroView>
                             : const AlwaysScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
-                          FocusView(widget: widget, workTime: _workTime, time: time, controller: controller, tabController: tabController),
+                          FocusView(widget: widget, workTime: _workTime, controller: controller, tabController: tabController),
                           ShortBreak(widget: widget, breakTime: _breakTime, time: time, controller: controller, tabController: tabController),
                           LongBreak(widget: widget, longBreakTime: _longBreakTime, controller: controller, time: time, tabController: tabController),
                         ],

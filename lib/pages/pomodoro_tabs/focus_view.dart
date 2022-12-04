@@ -15,13 +15,11 @@ class FocusView extends StatelessWidget {
     Key? key,
     required this.widget,
     required Future<int> workTime,
-    required this.time,
     required this.controller,
     required this.tabController,
   }) : super(key: key);
 
   final PomodoroView widget;
-  int time;
   final CountDownController controller;
   final TabController tabController;
 
@@ -45,7 +43,12 @@ class FocusView extends StatelessWidget {
                   isReverseAnimation: true,
                   onComplete: () async {
                     context.read<PageUpdate>().startOrStop(
-                        time, controller, widget.task, tabController);
+                        context
+                            .read<SharedPreferences>()
+                            .getInt("workTimerSelect")!,
+                        controller,
+                        widget.task,
+                        tabController);
                     await FlutterLocalNotificationsPlugin().zonedSchedule(
                         0,
                         'scheduled title',
@@ -61,7 +64,10 @@ class FocusView extends StatelessWidget {
                         uiLocalNotificationDateInterpretation:
                             UILocalNotificationDateInterpretation.absoluteTime);
                   },
-                  duration: context.read<SharedPreferences>().getInt("workTimerSelect")! * 60,
+                  duration: context
+                          .read<SharedPreferences>()
+                          .getInt("workTimerSelect")! *
+                      60,
                   autoStart: false,
                   controller: controller,
                   isTimerTextShown: true,
@@ -74,6 +80,35 @@ class FocusView extends StatelessWidget {
                     Colors.greenAccent.shade200,
                     Colors.blueAccent.shade400
                   ]),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              var btn = context.watch<PageUpdate>();
+                              btn.startOrStop(
+                                  context
+                                      .read<SharedPreferences>()
+                                      .getInt("workTimerSelect")!,
+                                  controller,
+                                  widget.task,
+                                  tabController);
+                            },
+                            child: context.read<PageUpdate>().callText())),
+                    if (context.read<PageUpdate>().skipButtonVisible)
+                      IconButton(
+                          onPressed: () {
+                            tabController.animateTo(tabController.index + 1);
+                            context.read<PageUpdate>().skipButtonVisible =
+                                false;
+                            context.read<PageUpdate>().startStop = true;
+                          },
+                          icon: const Icon(Icons.skip_next))
+                  ],
                 ),
               ],
             ),
