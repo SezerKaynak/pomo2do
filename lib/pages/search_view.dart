@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
 import 'package:provider/provider.dart';
 
 class SearchView extends StatelessWidget {
@@ -49,9 +50,15 @@ class SearchView extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PomodoroView(
-                                          task: dataList[index],
-                                        )));
+                                  builder: (context) => ChangeNotifierProvider(
+                                    create: (context) {
+                                      return PageUpdate();
+                                    },
+                                    child: PomodoroView(
+                                      task: dataList[index],
+                                    ),
+                                  ),
+                                ));
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
