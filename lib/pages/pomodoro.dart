@@ -11,7 +11,7 @@ import 'package:flutter_application_1/pages/pomodoro_tabs/focus_view.dart';
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});
   final TaskModel task;
-  
+
   @override
   State<PomodoroView> createState() => _PomodoroViewState();
 }
@@ -55,67 +55,77 @@ class _PomodoroViewState extends State<PomodoroView>
 
   @override
   Widget build(BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => context.read<PageUpdate>().onWillPop,
-          child: Scaffold(
-              appBar: AppBar(
-                title: const Text("Pomodoro"),
-                centerTitle: true,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    context.read<PageUpdate>().onWillPop
-                        ? Navigator.pop(context)
-                        : DoNothingAction();
-                  },
+    final pageUpdateNotifier = context.watch<PageUpdate>();
+    return WillPopScope(
+      onWillPop: () async => pageUpdateNotifier.onWillPop,
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text("Pomodoro"),
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                pageUpdateNotifier.onWillPop
+                    ? Navigator.pop(context)
+                    : DoNothingAction();
+              },
+            ),
+          ),
+          resizeToAvoidBottomInset: false,
+          body: Column(
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  width: 400,
+                  child: IgnorePointer(
+                    ignoring: !pageUpdateNotifier.startStop,
+                    child: TabBar(
+                      labelColor: const Color.fromRGBO(4, 2, 46, 1),
+                      indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
+                      unselectedLabelColor: Colors.grey,
+                      controller: tabController,
+                      onTap: (_) {
+                        pageUpdateNotifier.skipButtonVisible = false;
+                      },
+                      tabs: const [
+                        Tabs(tabName: 'Pomodoro'),
+                        Tabs(tabName: 'Kısa Ara'),
+                        Tabs(tabName: 'Uzun Ara'),
+                      ],
+                    ),
+                  )),
+              Expanded(
+                child: SizedBox(
+                  child: TabBarView(
+                    physics: !pageUpdateNotifier.startStop
+                        ? const NeverScrollableScrollPhysics()
+                        : const AlwaysScrollableScrollPhysics(),
+                    controller: tabController,
+                    children: [
+                      FocusView(
+                          widget: widget,
+                          workTime: _workTime,
+                          controller: controller,
+                          tabController: tabController),
+                      ShortBreak(
+                          widget: widget,
+                          breakTime: _breakTime,
+                          time: time,
+                          controller: controller,
+                          tabController: tabController),
+                      LongBreak(
+                          widget: widget,
+                          longBreakTime: _longBreakTime,
+                          controller: controller,
+                          time: time,
+                          tabController: tabController),
+                    ],
+                  ),
                 ),
               ),
-              resizeToAvoidBottomInset: false,
-              body: Column(
-                children: [
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: 400,
-                      child: Consumer<PageUpdate>(
-                        builder: (context, value, child) {
-                          return IgnorePointer(
-                            ignoring: !context.read<PageUpdate>().startStop,
-                            child: TabBar(
-                              labelColor: const Color.fromRGBO(4, 2, 46, 1),
-                              indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
-                              unselectedLabelColor: Colors.grey,
-                              controller: tabController,
-                              onTap: (_) {
-                                context.read<PageUpdate>().skipButtonVisible =
-                                    false;
-                              },
-                              tabs: const [
-                                Tabs(tabName: 'Pomodoro'),
-                                Tabs(tabName: 'Kısa Ara'),
-                                Tabs(tabName: 'Uzun Ara'),
-                              ],
-                            ),
-                          );
-                        },
-                      )),
-                  Expanded(
-                    child: SizedBox(
-                      child: TabBarView(
-                        physics: !context.watch<PageUpdate>().startStop
-                            ? const NeverScrollableScrollPhysics()
-                            : const AlwaysScrollableScrollPhysics(),
-                        controller: tabController,
-                        children: [
-                          FocusView(widget: widget, workTime: _workTime, controller: controller, tabController: tabController),
-                          ShortBreak(widget: widget, breakTime: _breakTime, time: time, controller: controller, tabController: tabController),
-                          LongBreak(widget: widget, longBreakTime: _longBreakTime, controller: controller, time: time, tabController: tabController),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-        );
+            ],
+          )),
+    );
   }
 
   @override
@@ -124,7 +134,6 @@ class _PomodoroViewState extends State<PomodoroView>
     super.dispose();
   }
 }
-
 
 class TaskInfoListTile extends StatelessWidget {
   const TaskInfoListTile({
