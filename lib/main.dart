@@ -39,11 +39,12 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-    Provider.value(value: await SharedPreferences.getInstance()),
-  ],
-  child: const MaterialApp(home: MyApp()),
-  ),
-    );
+        Provider<IAuthService>(create: (_) => AuthService()),
+        Provider.value(value: await SharedPreferences.getInstance()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -51,35 +52,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [Provider<IAuthService>(create: (_) => AuthService())],
-      child: AuthWidgetBuilder(
-          onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
-              MaterialApp(
-                navigatorObservers: [FlutterSmartDialog.observer],
-                builder: FlutterSmartDialog.init(),
-                initialRoute: '/',
-                routes: {
-                  '/task': (context) => TaskView(),
-                  '/done': (context) => const CompletedTasks(),
-                  '/editTask': (context) => const EditTask(),
-                  '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
-                      create: (context) => ListUpdate(),
-                      child: const DeletedTasks()),
-                  '/editProfile': (context) => const EditProfile(),
-                  '/archived': (context) => const ArchivedTasks(),
-                  '/deneme': (context) => const Deneme(),
-                },
-                debugShowCheckedModeBanner: false,
-                theme: ThemeData().copyWith(
-                  appBarTheme: AppBarTheme(
-                    backgroundColor: ProjectThemeOptions().backGroundColor,
-                    elevation: 0.0,
-                    systemOverlayStyle: SystemUiOverlayStyle.light,
-                  ),
+    return AuthWidgetBuilder(
+        onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
+            MaterialApp(
+              navigatorObservers: [FlutterSmartDialog.observer],
+              builder: FlutterSmartDialog.init(),
+              initialRoute: '/',
+              routes: {
+                '/task': (context) => TaskView(),
+                '/done': (context) => const CompletedTasks(),
+                '/editTask': (context) => const EditTask(),
+                '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
+                    create: (context) => ListUpdate(),
+                    child: const DeletedTasks()),
+                '/editProfile': (context) => const EditProfile(),
+                '/archived': (context) => const ArchivedTasks(),
+                '/deneme': (context) => const Deneme(),
+              },
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData().copyWith(
+                appBarTheme: AppBarTheme(
+                  backgroundColor: ProjectThemeOptions().backGroundColor,
+                  elevation: 0.0,
+                  systemOverlayStyle: SystemUiOverlayStyle.light,
                 ),
-                home: AuthWidget(snapShot: snapShot),
-              )),
-    );
+              ),
+              home: AuthWidget(snapShot: snapShot),
+            ));
   }
 }
