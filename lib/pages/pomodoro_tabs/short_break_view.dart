@@ -25,11 +25,10 @@ class ShortBreak extends StatelessWidget {
         children: [
           TaskInfoListTile(
               taskName: widget.task.taskName, taskInfo: widget.task.taskInfo),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.of(context).size.height * 0.55,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PomodoroTimer(
                   onComplete: () async {
@@ -41,7 +40,7 @@ class ShortBreak extends StatelessWidget {
                         widget.task,
                         tabController);
                   },
-                  width: 300,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   isReverse: true,
                   isReverseAnimation: true,
                   duration: context.select((SharedPreferences prefs) =>

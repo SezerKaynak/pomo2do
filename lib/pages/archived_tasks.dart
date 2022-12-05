@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ArchivedTasks extends StatefulWidget {
   const ArchivedTasks({super.key});
@@ -131,8 +132,14 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                                 await dbService.updateTask(data);
                               }
                               for (int i = 0; i < selectedIndexes.length; i++) {
+                                tasks[selectedIndexes[i] - i].isDone
+                                    ? SmartDialog.showToast(
+                                        "${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!")
+                                    : SmartDialog.showToast(
+                                        "${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
                                 tasks.removeAt(selectedIndexes[i] - i);
                               }
+
                               selectedIndexes.clear();
                               buttonVisible = false;
                               setState(() {
