@@ -73,10 +73,10 @@ class _PomodoroViewState extends State<PomodoroView>
               Expanded(
                 child: SizedBox(
                   child: TabBarView(
-                    physics: !pageUpdateNotifier.startStop
-                        ? const NeverScrollableScrollPhysics()
-                        : const AlwaysScrollableScrollPhysics(),
-                    //physics: const NeverScrollableScrollPhysics(),
+                    // physics: !pageUpdateNotifier.startStop
+                    //     ? const NeverScrollableScrollPhysics()
+                    //     : const AlwaysScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: tabController,
                     children: [
                       FocusView(

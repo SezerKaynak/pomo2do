@@ -25,7 +25,7 @@ class PageUpdate extends ChangeNotifier {
       startButton(controller, time);
       onWillPop = false;
     } else {
-      stop(controller, task, tabController.index, time, tabController);
+      stop(controller, task, time, tabController);
       onWillPop = true;
       skipButtonVisible = false;
     }
@@ -39,20 +39,20 @@ class PageUpdate extends ChangeNotifier {
     }
   }
 
-  void stop(CountDownController controller, TaskModel task, int index, int time,
+  void stop(CountDownController controller, TaskModel task, int time,
       TabController tabController) async {
     startStop = true;
     controller.pause();
     int passingTime;
 
-    switch (index) {
+    switch (tabController.index) {
       case 0:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
         task.taskPassingTime =
             (passingTime + int.parse(task.taskPassingTime)).toString();
         await dbService.updateTask(task);
-        if(passingTime == time){
+        if (passingTime == time) {
           tabController.animateTo(1);
         }
         break;

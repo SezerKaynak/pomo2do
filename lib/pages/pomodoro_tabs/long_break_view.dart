@@ -31,6 +31,15 @@ class LongBreak extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PomodoroTimer(
+                  onComplete: () {
+                    context.read<PageUpdate>().startOrStop(
+                        context
+                            .read<SharedPreferences>()
+                            .getInt("longBreakTimerSelect")!,
+                        controller,
+                        widget.task,
+                        tabController);
+                  },
                   width: MediaQuery.of(context).size.width * 0.7,
                   isReverse: true,
                   isReverseAnimation: true,
