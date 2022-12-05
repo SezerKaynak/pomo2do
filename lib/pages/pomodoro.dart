@@ -52,7 +52,7 @@ class _PomodoroViewState extends State<PomodoroView>
             children: [
               SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
-                  width: 400,
+                  width: MediaQuery.of(context).size.width,
                   child: IgnorePointer(
                     ignoring: !pageUpdateNotifier.startStop,
                     child: TabBar(
@@ -76,6 +76,7 @@ class _PomodoroViewState extends State<PomodoroView>
                     physics: !pageUpdateNotifier.startStop
                         ? const NeverScrollableScrollPhysics()
                         : const AlwaysScrollableScrollPhysics(),
+                    //physics: const NeverScrollableScrollPhysics(),
                     controller: tabController,
                     children: [
                       FocusView(
