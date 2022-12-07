@@ -21,10 +21,12 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? image;
+  File? temp;
   String? downloadUrl;
 
   @override
   void initState() {
+    temp = image;
     WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
     super.initState();
   }
@@ -69,8 +71,7 @@ class _EditProfileState extends State<EditProfile> {
                 color: Colors.white,
               ),
               onPressed: () {
-                !isLoading ?
-                Navigator.pop(context) : DoNothingAction();
+                !isLoading ? Navigator.pop(context) : DoNothingAction();
               },
             ),
           ),
@@ -103,7 +104,8 @@ class _EditProfileState extends State<EditProfile> {
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w400,
                             textPosition: TextAlign.left,
-                            customPadding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                            customPadding:
+                                const EdgeInsets.fromLTRB(0, 5, 0, 0)),
                         const SizedBox(height: 25),
                         Center(
                           child: Stack(children: [
@@ -143,7 +145,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               if (asyncSnapshot.connectionState ==
                                   ConnectionState.active) {
                                 _nameController.text =
@@ -157,7 +159,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               return ScreenTextField(
                                 textLabel: "Loading",
                                 obscure: false,
@@ -185,7 +187,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               if (asyncSnapshot.connectionState ==
                                   ConnectionState.active) {
                                 _surnameController.text =
@@ -199,7 +201,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               return ScreenTextField(
                                 textLabel: "Loading",
                                 obscure: false,
@@ -227,7 +229,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               if (asyncSnapshot.connectionState ==
                                   ConnectionState.active) {
                                 _birthdayController.text =
@@ -240,12 +242,12 @@ class _EditProfileState extends State<EditProfile> {
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(1950),
                                         lastDate: DateTime(2100));
-    
+
                                     if (pickedDate != null) {
                                       String formattedDate =
                                           DateFormat('dd.MM.yyyy')
                                               .format(pickedDate);
-    
+
                                       _birthdayController.text = formattedDate;
                                     } else {}
                                   },
@@ -258,7 +260,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               return ScreenTextField(
                                 textLabel: "Loading",
                                 obscure: false,
@@ -274,7 +276,8 @@ class _EditProfileState extends State<EditProfile> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20))),
+                                        borderRadius:
+                                            BorderRadius.circular(20))),
                                 onPressed: () async {
                                   CollectionReference users = FirebaseFirestore
                                       .instance
@@ -293,8 +296,11 @@ class _EditProfileState extends State<EditProfile> {
                                         .userMail
                                         .toString(),
                                   });
-    
-                                  await uploadImage();
+
+                                  if (temp != image) {
+                                    await uploadImage();
+                                  }
+
                                   setState(() {
                                     isLoading = false;
                                   });
