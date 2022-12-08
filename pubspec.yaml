@@ -44,6 +44,7 @@ dependencies:
   flutter_smart_dialog: ^4.5.5+6
   image_picker: ^0.8.6
   intl: ^0.17.0
+  json_theme: ^4.0.3+1
   path_provider: ^2.0.11
   provider: ^6.0.3
   shared_preferences: ^2.0.15
@@ -67,6 +68,7 @@ flutter:
   assets:
     - assets/google.png
     - assets/person.png
+    - assets/appainter_theme.json
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

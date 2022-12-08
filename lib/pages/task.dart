@@ -67,8 +67,8 @@ class Task extends State<TaskView> {
     var _authService = Provider.of<IAuthService>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-            systemOverlayStyle: ProjectThemeOptions().systemTheme,
-            backgroundColor: ProjectThemeOptions().backGroundColor,
+            // systemOverlayStyle: ProjectThemeOptions().systemTheme,
+            // backgroundColor: ProjectThemeOptions().backGroundColor,
             title: const Text("PomoTodo",
                 style: TextStyle(color: Colors.white, fontSize: 18)),
             leading: Builder(

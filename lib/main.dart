@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/widgets/auth_widget.dart';
 import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:json_theme/json_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
@@ -26,6 +29,11 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final themeStr = await rootBundle.loadString("assets/appainter_theme.json");
+  final themeJson = jsonDecode(themeStr);
+  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -42,14 +50,14 @@ Future<void> main() async {
         Provider<IAuthService>(create: (_) => AuthService()),
         Provider.value(value: await SharedPreferences.getInstance()),
       ],
-      child: const MyApp(),
+      child: MyApp(theme: theme),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  const MyApp({Key? key, required this.theme}) : super(key: key);
+  final ThemeData theme;
   @override
   Widget build(BuildContext context) {
     return AuthWidgetBuilder(
@@ -78,6 +86,7 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               home: AuthWidget(snapShot: snapShot),
+              //theme: theme
             ));
   }
 }
