@@ -10,6 +10,7 @@ import 'package:flutter_application_1/pages/pomodoro.dart';
 import 'package:flutter_application_1/pages/pomodoro_settings.dart';
 import 'package:flutter_application_1/pages/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
+import 'package:flutter_application_1/providers/dark_theme_provider.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
@@ -62,6 +63,7 @@ class Task extends State<TaskView> {
   String alertRejectLogOut = "İptal Et";
   @override
   Widget build(BuildContext context) {
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
     var _authService = Provider.of<IAuthService>(context, listen: false);
@@ -267,6 +269,9 @@ class Task extends State<TaskView> {
                         });
                   }),
               const Divider(thickness: 1),
+              Checkbox(value: themeChange.darkTheme, onChanged: (bool? value) {
+                themeChange.darkTheme = value!;
+              })
             ],
           ),
         ),
