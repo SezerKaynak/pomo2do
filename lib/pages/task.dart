@@ -583,40 +583,14 @@ class Task extends State<TaskView> {
             ),
           ],
         ),
-        bottomNavigationBar: Container(
-          height: 60,
-          decoration: const BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TaskPageIconButton(
-                  taskIcons: Icons.archive,
-                  onPressIconButton: () {
-                    Navigator.pushNamed(context, '/archived',
-                            arguments: taskLists()[3])
-                        .then((_) => _refresh());
-                  }),
-              TaskPageIconButton(
-                taskIcons: Icons.done,
-                onPressIconButton: () {
-                  Navigator.pushNamed(context, '/done',
-                          arguments: taskLists()[0])
-                      .then((_) {
-                    _refresh();
-                  });
-                },
-              ),
-              TaskPageIconButton(
-                  taskIcons: Icons.delete,
-                  onPressIconButton: () {
-                    Navigator.pushNamed(context, '/deleted',
-                            arguments: taskLists()[2])
-                        .then((_) => _refresh());
-                  }),
-            ],
-          ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.archive), label: "Archive"),
+            BottomNavigationBarItem(icon: Icon(Icons.done), label: "Done"),
+            BottomNavigationBarItem(icon: Icon(Icons.delete), label: "Trash")
+          ],
+          onTap: onItemTapped,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
@@ -722,6 +696,29 @@ class Task extends State<TaskView> {
       }
     }
     return count;
+  }
+
+  void onItemTapped(int selectedIndex) {
+    switch (selectedIndex) {
+      case 0:
+        Navigator.pushNamed(context, '/archived', arguments: taskLists()[3])
+            .then((_) => _refresh());
+
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
+            .then((_) {
+          _refresh();
+        });
+
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/deleted', arguments: taskLists()[2])
+            .then((_) => _refresh());
+
+        break;
+      default:
+    }
   }
 
   void _dismiss() {

@@ -78,15 +78,15 @@ class MyApp extends StatelessWidget {
                 '/deneme': (context) => const Deneme(),
               },
               debugShowCheckedModeBanner: false,
-              theme: ThemeData().copyWith(
-                appBarTheme: AppBarTheme(
-                  backgroundColor: ProjectThemeOptions().backGroundColor,
-                  elevation: 0.0,
-                  systemOverlayStyle: SystemUiOverlayStyle.light,
-                ),
-              ),
+              // theme: ThemeData().copyWith(
+              //   appBarTheme: AppBarTheme(
+              //     backgroundColor: ProjectThemeOptions().backGroundColor,
+              //     elevation: 0.0,
+              //     systemOverlayStyle: SystemUiOverlayStyle.light,
+              //   ),
+              // ),
               home: AuthWidget(snapShot: snapShot),
-              //theme: theme
+              theme: theme
             ));
   }
 }
