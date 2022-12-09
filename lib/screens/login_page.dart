@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/register_page.dart';
-import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_application_1/widgets/alert_widget.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -182,6 +184,7 @@ class LoginPage extends StatelessWidget {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertWidget(
+                                      alertApprove: "Kapat",
                                       alertTitle: emailAlert,
                                       alertSubtitle: emailAlertSubtitle);
                                 });
@@ -190,6 +193,7 @@ class LoginPage extends StatelessWidget {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertWidget(
+                                      alertApprove: "Kapat",
                                       alertTitle: passwordAlert,
                                       alertSubtitle: passwordAlertSubtitle);
                                 });
@@ -204,6 +208,7 @@ class LoginPage extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertWidget(
+                                          alertApprove: "Kapat",
                                           alertTitle: userNotFound,
                                           alertSubtitle: userNotFoundSubtitle);
                                     });
@@ -212,6 +217,7 @@ class LoginPage extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertWidget(
+                                          alertApprove: "Kapat",
                                           alertTitle: wrongPassword,
                                           alertSubtitle: wrongPasswordSubtitle);
                                     });
@@ -220,6 +226,7 @@ class LoginPage extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertWidget(
+                                          alertApprove: "Kapat",
                                           alertTitle: invalidEmail,
                                           alertSubtitle: invalidEmailSubtitle);
                                     });
@@ -243,146 +250,24 @@ class LoginPage extends StatelessWidget {
                           child: Image.asset("assets/google.png",
                               fit: BoxFit.fitHeight))),
                 ),
-                BottomText(dontHaveAccount: dontHaveAccount),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(dontHaveAccount),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterPage()),
+                          );
+                        },
+                        child: const Text("Kayıt Ol!"))
+                  ],
+                )
               ],
             ),
           ),
-        ));
-  }
-}
-
-class AlertWidget extends StatelessWidget {
-  const AlertWidget({
-    Key? key,
-    required this.alertTitle,
-    required this.alertSubtitle,
-  }) : super(key: key);
-
-  final String alertTitle;
-  final String alertSubtitle;
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      title: Text(alertTitle),
-      content: Text(alertSubtitle),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(
-            "Kapat",
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class BottomText extends StatelessWidget {
-  const BottomText({
-    Key? key,
-    required this.dontHaveAccount,
-  }) : super(key: key);
-
-  final String dontHaveAccount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(dontHaveAccount),
-        TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisterPage()),
-              );
-            },
-            child: const Text("Kayıt Ol!"))
-      ],
-    );
-  }
-}
-
-class ScreenTextField extends StatelessWidget {
-  const ScreenTextField({
-    Key? key,
-    required this.textLabel,
-    required this.obscure,
-    required this.controller,
-    required this.height,
-    required this.maxLines,
-    this.valid,
-    this.onTouch,
-    this.con,
-    this.textFieldInputType = TextInputType.text,
-    this.suffix,
-  }) : super(key: key);
-  final String? textLabel;
-  final bool obscure;
-  final TextEditingController controller;
-  final double height;
-  final int maxLines;
-  final String? Function(String?)? valid;
-  final Function()? onTouch;
-  final Widget? con;
-  final TextInputType? textFieldInputType;
-  final Widget? suffix;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: Center(
-        child: TextFormField(
-          keyboardType: textFieldInputType,
-          onTap: onTouch,
-          maxLines: maxLines,
-          controller: controller,
-          validator: valid,
-          obscureText: obscure,
-          decoration: InputDecoration(
-            suffixIcon: suffix,
-            icon: con,
-            labelText: textLabel,
-            filled: true,
-            fillColor: Colors.grey[200],
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ScreenTexts extends StatelessWidget {
-  const ScreenTexts({
-    Key? key,
-    this.customPadding,
-    required this.title,
-    required this.theme,
-    required this.fontW,
-    required this.textPosition,
-  }) : super(key: key);
-  final String title;
-  final TextStyle? theme;
-  final FontWeight fontW;
-  final TextAlign textPosition;
-  final EdgeInsetsGeometry? customPadding;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        width: 400,
-        child: Padding(
-          padding: customPadding ?? const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Text(title,
-              textAlign: textPosition,
-              style: theme?.copyWith(fontWeight: fontW, color: Colors.black)),
         ));
   }
 }

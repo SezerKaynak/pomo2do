@@ -4,6 +4,7 @@ import 'package:flutter_application_1/screens/pomodoro_tabs/long_break_view.dart
 import 'package:flutter_application_1/screens/pomodoro_tabs/short_break_view.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
+import 'package:flutter_application_1/widgets/tabs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/screens/pomodoro_tabs/focus_view.dart';
 
@@ -104,54 +105,5 @@ class _PomodoroViewState extends State<PomodoroView>
   void dispose() {
     tabController.dispose();
     super.dispose();
-  }
-}
-
-class TaskInfoListTile extends StatelessWidget {
-  const TaskInfoListTile({
-    Key? key,
-    required this.taskName,
-    required this.taskInfo,
-  }) : super(key: key);
-
-  final String taskName;
-  final String taskInfo;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      trailing: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          const Icon(Icons.schedule),
-          const Icon(Icons.close),
-          Text(
-            '0',
-            style:
-                Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 22),
-          ),
-        ],
-      ),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: Colors.black, width: 1)),
-      title: Text(taskName),
-      subtitle: Text(taskInfo),
-      tileColor: Colors.blueGrey[50],
-    );
-  }
-}
-
-class Tabs extends StatelessWidget {
-  const Tabs({
-    Key? key,
-    required this.tabName,
-  }) : super(key: key);
-  final String tabName;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.fromSize(
-        size: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
-        child: Center(child: Text(tabName)));
   }
 }

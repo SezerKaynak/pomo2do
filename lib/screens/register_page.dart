@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_application_1/widgets/alert_widget.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -156,6 +159,7 @@ class RegisterPage extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
+                                    alertApprove: "Kapat",
                                     alertTitle: nameAlert,
                                     alertSubtitle: nameAlertSubtitle);
                               });
@@ -164,6 +168,7 @@ class RegisterPage extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
+                                    alertApprove: "Kapat",
                                     alertTitle: surnameAlert,
                                     alertSubtitle: surnameAlertSubtitle);
                               });
@@ -172,6 +177,7 @@ class RegisterPage extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
+                                    alertApprove: "Kapat",
                                     alertTitle: emailAlert,
                                     alertSubtitle: emailAlertSubtitle);
                               });
@@ -180,6 +186,7 @@ class RegisterPage extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
+                                    alertApprove: "Kapat",
                                     alertTitle: passwordAlert,
                                     alertSubtitle: passwordAlertSubtitle);
                               });
@@ -188,6 +195,7 @@ class RegisterPage extends StatelessWidget {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertWidget(
+                                    alertApprove: "Kapat",
                                     alertTitle: birthdayAlert,
                                     alertSubtitle: birthdayAlertSubtitle);
                               });
@@ -202,6 +210,7 @@ class RegisterPage extends StatelessWidget {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertWidget(
+                                        alertApprove: "Kapat",
                                         alertTitle: weakPassword,
                                         alertSubtitle: weakPasswordSubtitle);
                                   });
@@ -210,6 +219,7 @@ class RegisterPage extends StatelessWidget {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertWidget(
+                                        alertApprove: "Kapat",
                                         alertTitle: emailAlreadyInUse,
                                         alertSubtitle:
                                             emailAlreadyInUseSubtitle);
@@ -219,6 +229,7 @@ class RegisterPage extends StatelessWidget {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertWidget(
+                                        alertApprove: "Kapat",
                                         alertTitle: invalidEmail,
                                         alertSubtitle: invalidEmailSubtitle);
                                   });

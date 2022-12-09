@@ -3,6 +3,8 @@ import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});

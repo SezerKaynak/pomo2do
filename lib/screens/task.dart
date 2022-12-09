@@ -11,6 +11,8 @@ import 'package:flutter_application_1/screens/pomodoro_settings.dart';
 import 'package:flutter_application_1/screens/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/providers/dark_theme_provider.dart';
+import 'package:flutter_application_1/widgets/alert_widget.dart';
+import 'package:flutter_application_1/widgets/settings.dart' as settings;
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
@@ -185,7 +187,7 @@ class Task extends State<TaskView> {
                       ),
                     ],
                   )),
-              Settings(
+              settings.Settings(
                 settingIcon: Icons.account_circle,
                 title: settingTitle(context, "Hesap Ayarları"),
                 subtitle: "Profilinizi düzenleyebilirsiniz.",
@@ -194,7 +196,7 @@ class Task extends State<TaskView> {
                 },
               ),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                 settingIcon: Icons.password,
                 subtitle: "Şifrenizi değiştirebilirsiniz.",
                 title: settingTitle(context, 'Şifreyi Değiştir'),
@@ -206,13 +208,13 @@ class Task extends State<TaskView> {
                 },
               ),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                   settingIcon: Icons.notifications,
                   subtitle: "Bildirim ayarlarını yapabilirsiniz.",
                   title: settingTitle(context, 'Bildirim Ayarları'),
                   tap: () {}),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                   settingIcon: Icons.watch,
                   subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
                   title: settingTitle(context, 'Pomodoro Ayarları'),
@@ -223,7 +225,7 @@ class Task extends State<TaskView> {
                             builder: (context) => const PomodoroSettings()));
                   }),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                   settingIcon: Icons.logout,
                   subtitle: "Hesaptan çıkış yapın.",
                   title: settingTitle(context, 'Çıkış Yap'),
@@ -269,9 +271,11 @@ class Task extends State<TaskView> {
                         });
                   }),
               const Divider(thickness: 1),
-              Checkbox(value: themeChange.darkTheme, onChanged: (bool? value) {
-                themeChange.darkTheme = value!;
-              })
+              Checkbox(
+                  value: themeChange.darkTheme,
+                  onChanged: (bool? value) {
+                    themeChange.darkTheme = value!;
+                  })
             ],
           ),
         ),
@@ -441,7 +445,13 @@ class Task extends State<TaskView> {
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return alert(context);
+                                                        return AlertWidget(
+                                                          alertTitle:
+                                                              Task().alertTitle,
+                                                          alertSubtitle: Task()
+                                                              .alertSubtitle,
+                                                          isAlert: true,
+                                                        );
                                                       },
                                                     );
                                                   }
@@ -735,113 +745,34 @@ class Task extends State<TaskView> {
     tasks = await service.retrieveTasks();
   }
 
-  AlertDialog alert(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      title: Text(Task().alertTitle),
-      content: Text(Task().alertSubtitle),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(
-            Task().alertApprove,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-          ),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(
-            Task().alertReject,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TaskPageIconButton extends StatelessWidget {
-  const TaskPageIconButton({
-    Key? key,
-    required this.taskIcons,
-    required this.onPressIconButton,
-  }) : super(key: key);
-
-  final IconData taskIcons;
-  final void Function()? onPressIconButton;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      enableFeedback: false,
-      onPressed: onPressIconButton,
-      icon: Icon(
-        taskIcons,
-        color: Colors.white,
-        size: 35,
-      ),
-    );
-  }
-}
-
-class Settings extends StatelessWidget {
-  const Settings({
-    Key? key,
-    required this.settingIcon,
-    required this.subtitle,
-    required this.title,
-    required this.tap,
-  }) : super(key: key);
-
-  final IconData settingIcon;
-  final String subtitle;
-  final Widget title;
-  final Function() tap;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: tap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              settingIcon,
-              size: 40,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [title, const Icon(Icons.arrow_right_sharp)],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2.0),
-                      child: Text(
-                        subtitle,
-                        style: const TextStyle(
-                            color: Colors.black45, fontSize: 16.0),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // AlertDialog alert(BuildContext context) {
+  //   return AlertDialog(
+  //     shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(20.0))),
+  //     title: Text(Task().alertTitle),
+  //     content: Text(Task().alertSubtitle),
+  //     actions: [
+  //       TextButton(
+  //         onPressed: () => Navigator.of(context).pop(true),
+  //         child: Text(
+  //           Task().alertApprove,
+  //           style: Theme.of(context)
+  //               .textTheme
+  //               .subtitle1
+  //               ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+  //         ),
+  //       ),
+  //       TextButton(
+  //         onPressed: () => Navigator.of(context).pop(false),
+  //         child: Text(
+  //           Task().alertReject,
+  //           style: Theme.of(context)
+  //               .textTheme
+  //               .subtitle1
+  //               ?.copyWith(color: ProjectThemeOptions().backGroundColor),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
+import 'package:flutter_application_1/widgets/alert_widget.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({super.key});
@@ -131,6 +134,7 @@ class _EditPasswordState extends State<EditPassword> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertWidget(
+                                      alertApprove: "Kapat",
                                       alertTitle: oldPasswordAlert,
                                       alertSubtitle: oldPasswordAlertSubtitle);
                                 });
@@ -139,6 +143,7 @@ class _EditPasswordState extends State<EditPassword> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertWidget(
+                                      alertApprove: "Kapat",
                                       alertTitle: passwordAlert,
                                       alertSubtitle: passwordAlertSubtitle);
                                 });
@@ -195,6 +200,7 @@ class _EditPasswordState extends State<EditPassword> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertWidget(
+                                          alertApprove: "Kapat", 
                                           alertTitle: weakPassword,
                                           alertSubtitle: weakPasswordSubtitle);
                                     });
@@ -203,6 +209,7 @@ class _EditPasswordState extends State<EditPassword> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertWidget(
+                                          alertApprove: "Kapat",
                                           alertTitle: wrongPassword,
                                           alertSubtitle: wrongPasswordSubtitle);
                                     });
