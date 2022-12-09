@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:flutter_application_1/screens/pomodoro.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:provider/provider.dart';

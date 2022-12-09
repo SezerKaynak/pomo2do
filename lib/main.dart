@@ -1,21 +1,18 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
-import 'package:flutter_application_1/pages/archived_tasks.dart';
-import 'package:flutter_application_1/pages/completed_tasks.dart';
-import 'package:flutter_application_1/pages/deleted_tasks.dart';
-import 'package:flutter_application_1/pages/deneme.dart';
-import 'package:flutter_application_1/pages/edit_profile.dart';
-import 'package:flutter_application_1/pages/edit_task.dart';
-import 'package:flutter_application_1/pages/task.dart';
-import 'package:flutter_application_1/project_theme_options.dart';
+import 'package:flutter_application_1/screens/archived_tasks.dart';
+import 'package:flutter_application_1/screens/completed_tasks.dart';
+import 'package:flutter_application_1/screens/deleted_tasks.dart';
+import 'package:flutter_application_1/screens/deneme.dart';
+import 'package:flutter_application_1/screens/edit_profile.dart';
+import 'package:flutter_application_1/screens/edit_task.dart';
+import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/providers/dark_theme_provider.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
-import 'package:flutter_application_1/utilities/dark_theme_preference.dart';
 import 'package:flutter_application_1/widgets/auth_widget.dart';
 import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -89,7 +86,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    
     return ChangeNotifierProvider(
       create: (_) {
         return themeChangeProvider;
@@ -112,14 +108,6 @@ class _MyAppState extends State<MyApp> {
                     '/deneme': (context) => const Deneme(),
                   },
                   debugShowCheckedModeBanner: false,
-                  // theme: ThemeData().copyWith(
-                  //   appBarTheme: AppBarTheme(
-                  //     backgroundColor: ProjectThemeOptions().backGroundColor,
-                  //     elevation: 0.0,
-                  //     systemOverlayStyle: SystemUiOverlayStyle.light,
-                  //   ),
-                  // ),
-
                   theme: context.watch<DarkThemeProvider>().darkTheme
                       ? widget.themeDark
                       : widget.theme,

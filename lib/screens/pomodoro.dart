@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:flutter_application_1/pages/pomodoro_tabs/long_break_view.dart';
-import 'package:flutter_application_1/pages/pomodoro_tabs/short_break_view.dart';
+import 'package:flutter_application_1/screens/pomodoro_tabs/long_break_view.dart';
+import 'package:flutter_application_1/screens/pomodoro_tabs/short_break_view.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_1/pages/pomodoro_tabs/focus_view.dart';
+import 'package:flutter_application_1/screens/pomodoro_tabs/focus_view.dart';
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});

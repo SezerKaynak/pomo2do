@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
-import 'package:flutter_application_1/pages/task.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 
 class AddTask extends StatelessWidget {
