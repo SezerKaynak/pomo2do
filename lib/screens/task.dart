@@ -744,35 +744,4 @@ class Task extends State<TaskView> {
     taskList = service.retrieveTasks();
     tasks = await service.retrieveTasks();
   }
-
-  // AlertDialog alert(BuildContext context) {
-  //   return AlertDialog(
-  //     shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(20.0))),
-  //     title: Text(Task().alertTitle),
-  //     content: Text(Task().alertSubtitle),
-  //     actions: [
-  //       TextButton(
-  //         onPressed: () => Navigator.of(context).pop(true),
-  //         child: Text(
-  //           Task().alertApprove,
-  //           style: Theme.of(context)
-  //               .textTheme
-  //               .subtitle1
-  //               ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-  //         ),
-  //       ),
-  //       TextButton(
-  //         onPressed: () => Navigator.of(context).pop(false),
-  //         child: Text(
-  //           Task().alertReject,
-  //           style: Theme.of(context)
-  //               .textTheme
-  //               .subtitle1
-  //               ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }
