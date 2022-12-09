@@ -40,8 +40,10 @@ class Settings extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 2.0),
                       child: Text(
                         subtitle,
-                        style: const TextStyle(
-                            color: Colors.black45, fontSize: 16.0),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall!
+                            .copyWith(fontSize: 16),
                       ),
                     )
                   ],

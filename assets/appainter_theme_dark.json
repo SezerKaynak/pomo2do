@@ -1,5 +1,6 @@
 {
   "appBarTheme": {
+    "backgroundColor": "#ff4355b9",
     "titleTextStyle": {
       "color": "#ffffffff",
       "decoration": "none",
@@ -56,13 +57,13 @@
       "onTertiary": "#ff000000",
       "onTertiaryContainer": "#ff000000",
       "outline": "#ffffffff",
-      "primary": "#ff2196f3",
+      "primary": "#ff4355b9",
       "primaryContainer": "#ff2196f3",
       "secondary": "#ff64ffda",
       "secondaryContainer": "#ff64ffda",
       "shadow": "#ff000000",
       "surface": "#ff424242",
-      "surfaceTint": "#ff2196f3",
+      "surfaceTint": "#ff4355b9",
       "surfaceVariant": "#ff424242",
       "tertiary": "#ff64ffda",
       "tertiaryContainer": "#ff64ffda"
@@ -131,13 +132,13 @@
     "onTertiary": "#ff000000",
     "onTertiaryContainer": "#ff000000",
     "outline": "#ffffffff",
-    "primary": "#ff2196f3",
+    "primary": "#ff4355b9",
     "primaryContainer": "#ff2196f3",
     "secondary": "#ff64ffda",
     "secondaryContainer": "#ff64ffda",
     "shadow": "#ff000000",
     "surface": "#ff424242",
-    "surfaceTint": "#ff2196f3",
+    "surfaceTint": "#ff4355b9",
     "surfaceVariant": "#ff424242",
     "tertiary": "#ff64ffda",
     "tertiaryContainer": "#ff64ffda"
@@ -164,7 +165,7 @@
   },
   "materialTapTargetSize": "shrinkWrap",
   "platform": "windows",
-  "primaryColor": "#ff212121",
+  "primaryColor": "#ff4355b9",
   "primaryColorDark": "#ff000000",
   "primaryColorLight": "#ff9e9e9e",
   "primaryIconTheme": {

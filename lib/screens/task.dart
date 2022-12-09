@@ -71,8 +71,6 @@ class Task extends State<TaskView> {
     var _authService = Provider.of<IAuthService>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-            // systemOverlayStyle: ProjectThemeOptions().systemTheme,
-            // backgroundColor: ProjectThemeOptions().backGroundColor,
             title: const Text("PomoTodo",
                 style: TextStyle(color: Colors.white, fontSize: 18)),
             leading: Builder(
@@ -285,7 +283,7 @@ class Task extends State<TaskView> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.cyan[100],
+                  color: Theme.of(context).primaryColorLight,
                   child: Row(
                     children: [
                       Expanded(
@@ -520,8 +518,8 @@ class Task extends State<TaskView> {
                                                 child: Center(
                                                   child: Container(
                                                     decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.blueGrey[50],
+                                                        color: Theme.of(context)
+                                                            .cardColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(
