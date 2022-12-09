@@ -150,7 +150,7 @@ class _EditPasswordState extends State<EditPassword> {
                                   isLoading = true;
                                 });
 
-                                await editPassword();
+                                await _authService.editPassword(_oldpasswordController);
 
                                 await currentUser!.updatePassword(newPassword);
 
@@ -217,13 +217,5 @@ class _EditPasswordState extends State<EditPassword> {
         ),
       ),
     );
-  }
-
-  Future<UserCredential> editPassword() {
-    AuthCredential authCredential = EmailAuthProvider.credential(
-      email: currentUser!.email ?? '',
-      password: _oldpasswordController.text,
-    );
-    return currentUser!.reauthenticateWithCredential(authCredential);
   }
 }
