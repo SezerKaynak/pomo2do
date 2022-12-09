@@ -30,15 +30,18 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+  ThemeData theme, themeDark;
   WidgetsFlutterBinding.ensureInitialized();
 
-  final themeStr = await rootBundle.loadString("assets/appainter_theme.json");
-  final themeStrDark =
-      await rootBundle.loadString("assets/appainter_theme_dark.json");
-  final themeJson = jsonDecode(themeStr);
-  final themeJsonDark = jsonDecode(themeStrDark);
-  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-  final themeDark = ThemeDecoder.decodeThemeData(themeJsonDark)!;
+  Future<ThemeData> loadTheme(String path) async {
+    final themeStr = await rootBundle.loadString(path);
+    final themeJson = jsonDecode(themeStr);
+    final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+    return theme;
+  }
+
+  theme = await loadTheme("assets/appainter_theme.json");
+  themeDark = await loadTheme("assets/appainter_theme_dark.json");
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -86,45 +89,41 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    
     return ChangeNotifierProvider(
       create: (_) {
         return themeChangeProvider;
       },
-      child: Consumer<DarkThemeProvider>(
-        builder: (context, value, child) {
-          return AuthWidgetBuilder(
-              onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
-                  MaterialApp(
-                      navigatorObservers: [FlutterSmartDialog.observer],
-                      builder: FlutterSmartDialog.init(),
-                      initialRoute: '/',
-                      routes: {
-                        '/task': (context) => TaskView(),
-                        '/done': (context) => const CompletedTasks(),
-                        '/editTask': (context) => const EditTask(),
-                        '/deleted': (context) =>
-                            ChangeNotifierProvider<ListUpdate>(
-                                create: (context) => ListUpdate(),
-                                child: const DeletedTasks()),
-                        '/editProfile': (context) => const EditProfile(),
-                        '/archived': (context) => const ArchivedTasks(),
-                        '/deneme': (context) => const Deneme(),
-                      },
-                      debugShowCheckedModeBanner: false,
-                      // theme: ThemeData().copyWith(
-                      //   appBarTheme: AppBarTheme(
-                      //     backgroundColor: ProjectThemeOptions().backGroundColor,
-                      //     elevation: 0.0,
-                      //     systemOverlayStyle: SystemUiOverlayStyle.light,
-                      //   ),
-                      // ),
+      child: AuthWidgetBuilder(
+          onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
+              MaterialApp(
+                  navigatorObservers: [FlutterSmartDialog.observer],
+                  builder: FlutterSmartDialog.init(),
+                  initialRoute: '/',
+                  routes: {
+                    '/task': (context) => TaskView(),
+                    '/done': (context) => const CompletedTasks(),
+                    '/editTask': (context) => const EditTask(),
+                    '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
+                        create: (context) => ListUpdate(),
+                        child: const DeletedTasks()),
+                    '/editProfile': (context) => const EditProfile(),
+                    '/archived': (context) => const ArchivedTasks(),
+                    '/deneme': (context) => const Deneme(),
+                  },
+                  debugShowCheckedModeBanner: false,
+                  // theme: ThemeData().copyWith(
+                  //   appBarTheme: AppBarTheme(
+                  //     backgroundColor: ProjectThemeOptions().backGroundColor,
+                  //     elevation: 0.0,
+                  //     systemOverlayStyle: SystemUiOverlayStyle.light,
+                  //   ),
+                  // ),
 
-                      theme: themeChangeProvider.darkTheme
-                          ? widget.themeDark
-                          : widget.theme,
-                      home: AuthWidget(snapShot: snapShot)));
-        },
-      ),
+                  theme: context.watch<DarkThemeProvider>().darkTheme
+                      ? widget.themeDark
+                      : widget.theme,
+                  home: AuthWidget(snapShot: snapShot))),
     );
   }
 }
