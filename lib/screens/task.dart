@@ -13,7 +13,7 @@ import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/providers/dark_theme_provider.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
-import 'package:flutter_application_1/pomodoro/pomodoro_controller.dart';
+import 'package:flutter_application_1/providers/pomodoro_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
