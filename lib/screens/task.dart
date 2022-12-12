@@ -632,8 +632,7 @@ class Task extends State<TaskView> {
                   "Ekle",
                   style: Theme.of(context)
                       .textTheme
-                      .headline6
-                      ?.copyWith(color: Colors.white),
+                      .headline6,
                 ),
                 icon: const Icon(Icons.add),
               ),

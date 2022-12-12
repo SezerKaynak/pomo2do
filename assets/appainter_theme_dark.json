@@ -152,7 +152,7 @@
   "hintColor": "#99ffffff",
   "hoverColor": "#0affffff",
   "iconTheme": {
-    "color": "#dd000000"
+    "color": "#ffffffff"
   },
   "indicatorColor": "#ff64ffda",
   "inputDecorationTheme": {

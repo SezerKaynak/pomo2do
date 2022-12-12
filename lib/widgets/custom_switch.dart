@@ -8,10 +8,17 @@ class CustomSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Switch(
-      value: switchValue,
-      activeColor: Colors.black87,
-      onChanged: switchOnChanged,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.light_mode, color: Colors.amber),
+        Switch(
+          value: switchValue,
+          activeColor: Colors.black87,
+          onChanged: switchOnChanged,
+        ),
+        const Icon(Icons.dark_mode)
+      ],
     );
   }
 }
