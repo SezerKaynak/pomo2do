@@ -157,7 +157,7 @@
   "iconTheme": {
     "color": "#ffffffff"
   },
-  "indicatorColor": "#ff64ffda",
+  "indicatorColor": "#ffffffff",
   "inputDecorationTheme": {
     "alignLabelWithHint": false,
     "filled": false,
@@ -272,6 +272,9 @@
   "shadowColor": "#ff000000",
   "splashColor": "#40cccccc",
   "splashFactory": "splash",
+  "tabBarTheme": {
+    "unselectedLabelColor": "#b39e9e9e"
+  },
   "textTheme": {
     "bodyLarge": {
       "color": "#ffffffff",

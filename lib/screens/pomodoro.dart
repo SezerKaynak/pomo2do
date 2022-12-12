@@ -57,9 +57,9 @@ class _PomodoroViewState extends State<PomodoroView>
                   child: IgnorePointer(
                     ignoring: !pageUpdateNotifier.startStop,
                     child: TabBar(
-                      labelColor: const Color.fromRGBO(4, 2, 46, 1),
-                      indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
-                      unselectedLabelColor: Colors.grey,
+                      // labelColor: const Color.fromRGBO(4, 2, 46, 1),
+                      // indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
+                      // unselectedLabelColor: Colors.grey,
                       controller: tabController,
                       onTap: (_) {
                         pageUpdateNotifier.skipButtonVisible = false;
