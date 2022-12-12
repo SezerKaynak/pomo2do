@@ -12,6 +12,7 @@ import 'package:flutter_application_1/screens/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/providers/dark_theme_provider.dart';
 import 'package:flutter_application_1/widgets/alert_widget.dart';
+import 'package:flutter_application_1/widgets/custom_switch.dart';
 import 'package:flutter_application_1/widgets/settings.dart' as settings;
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
@@ -269,11 +270,12 @@ class Task extends State<TaskView> {
                         });
                   }),
               const Divider(thickness: 1),
-              Checkbox(
-                  value: themeChange.darkTheme,
-                  onChanged: (bool? value) {
-                    themeChange.darkTheme = value!;
-                  })
+              CustomSwitch(
+                switchValue: themeChange.darkTheme,
+                switchOnChanged: (bool? value) {
+                  themeChange.darkTheme = value!;
+                },
+              )
             ],
           ),
         ),
