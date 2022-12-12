@@ -27,7 +27,7 @@ class AddTask extends StatelessWidget {
     DatabaseService dbService = DatabaseService();
 
     return Scaffold(
-        backgroundColor: Colors.blueGrey[50],
+        //backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(

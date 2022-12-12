@@ -29,7 +29,8 @@ class _DenemeState extends State<Deneme> {
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return Scaffold(
-        body: Center(
+        body: Align(
+          alignment: Alignment.bottomCenter,
       child: CustomSwitch(
         switchValue: themeChange.darkTheme,
         switchOnChanged: (bool? value) {

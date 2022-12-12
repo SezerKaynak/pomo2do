@@ -91,8 +91,7 @@ class Task extends State<TaskView> {
             ]),
         drawer: Drawer(
           width: MediaQuery.of(context).size.width * 0.745,
-          child: ListView(
-            padding: EdgeInsets.zero,
+          child: Column(
             children: [
               DrawerHeader(
                   decoration: const BoxDecoration(
@@ -270,11 +269,16 @@ class Task extends State<TaskView> {
                         });
                   }),
               const Divider(thickness: 1),
-              CustomSwitch(
-                switchValue: themeChange.darkTheme,
-                switchOnChanged: (bool? value) {
-                  themeChange.darkTheme = value!;
-                },
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CustomSwitch(
+                    switchValue: themeChange.darkTheme,
+                    switchOnChanged: (bool? value) {
+                      themeChange.darkTheme = value!;
+                    },
+                  ),
+                ),
               )
             ],
           ),
@@ -632,7 +636,8 @@ class Task extends State<TaskView> {
                   "Ekle",
                   style: Theme.of(context)
                       .textTheme
-                      .headline6,
+                      .headline6
+                      ?.copyWith(color: Colors.black),
                 ),
                 icon: const Icon(Icons.add),
               ),

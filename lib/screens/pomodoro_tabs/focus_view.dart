@@ -129,7 +129,7 @@ class FocusView extends StatelessWidget {
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   bottomLeft: Radius.circular(8))),
-                          color: Colors.green[100],
+                          color: Colors.green[500],
                           child: InkWell(
                             onTap: () {},
                             child: const SizedBox(
@@ -150,7 +150,7 @@ class FocusView extends StatelessWidget {
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(8),
                                   bottomRight: Radius.circular(8))),
-                          color: Colors.red[100],
+                          color: Colors.red[400],
                           child: InkWell(
                               onTap: () {
                                 SystemChrome.setEnabledSystemUIMode(

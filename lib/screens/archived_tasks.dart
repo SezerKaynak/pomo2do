@@ -61,8 +61,8 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                                 Container(
                                   decoration: BoxDecoration(
                                       color: data.isDone == true
-                                          ? Colors.green[100]
-                                          : Colors.blueGrey[50],
+                                          ? Colors.green[500]
+                                          : Theme.of(context).cardColor,
                                       borderRadius:
                                           BorderRadius.circular(16.0)),
                                   child: ListTile(

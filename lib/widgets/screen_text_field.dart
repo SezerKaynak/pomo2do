@@ -41,7 +41,7 @@ class ScreenTextField extends StatelessWidget {
             icon: con,
             labelText: textLabel,
             filled: true,
-            fillColor: Colors.grey[200],
+            //fillColor: Colors.grey[200],
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           ),
         ),

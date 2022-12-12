@@ -55,7 +55,7 @@ class DeletedTasks extends StatelessWidget {
                                 children: [
                                   Container(
                                       decoration: BoxDecoration(
-                                          color: Colors.red[200],
+                                          color: Colors.red[400],
                                           borderRadius:
                                               BorderRadius.circular(16.0)),
                                       child: Consumer<ListUpdate>(
@@ -147,7 +147,7 @@ class DeletedTasks extends StatelessWidget {
                                                 topRight: Radius.circular(15),
                                                 bottomRight:
                                                     Radius.circular(15))),
-                                        color: Colors.red[300],
+                                        color: Colors.red[400],
                                         child: InkWell(
                                             onTap: () {
                                               var elevatedButtonWorks =

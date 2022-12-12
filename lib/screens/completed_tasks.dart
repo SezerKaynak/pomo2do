@@ -60,7 +60,7 @@ class _CompletedTasksState extends State<CompletedTasks> {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.green[100],
+                                    color: Colors.green[500],
                                     borderRadius: BorderRadius.circular(16.0)),
                                 child: ListTile(
                                   contentPadding: const EdgeInsets.all(15),

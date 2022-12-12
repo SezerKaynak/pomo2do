@@ -147,6 +147,9 @@
   "disabledColor": "#62ffffff",
   "dividerColor": "#1fffffff",
   "errorColor": "#ffd32f2f",
+  "floatingActionButtonTheme": {
+    "backgroundColor": "#ffffffff"
+  },
   "focusColor": "#1fffffff",
   "highlightColor": "#40cccccc",
   "hintColor": "#99ffffff",

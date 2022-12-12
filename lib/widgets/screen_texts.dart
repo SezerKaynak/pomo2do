@@ -22,7 +22,9 @@ class ScreenTexts extends StatelessWidget {
           padding: customPadding ?? const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Text(title,
               textAlign: textPosition,
-              style: theme?.copyWith(fontWeight: fontW, color: Colors.black)),
+              style: theme?.copyWith(
+                  fontWeight: fontW,
+                  color: Theme.of(context).iconTheme.color)),
         ));
   }
 }

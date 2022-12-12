@@ -16,20 +16,20 @@ class TaskInfoListTile extends StatelessWidget {
       trailing: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          const Icon(Icons.schedule),
-          const Icon(Icons.close),
+          const Icon(Icons.schedule, color: Colors.black),
+          const Icon(Icons.close, color: Colors.black),
           Text(
             '0',
             style:
-                Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 22),
+                Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 22, color: Colors.black),
           ),
         ],
       ),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: const BorderSide(color: Colors.black, width: 1)),
-      title: Text(taskName),
-      subtitle: Text(taskInfo),
+      title: Text(taskName, style: const TextStyle(color: Colors.black)),
+      subtitle: Text(taskInfo, style: const TextStyle(color: Colors.black)),
       tileColor: Colors.blueGrey[50],
     );
   }
