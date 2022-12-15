@@ -47,7 +47,7 @@ class FocusView extends StatelessWidget {
                     context.read<PageUpdate>().startOrStop(
                         context
                             .read<SharedPreferences>()
-                            .getInt("workTimerSelect")!,
+                            .getInt("workTimerSelect")! * 60,
                         controller,
                         widget.task,
                         tabController);
@@ -95,7 +95,7 @@ class FocusView extends StatelessWidget {
                               btn.startOrStop(
                                   context
                                       .read<SharedPreferences>()
-                                      .getInt("workTimerSelect")!,
+                                      .getInt("workTimerSelect")! * 60,
                                   controller,
                                   widget.task,
                                   tabController);

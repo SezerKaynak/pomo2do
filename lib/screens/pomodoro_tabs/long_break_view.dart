@@ -40,7 +40,7 @@ class LongBreak extends StatelessWidget {
                     context.read<PageUpdate>().startOrStop(
                         context
                             .read<SharedPreferences>()
-                            .getInt("longBreakTimerSelect")!,
+                            .getInt("longBreakTimerSelect")! * 60,
                         controller,
                         widget.task,
                         tabController);
@@ -75,7 +75,7 @@ class LongBreak extends StatelessWidget {
                               context.read<PageUpdate>().startOrStop(
                                   context
                                       .read<SharedPreferences>()
-                                      .getInt("longBreakTimerSelect")!,
+                                      .getInt("longBreakTimerSelect")! * 60,
                                   controller,
                                   widget.task,
                                   tabController);

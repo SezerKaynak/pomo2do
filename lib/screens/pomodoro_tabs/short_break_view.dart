@@ -40,7 +40,7 @@ class ShortBreak extends StatelessWidget {
                     context.read<PageUpdate>().startOrStop(
                         context
                             .read<SharedPreferences>()
-                            .getInt("breakTimerSelect")!,
+                            .getInt("breakTimerSelect")! * 60,
                         controller,
                         widget.task,
                         tabController);
@@ -76,7 +76,7 @@ class ShortBreak extends StatelessWidget {
                               btn.startOrStop(
                                   context
                                       .read<SharedPreferences>()
-                                      .getInt("breakTimerSelect")!,
+                                      .getInt("breakTimerSelect")! * 60,
                                   controller,
                                   widget.task,
                                   tabController);
