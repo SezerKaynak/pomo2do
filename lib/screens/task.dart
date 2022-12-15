@@ -410,169 +410,166 @@ class Task extends State<TaskView> {
                                           itemCount:
                                               retrievedTaskList![key]!.length,
                                           itemBuilder: (context, index) {
-                                            return Dismissible(
-                                                onDismissed:
-                                                    ((direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    retrievedTaskList![key]![
-                                                            index]
-                                                        .isActive = false;
-                                                    dbService.updateTask(
-                                                        retrievedTaskList![
-                                                            key]![index]);
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              child: Dismissible(
+                                                  onDismissed:
+                                                      ((direction) async {
+                                                    if (direction ==
+                                                        DismissDirection
+                                                            .endToStart) {
+                                                      retrievedTaskList![key]![
+                                                              index]
+                                                          .isActive = false;
+                                                      dbService.updateTask(
+                                                          retrievedTaskList![
+                                                              key]![index]);
 
-                                                    _refresh();
-                                                    _dismiss();
-                                                  } else {
-                                                    {
-                                                      Navigator.pushNamed(
-                                                          context, '/editTask',
-                                                          arguments:
-                                                              retrievedTaskList![
-                                                                  key]![index]);
+                                                      _refresh();
+                                                      _dismiss();
+                                                    } else {
+                                                      {
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            '/editTask',
+                                                            arguments:
+                                                                retrievedTaskList![
+                                                                        key]![
+                                                                    index]);
 
-                                                      setState(() {
-                                                        _refresh();
-                                                      });
+                                                        setState(() {
+                                                          _refresh();
+                                                        });
+                                                      }
                                                     }
-                                                  }
-                                                }),
-                                                confirmDismiss:
-                                                    (DismissDirection
-                                                        direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    return await showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertWidget(
-                                                          alertTitle:
-                                                              Task().alertTitle,
-                                                          alertSubtitle: Task()
-                                                              .alertSubtitle,
-                                                          isAlert: true,
-                                                        );
-                                                      },
-                                                    );
-                                                  }
-                                                  return true;
-                                                },
-                                                background: Container(
-                                                  decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFF21B7CA),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16.0)),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 28.0),
-                                                  alignment:
-                                                      AlignmentDirectional
-                                                          .centerStart,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: const [
-                                                      Icon(Icons.edit,
-                                                          color: Colors.white),
-                                                      Text(
-                                                        "DÜZENLE",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                secondaryBackground: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.red,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    16.0)),
+                                                  }),
+                                                  confirmDismiss:
+                                                      (DismissDirection
+                                                          direction) async {
+                                                    if (direction ==
+                                                        DismissDirection
+                                                            .endToStart) {
+                                                      return await showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertWidget(
+                                                            alertTitle: Task()
+                                                                .alertTitle,
+                                                            alertSubtitle: Task()
+                                                                .alertSubtitle,
+                                                            isAlert: true,
+                                                          );
+                                                        },
+                                                      );
+                                                    }
+                                                    return true;
+                                                  },
+                                                  background: Container(
+                                                    color:
+                                                        const Color(0xFF21B7CA),
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 28.0),
+                                                            left: 28.0),
                                                     alignment:
                                                         AlignmentDirectional
-                                                            .centerEnd,
+                                                            .centerStart,
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
                                                       children: const [
-                                                        Icon(Icons.delete,
+                                                        Icon(Icons.edit,
                                                             color:
                                                                 Colors.white),
                                                         Text(
-                                                            "ÇÖP KUTUSUNA TAŞI",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white))
+                                                          "DÜZENLE",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        )
                                                       ],
-                                                    )),
-                                                resizeDuration: const Duration(
-                                                    milliseconds: 200),
-                                                key: UniqueKey(),
-                                                child: Center(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .cardColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    16.0)),
-                                                    child: ListTile(
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              15),
-                                                      leading: const Icon(
-                                                          Icons.numbers),
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) => ChangeNotifierProvider<
-                                                                        PageUpdate>(
-                                                                    create:
-                                                                        (context) {
-                                                                      return PageUpdate();
-                                                                    },
-                                                                    child:
-                                                                        PomodoroView(
-                                                                      task: retrievedTaskList![
-                                                                              key]![
-                                                                          index],
-                                                                    )))).then(
-                                                            (_) => _refresh());
-                                                      },
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
-                                                      ),
-                                                      title: Text(
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskName),
-                                                      subtitle: Text(
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskInfo),
-                                                      trailing: const Icon(Icons
-                                                          .arrow_right_sharp),
                                                     ),
                                                   ),
-                                                ));
+                                                  secondaryBackground:
+                                                      Container(
+                                                          color: Colors.red,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 28.0),
+                                                          alignment:
+                                                              AlignmentDirectional
+                                                                  .centerEnd,
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: const [
+                                                              Icon(Icons.delete,
+                                                                  color: Colors
+                                                                      .white),
+                                                              Text(
+                                                                  "ÇÖP KUTUSUNA TAŞI",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white))
+                                                            ],
+                                                          )),
+                                                  resizeDuration:
+                                                      const Duration(
+                                                          milliseconds: 200),
+                                                  key: UniqueKey(),
+                                                  child: Center(
+                                                    child: Container(
+                                                      color: Theme.of(context)
+                                                          .cardColor,
+                                                      child: ListTile(
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .all(15),
+                                                        leading: const Icon(
+                                                            Icons.numbers),
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => ChangeNotifierProvider<
+                                                                          PageUpdate>(
+                                                                      create:
+                                                                          (context) {
+                                                                        return PageUpdate();
+                                                                      },
+                                                                      child:
+                                                                          PomodoroView(
+                                                                        task: retrievedTaskList![key]![
+                                                                            index],
+                                                                      )))).then(
+                                                              (_) =>
+                                                                  _refresh());
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.0),
+                                                        ),
+                                                        title: Text(
+                                                            retrievedTaskList![
+                                                                    key]![index]
+                                                                .taskName),
+                                                        subtitle: Text(
+                                                            retrievedTaskList![
+                                                                    key]![index]
+                                                                .taskInfo),
+                                                        trailing: const Icon(Icons
+                                                            .arrow_right_sharp),
+                                                      ),
+                                                    ),
+                                                  )),
+                                            );
                                           },
                                         )
                                       ],
