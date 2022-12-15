@@ -32,6 +32,7 @@ class ShortBreak extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PomodoroTimer(
+                  backgroudColor: Colors.black26,
                   onComplete: () async {
                     context.read<PageUpdate>().startOrStop(
                         context

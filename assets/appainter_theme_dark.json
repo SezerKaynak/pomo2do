@@ -150,7 +150,7 @@
   "floatingActionButtonTheme": {
     "backgroundColor": "#ffffffff"
   },
-  "focusColor": "#1fffffff",
+  "focusColor": "#80000000",
   "highlightColor": "#40cccccc",
   "hintColor": "#99ffffff",
   "hoverColor": "#0affffff",

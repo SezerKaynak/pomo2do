@@ -36,6 +36,7 @@ class FocusView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PomodoroTimer(
+                  backgroudColor: Theme.of(context).focusColor,
                   width: MediaQuery.of(context).size.width * 0.7,
                   isReverse: true,
                   isReverseAnimation: true,

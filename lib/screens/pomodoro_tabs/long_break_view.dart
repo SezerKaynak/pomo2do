@@ -32,6 +32,7 @@ class LongBreak extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 PomodoroTimer(
+                  backgroudColor: Colors.black26,
                   onComplete: () {
                     context.read<PageUpdate>().startOrStop(
                         context
