@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TaskInfoListTile extends StatelessWidget {
   const TaskInfoListTile({
@@ -19,7 +21,7 @@ class TaskInfoListTile extends StatelessWidget {
           const Icon(Icons.schedule, color: Colors.black),
           const Icon(Icons.close, color: Colors.black),
           Text(
-            '0',
+            context.select((SharedPreferences prefs) => prefs.getInt("PomodoroCount").toString()),
             style:
                 Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 22, color: Colors.black),
           ),

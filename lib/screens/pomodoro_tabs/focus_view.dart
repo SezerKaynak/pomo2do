@@ -24,6 +24,9 @@ class FocusView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int pomodoroCount = context.select((SharedPreferences prefs) {
+      return prefs.getInt("PomodoroCount")!;
+    });
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -48,6 +51,9 @@ class FocusView extends StatelessWidget {
                         controller,
                         widget.task,
                         tabController);
+                    context
+                        .read<SharedPreferences>()
+                        .setInt('PomodoroCount', pomodoroCount + 1);
                     await FlutterLocalNotificationsPlugin().zonedSchedule(
                         0,
                         'scheduled title',
@@ -153,24 +159,40 @@ class FocusView extends StatelessWidget {
                                   bottomRight: Radius.circular(8))),
                           color: Colors.red[400],
                           child: InkWell(
+                              // onTap: () {
+                              //   SystemChrome.setEnabledSystemUIMode(
+                              //       SystemUiMode.immersiveSticky);
+                              // },
+                              // onLongPress: () {
+                              //   SystemChrome.setEnabledSystemUIMode(
+                              //     SystemUiMode.manual,
+                              //     overlays: [
+                              //       SystemUiOverlay.top,
+                              //       SystemUiOverlay.bottom
+                              //     ],
+                              //   );
+                              // },
                               onTap: () {
-                                SystemChrome.setEnabledSystemUIMode(
-                                    SystemUiMode.immersiveSticky);
+                                context
+                                    .read<PageUpdate>()
+                                    .floatingActionOnPressed(
+                                        context.read<SharedPreferences>());
                               },
-                              onLongPress: () {
-                                SystemChrome.setEnabledSystemUIMode(
-                                  SystemUiMode.manual,
-                                  overlays: [
-                                    SystemUiOverlay.top,
-                                    SystemUiOverlay.bottom
-                                  ],
-                                );
-                              },
-                              child: const SizedBox(
+                              child: SizedBox(
                                 child: Center(
-                                    child: Text(
-                                  'Tam Ekran',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                    child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  direction: Axis.vertical,
+                                  children: const [
+                                    Text('Pomodoro Sayacını',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                      'Sıfırla',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 )),
                               )),
                         ),
