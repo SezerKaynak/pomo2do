@@ -7,10 +7,12 @@ class TaskInfoListTile extends StatelessWidget {
     Key? key,
     required this.taskName,
     required this.taskInfo,
+    required this.pomodoroCount
   }) : super(key: key);
 
   final String taskName;
   final String taskInfo;
+  final int pomodoroCount;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class TaskInfoListTile extends StatelessWidget {
           const Icon(Icons.schedule, color: Colors.black),
           const Icon(Icons.close, color: Colors.black),
           Text(
-            context.select((SharedPreferences prefs) => prefs.getInt("PomodoroCount").toString()),
+            pomodoroCount.toString(),
             style:
                 Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 22, color: Colors.black),
           ),

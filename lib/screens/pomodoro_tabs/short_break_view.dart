@@ -25,7 +25,10 @@ class ShortBreak extends StatelessWidget {
       child: Column(
         children: [
           TaskInfoListTile(
-              taskName: widget.task.taskName, taskInfo: widget.task.taskInfo),
+            taskName: widget.task.taskName,
+            taskInfo: widget.task.taskInfo,
+            pomodoroCount: widget.task.pomodoroCount,
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.55,
             child: Column(

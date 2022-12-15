@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/widgets/task_info_list_tile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -21,18 +22,17 @@ class FocusView extends StatelessWidget {
   final PomodoroView widget;
   final CountDownController controller;
   final TabController tabController;
-
   @override
   Widget build(BuildContext context) {
-    int pomodoroCount = context.select((SharedPreferences prefs) {
-      return prefs.getInt("PomodoroCount")!;
-    });
+    int pomodoroCount = widget.task.pomodoroCount;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           TaskInfoListTile(
-              taskName: widget.task.taskName, taskInfo: widget.task.taskInfo),
+              taskName: widget.task.taskName,
+              taskInfo: widget.task.taskInfo,
+              pomodoroCount: widget.task.pomodoroCount),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.55,
             child: Column(
@@ -51,9 +51,7 @@ class FocusView extends StatelessWidget {
                         controller,
                         widget.task,
                         tabController);
-                    context
-                        .read<SharedPreferences>()
-                        .setInt('PomodoroCount', pomodoroCount + 1);
+                    context.read<PageUpdate>().floatingActionOnPressed(widget.task, pomodoroCount + 1);
                     await FlutterLocalNotificationsPlugin().zonedSchedule(
                         0,
                         'scheduled title',
@@ -139,12 +137,18 @@ class FocusView extends StatelessWidget {
                           color: Colors.green[500],
                           child: InkWell(
                             onTap: () {},
-                            child: const SizedBox(
+                            child: SizedBox(
+                              //metni görevi tamamlandı olarak işaretle cümlesine benzer bir cümleyle değiştir
                               child: Center(
-                                child: Text(
-                                  "Tamamlandı",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                child: Wrap(
+                                  children: const [
+                                    Text(
+                                      "Tamamlandı",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -176,7 +180,7 @@ class FocusView extends StatelessWidget {
                                 context
                                     .read<PageUpdate>()
                                     .floatingActionOnPressed(
-                                        context.read<SharedPreferences>());
+                                        widget.task, 0);
                               },
                               child: SizedBox(
                                 child: Center(

@@ -5,13 +5,12 @@ import 'package:flutter_application_1/service/database_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PageUpdate extends ChangeNotifier {
+class PageUpdate extends ChangeNotifier with DatabaseService{
   bool skipButtonVisible = false;
   bool startStop = true;
   bool onWillPop = true;
   final String basla = "BAŞLAT";
   final String durdur = "DURDUR";
-  DatabaseService dbService = DatabaseService();
 
   void startButton(CountDownController controller, int time) {
     controller.resume();
@@ -41,8 +40,9 @@ class PageUpdate extends ChangeNotifier {
     }
   }
 
-  void floatingActionOnPressed(SharedPreferences prefs){
-    prefs.setInt("PomodoroCount", 0);
+  void floatingActionOnPressed(TaskModel task, int pomodoroCount){
+    task.pomodoroCount = pomodoroCount;
+    updateTask(task);
     notifyListeners();
   }
   void stop(CountDownController controller, TaskModel task, int time,
@@ -57,7 +57,7 @@ class PageUpdate extends ChangeNotifier {
         passingTime = time - countDown;
         task.taskPassingTime =
             (passingTime + int.parse(task.taskPassingTime)).toString();
-        await dbService.updateTask(task);
+        await updateTask(task);
         if (passingTime == time) {
           tabController.animateTo(1);
         }
@@ -67,14 +67,14 @@ class PageUpdate extends ChangeNotifier {
         passingTime = time - countDown;
         task.breakPassingTime =
             (passingTime + int.parse(task.breakPassingTime)).toString();
-        dbService.updateTask(task);
+        updateTask(task);
         break;
       case 2:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
         task.longBreakPassingTime =
             (passingTime + int.parse(task.longBreakPassingTime)).toString();
-        dbService.updateTask(task);
+        updateTask(task);
         break;
       default:
     }
