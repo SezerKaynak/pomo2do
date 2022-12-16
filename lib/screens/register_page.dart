@@ -8,45 +8,45 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  late TextEditingController _passwordController;
+  late TextEditingController _emailController;
+  late TextEditingController _nameController;
+  late TextEditingController _surnameController;
+  late TextEditingController _birthdayController;
+
+  @override
+  void initState() {
+    _passwordController = TextEditingController();
+    _emailController = TextEditingController();
+    _nameController = TextEditingController();
+    _surnameController = TextEditingController();
+    _birthdayController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _birthdayController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
-
-    var register = "Kayıt Ol";
-    var subtitle = "Aşağıdaki alanları doldurarak kaydolabilirsiniz.🙂";
-    var name = "Ad";
-    var surname = "Soyad";
-    var email = "Email";
-    var password = "Şifre";
-    var yourName = "Adınız";
-    var yourSurname = "Soyadınız";
-    var yourBirthday = "Doğum Tarihiniz";
-    var weakPassword = "Güçsüz Şifre!";
-    var weakPasswordSubtitle = "Girdiğiniz şifre minimum 6 haneden oluşmalı!";
-    var emailAlreadyInUse = "Geçersiz E-Posta!";
-    var emailAlreadyInUseSubtitle =
-        "Girdiğiniz E-posta adresi başka bir hesaba bağlı!";
-    var emailAlert = "E-Posta Alanı Boş Bırakılamaz!";
-    var emailAlertSubtitle = "Lütfen e-postanızı girin.";
-    var passwordAlert = "Şifre Alanı Boş Bırakılamaz!";
-    var passwordAlertSubtitle = "Lütfen şifrenizi girin.";
-    var nameAlert = "İsim Alanı Boş Bırakılamaz!";
-    var nameAlertSubtitle = "Lütfen isminizi girin.";
-    var surnameAlert = "Soy İsim Alanı Boş Bırakılamaz!";
-    var surnameAlertSubtitle = "Lütfen soy isminizi girin.";
-    var birthdayAlert = "Doğum Tarihi Alanı Boş Bırakılamaz!";
-    var birthdayAlertSubtitle = "Lütfen doğum tarihinizi seçin.";
-    var invalidEmail = "Geçersiz E-Mail Adresi!";
-    var invalidEmailSubtitle = "Lütfen geçerli bir E-Mail adresi girin.";
-
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-    final TextEditingController _nameController = TextEditingController();
-    final TextEditingController _surnameController = TextEditingController();
-    final TextEditingController _birthdayController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
@@ -68,7 +68,7 @@ class RegisterPage extends StatelessWidget {
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left),
               ScreenTexts(
-                  title: subtitle,
+                  title: subtitle2,
                   theme: Theme.of(context).textTheme.subtitle1,
                   fontW: FontWeight.w400,
                   textPosition: TextAlign.left),
@@ -159,35 +159,35 @@ class RegisterPage extends StatelessWidget {
                               type: QuickAlertType.error,
                               title: nameAlert,
                               text: nameAlertSubtitle,
-                              confirmBtnText: "Kapat");
+                              confirmBtnText: confirmButtonText);
                         } else if (_passwordController.text == "") {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
                               title: surnameAlert,
                               text: surnameAlertSubtitle,
-                              confirmBtnText: "Kapat");
+                              confirmBtnText: confirmButtonText);
                         } else if (_nameController.text == "") {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
                               title: emailAlert,
                               text: emailAlertSubtitle,
-                              confirmBtnText: "Kapat");
+                              confirmBtnText: confirmButtonText);
                         } else if (_surnameController.text == "") {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
                               title: passwordAlert,
                               text: passwordAlertSubtitle,
-                              confirmBtnText: "Kapat");
+                              confirmBtnText: confirmButtonText);
                         } else if (_birthdayController.text == "") {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
                               title: birthdayAlert,
                               text: birthdayAlertSubtitle,
-                              confirmBtnText: "Kapat");
+                              confirmBtnText: confirmButtonText);
                         } else {
                           try {
                             await _authService.createUserWithEmailAndPassword(
@@ -200,21 +200,21 @@ class RegisterPage extends StatelessWidget {
                                   type: QuickAlertType.error,
                                   title: weakPassword,
                                   text: weakPasswordSubtitle,
-                                  confirmBtnText: "Kapat");
+                                  confirmBtnText: confirmButtonText);
                             } else if (e.code == 'email-already-in-use') {
                               QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.error,
                                   title: emailAlreadyInUse,
                                   text: emailAlreadyInUseSubtitle,
-                                  confirmBtnText: "Kapat");
+                                  confirmBtnText: confirmButtonText);
                             } else if (e.code == 'invalid-email') {
                               QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.error,
                                   title: invalidEmail,
                                   text: invalidEmailSubtitle,
-                                  confirmBtnText: "Kapat");
+                                  confirmBtnText: confirmButtonText);
                             }
                           }
                           CollectionReference users =
