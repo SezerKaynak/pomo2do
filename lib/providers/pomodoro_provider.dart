@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/service/database_service.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PageUpdate extends ChangeNotifier with DatabaseService {
   bool skipButtonVisible = false;

@@ -593,6 +593,7 @@ class Task extends State<TaskView> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FloatingActionButton(
                 heroTag: "btn1",
@@ -601,7 +602,6 @@ class Task extends State<TaskView> {
                 },
                 child: const Icon(Icons.stacked_bar_chart),
               ),
-              const Spacer(),
               FloatingActionButton.extended(
                 heroTag: "btn2",
                 onPressed: () {

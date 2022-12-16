@@ -8,42 +8,39 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget{
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  late TextEditingController _resetEmailController;
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _resetEmailController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _resetEmailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var title = "Hoşgeldiniz!";
-    var subtitle = "Lütfen öncelikle giriş yapınız👋";
-    var email = "Email";
-    var sifre = "Şifre";
-    var forgotPassword = "Şifremi Unuttum";
-    var textLabel2 = 'abc@xyz.com';
-    var textLabel3 = 'Şifrenizi Girin';
-    var loginWithAccount = 'Hesabınızla Giriş Yapın';
-    var dontHaveAccount = 'Henüz bir hesabınız yok mu?';
-    var emailAlert = "E-Posta Alanı Boş Bırakılamaz!";
-    var emailAlertSubtitle = "Lütfen e-postanızı girin.";
-    var passwordAlert = "Şifre Alanı Boş Bırakılamaz!";
-    var passwordAlertSubtitle = "Lütfen şifrenizi girin.";
-    var userNotFound = "Kullanıcı Bulunamadı!";
-    var userNotFoundSubtitle =
-        "Hesabınız yoksa aşağıdaki kayıt ol butonunu kullanarak kayıt olabilirsiniz.";
-    var wrongPassword = "Şifre Yanlış!";
-    var wrongPasswordSubtitle =
-        "Şifrenizi yanlış girdiniz, lütfen tekrar deneyin...";
-    var resetPassword = "Şifre Sıfırlama";
-    var enterEmailHint = "E-posta adresinizi girin.";
-    var enterEmail =
-        "Şifresini sıfırlamak istediğiniz hesabınızın e-mail adresini girin:";
-    var checkEmail = 'E-posta adresinizi kontrol edin.';
-    var invalidEmail = "Geçersiz E-Mail Adresi!";
-    var invalidEmailSubtitle = "Lütfen geçerli bir E-Mail adresi girin.";
 
     final _authService = Provider.of<IAuthService>(context, listen: false);
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-    final TextEditingController _resetEmailController = TextEditingController();
 
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
@@ -199,7 +196,7 @@ class LoginPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(dontHaveAccount),
+                    const Text(dontHaveAccount),
                     TextButton(
                         onPressed: () {
                           Navigator.push(
