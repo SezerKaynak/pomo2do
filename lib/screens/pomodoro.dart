@@ -4,9 +4,11 @@ import 'package:flutter_application_1/screens/pomodoro_tabs/long_break_view.dart
 import 'package:flutter_application_1/screens/pomodoro_tabs/short_break_view.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
+import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/widgets/tabs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/screens/pomodoro_tabs/focus_view.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroView extends StatefulWidget {
@@ -18,7 +20,7 @@ class PomodoroView extends StatefulWidget {
 }
 
 class _PomodoroViewState extends State<PomodoroView>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, DatabaseService {
   late TabController tabController;
   late CountDownController controller;
   int time = 0;
@@ -44,7 +46,22 @@ class _PomodoroViewState extends State<PomodoroView>
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               pageUpdateNotifier.onWillPop
-                  ? Navigator.pop(context)
+                  ? widget.task.pomodoroCount != 0
+                      ? QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.confirm,
+                          title: 'Emin misin?',
+                          text: 'Pomodoro sayacı sıfırlanacak!',
+                          confirmBtnText: 'Onayla',
+                          cancelBtnText: 'İptal Et',
+                          confirmBtnColor: Colors.green,
+                          onConfirmBtnTap: () {
+                            widget.task.pomodoroCount = 0;
+                            updateTask(widget.task);
+                            Navigator.pop(context);
+                          },
+                        )
+                      : Navigator.pop(context)
                   : DoNothingAction();
             },
           ),
