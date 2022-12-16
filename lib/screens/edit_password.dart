@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
-import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/service/firebase_service.dart';
-import 'package:flutter_application_1/widgets/alert_widget.dart';
 import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
+import 'package:quickalert/quickalert.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({super.key});
@@ -130,23 +129,19 @@ class _EditPasswordState extends State<EditPassword> {
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
                           if (_oldpasswordController.text == "") {
-                            showDialog(
+                            QuickAlert.show(
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return AlertWidget(
-                                      alertApprove: "Kapat",
-                                      alertTitle: oldPasswordAlert,
-                                      alertSubtitle: oldPasswordAlertSubtitle);
-                                });
+                                type: QuickAlertType.error,
+                                title: oldPassword,
+                                text: oldPasswordAlertSubtitle,
+                                confirmBtnText: "Kapat");
                           } else if (_passwordController.text == "") {
-                            showDialog(
+                            QuickAlert.show(
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return AlertWidget(
-                                      alertApprove: "Kapat",
-                                      alertTitle: passwordAlert,
-                                      alertSubtitle: passwordAlertSubtitle);
-                                });
+                                type: QuickAlertType.error,
+                                title: passwordAlert,
+                                text: passwordAlertSubtitle,
+                                confirmBtnText: "Kapat");
                           } else {
                             try {
                               if (_formKey.currentState!.validate()) {
@@ -155,64 +150,44 @@ class _EditPasswordState extends State<EditPassword> {
                                   isLoading = true;
                                 });
 
-                                await _authService.editPassword(_oldpasswordController);
+                                await _authService
+                                    .editPassword(_oldpasswordController);
 
                                 await currentUser!.updatePassword(newPassword);
 
                                 setState(() {
                                   isLoading = false;
                                 });
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0))),
-                                        title: Text(passwordConfirmed),
-                                        content: Text(passwordAlertSubtitle),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              _authService.signOut();
-                                            },
-                                            child: Text(
-                                              "Kapat",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1
-                                                  ?.copyWith(
-                                                      color:
-                                                          ProjectThemeOptions()
-                                                              .backGroundColor),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    });
+
+                                QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.success,
+                                  title: passwordConfirmed,
+                                  text: passwordAlertSubtitle,
+                                  confirmBtnText: "Onayla",
+                                  onConfirmBtnTap: () {
+                                    _authService.signOut();
+                                  },
+                                );
                               }
                             } on FirebaseAuthException catch (e) {
                               setState(() {
                                 isLoading = false;
                               });
                               if (e.code == 'weak-password') {
-                                showDialog(
+                                QuickAlert.show(
                                     context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertWidget(
-                                          alertApprove: "Kapat", 
-                                          alertTitle: weakPassword,
-                                          alertSubtitle: weakPasswordSubtitle);
-                                    });
+                                    type: QuickAlertType.error,
+                                    title: weakPassword,
+                                    text: weakPasswordSubtitle,
+                                    confirmBtnText: "Kapat");
                               } else if (e.code == 'wrong-password') {
-                                showDialog(
+                                QuickAlert.show(
                                     context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertWidget(
-                                          alertApprove: "Kapat",
-                                          alertTitle: wrongPassword,
-                                          alertSubtitle: wrongPasswordSubtitle);
-                                    });
+                                    type: QuickAlertType.error,
+                                    title: wrongPassword,
+                                    text: wrongPasswordSubtitle,
+                                    confirmBtnText: "Kapat");
                               }
                             }
                           }

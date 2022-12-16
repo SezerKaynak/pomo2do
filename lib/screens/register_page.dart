@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
-import 'package:flutter_application_1/widgets/alert_widget.dart';
 import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quickalert/quickalert.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -154,50 +154,40 @@ class RegisterPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () async {
                         if (_emailController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertApprove: "Kapat",
-                                    alertTitle: nameAlert,
-                                    alertSubtitle: nameAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: nameAlert,
+                              text: nameAlertSubtitle,
+                              confirmBtnText: "Kapat");
                         } else if (_passwordController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertApprove: "Kapat",
-                                    alertTitle: surnameAlert,
-                                    alertSubtitle: surnameAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: surnameAlert,
+                              text: surnameAlertSubtitle,
+                              confirmBtnText: "Kapat");
                         } else if (_nameController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertApprove: "Kapat",
-                                    alertTitle: emailAlert,
-                                    alertSubtitle: emailAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: emailAlert,
+                              text: emailAlertSubtitle,
+                              confirmBtnText: "Kapat");
                         } else if (_surnameController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertApprove: "Kapat",
-                                    alertTitle: passwordAlert,
-                                    alertSubtitle: passwordAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: passwordAlert,
+                              text: passwordAlertSubtitle,
+                              confirmBtnText: "Kapat");
                         } else if (_birthdayController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertApprove: "Kapat",
-                                    alertTitle: birthdayAlert,
-                                    alertSubtitle: birthdayAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: birthdayAlert,
+                              text: birthdayAlertSubtitle,
+                              confirmBtnText: "Kapat");
                         } else {
                           try {
                             await _authService.createUserWithEmailAndPassword(
@@ -205,33 +195,26 @@ class RegisterPage extends StatelessWidget {
                                 password: _passwordController.text);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
-                              showDialog(
+                              QuickAlert.show(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertWidget(
-                                        alertApprove: "Kapat",
-                                        alertTitle: weakPassword,
-                                        alertSubtitle: weakPasswordSubtitle);
-                                  });
+                                  type: QuickAlertType.error,
+                                  title: weakPassword,
+                                  text: weakPasswordSubtitle,
+                                  confirmBtnText: "Kapat");
                             } else if (e.code == 'email-already-in-use') {
-                              showDialog(
+                              QuickAlert.show(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertWidget(
-                                        alertApprove: "Kapat",
-                                        alertTitle: emailAlreadyInUse,
-                                        alertSubtitle:
-                                            emailAlreadyInUseSubtitle);
-                                  });
+                                  type: QuickAlertType.error,
+                                  title: emailAlreadyInUse,
+                                  text: emailAlreadyInUseSubtitle,
+                                  confirmBtnText: "Kapat");
                             } else if (e.code == 'invalid-email') {
-                              showDialog(
+                              QuickAlert.show(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertWidget(
-                                        alertApprove: "Kapat",
-                                        alertTitle: invalidEmail,
-                                        alertSubtitle: invalidEmailSubtitle);
-                                  });
+                                  type: QuickAlertType.error,
+                                  title: invalidEmail,
+                                  text: invalidEmailSubtitle,
+                                  confirmBtnText: "Kapat");
                             }
                           }
                           CollectionReference users =

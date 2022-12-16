@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/register_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
-import 'package:flutter_application_1/widgets/alert_widget.dart';
 import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -46,8 +47,7 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
         backgroundColor: Colors.blueGrey[50],
-        appBar: AppBar(
-        ),
+        appBar: AppBar(),
         body: SingleChildScrollView(
           child: Padding(
             padding: ScreenPadding().screenPadding,
@@ -92,77 +92,34 @@ class LoginPage extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                         onTap: () {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0))),
-                                  title: Text(resetPassword),
-                                  content: Builder(
-                                    builder: (context) {
-                                      var height =
-                                          MediaQuery.of(context).size.height;
-                                      var width =
-                                          MediaQuery.of(context).size.width;
-
-                                      return SizedBox(
-                                        height: height / 6,
-                                        width: width - 100,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ScreenTexts(
-                                                title: enterEmail,
-                                                theme: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1,
-                                                fontW: FontWeight.w400,
-                                                textPosition: TextAlign.left),
-                                            ScreenTextField(
-                                              controller: _resetEmailController,
-                                              height: 70,
-                                              maxLines: 1,
-                                              obscure: false,
-                                              textLabel: enterEmailHint,
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () async {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                          try {
-                                            await _authService.resetPassword(
-                                                email:
-                                                    _resetEmailController.text);
-                                            SmartDialog.showToast(checkEmail);
-                                          } on FirebaseAuthException catch (e) {
-                                            if (e.code == 'user-not-found') {
-                                              SmartDialog.showToast(
-                                                  userNotFound);
-                                            } else if (e.code ==
-                                                'invalid-email') {
-                                              SmartDialog.showToast(
-                                                  invalidEmailSubtitle);
-                                            }
-                                          }
-                                        },
-                                        child: const Text('Onayla')),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('İptal Et')),
-                                  ],
-                                );
-                              });
+                              type: QuickAlertType.custom,
+                              showCancelBtn: true,
+                              title: enterEmail,
+                              confirmBtnText: 'Onayla',
+                              cancelBtnText: 'İptal Et',
+                              widget: ScreenTextField(
+                                  textLabel: enterEmailHint,
+                                  obscure: false,
+                                  controller: _resetEmailController,
+                                  height: 70,
+                                  maxLines: 1),
+                              onConfirmBtnTap: () async {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                try {
+                                  await _authService.resetPassword(
+                                      email: _resetEmailController.text);
+                                  SmartDialog.showToast(checkEmail);
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    SmartDialog.showToast(userNotFound);
+                                  } else if (e.code == 'invalid-email') {
+                                    SmartDialog.showToast(invalidEmailSubtitle);
+                                  }
+                                }
+                              },
+                              onCancelBtnTap: () => Navigator.pop(context));
                         },
                         child: Text(forgotPassword,
                             style: Theme.of(context)
@@ -179,23 +136,19 @@ class LoginPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
                           if (_emailController.text == "") {
-                            showDialog(
+                            QuickAlert.show(
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return AlertWidget(
-                                      alertApprove: "Kapat",
-                                      alertTitle: emailAlert,
-                                      alertSubtitle: emailAlertSubtitle);
-                                });
+                                type: QuickAlertType.error,
+                                title: emailAlert,
+                                text: emailAlertSubtitle,
+                                confirmBtnText: "Kapat");
                           } else if (_passwordController.text == "") {
-                            showDialog(
+                            QuickAlert.show(
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return AlertWidget(
-                                      alertApprove: "Kapat",
-                                      alertTitle: passwordAlert,
-                                      alertSubtitle: passwordAlertSubtitle);
-                                });
+                                type: QuickAlertType.error,
+                                title: passwordAlert,
+                                text: passwordAlertSubtitle,
+                                confirmBtnText: "Kapat");
                           } else {
                             try {
                               await _authService.signInEmailAndPassword(
@@ -203,32 +156,26 @@ class LoginPage extends StatelessWidget {
                                   password: _passwordController.text);
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'user-not-found') {
-                                showDialog(
+                                QuickAlert.show(
                                     context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertWidget(
-                                          alertApprove: "Kapat",
-                                          alertTitle: userNotFound,
-                                          alertSubtitle: userNotFoundSubtitle);
-                                    });
+                                    type: QuickAlertType.error,
+                                    title: userNotFound,
+                                    text: userNotFoundSubtitle,
+                                    confirmBtnText: "Kapat");
                               } else if (e.code == 'wrong-password') {
-                                showDialog(
+                                QuickAlert.show(
                                     context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertWidget(
-                                          alertApprove: "Kapat",
-                                          alertTitle: wrongPassword,
-                                          alertSubtitle: wrongPasswordSubtitle);
-                                    });
+                                    type: QuickAlertType.error,
+                                    title: wrongPassword,
+                                    text: wrongPasswordSubtitle,
+                                    confirmBtnText: "Kapat");
                               } else if (e.code == 'invalid-email') {
-                                showDialog(
+                                QuickAlert.show(
                                     context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertWidget(
-                                          alertApprove: "Kapat",
-                                          alertTitle: invalidEmail,
-                                          alertSubtitle: invalidEmailSubtitle);
-                                    });
+                                    type: QuickAlertType.error,
+                                    title: invalidEmail,
+                                    text: invalidEmailSubtitle,
+                                    confirmBtnText: "Kapat");
                               }
                             }
                           }

@@ -11,7 +11,6 @@ import 'package:flutter_application_1/screens/pomodoro_settings.dart';
 import 'package:flutter_application_1/screens/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/providers/dark_theme_provider.dart';
-import 'package:flutter_application_1/widgets/alert_widget.dart';
 import 'package:flutter_application_1/widgets/custom_switch.dart';
 import 'package:flutter_application_1/widgets/settings.dart' as settings;
 import 'package:flutter_application_1/service/database_service.dart';
@@ -19,6 +18,7 @@ import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:quickalert/quickalert.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -62,8 +62,7 @@ class Task extends State<TaskView> {
   String alertReject = "İptal Et";
   String alertTitleLogOut = "Çıkış Yapılacak!";
   String alertSubtitleLogOut = "Çıkış yapmak istediğinizden emin misiniz?";
-  String alertApproveLogOut = "Onayla";
-  String alertRejectLogOut = "İptal Et";
+
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
@@ -228,45 +227,17 @@ class Task extends State<TaskView> {
                   subtitle: "Hesaptan çıkış yapın.",
                   title: settingTitle(context, 'Çıkış Yap'),
                   tap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                            title: Text(alertTitleLogOut),
-                            content: Text(alertSubtitleLogOut),
-                            actions: [
-                              TextButton(
-                                onPressed: () async =>
-                                    await _authService.signOut(),
-                                child: Text(
-                                  alertApproveLogOut,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.copyWith(
-                                          color: ProjectThemeOptions()
-                                              .backGroundColor),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: Text(
-                                  alertReject,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.copyWith(
-                                          color: ProjectThemeOptions()
-                                              .backGroundColor),
-                                ),
-                              ),
-                            ],
-                          );
-                        });
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.confirm,
+                      title: alertTitleLogOut,
+                      text: alertSubtitleLogOut,
+                      confirmBtnText: alertApprove,
+                      cancelBtnText: alertReject,
+                      confirmBtnColor: Theme.of(context).errorColor,
+                      onConfirmBtnTap: () async => await _authService.signOut(),
+                      onCancelBtnTap: () => Navigator.of(context).pop(false),
+                    );
                   }),
               const Divider(thickness: 1),
               Expanded(
@@ -450,18 +421,28 @@ class Task extends State<TaskView> {
                                                     if (direction ==
                                                         DismissDirection
                                                             .endToStart) {
-                                                      return await showDialog(
+                                                      return await QuickAlert
+                                                          .show(
                                                         context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertWidget(
-                                                            alertTitle: Task()
-                                                                .alertTitle,
-                                                            alertSubtitle: Task()
-                                                                .alertSubtitle,
-                                                            isAlert: true,
-                                                          );
-                                                        },
+                                                        type: QuickAlertType
+                                                            .confirm,
+                                                        title: alertTitle,
+                                                        text: alertSubtitle,
+                                                        confirmBtnText:
+                                                            'Onayla',
+                                                        cancelBtnText:
+                                                            'İptal Et',
+                                                        confirmBtnColor:
+                                                            Theme.of(context)
+                                                                .errorColor,
+                                                        onConfirmBtnTap: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(true),
+                                                        onCancelBtnTap: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(false),
                                                       );
                                                     }
                                                     return true;
