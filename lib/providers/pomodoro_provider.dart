@@ -5,7 +5,7 @@ import 'package:flutter_application_1/service/database_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PageUpdate extends ChangeNotifier with DatabaseService{
+class PageUpdate extends ChangeNotifier with DatabaseService {
   bool skipButtonVisible = false;
   bool startStop = true;
   bool onWillPop = true;
@@ -21,12 +21,12 @@ class PageUpdate extends ChangeNotifier with DatabaseService{
   }
 
   void startOrStop(int time, CountDownController controller, TaskModel task,
-      TabController tabController) {
+      TabController tabController, int longBreakTimerSelect) {
     if (startStop == true) {
       startButton(controller, time);
       onWillPop = false;
     } else {
-      stop(controller, task, time, tabController);
+      stop(controller, task, time, tabController, longBreakTimerSelect);
       onWillPop = true;
       skipButtonVisible = false;
     }
@@ -40,13 +40,14 @@ class PageUpdate extends ChangeNotifier with DatabaseService{
     }
   }
 
-  void floatingActionOnPressed(TaskModel task, int pomodoroCount){
+  void floatingActionOnPressed(TaskModel task, int pomodoroCount) {
     task.pomodoroCount = pomodoroCount;
     updateTask(task);
     notifyListeners();
   }
+
   void stop(CountDownController controller, TaskModel task, int time,
-      TabController tabController) async {
+      TabController tabController, int longBreakNumberSelect) async {
     startStop = true;
     controller.pause();
     int passingTime;
@@ -58,8 +59,10 @@ class PageUpdate extends ChangeNotifier with DatabaseService{
         task.taskPassingTime =
             (passingTime + int.parse(task.taskPassingTime)).toString();
         await updateTask(task);
-        if (passingTime == time) {
+        if (passingTime == time && task.pomodoroCount < longBreakNumberSelect) {
           tabController.animateTo(1);
+        } else {
+          tabController.animateTo(2);
         }
         break;
       case 1:
@@ -68,6 +71,9 @@ class PageUpdate extends ChangeNotifier with DatabaseService{
         task.breakPassingTime =
             (passingTime + int.parse(task.breakPassingTime)).toString();
         updateTask(task);
+        if (passingTime == time) {
+          tabController.animateTo(0);
+        }
         break;
       case 2:
         var countDown = controller.getTimeInSeconds();

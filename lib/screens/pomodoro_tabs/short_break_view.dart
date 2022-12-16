@@ -39,11 +39,15 @@ class ShortBreak extends StatelessWidget {
                   onComplete: () async {
                     context.read<PageUpdate>().startOrStop(
                         context
-                            .read<SharedPreferences>()
-                            .getInt("breakTimerSelect")! * 60,
+                                .read<SharedPreferences>()
+                                .getInt("breakTimerSelect")! *
+                            60,
                         controller,
                         widget.task,
-                        tabController);
+                        tabController,
+                        context
+                            .read<SharedPreferences>()
+                            .getInt("longBreakNumberSelect")!);
                   },
                   width: MediaQuery.of(context).size.width * 0.7,
                   isReverse: true,
@@ -75,11 +79,15 @@ class ShortBreak extends StatelessWidget {
                               var btn = context.read<PageUpdate>();
                               btn.startOrStop(
                                   context
-                                      .read<SharedPreferences>()
-                                      .getInt("breakTimerSelect")! * 60,
+                                          .read<SharedPreferences>()
+                                          .getInt("breakTimerSelect")! *
+                                      60,
                                   controller,
                                   widget.task,
-                                  tabController);
+                                  tabController,
+                                  context
+                                      .read<SharedPreferences>()
+                                      .getInt("longBreakNumberSelect")!);
                             },
                             child: context.read<PageUpdate>().callText())),
                     if (context.read<PageUpdate>().skipButtonVisible)

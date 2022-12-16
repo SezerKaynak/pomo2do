@@ -39,11 +39,15 @@ class LongBreak extends StatelessWidget {
                   onComplete: () {
                     context.read<PageUpdate>().startOrStop(
                         context
-                            .read<SharedPreferences>()
-                            .getInt("longBreakTimerSelect")! * 60,
+                                .read<SharedPreferences>()
+                                .getInt("longBreakTimerSelect")! *
+                            60,
                         controller,
                         widget.task,
-                        tabController);
+                        tabController,
+                        context
+                            .read<SharedPreferences>()
+                            .getInt("longBreakNumberSelect")!);
                   },
                   width: MediaQuery.of(context).size.width * 0.7,
                   isReverse: true,
@@ -74,11 +78,15 @@ class LongBreak extends StatelessWidget {
                             onPressed: () {
                               context.read<PageUpdate>().startOrStop(
                                   context
-                                      .read<SharedPreferences>()
-                                      .getInt("longBreakTimerSelect")! * 60,
+                                          .read<SharedPreferences>()
+                                          .getInt("longBreakTimerSelect")! *
+                                      60,
                                   controller,
                                   widget.task,
-                                  tabController);
+                                  tabController,
+                                  context
+                                      .read<SharedPreferences>()
+                                      .getInt("longBreakNumberSelect")!);
                             },
                             child: context.read<PageUpdate>().callText())),
                     if (context.read<PageUpdate>().skipButtonVisible)

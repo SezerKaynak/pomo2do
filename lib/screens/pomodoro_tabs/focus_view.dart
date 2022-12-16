@@ -46,12 +46,17 @@ class FocusView extends StatelessWidget {
                   onComplete: () async {
                     context.read<PageUpdate>().startOrStop(
                         context
-                            .read<SharedPreferences>()
-                            .getInt("workTimerSelect")! * 60,
+                                .read<SharedPreferences>()
+                                .getInt("workTimerSelect")! *
+                            60,
                         controller,
                         widget.task,
-                        tabController);
-                    context.read<PageUpdate>().floatingActionOnPressed(widget.task, pomodoroCount + 1);
+                        tabController,
+                        context
+                            .read<SharedPreferences>()
+                            .getInt("longBreakNumberSelect")!);
+                    context.read<PageUpdate>().floatingActionOnPressed(
+                        widget.task, pomodoroCount + 1);
                     await FlutterLocalNotificationsPlugin().zonedSchedule(
                         0,
                         'scheduled title',
@@ -94,11 +99,15 @@ class FocusView extends StatelessWidget {
                               var btn = context.read<PageUpdate>();
                               btn.startOrStop(
                                   context
-                                      .read<SharedPreferences>()
-                                      .getInt("workTimerSelect")! * 60,
+                                          .read<SharedPreferences>()
+                                          .getInt("workTimerSelect")! *
+                                      60,
                                   controller,
                                   widget.task,
-                                  tabController);
+                                  tabController,
+                                  context
+                                      .read<SharedPreferences>()
+                                      .getInt("longBreakNumberSelect")!);
                             },
                             child: context.select((PageUpdate pageNotifier) =>
                                 pageNotifier.callText()))),
@@ -179,8 +188,7 @@ class FocusView extends StatelessWidget {
                               onTap: () {
                                 context
                                     .read<PageUpdate>()
-                                    .floatingActionOnPressed(
-                                        widget.task, 0);
+                                    .floatingActionOnPressed(widget.task, 0);
                               },
                               child: SizedBox(
                                 child: Center(

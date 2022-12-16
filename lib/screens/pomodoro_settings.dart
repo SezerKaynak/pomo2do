@@ -90,9 +90,7 @@ class PomodoroSettings extends StatelessWidget {
     getSettings();
 
     return Scaffold(
-      // backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
