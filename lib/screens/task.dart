@@ -4,17 +4,22 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:flutter_application_1/pages/add_task.dart';
-import 'package:flutter_application_1/pages/edit_password.dart';
-import 'package:flutter_application_1/pages/edit_task.dart';
-import 'package:flutter_application_1/pages/pomodoro.dart';
-import 'package:flutter_application_1/pages/pomodoro_settings.dart';
-import 'package:flutter_application_1/pages/search_view.dart';
+import 'package:flutter_application_1/screens/add_task.dart';
+import 'package:flutter_application_1/screens/edit_password.dart';
+import 'package:flutter_application_1/screens/pomodoro.dart';
+import 'package:flutter_application_1/screens/pomodoro_settings.dart';
+import 'package:flutter_application_1/screens/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
+import 'package:flutter_application_1/providers/dark_theme_provider.dart';
+import 'package:flutter_application_1/widgets/custom_switch.dart';
+import 'package:flutter_application_1/widgets/settings.dart' as settings;
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_application_1/providers/pomodoro_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -31,7 +36,7 @@ class Task extends State<TaskView> {
   final TextEditingController textController = TextEditingController();
   List<TaskModel> deletedTasks = [];
   String? downloadUrl;
-
+  DatabaseService dbService = DatabaseService();
   @override
   void initState() {
     super.initState();
@@ -58,17 +63,15 @@ class Task extends State<TaskView> {
   String alertReject = "İptal Et";
   String alertTitleLogOut = "Çıkış Yapılacak!";
   String alertSubtitleLogOut = "Çıkış yapmak istediğinizden emin misiniz?";
-  String alertApproveLogOut = "Onayla";
-  String alertRejectLogOut = "İptal Et";
+
   @override
   Widget build(BuildContext context) {
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
     var _authService = Provider.of<IAuthService>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-            systemOverlayStyle: ProjectThemeOptions().systemTheme,
-            backgroundColor: ProjectThemeOptions().backGroundColor,
             title: const Text("PomoTodo",
                 style: TextStyle(color: Colors.white, fontSize: 18)),
             leading: Builder(
@@ -88,8 +91,7 @@ class Task extends State<TaskView> {
             ]),
         drawer: Drawer(
           width: MediaQuery.of(context).size.width * 0.745,
-          child: ListView(
-            padding: EdgeInsets.zero,
+          child: Column(
             children: [
               DrawerHeader(
                   decoration: const BoxDecoration(
@@ -183,7 +185,7 @@ class Task extends State<TaskView> {
                       ),
                     ],
                   )),
-              Settings(
+              settings.Settings(
                 settingIcon: Icons.account_circle,
                 title: settingTitle(context, "Hesap Ayarları"),
                 subtitle: "Profilinizi düzenleyebilirsiniz.",
@@ -192,7 +194,7 @@ class Task extends State<TaskView> {
                 },
               ),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                 settingIcon: Icons.password,
                 subtitle: "Şifrenizi değiştirebilirsiniz.",
                 title: settingTitle(context, 'Şifreyi Değiştir'),
@@ -204,13 +206,13 @@ class Task extends State<TaskView> {
                 },
               ),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                   settingIcon: Icons.notifications,
                   subtitle: "Bildirim ayarlarını yapabilirsiniz.",
                   title: settingTitle(context, 'Bildirim Ayarları'),
                   tap: () {}),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                   settingIcon: Icons.watch,
                   subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
                   title: settingTitle(context, 'Pomodoro Ayarları'),
@@ -221,52 +223,35 @@ class Task extends State<TaskView> {
                             builder: (context) => const PomodoroSettings()));
                   }),
               const Divider(thickness: 1),
-              Settings(
+              settings.Settings(
                   settingIcon: Icons.logout,
                   subtitle: "Hesaptan çıkış yapın.",
                   title: settingTitle(context, 'Çıkış Yap'),
                   tap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                            title: Text(alertTitleLogOut),
-                            content: Text(alertSubtitleLogOut),
-                            actions: [
-                              TextButton(
-                                onPressed: () async =>
-                                    await _authService.signOut(),
-                                child: Text(
-                                  alertApproveLogOut,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.copyWith(
-                                          color: ProjectThemeOptions()
-                                              .backGroundColor),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: Text(
-                                  alertReject,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.copyWith(
-                                          color: ProjectThemeOptions()
-                                              .backGroundColor),
-                                ),
-                              ),
-                            ],
-                          );
-                        });
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.confirm,
+                      title: alertTitleLogOut,
+                      text: alertSubtitleLogOut,
+                      confirmBtnText: alertApprove,
+                      cancelBtnText: alertReject,
+                      confirmBtnColor: Theme.of(context).errorColor,
+                      onConfirmBtnTap: () async => await _authService.signOut(),
+                      onCancelBtnTap: () => Navigator.of(context).pop(false),
+                    );
                   }),
               const Divider(thickness: 1),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CustomSwitch(
+                    switchValue: themeChange.darkTheme,
+                    switchOnChanged: (bool? value) {
+                      themeChange.darkTheme = value!;
+                    },
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -276,7 +261,7 @@ class Task extends State<TaskView> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  color: Colors.cyan[100],
+                  color: Theme.of(context).primaryColorLight,
                   child: Row(
                     children: [
                       Expanded(
@@ -397,201 +382,176 @@ class Task extends State<TaskView> {
                                           itemCount:
                                               retrievedTaskList![key]!.length,
                                           itemBuilder: (context, index) {
-                                            return Dismissible(
-                                                onDismissed:
-                                                    ((direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    CollectionReference users =
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                                    var task = users.doc(
-                                                        retrievedTaskList![
-                                                                key]![index]
-                                                            .id);
-                                                    task.set({
-                                                      'taskNameCaseInsensitive':
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              child: Dismissible(
+                                                  onDismissed:
+                                                      ((direction) async {
+                                                    if (direction ==
+                                                        DismissDirection
+                                                            .endToStart) {
+                                                      retrievedTaskList![key]![
+                                                              index]
+                                                          .isActive = false;
+                                                      dbService.updateTask(
                                                           retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskName
-                                                              .toLowerCase(),
-                                                      'taskName':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskName,
-                                                      'taskType':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskType,
-                                                      'taskInfo':
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskInfo,
-                                                      "isDone": false,
-                                                      "isActive": false,
-                                                      "isArchive": false,
-                                                    });
+                                                              key]![index]);
 
-                                                    _refresh();
-                                                    _dismiss();
-                                                  } else {
-                                                    {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      EditTask(
-                                                                        isArchive:
-                                                                            retrievedTaskList![key]![index].isArchive,
-                                                                        isDone:
-                                                                            retrievedTaskList![key]![index].isDone,
-                                                                        taskInfo:
-                                                                            retrievedTaskList![key]![index].taskInfo,
-                                                                        taskName:
-                                                                            retrievedTaskList![key]![index].taskName,
-                                                                        taskType:
-                                                                            retrievedTaskList![key]![index].taskType,
-                                                                        id: retrievedTaskList![key]![index]
-                                                                            .id
-                                                                            .toString(),
-                                                                      )));
-                                                      setState(() {
-                                                        _refresh();
-                                                      });
+                                                      _refresh();
+                                                      _dismiss();
+                                                    } else {
+                                                      {
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            '/editTask',
+                                                            arguments:
+                                                                retrievedTaskList![
+                                                                        key]![
+                                                                    index]);
+
+                                                        setState(() {
+                                                          _refresh();
+                                                        });
+                                                      }
                                                     }
-                                                  }
-                                                }),
-                                                confirmDismiss:
-                                                    (DismissDirection
-                                                        direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    return await showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return alert(context);
-                                                      },
-                                                    );
-                                                  }
-                                                  return true;
-                                                },
-                                                background: Container(
-                                                  decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFF21B7CA),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16.0)),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 28.0),
-                                                  alignment:
-                                                      AlignmentDirectional
-                                                          .centerStart,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: const [
-                                                      Icon(Icons.edit,
-                                                          color: Colors.white),
-                                                      Text(
-                                                        "DÜZENLE",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                secondaryBackground: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.red,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    16.0)),
+                                                  }),
+                                                  confirmDismiss:
+                                                      (DismissDirection
+                                                          direction) async {
+                                                    if (direction ==
+                                                        DismissDirection
+                                                            .endToStart) {
+                                                      return await QuickAlert
+                                                          .show(
+                                                        context: context,
+                                                        type: QuickAlertType
+                                                            .confirm,
+                                                        title: alertTitle,
+                                                        text: alertSubtitle,
+                                                        confirmBtnText:
+                                                            'Onayla',
+                                                        cancelBtnText:
+                                                            'İptal Et',
+                                                        confirmBtnColor:
+                                                            Theme.of(context)
+                                                                .errorColor,
+                                                        onConfirmBtnTap: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(true),
+                                                        onCancelBtnTap: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(false),
+                                                      );
+                                                    }
+                                                    return true;
+                                                  },
+                                                  background: Container(
+                                                    color:
+                                                        const Color(0xFF21B7CA),
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 28.0),
+                                                            left: 28.0),
                                                     alignment:
                                                         AlignmentDirectional
-                                                            .centerEnd,
+                                                            .centerStart,
                                                     child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
                                                       children: const [
-                                                        Icon(Icons.delete,
+                                                        Icon(Icons.edit,
                                                             color:
                                                                 Colors.white),
                                                         Text(
-                                                            "ÇÖP KUTUSUNA TAŞI",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white))
+                                                          "DÜZENLE",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        )
                                                       ],
-                                                    )),
-                                                resizeDuration: const Duration(
-                                                    milliseconds: 200),
-                                                key: UniqueKey(),
-                                                child: Center(
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.blueGrey[50],
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    16.0)),
-                                                    child: ListTile(
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              15),
-                                                      leading: const Icon(
-                                                          Icons.numbers),
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ChangeNotifierProvider<
-                                                                            PageUpdate>(
-                                                                        create:
-                                                                            (context) {
-                                                                          return PageUpdate();
-                                                                        },
-                                                                        child:
-                                                                            PomodoroView(
-                                                                          task:
-                                                                              retrievedTaskList![key]![index],
-                                                                        )))).then((_) => _refresh());
-                                                      },
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
-                                                      ),
-                                                      title: Text(
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskName),
-                                                      subtitle: Text(
-                                                          retrievedTaskList![
-                                                                  key]![index]
-                                                              .taskInfo),
-                                                      trailing: const Icon(Icons
-                                                          .arrow_right_sharp),
                                                     ),
                                                   ),
-                                                ));
+                                                  secondaryBackground:
+                                                      Container(
+                                                          color: Colors.red,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 28.0),
+                                                          alignment:
+                                                              AlignmentDirectional
+                                                                  .centerEnd,
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: const [
+                                                              Icon(Icons.delete,
+                                                                  color: Colors
+                                                                      .white),
+                                                              Text(
+                                                                  "ÇÖP KUTUSUNA TAŞI",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white))
+                                                            ],
+                                                          )),
+                                                  resizeDuration:
+                                                      const Duration(
+                                                          milliseconds: 200),
+                                                  key: UniqueKey(),
+                                                  child: Center(
+                                                    child: Container(
+                                                      color: Theme.of(context)
+                                                          .cardColor,
+                                                      child: ListTile(
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .all(15),
+                                                        leading: const Icon(
+                                                            Icons.numbers),
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) => ChangeNotifierProvider<
+                                                                          PageUpdate>(
+                                                                      create:
+                                                                          (context) {
+                                                                        return PageUpdate();
+                                                                      },
+                                                                      child:
+                                                                          PomodoroView(
+                                                                        task: retrievedTaskList![key]![
+                                                                            index],
+                                                                      )))).then(
+                                                              (_) =>
+                                                                  _refresh());
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.0),
+                                                        ),
+                                                        title: Text(
+                                                            retrievedTaskList![
+                                                                    key]![index]
+                                                                .taskName),
+                                                        subtitle: Text(
+                                                            retrievedTaskList![
+                                                                    key]![index]
+                                                                .taskInfo),
+                                                        trailing: const Icon(Icons
+                                                            .arrow_right_sharp),
+                                                      ),
+                                                    ),
+                                                  )),
+                                            );
                                           },
                                         )
                                       ],
@@ -613,7 +573,89 @@ class Task extends State<TaskView> {
                           ),
                         );
                       }
-                      return const Center(child: CircularProgressIndicator());
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Shimmer.fromColors(
+                                //period: Duration(milliseconds: 1),
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                enabled: true,
+                                child: ListView.separated(
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                    height: 10,
+                                  ),
+                                  itemBuilder: (_, __) => Container(
+                                    // shape: RoundedRectangleBorder(
+                                    //   borderRadius: BorderRadius.circular(16),
+                                    // ),
+                                    alignment: Alignment.center,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(),
+                                    ),
+                                    
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 48.0,
+                                            height: 48.0,
+                                            color: Colors.white,
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                          ),
+                                          Expanded(
+                                            flex: 5,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  //width: double.infinity,
+                                                  height: 10.0,
+                                                  color: Colors.white,
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 2.0),
+                                                ),
+                                                Container(
+                                                  height: 10.0,
+                                                  color: Colors.white,
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 2.0),
+                                                ),
+                                                Container(
+                                                  width: 40.0,
+                                                  height: 10.0,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  itemCount: 7,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -621,45 +663,20 @@ class Task extends State<TaskView> {
             ),
           ],
         ),
-        bottomNavigationBar: Container(
-          height: 60,
-          decoration: const BoxDecoration(
-            color: Colors.blue,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TaskPageIconButton(
-                  taskIcons: Icons.archive,
-                  onPressIconButton: () {
-                    Navigator.pushNamed(context, '/archived',
-                            arguments: taskLists()[3])
-                        .then((_) => _refresh());
-                  }),
-              TaskPageIconButton(
-                taskIcons: Icons.done,
-                onPressIconButton: () {
-                  Navigator.pushNamed(context, '/done',
-                          arguments: taskLists()[0])
-                      .then((_) {
-                    _refresh();
-                  });
-                },
-              ),
-              TaskPageIconButton(
-                  taskIcons: Icons.delete,
-                  onPressIconButton: () {
-                    Navigator.pushNamed(context, '/deleted',
-                            arguments: taskLists()[2])
-                        .then((_) => _refresh());
-                  }),
-            ],
-          ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.archive), label: "Archive"),
+            BottomNavigationBarItem(icon: Icon(Icons.done), label: "Done"),
+            BottomNavigationBarItem(icon: Icon(Icons.delete), label: "Trash")
+          ],
+          onTap: onItemTapped,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FloatingActionButton(
                 heroTag: "btn1",
@@ -668,7 +685,6 @@ class Task extends State<TaskView> {
                 },
                 child: const Icon(Icons.stacked_bar_chart),
               ),
-              const Spacer(),
               FloatingActionButton.extended(
                 heroTag: "btn2",
                 onPressed: () {
@@ -682,7 +698,7 @@ class Task extends State<TaskView> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6
-                      ?.copyWith(color: Colors.white),
+                      ?.copyWith(color: Colors.black),
                 ),
                 icon: const Icon(Icons.add),
               ),
@@ -762,6 +778,29 @@ class Task extends State<TaskView> {
     return count;
   }
 
+  void onItemTapped(int selectedIndex) {
+    switch (selectedIndex) {
+      case 0:
+        Navigator.pushNamed(context, '/archived', arguments: taskLists()[3])
+            .then((_) => _refresh());
+
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
+            .then((_) {
+          _refresh();
+        });
+
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/deleted', arguments: taskLists()[2])
+            .then((_) => _refresh());
+
+        break;
+      default:
+    }
+  }
+
   void _dismiss() {
     taskList = service.retrieveTasks();
   }
@@ -769,115 +808,5 @@ class Task extends State<TaskView> {
   Future<void> _initRetrieval() async {
     taskList = service.retrieveTasks();
     tasks = await service.retrieveTasks();
-  }
-
-  AlertDialog alert(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      title: Text(Task().alertTitle),
-      content: Text(Task().alertSubtitle),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(
-            Task().alertApprove,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-          ),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(
-            Task().alertReject,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                ?.copyWith(color: ProjectThemeOptions().backGroundColor),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TaskPageIconButton extends StatelessWidget {
-  const TaskPageIconButton({
-    Key? key,
-    required this.taskIcons,
-    required this.onPressIconButton,
-  }) : super(key: key);
-
-  final IconData taskIcons;
-  final void Function()? onPressIconButton;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      enableFeedback: false,
-      onPressed: onPressIconButton,
-      icon: Icon(
-        taskIcons,
-        color: Colors.white,
-        size: 35,
-      ),
-    );
-  }
-}
-
-class Settings extends StatelessWidget {
-  const Settings({
-    Key? key,
-    required this.settingIcon,
-    required this.subtitle,
-    required this.title,
-    required this.tap,
-  }) : super(key: key);
-
-  final IconData settingIcon;
-  final String subtitle;
-  final Widget title;
-  final Function() tap;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: tap,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              settingIcon,
-              size: 40,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [title, const Icon(Icons.arrow_right_sharp)],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2.0),
-                      child: Text(
-                        subtitle,
-                        style: const TextStyle(
-                            color: Colors.black45, fontSize: 16.0),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

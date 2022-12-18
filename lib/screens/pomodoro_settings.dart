@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
-import 'package:flutter_application_1/pages/pomodoro.dart';
-import 'package:flutter_application_1/pages/task.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/screens/task.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroSettings extends StatelessWidget {
@@ -68,9 +69,12 @@ class PomodoroSettings extends StatelessWidget {
 
     getSettings() async {
       final prefs = await SharedPreferences.getInstance();
-      if(prefs.getInt('workTimerSelect') == null){
-        
-      }
+      // if (prefs.getInt('workTimerSelect') == null) {
+        // await prefs.setInt('workTimerSelect', 25);
+        // await prefs.setInt('breakTimerSelect', 5);
+        // await prefs.setInt('longBreakTimerSelect', 15);
+        // await prefs.setInt('longBreakNumberSelect', 1);
+      // }
       workTimerController.text = '${prefs.getInt('workTimerSelect')} dakika';
       breakTimerController.text = '${prefs.getInt('breakTimerSelect')} dakika';
       longBreakTimerController.text =
@@ -78,7 +82,7 @@ class PomodoroSettings extends StatelessWidget {
       longBreakNumberController.text =
           '${prefs.getInt('longBreakNumberSelect')}';
 
-      // for(int i = 0; i < list.length; i++){
+      // for (int i = 0; i < list.length; i++) {
       //   await prefs.remove(list[i]);
       // }
     }
@@ -86,9 +90,7 @@ class PomodoroSettings extends StatelessWidget {
     getSettings();
 
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

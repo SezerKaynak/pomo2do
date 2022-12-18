@@ -1,12 +1,14 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
-import 'package:flutter_application_1/pages/task.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/screens/task.dart';
+import 'package:flutter_application_1/widgets/custom_avatar.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,10 +23,12 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? image;
+  File? temp;
   String? downloadUrl;
 
   @override
   void initState() {
+    temp = image;
     WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
     super.initState();
   }
@@ -69,8 +73,7 @@ class _EditProfileState extends State<EditProfile> {
                 color: Colors.white,
               ),
               onPressed: () {
-                !isLoading ?
-                Navigator.pop(context) : DoNothingAction();
+                !isLoading ? Navigator.pop(context) : DoNothingAction();
               },
             ),
           ),
@@ -103,7 +106,8 @@ class _EditProfileState extends State<EditProfile> {
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w400,
                             textPosition: TextAlign.left,
-                            customPadding: const EdgeInsets.fromLTRB(0, 5, 0, 0)),
+                            customPadding:
+                                const EdgeInsets.fromLTRB(0, 5, 0, 0)),
                         const SizedBox(height: 25),
                         Center(
                           child: Stack(children: [
@@ -143,7 +147,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               if (asyncSnapshot.connectionState ==
                                   ConnectionState.active) {
                                 _nameController.text =
@@ -157,7 +161,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               return ScreenTextField(
                                 textLabel: "Loading",
                                 obscure: false,
@@ -185,7 +189,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               if (asyncSnapshot.connectionState ==
                                   ConnectionState.active) {
                                 _surnameController.text =
@@ -199,7 +203,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               return ScreenTextField(
                                 textLabel: "Loading",
                                 obscure: false,
@@ -227,7 +231,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               if (asyncSnapshot.connectionState ==
                                   ConnectionState.active) {
                                 _birthdayController.text =
@@ -240,12 +244,12 @@ class _EditProfileState extends State<EditProfile> {
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(1950),
                                         lastDate: DateTime(2100));
-    
+
                                     if (pickedDate != null) {
                                       String formattedDate =
                                           DateFormat('dd.MM.yyyy')
                                               .format(pickedDate);
-    
+
                                       _birthdayController.text = formattedDate;
                                     } else {}
                                   },
@@ -258,7 +262,7 @@ class _EditProfileState extends State<EditProfile> {
                                   maxLines: 1,
                                 );
                               }
-    
+
                               return ScreenTextField(
                                 textLabel: "Loading",
                                 obscure: false,
@@ -274,7 +278,8 @@ class _EditProfileState extends State<EditProfile> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20))),
+                                        borderRadius:
+                                            BorderRadius.circular(20))),
                                 onPressed: () async {
                                   CollectionReference users = FirebaseFirestore
                                       .instance
@@ -293,8 +298,11 @@ class _EditProfileState extends State<EditProfile> {
                                         .userMail
                                         .toString(),
                                   });
-    
-                                  await uploadImage();
+
+                                  if (temp != image) {
+                                    await uploadImage();
+                                  }
+
                                   setState(() {
                                     isLoading = false;
                                   });
@@ -368,49 +376,5 @@ class _EditProfileState extends State<EditProfile> {
         ],
       ),
     );
-  }
-}
-
-class Avatar extends StatelessWidget {
-  const Avatar({
-    Key? key,
-    required this.downloadUrl,
-    required this.image,
-  }) : super(key: key);
-
-  final String? downloadUrl;
-  final File? image;
-
-  @override
-  Widget build(BuildContext context) {
-    if (downloadUrl == null && image == null) {
-      return const CircleAvatar(
-          radius: 80.0, backgroundImage: AssetImage("assets/person.png"));
-    } else if (downloadUrl != null && image == null) {
-      return CircleAvatar(
-        radius: 80.0,
-        child: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: downloadUrl!,
-          imageBuilder: (context, imageProvider) {
-            return ClipOval(
-                child: SizedBox.fromSize(
-                    size: const Size.fromRadius(80),
-                    child: Image(image: imageProvider, fit: BoxFit.cover)));
-          },
-          placeholder: (context, url) {
-            return ClipOval(
-                child: SizedBox.fromSize(
-              size: const Size.fromRadius(20),
-              child: const CircularProgressIndicator(color: Colors.white),
-            ));
-          },
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        ),
-      );
-    } else if (downloadUrl == null && image != null) {
-      return CircleAvatar(radius: 80.0, backgroundImage: FileImage(image!));
-    }
-    return CircleAvatar(radius: 80.0, backgroundImage: FileImage(image!));
   }
 }

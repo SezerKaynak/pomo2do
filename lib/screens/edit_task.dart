@@ -1,30 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/pomotodo_user.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
-import 'package:flutter_application_1/pages/task.dart';
+import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
+import 'package:flutter_application_1/screens/task.dart';
+import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:provider/provider.dart';
 
 class EditTask extends StatefulWidget {
   const EditTask({
     super.key,
-    required this.taskName,
-    required this.taskType,
-    required this.taskInfo,
-    required this.isDone,
-    required this.isArchive,
-    required this.id,
-
-    //required this.isActive,
   });
-  final String taskName;
-  final String taskType;
-  final String taskInfo;
-  final bool isDone;
-  final bool isArchive;
-  final String id;
-  //final bool isActive;
   @override
   State<EditTask> createState() => _EditTaskState();
 }
@@ -32,8 +18,11 @@ class EditTask extends StatefulWidget {
 class _EditTaskState extends State<EditTask> {
   bool isCheckedDone = false;
   bool isCheckedArchive = false;
+  DatabaseService dbService = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    TaskModel selectedTask =
+        ModalRoute.of(context)!.settings.arguments as TaskModel;
     var title = "Görev Düzenleme Sayfası";
     var subtitle = "Görevin ismi,türü ve açıklamasını düzenleyebilirsiniz👋";
     var taskN = "Görev İsmi";
@@ -45,7 +34,7 @@ class _EditTaskState extends State<EditTask> {
     final TextEditingController _taskInfoController = TextEditingController();
 
     return Scaffold(
-        backgroundColor: Colors.blueGrey[50],
+        //backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(
@@ -80,7 +69,7 @@ class _EditTaskState extends State<EditTask> {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: _taskNameController.text = widget.taskName,
+                    textLabel: _taskNameController.text = selectedTask.taskName,
                     obscure: false,
                     controller: _taskNameController,
                     height: 70,
@@ -92,7 +81,7 @@ class _EditTaskState extends State<EditTask> {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: _taskTypeController.text = widget.taskType,
+                    textLabel: _taskTypeController.text = selectedTask.taskType,
                     obscure: false,
                     controller: _taskTypeController,
                     height: 70,
@@ -104,13 +93,13 @@ class _EditTaskState extends State<EditTask> {
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
                 ScreenTextField(
-                    textLabel: _taskInfoController.text = widget.taskInfo,
+                    textLabel: _taskInfoController.text = selectedTask.taskInfo,
                     obscure: false,
                     controller: _taskInfoController,
                     height: 120,
                     maxLines: 3),
                 FormField(
-                  initialValue: widget.isDone,
+                  initialValue: selectedTask.isDone,
                   builder: (FormFieldState state) {
                     return Column(
                       children: [
@@ -131,7 +120,7 @@ class _EditTaskState extends State<EditTask> {
                   },
                 ),
                 FormField(
-                  initialValue: widget.isArchive,
+                  initialValue: selectedTask.isArchive,
                   builder: (FormFieldState state) {
                     return Column(
                       children: [
@@ -160,20 +149,14 @@ class _EditTaskState extends State<EditTask> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20))),
                         onPressed: () async {
-                          CollectionReference users = FirebaseFirestore.instance
-                              .collection(
-                                  'Users/${context.read<PomotodoUser>().userId}/tasks');
-                          var task = users.doc(widget.id);
-                          task.set({
-                            'taskNameCaseInsensitive':
-                                _taskNameController.text.toLowerCase(),
-                            'taskName': _taskNameController.text,
-                            'taskType': _taskTypeController.text,
-                            'taskInfo': _taskInfoController.text,
-                            "isDone": isCheckedDone,
-                            "isActive": true,
-                            "isArchive": isCheckedArchive
-                          });
+                          selectedTask.taskName = _taskNameController.text;
+                          selectedTask.taskType = _taskTypeController.text;
+                          selectedTask.taskInfo = _taskInfoController.text;
+                          selectedTask.isDone = isCheckedDone;
+                          selectedTask.isArchive = isCheckedArchive;
+                          selectedTask.isActive = true;
+                          await dbService.updateTask(selectedTask);
+
                           isCheckedDone && isCheckedArchive
                               ? SmartDialog.showToast("Görev arşive taşındı!")
                               : isCheckedDone
@@ -183,6 +166,7 @@ class _EditTaskState extends State<EditTask> {
                                       ? SmartDialog.showToast(
                                           "Görev arşive taşındı!")
                                       : DoNothingAction();
+                          // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

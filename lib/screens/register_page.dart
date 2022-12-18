@@ -1,54 +1,56 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/login_page.dart';
+import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
+import 'package:flutter_application_1/widgets/screen_text_field.dart';
+import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  late TextEditingController _passwordController;
+  late TextEditingController _emailController;
+  late TextEditingController _nameController;
+  late TextEditingController _surnameController;
+  late TextEditingController _birthdayController;
+
+  @override
+  void initState() {
+    _passwordController = TextEditingController();
+    _emailController = TextEditingController();
+    _nameController = TextEditingController();
+    _surnameController = TextEditingController();
+    _birthdayController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _emailController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+    _birthdayController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<IAuthService>(context, listen: false);
 
-    var register = "Kayıt Ol";
-    var subtitle = "Aşağıdaki alanları doldurarak kaydolabilirsiniz.🙂";
-    var name = "Ad";
-    var surname = "Soyad";
-    var email = "Email";
-    var password = "Şifre";
-    var yourName = "Adınız";
-    var yourSurname = "Soyadınız";
-    var yourBirthday = "Doğum Tarihiniz";
-    var weakPassword = "Güçsüz Şifre!";
-    var weakPasswordSubtitle = "Girdiğiniz şifre minimum 6 haneden oluşmalı!";
-    var emailAlreadyInUse = "Geçersiz E-Posta!";
-    var emailAlreadyInUseSubtitle =
-        "Girdiğiniz E-posta adresi başka bir hesaba bağlı!";
-    var emailAlert = "E-Posta Alanı Boş Bırakılamaz!";
-    var emailAlertSubtitle = "Lütfen e-postanızı girin.";
-    var passwordAlert = "Şifre Alanı Boş Bırakılamaz!";
-    var passwordAlertSubtitle = "Lütfen şifrenizi girin.";
-    var nameAlert = "İsim Alanı Boş Bırakılamaz!";
-    var nameAlertSubtitle = "Lütfen isminizi girin.";
-    var surnameAlert = "Soy İsim Alanı Boş Bırakılamaz!";
-    var surnameAlertSubtitle = "Lütfen soy isminizi girin.";
-    var birthdayAlert = "Doğum Tarihi Alanı Boş Bırakılamaz!";
-    var birthdayAlertSubtitle = "Lütfen doğum tarihinizi seçin.";
-    var invalidEmail = "Geçersiz E-Mail Adresi!";
-    var invalidEmailSubtitle = "Lütfen geçerli bir E-Mail adresi girin.";
-
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-    final TextEditingController _nameController = TextEditingController();
-    final TextEditingController _surnameController = TextEditingController();
-    final TextEditingController _birthdayController = TextEditingController();
-
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -66,7 +68,7 @@ class RegisterPage extends StatelessWidget {
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left),
               ScreenTexts(
-                  title: subtitle,
+                  title: subtitle2,
                   theme: Theme.of(context).textTheme.subtitle1,
                   fontW: FontWeight.w400,
                   textPosition: TextAlign.left),
@@ -152,45 +154,40 @@ class RegisterPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20))),
                       onPressed: () async {
                         if (_emailController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertTitle: nameAlert,
-                                    alertSubtitle: nameAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: nameAlert,
+                              text: nameAlertSubtitle,
+                              confirmBtnText: confirmButtonText);
                         } else if (_passwordController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertTitle: surnameAlert,
-                                    alertSubtitle: surnameAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: surnameAlert,
+                              text: surnameAlertSubtitle,
+                              confirmBtnText: confirmButtonText);
                         } else if (_nameController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertTitle: emailAlert,
-                                    alertSubtitle: emailAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: emailAlert,
+                              text: emailAlertSubtitle,
+                              confirmBtnText: confirmButtonText);
                         } else if (_surnameController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertTitle: passwordAlert,
-                                    alertSubtitle: passwordAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: passwordAlert,
+                              text: passwordAlertSubtitle,
+                              confirmBtnText: confirmButtonText);
                         } else if (_birthdayController.text == "") {
-                          showDialog(
+                          QuickAlert.show(
                               context: context,
-                              builder: (BuildContext context) {
-                                return AlertWidget(
-                                    alertTitle: birthdayAlert,
-                                    alertSubtitle: birthdayAlertSubtitle);
-                              });
+                              type: QuickAlertType.error,
+                              title: birthdayAlert,
+                              text: birthdayAlertSubtitle,
+                              confirmBtnText: confirmButtonText);
                         } else {
                           try {
                             await _authService.createUserWithEmailAndPassword(
@@ -198,30 +195,26 @@ class RegisterPage extends StatelessWidget {
                                 password: _passwordController.text);
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'weak-password') {
-                              showDialog(
+                              QuickAlert.show(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertWidget(
-                                        alertTitle: weakPassword,
-                                        alertSubtitle: weakPasswordSubtitle);
-                                  });
+                                  type: QuickAlertType.error,
+                                  title: weakPassword,
+                                  text: weakPasswordSubtitle,
+                                  confirmBtnText: confirmButtonText);
                             } else if (e.code == 'email-already-in-use') {
-                              showDialog(
+                              QuickAlert.show(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertWidget(
-                                        alertTitle: emailAlreadyInUse,
-                                        alertSubtitle:
-                                            emailAlreadyInUseSubtitle);
-                                  });
+                                  type: QuickAlertType.error,
+                                  title: emailAlreadyInUse,
+                                  text: emailAlreadyInUseSubtitle,
+                                  confirmBtnText: confirmButtonText);
                             } else if (e.code == 'invalid-email') {
-                              showDialog(
+                              QuickAlert.show(
                                   context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertWidget(
-                                        alertTitle: invalidEmail,
-                                        alertSubtitle: invalidEmailSubtitle);
-                                  });
+                                  type: QuickAlertType.error,
+                                  title: invalidEmail,
+                                  text: invalidEmailSubtitle,
+                                  confirmBtnText: confirmButtonText);
                             }
                           }
                           CollectionReference users =

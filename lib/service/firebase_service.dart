@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/service/mixin_user.dart';
@@ -34,5 +35,13 @@ class AuthService with ConvertUser implements IAuthService{
   @override
   Future<void> resetPassword({required String email}) async {
     await _authInstance.sendPasswordResetEmail(email: email);
-  } 
+  }
+
+  Future<UserCredential> editPassword(TextEditingController oldPasswordController) {
+    AuthCredential authCredential = EmailAuthProvider.credential(
+      email: _authInstance.currentUser!.email!,
+      password: oldPasswordController.text,
+    );
+    return _authInstance.currentUser!.reauthenticateWithCredential(authCredential);
+  }
 }

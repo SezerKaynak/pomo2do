@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_application_1/service/database_service.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ArchivedTasks extends StatefulWidget {
   const ArchivedTasks({super.key});
@@ -15,6 +14,7 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
   List selectedIndexes = [];
   bool buttonVisible = false;
   bool isLoading = false;
+  DatabaseService dbService = DatabaseService();
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
@@ -61,8 +61,8 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                                 Container(
                                   decoration: BoxDecoration(
                                       color: data.isDone == true
-                                          ? Colors.green[100]
-                                          : Colors.blueGrey[50],
+                                          ? Colors.green[500]
+                                          : Theme.of(context).cardColor,
                                       borderRadius:
                                           BorderRadius.circular(16.0)),
                                   child: ListTile(
@@ -127,25 +127,19 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                                 final TaskModel data =
                                     tasks[selectedIndexes[i]];
 
-                                CollectionReference users =
-                                    FirebaseFirestore.instance.collection(
-                                        'Users/${context.read<PomotodoUser>().userId}/tasks');
-                                var task = users.doc(data.id);
-
-                                await task.set({
-                                  "taskName": data.taskName,
-                                  "taskInfo": data.taskInfo,
-                                  "taskType": data.taskType,
-                                  "taskNameCaseInsensitive":
-                                      data.taskName.toLowerCase(),
-                                  "isArchive": false,
-                                  "isActive": true,
-                                  "isDone": data.isDone,
-                                });
+                                data.isArchive = false;
+                                data.isActive = true;
+                                await dbService.updateTask(data);
                               }
                               for (int i = 0; i < selectedIndexes.length; i++) {
+                                tasks[selectedIndexes[i] - i].isDone
+                                    ? SmartDialog.showToast(
+                                        "${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!")
+                                    : SmartDialog.showToast(
+                                        "${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
                                 tasks.removeAt(selectedIndexes[i] - i);
                               }
+
                               selectedIndexes.clear();
                               buttonVisible = false;
                               setState(() {

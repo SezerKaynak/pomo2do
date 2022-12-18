@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
-  final String? id;
-  final String taskInfo;
-  final String taskName;
-  final String taskType;
-  final bool isDone;
-  final bool isActive;
-  final bool isArchive;
-  final String taskPassingTime;
-  final String breakPassingTime;
+  String? id;
+  String taskInfo,
+      taskName,
+      taskType,
+      taskPassingTime,
+      breakPassingTime,
+      longBreakPassingTime;
+  int pomodoroCount;
+  bool isDone, isActive, isArchive;
   TaskModel(
       {this.id,
       this.isArchive = false,
@@ -18,19 +18,24 @@ class TaskModel {
       this.taskInfo = "",
       this.taskName = "",
       this.taskType = "",
-      this.taskPassingTime = "0.00",
-      this.breakPassingTime = "0.00"});
+      this.taskPassingTime = "0",
+      this.breakPassingTime = "0",
+      this.longBreakPassingTime = "0",
+      this.pomodoroCount = 0});
 
   Map<String, dynamic> toMap() {
     return {
       'taskInfo': taskInfo,
+      'taskNameCaseInsensitive': taskName.toLowerCase(),
       'taskName': taskName,
       'taskType': taskType,
       'isDone': isDone,
       'isActive': isActive,
       'isArchive': isArchive,
       'taskPassingTime': taskPassingTime,
-      'breakPassingTime' : breakPassingTime
+      'breakPassingTime': breakPassingTime,
+      'longBreakPassingTime': longBreakPassingTime,
+      'pomodoroCount': pomodoroCount
     };
   }
 
@@ -42,8 +47,10 @@ class TaskModel {
         isArchive = doc.data()!["isArchive"] ?? false,
         isDone = doc.data()!["isDone"],
         isActive = doc.data()?["isActive"] ?? true,
-        taskPassingTime = doc.data()?["taskPassingTime"] ?? "0.00",
-        breakPassingTime = doc.data()?["breakPassingTime"] ?? "0.00";
+        taskPassingTime = doc.data()?["taskPassingTime"] ?? "0",
+        breakPassingTime = doc.data()?["breakPassingTime"] ?? "0",
+        longBreakPassingTime = doc.data()?["longBreakPassingTime"] ?? "0",
+        pomodoroCount = doc.data()?["pomodoroCount"] ?? 0;
 
   List<TaskModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((snapshot) {
@@ -58,7 +65,9 @@ class TaskModel {
           isDone: dataMap['isDone'],
           isActive: dataMap['isActive'],
           taskPassingTime: dataMap['taskPassingTime'],
-          breakPassingTime: dataMap['breakPassingTime']);
+          breakPassingTime: dataMap['breakPassingTime'],
+          longBreakPassingTime: dataMap['longBreakPassingTime'],
+          pomodoroCount: dataMap['pomodoroCount']);
     }).toList();
   }
 }
