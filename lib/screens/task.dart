@@ -166,7 +166,7 @@ class Task extends State<TaskView> {
                         try {
                           return retrievedTaskList!.isEmpty
                               ? const Center(
-                                  child: Text("Aktif görev bulunamadı!"))
+                                  child: Text(noActiveTask))
                               : ListView.separated(
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
@@ -185,9 +185,8 @@ class Task extends State<TaskView> {
                                         ListView.separated(
                                           physics:
                                               const ClampingScrollPhysics(),
-                                          separatorBuilder:
-                                              (context, index) =>
-                                                  const SizedBox(height: 10),
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(height: 10),
                                           shrinkWrap: true,
                                           itemCount:
                                               retrievedTaskList![key]!.length,
@@ -201,8 +200,8 @@ class Task extends State<TaskView> {
                                                     if (direction ==
                                                         DismissDirection
                                                             .endToStart) {
-                                                      retrievedTaskList![
-                                                              key]![index]
+                                                      retrievedTaskList![key]![
+                                                              index]
                                                           .isActive = false;
                                                       dbService.updateTask(
                                                           retrievedTaskList![
@@ -240,9 +239,9 @@ class Task extends State<TaskView> {
                                                         title: alertTitle,
                                                         text: alertSubtitle,
                                                         confirmBtnText:
-                                                            'Onayla',
+                                                            alertApprove,
                                                         cancelBtnText:
-                                                            'İptal Et',
+                                                            alertReject,
                                                         confirmBtnColor:
                                                             Theme.of(context)
                                                                 .errorColor,
@@ -259,8 +258,8 @@ class Task extends State<TaskView> {
                                                     return true;
                                                   },
                                                   background: Container(
-                                                    color: const Color(
-                                                        0xFF21B7CA),
+                                                    color:
+                                                        const Color(0xFF21B7CA),
                                                     padding:
                                                         const EdgeInsets.only(
                                                             left: 28.0),
@@ -276,10 +275,10 @@ class Task extends State<TaskView> {
                                                             color:
                                                                 Colors.white),
                                                         Text(
-                                                          "DÜZENLE",
+                                                          editText,
                                                           style: TextStyle(
-                                                              color: Colors
-                                                                  .white),
+                                                              color:
+                                                                  Colors.white),
                                                         )
                                                       ],
                                                     ),
@@ -290,8 +289,7 @@ class Task extends State<TaskView> {
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
-                                                                  right:
-                                                                      28.0),
+                                                                  right: 28.0),
                                                           alignment:
                                                               AlignmentDirectional
                                                                   .centerEnd,
@@ -300,13 +298,11 @@ class Task extends State<TaskView> {
                                                                 MainAxisAlignment
                                                                     .center,
                                                             children: const [
-                                                              Icon(
-                                                                  Icons
-                                                                      .delete,
+                                                              Icon(Icons.delete,
                                                                   color: Colors
                                                                       .white),
                                                               Text(
-                                                                  "ÇÖP KUTUSUNA TAŞI",
+                                                                  moveIntoTrash,
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white))
@@ -338,8 +334,8 @@ class Task extends State<TaskView> {
                                                                       },
                                                                       child:
                                                                           PomodoroView(
-                                                                        task:
-                                                                            retrievedTaskList![key]![index],
+                                                                        task: retrievedTaskList![key]![
+                                                                            index],
                                                                       )))).then(
                                                               (_) =>
                                                                   _refresh());
@@ -353,13 +349,11 @@ class Task extends State<TaskView> {
                                                         ),
                                                         title: Text(
                                                             retrievedTaskList![
-                                                                        key]![
-                                                                    index]
+                                                                    key]![index]
                                                                 .taskName),
                                                         subtitle: Text(
                                                             retrievedTaskList![
-                                                                        key]![
-                                                                    index]
+                                                                    key]![index]
                                                                 .taskInfo),
                                                         trailing: const Icon(Icons
                                                             .arrow_right_sharp),
@@ -383,7 +377,7 @@ class Task extends State<TaskView> {
                             children: const [
                               Align(
                                   alignment: AlignmentDirectional.center,
-                                  child: Text('Görev bulunamadı!')),
+                                  child: Text(noTask)),
                             ],
                           ),
                         );

@@ -1,5 +1,6 @@
 import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
@@ -27,7 +28,7 @@ class SearchView extends StatelessWidget {
           final List<TaskModel>? dataList = snapshot.data;
           if (dataList!.isEmpty) {
             return const Center(
-              child: Text('Sonuç Bulunamadı!'),
+              child: Text(noResult),
             );
           }
           return ListView.builder(
@@ -80,7 +81,7 @@ class SearchView extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return const Center(
-              child: Text('Sonuç Bulunamadı!'),
+              child: Text(noResult),
             );
           }
         }

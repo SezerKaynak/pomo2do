@@ -5,6 +5,7 @@ import 'package:flutter_application_1/service/firebase_service.dart';
 import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({super.key});
@@ -15,27 +16,9 @@ class EditPassword extends StatefulWidget {
 
 class _EditPasswordState extends State<EditPassword> {
   final _formKey = GlobalKey<FormState>();
-  var newPassword = " ";
-  var register = "Şifreyi Değiştir";
-  var subtitle =
-      "Aşağıdaki alanları doldurarak şifrenizi yenileyebilirsiniz 🙂";
-  var oldPassword = "Eski Şifre";
-  var oldPasswordHint = "Eski Şifrenizi Girin";
-  var password = "Yeni Şifre";
-  var passwordHint = "Yeni Şifrenizi Girin";
-  var oldPasswordAlert = "Eski Şifre Alanı Boş Bırakılamaz!";
-  var oldPasswordAlertSubtitle = "Lütfen eski şifrenizi girin.";
-  var passwordAlert = "Yeni Şifre Alanı Boş Bırakılamaz!";
-  var passwordAlertSubtitle = "Lütfen yeni şifrenizi girin.";
-  var passwordConfirmed = 'Şifreniz Başarıyla Değiştirildi.';
-  var passwordConfirmedSubtitle =
-      'Lütfen yeni şifrenizi kullanarak tekrar giriş yapınız.';
-  var weakPassword = "Güçsüz Şifre!";
-  var weakPasswordSubtitle = "Girdiğiniz şifre minimum 6 haneden oluşmalı!";
-  var wrongPassword = "Yanlış Şifre";
-  var wrongPasswordSubtitle = "Eski şifrenizi yanlış girdiniz!";
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _oldpasswordController = TextEditingController();
+  String newPassword = " ";
   bool isLoading = false;
   @override
   void dispose() {
@@ -75,12 +58,12 @@ class _EditPasswordState extends State<EditPassword> {
             child: Column(
               children: [
                 ScreenTexts(
-                    title: register,
+                    title: changePassword,
                     theme: Theme.of(context).textTheme.headline4,
                     fontW: FontWeight.w600,
                     textPosition: TextAlign.left),
                 ScreenTexts(
-                    title: subtitle,
+                    title: subtitle3,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
@@ -102,7 +85,7 @@ class _EditPasswordState extends State<EditPassword> {
                     height: 70,
                     maxLines: 1),
                 ScreenTexts(
-                    title: password,
+                    title: newPasswordText,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -138,8 +121,8 @@ class _EditPasswordState extends State<EditPassword> {
                             QuickAlert.show(
                                 context: context,
                                 type: QuickAlertType.error,
-                                title: passwordAlert,
-                                text: passwordAlertSubtitle,
+                                title: newPasswordAlert,
+                                text: newPasswordAlertSubtitle,
                                 confirmBtnText: "Kapat");
                           } else {
                             try {
@@ -162,7 +145,7 @@ class _EditPasswordState extends State<EditPassword> {
                                   context: context,
                                   type: QuickAlertType.success,
                                   title: passwordConfirmed,
-                                  text: passwordAlertSubtitle,
+                                  text: newPasswordAlertSubtitle,
                                   confirmBtnText: "Onayla",
                                   onConfirmBtnTap: () {
                                     _authService.signOut();

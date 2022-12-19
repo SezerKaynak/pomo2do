@@ -6,6 +6,7 @@ import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 
 class EditTask extends StatefulWidget {
   const EditTask({
@@ -19,22 +20,32 @@ class _EditTaskState extends State<EditTask> {
   bool isCheckedDone = false;
   bool isCheckedArchive = false;
   DatabaseService dbService = DatabaseService();
+  late TextEditingController _taskNameController;
+  late TextEditingController _taskTypeController;
+  late TextEditingController _taskInfoController;
+
+  @override
+  void initState() {
+    _taskNameController = TextEditingController();
+    _taskTypeController = TextEditingController();
+    _taskInfoController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _taskNameController.dispose();
+    _taskTypeController.dispose();
+    _taskInfoController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     TaskModel selectedTask =
         ModalRoute.of(context)!.settings.arguments as TaskModel;
-    var title = "Görev Düzenleme Sayfası";
-    var subtitle = "Görevin ismi,türü ve açıklamasını düzenleyebilirsiniz👋";
-    var taskN = "Görev İsmi";
-    var taskT = "Görev Türü";
-    var taskI = "Görev Açıklaması";
-
-    final TextEditingController _taskNameController = TextEditingController();
-    final TextEditingController _taskTypeController = TextEditingController();
-    final TextEditingController _taskInfoController = TextEditingController();
 
     return Scaffold(
-        //backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(
@@ -53,18 +64,18 @@ class _EditTaskState extends State<EditTask> {
             child: Column(
               children: [
                 ScreenTexts(
-                  title: title,
+                  title: taskPageTitle,
                   theme: Theme.of(context).textTheme.headline4,
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left,
                 ),
                 ScreenTexts(
-                    title: subtitle,
+                    title: taskPageSubtitle,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 ScreenTexts(
-                    title: taskN,
+                    title: taskPageTaskName,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -76,7 +87,7 @@ class _EditTaskState extends State<EditTask> {
                     maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
-                    title: taskT,
+                    title: taskPageTaskType,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -88,7 +99,7 @@ class _EditTaskState extends State<EditTask> {
                     maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
-                    title: taskI,
+                    title: taskPageTaskInfo,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -104,7 +115,7 @@ class _EditTaskState extends State<EditTask> {
                     return Column(
                       children: [
                         CheckboxListTile(
-                          title: const Text('Görev tamamlandı mı?'),
+                          title: const Text(isTaskDone),
                           activeColor: Colors.blue,
                           value: state.value,
                           onChanged: (value) {
@@ -125,7 +136,7 @@ class _EditTaskState extends State<EditTask> {
                     return Column(
                       children: [
                         CheckboxListTile(
-                          title: const Text('Görev arşivlensin mi?'),
+                          title: const Text(isTaskArchive),
                           activeColor: Colors.blue,
                           value: state.value,
                           onChanged: (value) {
@@ -158,13 +169,13 @@ class _EditTaskState extends State<EditTask> {
                           await dbService.updateTask(selectedTask);
 
                           isCheckedDone && isCheckedArchive
-                              ? SmartDialog.showToast("Görev arşive taşındı!")
+                              ? SmartDialog.showToast(taskMovedIntoArchive)
                               : isCheckedDone
                                   ? SmartDialog.showToast(
-                                      "Görev tamamlanmış görevler sayfasına taşındı!")
+                                      taskMovedIntoCompleted)
                                   : isCheckedArchive
                                       ? SmartDialog.showToast(
-                                          "Görev arşive taşındı!")
+                                          taskMovedIntoArchive)
                                       : DoNothingAction();
                           // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
@@ -173,7 +184,7 @@ class _EditTaskState extends State<EditTask> {
                                   builder: (context) => TaskView()),
                               ModalRoute.withName("/Task"));
                         },
-                        child: const Text("Güncelle"))),
+                        child: const Text(updateButtonText))),
               ],
             ),
           ),

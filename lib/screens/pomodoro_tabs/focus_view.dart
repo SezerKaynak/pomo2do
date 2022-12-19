@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
-import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/widgets/task_info_list_tile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
