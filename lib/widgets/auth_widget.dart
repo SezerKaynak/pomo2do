@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
+import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/widgets/error_page.dart';
@@ -23,7 +24,9 @@ class AuthWidget extends StatelessWidget {
         setPomodoroSettings();
       }
 
-      return snapShot.hasData ? TaskView() : const LoginPage();
+      return snapShot.hasData ? ChangeNotifierProvider(
+        create: (context) => TasksProvider(), 
+        child: TaskView()) : const LoginPage();
     }
     return const ErrorPage();
   }
