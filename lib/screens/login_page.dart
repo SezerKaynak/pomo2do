@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
     final _authService = Provider.of<IAuthService>(context, listen: false);
 
     return Scaffold(
-        backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(),
         body: SingleChildScrollView(
           child: Padding(

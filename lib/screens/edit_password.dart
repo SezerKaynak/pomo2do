@@ -49,7 +49,6 @@ class _EditPasswordState extends State<EditPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {

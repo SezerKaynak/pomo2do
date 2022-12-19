@@ -18,7 +18,7 @@ class Settings extends StatelessWidget {
     return InkWell(
       onTap: tap,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
