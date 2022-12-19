@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/providers/list_update_provider.dart';
-import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeletedTasks extends StatelessWidget {
@@ -12,7 +11,6 @@ class DeletedTasks extends StatelessWidget {
     List selectedIndexes = [];
     List<TaskModel> tasks =
         ModalRoute.of(context)!.settings.arguments as List<TaskModel>;
-    
     return Scaffold(
       appBar: AppBar(
         title: const Text("Çöp Kutusu"),
@@ -101,76 +99,78 @@ class DeletedTasks extends StatelessWidget {
                         const Center(
                             child: Text("Çöp kutusunda görev bulunamadı!")),
                       if (selectedIndexes.isNotEmpty)
-                        Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              height: kToolbarHeight,
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 1),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Material(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              bottomLeft:
-                                                  Radius.circular(15))),
-                                      color: Colors.green[500],
-                                      child: InkWell(
-                                        onTap: () {
-                                          var elevatedButtonWorks =
-                                              context.read<ListUpdate>();
-                                          elevatedButtonWorks
-                                              .taskActivationButton(
-                                                  selectedIndexes, tasks);
-                                        },
-                                        child: const SizedBox(
-                                          child: Center(
-                                            child: Text(
-                                              "Aktif Et",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold),
+                        Expanded(
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                height: kToolbarHeight,
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Material(
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                bottomLeft:
+                                                    Radius.circular(15))),
+                                        color: Colors.green[500],
+                                        child: InkWell(
+                                          onTap: () {
+                                            var elevatedButtonWorks =
+                                                context.read<ListUpdate>();
+                                            elevatedButtonWorks
+                                                .taskActivationButton(
+                                                    selectedIndexes, tasks);
+                                          },
+                                          child: const SizedBox(
+                                            child: Center(
+                                              child: Text(
+                                                "Aktif Et",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Material(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              bottomRight:
-                                                  Radius.circular(15))),
-                                      color: Colors.red[400],
-                                      child: InkWell(
-                                          onTap: () {
-                                            var elevatedButtonWorks =
-                                                context.read<ListUpdate>();
-                                            elevatedButtonWorks
-                                                .deleteTasksButton(
-                                                    selectedIndexes, tasks);
-                                          },
-                                          child: const SizedBox(
-                                            child: Center(
-                                                child: Text(
-                                              "Sil",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold),
+                                    Expanded(
+                                      child: Material(
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15))),
+                                        color: Colors.red[400],
+                                        child: InkWell(
+                                            onTap: () {
+                                              var elevatedButtonWorks =
+                                                  context.read<ListUpdate>();
+                                              elevatedButtonWorks
+                                                  .deleteTasksButton(
+                                                      selectedIndexes, tasks);
+                                            },
+                                            child: const SizedBox(
+                                              child: Center(
+                                                  child: Text(
+                                                "Sil",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
                                             )),
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ))
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )),
+                        )
                     ],
                   ),
                 ),

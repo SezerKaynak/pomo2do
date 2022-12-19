@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
-import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/service/database_service.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_application_1/assets/constants.dart';
-import 'package:provider/provider.dart';
 
 class EditTask extends StatefulWidget {
   const EditTask({
@@ -183,9 +181,7 @@ class _EditTaskState extends State<EditTask> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ChangeNotifierProvider(
-                                      create: (context) => TasksProvider(),
-                                      child: TaskView())),
+                                  builder: (context) => TaskView()),
                               ModalRoute.withName("/Task"));
                         },
                         child: const Text(updateButtonText))),
