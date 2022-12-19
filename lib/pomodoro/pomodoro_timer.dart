@@ -265,20 +265,22 @@ class PomodoroTimerState extends State<PomodoroTimer>
                   child: Stack(
                     children: <Widget>[
                       Positioned.fill(
-                        child: CustomPaint(
-                          painter: CustomTimerPainter(
-                              neumorphicEffect: widget.neumorphicEffect,
-                              backgroundColor: widget.backgroudColor,
-                              animation: _countDownAnimation ?? _controller,
-                              innerFillColor: widget.innerFillColor,
-                              innerFillGradient: widget.innerFillGradient,
-                              neonColor: widget.neonColor,
-                              neonGradient: widget.neonGradient,
-                              strokeWidth: widget.strokeWidth,
-                              strokeCap: widget.strokeCap,
-                              outerStrokeColor: widget.outerStrokeColor,
-                              outerStrokeGradient: widget.outerStrokeGradient,
-                              neon: widget.neon),
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            painter: CustomTimerPainter(
+                                neumorphicEffect: widget.neumorphicEffect,
+                                backgroundColor: widget.backgroudColor,
+                                animation: _countDownAnimation ?? _controller,
+                                innerFillColor: widget.innerFillColor,
+                                innerFillGradient: widget.innerFillGradient,
+                                neonColor: widget.neonColor,
+                                neonGradient: widget.neonGradient,
+                                strokeWidth: widget.strokeWidth,
+                                strokeCap: widget.strokeCap,
+                                outerStrokeColor: widget.outerStrokeColor,
+                                outerStrokeGradient: widget.outerStrokeGradient,
+                                neon: widget.neon),
+                          ),
                         ),
                       ),
                       widget.isTimerTextShown

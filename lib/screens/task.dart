@@ -7,10 +7,10 @@ import 'package:flutter_application_1/project_theme_options.dart';
 import 'package:flutter_application_1/widgets/custom_drawer.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
+import 'package:flutter_application_1/widgets/task_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:flutter_application_1/assets/constants.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
@@ -85,7 +85,9 @@ class Task extends State<TaskView> {
                                         ));
                                       } catch (e) {
                                         return const Center(
-                                            child: CircularProgressIndicator());
+                                            child: RepaintBoundary(
+                                                child:
+                                                    CircularProgressIndicator()));
                                       }
                                     } else if (snapshot.connectionState ==
                                             ConnectionState.done &&
@@ -95,7 +97,9 @@ class Task extends State<TaskView> {
                                               style: TextStyle(fontSize: 20)));
                                     }
                                     return const Center(
-                                        child: CircularProgressIndicator());
+                                        child: RepaintBoundary(
+                                            child:
+                                                CircularProgressIndicator()));
                                   }))),
                       Expanded(
                           child: Container(
@@ -117,7 +121,9 @@ class Task extends State<TaskView> {
                                         ));
                                       } catch (e) {
                                         return const Center(
-                                            child: CircularProgressIndicator());
+                                            child: RepaintBoundary(
+                                                child:
+                                                    CircularProgressIndicator()));
                                       }
                                     } else if (snapshot.connectionState ==
                                             ConnectionState.done &&
@@ -127,7 +133,9 @@ class Task extends State<TaskView> {
                                               style: TextStyle(fontSize: 20)));
                                     }
                                     return const Center(
-                                        child: CircularProgressIndicator());
+                                        child: RepaintBoundary(
+                                            child:
+                                                CircularProgressIndicator()));
                                   }))),
                       Expanded(
                           child: Container(
@@ -177,8 +185,9 @@ class Task extends State<TaskView> {
                                         ListView.separated(
                                           physics:
                                               const ClampingScrollPhysics(),
-                                          separatorBuilder: (context, index) =>
-                                              const SizedBox(height: 10),
+                                          separatorBuilder:
+                                              (context, index) =>
+                                                  const SizedBox(height: 10),
                                           shrinkWrap: true,
                                           itemCount:
                                               retrievedTaskList![key]!.length,
@@ -192,8 +201,8 @@ class Task extends State<TaskView> {
                                                     if (direction ==
                                                         DismissDirection
                                                             .endToStart) {
-                                                      retrievedTaskList![key]![
-                                                              index]
+                                                      retrievedTaskList![
+                                                              key]![index]
                                                           .isActive = false;
                                                       dbService.updateTask(
                                                           retrievedTaskList![
@@ -250,8 +259,8 @@ class Task extends State<TaskView> {
                                                     return true;
                                                   },
                                                   background: Container(
-                                                    color:
-                                                        const Color(0xFF21B7CA),
+                                                    color: const Color(
+                                                        0xFF21B7CA),
                                                     padding:
                                                         const EdgeInsets.only(
                                                             left: 28.0),
@@ -269,8 +278,8 @@ class Task extends State<TaskView> {
                                                         Text(
                                                           "DÜZENLE",
                                                           style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
+                                                              color: Colors
+                                                                  .white),
                                                         )
                                                       ],
                                                     ),
@@ -281,7 +290,8 @@ class Task extends State<TaskView> {
                                                           padding:
                                                               const EdgeInsets
                                                                       .only(
-                                                                  right: 28.0),
+                                                                  right:
+                                                                      28.0),
                                                           alignment:
                                                               AlignmentDirectional
                                                                   .centerEnd,
@@ -290,7 +300,9 @@ class Task extends State<TaskView> {
                                                                 MainAxisAlignment
                                                                     .center,
                                                             children: const [
-                                                              Icon(Icons.delete,
+                                                              Icon(
+                                                                  Icons
+                                                                      .delete,
                                                                   color: Colors
                                                                       .white),
                                                               Text(
@@ -326,8 +338,8 @@ class Task extends State<TaskView> {
                                                                       },
                                                                       child:
                                                                           PomodoroView(
-                                                                        task: retrievedTaskList![key]![
-                                                                            index],
+                                                                        task:
+                                                                            retrievedTaskList![key]![index],
                                                                       )))).then(
                                                               (_) =>
                                                                   _refresh());
@@ -341,11 +353,13 @@ class Task extends State<TaskView> {
                                                         ),
                                                         title: Text(
                                                             retrievedTaskList![
-                                                                    key]![index]
+                                                                        key]![
+                                                                    index]
                                                                 .taskName),
                                                         subtitle: Text(
                                                             retrievedTaskList![
-                                                                    key]![index]
+                                                                        key]![
+                                                                    index]
                                                                 .taskInfo),
                                                         trailing: const Icon(Icons
                                                             .arrow_right_sharp),
@@ -374,91 +388,7 @@ class Task extends State<TaskView> {
                           ),
                         );
                       }
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Shimmer.fromColors(
-                                //period: Duration(milliseconds: 1),
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                enabled: true,
-                                child: ListView.separated(
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(
-                                    height: 10,
-                                  ),
-                                  itemBuilder: (_, __) => Container(
-                                    // shape: RoundedRectangleBorder(
-                                    //   borderRadius: BorderRadius.circular(16),
-                                    // ),
-                                    alignment: Alignment.center,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(),
-                                    ),
-
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            width: 48.0,
-                                            height: 48.0,
-                                            color: Colors.white,
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                          ),
-                                          Expanded(
-                                            flex: 5,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  //width: double.infinity,
-                                                  height: 10.0,
-                                                  color: Colors.white,
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0),
-                                                ),
-                                                Container(
-                                                  height: 10.0,
-                                                  color: Colors.white,
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0),
-                                                ),
-                                                Container(
-                                                  width: 40.0,
-                                                  height: 10.0,
-                                                  color: Colors.white,
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  itemCount: 7,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      return const TaskShimmer();
                     },
                   ),
                 ),
