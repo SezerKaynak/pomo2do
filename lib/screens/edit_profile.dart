@@ -65,7 +65,6 @@ class _EditProfileState extends State<EditProfile> {
     return WillPopScope(
       onWillPop: () async => isLoading ? false : true,
       child: Scaffold(
-          backgroundColor: Colors.blueGrey[50],
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(

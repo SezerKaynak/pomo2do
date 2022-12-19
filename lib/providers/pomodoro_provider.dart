@@ -59,7 +59,7 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
         await updateTask(task);
         if (passingTime == time && task.pomodoroCount < longBreakNumberSelect) {
           tabController.animateTo(1);
-        } else {
+        } else if (passingTime == time) {
           tabController.animateTo(2);
         }
         break;

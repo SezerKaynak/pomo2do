@@ -49,7 +49,6 @@ class _RegisterPageState extends State<RegisterPage> {
     final _authService = Provider.of<IAuthService>(context, listen: false);
 
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
 import 'package:flutter_application_1/pomodoro/pomodoro_timer.dart';
-import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/widgets/task_info_list_tile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -38,55 +36,57 @@ class FocusView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                PomodoroTimer(
-                  backgroudColor: Theme.of(context).focusColor,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  isReverse: true,
-                  isReverseAnimation: true,
-                  onComplete: () async {
-                    context.read<PageUpdate>().startOrStop(
-                        context
-                                .read<SharedPreferences>()
-                                .getInt("workTimerSelect")! *
-                            60,
-                        controller,
-                        widget.task,
-                        tabController,
-                        context
-                            .read<SharedPreferences>()
-                            .getInt("longBreakNumberSelect")!);
-                    context.read<PageUpdate>().floatingActionOnPressed(
-                        widget.task, pomodoroCount + 1);
-                    await FlutterLocalNotificationsPlugin().zonedSchedule(
-                        0,
-                        'scheduled title',
-                        'scheduled body',
-                        tz.TZDateTime.now(tz.local)
-                            .add(const Duration(seconds: 1)),
-                        const NotificationDetails(
-                            android: AndroidNotificationDetails(
-                                'your channel id', 'your channel name',
-                                channelDescription: 'your channel description',
-                                importance: Importance.max)),
-                        androidAllowWhileIdle: true,
-                        uiLocalNotificationDateInterpretation:
-                            UILocalNotificationDateInterpretation.absoluteTime);
-                  },
-                  duration: context.select((SharedPreferences prefs) =>
-                          prefs.getInt("workTimerSelect"))! *
-                      60,
-                  autoStart: false,
-                  controller: controller,
-                  isTimerTextShown: true,
-                  neumorphicEffect: true,
-                  innerFillGradient: LinearGradient(colors: [
-                    Colors.greenAccent.shade200,
-                    Colors.blueAccent.shade400
-                  ]),
-                  neonGradient: LinearGradient(colors: [
-                    Colors.greenAccent.shade200,
-                    Colors.blueAccent.shade400
-                  ]),
+                RepaintBoundary(
+                  child: PomodoroTimer(
+                    backgroudColor: Theme.of(context).focusColor,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    isReverse: true,
+                    isReverseAnimation: true,
+                    onComplete: () async {
+                      context.read<PageUpdate>().startOrStop(
+                          context
+                                  .read<SharedPreferences>()
+                                  .getInt("workTimerSelect")! *
+                              60,
+                          controller,
+                          widget.task,
+                          tabController,
+                          context
+                              .read<SharedPreferences>()
+                              .getInt("longBreakNumberSelect")!);
+                      context.read<PageUpdate>().floatingActionOnPressed(
+                          widget.task, pomodoroCount + 1);
+                      await FlutterLocalNotificationsPlugin().zonedSchedule(
+                          0,
+                          'scheduled title',
+                          'scheduled body',
+                          tz.TZDateTime.now(tz.local)
+                              .add(const Duration(seconds: 1)),
+                          const NotificationDetails(
+                              android: AndroidNotificationDetails(
+                                  'your channel id', 'your channel name',
+                                  channelDescription: 'your channel description',
+                                  importance: Importance.max)),
+                          androidAllowWhileIdle: true,
+                          uiLocalNotificationDateInterpretation:
+                              UILocalNotificationDateInterpretation.absoluteTime);
+                    },
+                    duration: context.select((SharedPreferences prefs) =>
+                            prefs.getInt("workTimerSelect"))! *
+                        60,
+                    autoStart: false,
+                    controller: controller,
+                    isTimerTextShown: true,
+                    neumorphicEffect: true,
+                    innerFillGradient: LinearGradient(colors: [
+                      Colors.greenAccent.shade200,
+                      Colors.blueAccent.shade400
+                    ]),
+                    neonGradient: LinearGradient(colors: [
+                      Colors.greenAccent.shade200,
+                      Colors.blueAccent.shade400
+                    ]),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

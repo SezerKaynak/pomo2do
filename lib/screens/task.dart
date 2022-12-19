@@ -1,25 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/screens/add_task.dart';
-import 'package:flutter_application_1/screens/edit_password.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
-import 'package:flutter_application_1/screens/pomodoro_settings.dart';
 import 'package:flutter_application_1/screens/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
-import 'package:flutter_application_1/providers/dark_theme_provider.dart';
-import 'package:flutter_application_1/widgets/custom_switch.dart';
-import 'package:flutter_application_1/widgets/settings.dart' as settings;
+import 'package:flutter_application_1/widgets/custom_drawer.dart';
 import 'package:flutter_application_1/service/database_service.dart';
-import 'package:flutter_application_1/service/i_auth_service.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
+import 'package:flutter_application_1/widgets/task_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 
 class TaskView extends StatefulWidget with ProjectThemeOptions {
   TaskView({Key? key}) : super(key: key);
@@ -35,41 +27,15 @@ class Task extends State<TaskView> {
   List<TaskModel>? tasks;
   final TextEditingController textController = TextEditingController();
   List<TaskModel> deletedTasks = [];
-  String? downloadUrl;
   DatabaseService dbService = DatabaseService();
   @override
   void initState() {
     super.initState();
     _initRetrieval();
-    WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
   }
-
-  baglantiAl() async {
-    String yol = await FirebaseStorage.instance
-        .ref()
-        .child("profilresimleri")
-        .child(context.read<PomotodoUser>().userId)
-        .child("profilResmi.png")
-        .getDownloadURL();
-
-    setState(() {
-      downloadUrl = yol;
-    });
-  }
-
-  String alertTitle = "Görev Çöp Kutusuna Taşınacak!";
-  String alertSubtitle = "Görev çöp kutusuna taşınsın mı?";
-  String alertApprove = "Onayla";
-  String alertReject = "İptal Et";
-  String alertTitleLogOut = "Çıkış Yapılacak!";
-  String alertSubtitleLogOut = "Çıkış yapmak istediğinizden emin misiniz?";
 
   @override
   Widget build(BuildContext context) {
-    final themeChange = Provider.of<DarkThemeProvider>(context);
-    CollectionReference users = FirebaseFirestore.instance.collection("Users");
-    var user = users.doc(context.read<PomotodoUser>().userId);
-    var _authService = Provider.of<IAuthService>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
             title: const Text("PomoTodo",
@@ -89,172 +55,7 @@ class Task extends State<TaskView> {
                   },
                   icon: const Icon(Icons.search))
             ]),
-        drawer: Drawer(
-          width: MediaQuery.of(context).size.width * 0.745,
-          child: Column(
-            children: [
-              DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 0,
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: CircleAvatar(
-                                  radius: 50.0,
-                                  child: downloadUrl != null
-                                      ? CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl: downloadUrl!,
-                                          imageBuilder:
-                                              (context, imageProvider) {
-                                            return ClipOval(
-                                                child: SizedBox.fromSize(
-                                                    size: const Size.fromRadius(
-                                                        50),
-                                                    child: Image(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover)));
-                                          },
-                                          placeholder: (context, url) {
-                                            return ClipOval(
-                                                child: SizedBox.fromSize(
-                                              size: const Size.fromRadius(20),
-                                              child:
-                                                  const CircularProgressIndicator(
-                                                      color: Colors.white),
-                                            ));
-                                          },
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        )
-                                      : ClipOval(
-                                          child: SizedBox.fromSize(
-                                            size: const Size.fromRadius(70),
-                                            child: Image.asset(
-                                              'assets/person.png',
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: StreamBuilder(
-                                      stream: user.snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot asyncSnapshot) {
-                                        if (asyncSnapshot.hasError) {
-                                          return const Text(
-                                              "Bir şeyler yanlış gitti");
-                                        } else if (asyncSnapshot.hasData &&
-                                            !asyncSnapshot.data!.exists) {
-                                          return const Text(
-                                            "Hesap ayarları sayfasından profil resmi seçebilirsiniz",
-                                            overflow: TextOverflow.clip,
-                                            maxLines: 3,
-                                          );
-                                        } else if (asyncSnapshot
-                                                .connectionState ==
-                                            ConnectionState.active) {
-                                          return Text(
-                                            "${asyncSnapshot.data.data()["name"]}"
-                                            " ${asyncSnapshot.data.data()["surname"]}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline4
-                                                ?.copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 26,
-                                                    color: Colors.black),
-                                          );
-                                        }
-                                        return const Text("Loading");
-                                      }),
-                                ),
-                              ),
-                            ]),
-                      ),
-                    ],
-                  )),
-              settings.Settings(
-                settingIcon: Icons.account_circle,
-                title: settingTitle(context, "Hesap Ayarları"),
-                subtitle: "Profilinizi düzenleyebilirsiniz.",
-                tap: () {
-                  Navigator.pushNamed(context, '/editProfile');
-                },
-              ),
-              const Divider(thickness: 1),
-              settings.Settings(
-                settingIcon: Icons.password,
-                subtitle: "Şifrenizi değiştirebilirsiniz.",
-                title: settingTitle(context, 'Şifreyi Değiştir'),
-                tap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EditPassword()));
-                },
-              ),
-              const Divider(thickness: 1),
-              settings.Settings(
-                  settingIcon: Icons.notifications,
-                  subtitle: "Bildirim ayarlarını yapabilirsiniz.",
-                  title: settingTitle(context, 'Bildirim Ayarları'),
-                  tap: () {}),
-              const Divider(thickness: 1),
-              settings.Settings(
-                  settingIcon: Icons.watch,
-                  subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
-                  title: settingTitle(context, 'Pomodoro Ayarları'),
-                  tap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const PomodoroSettings()));
-                  }),
-              const Divider(thickness: 1),
-              settings.Settings(
-                  settingIcon: Icons.logout,
-                  subtitle: "Hesaptan çıkış yapın.",
-                  title: settingTitle(context, 'Çıkış Yap'),
-                  tap: () {
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.confirm,
-                      title: alertTitleLogOut,
-                      text: alertSubtitleLogOut,
-                      confirmBtnText: alertApprove,
-                      cancelBtnText: alertReject,
-                      confirmBtnColor: Theme.of(context).errorColor,
-                      onConfirmBtnTap: () async => await _authService.signOut(),
-                      onCancelBtnTap: () => Navigator.of(context).pop(false),
-                    );
-                  }),
-              const Divider(thickness: 1),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CustomSwitch(
-                    switchValue: themeChange.darkTheme,
-                    switchOnChanged: (bool? value) {
-                      themeChange.darkTheme = value!;
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
+        drawer: const CustomDrawer(),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -284,7 +85,9 @@ class Task extends State<TaskView> {
                                         ));
                                       } catch (e) {
                                         return const Center(
-                                            child: CircularProgressIndicator());
+                                            child: RepaintBoundary(
+                                                child:
+                                                    CircularProgressIndicator()));
                                       }
                                     } else if (snapshot.connectionState ==
                                             ConnectionState.done &&
@@ -294,7 +97,9 @@ class Task extends State<TaskView> {
                                               style: TextStyle(fontSize: 20)));
                                     }
                                     return const Center(
-                                        child: CircularProgressIndicator());
+                                        child: RepaintBoundary(
+                                            child:
+                                                CircularProgressIndicator()));
                                   }))),
                       Expanded(
                           child: Container(
@@ -316,7 +121,9 @@ class Task extends State<TaskView> {
                                         ));
                                       } catch (e) {
                                         return const Center(
-                                            child: CircularProgressIndicator());
+                                            child: RepaintBoundary(
+                                                child:
+                                                    CircularProgressIndicator()));
                                       }
                                     } else if (snapshot.connectionState ==
                                             ConnectionState.done &&
@@ -326,7 +133,9 @@ class Task extends State<TaskView> {
                                               style: TextStyle(fontSize: 20)));
                                     }
                                     return const Center(
-                                        child: CircularProgressIndicator());
+                                        child: RepaintBoundary(
+                                            child:
+                                                CircularProgressIndicator()));
                                   }))),
                       Expanded(
                           child: Container(
@@ -357,7 +166,7 @@ class Task extends State<TaskView> {
                         try {
                           return retrievedTaskList!.isEmpty
                               ? const Center(
-                                  child: Text("Aktif görev bulunamadı!"))
+                                  child: Text(noActiveTask))
                               : ListView.separated(
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
@@ -430,9 +239,9 @@ class Task extends State<TaskView> {
                                                         title: alertTitle,
                                                         text: alertSubtitle,
                                                         confirmBtnText:
-                                                            'Onayla',
+                                                            alertApprove,
                                                         cancelBtnText:
-                                                            'İptal Et',
+                                                            alertReject,
                                                         confirmBtnColor:
                                                             Theme.of(context)
                                                                 .errorColor,
@@ -466,7 +275,7 @@ class Task extends State<TaskView> {
                                                             color:
                                                                 Colors.white),
                                                         Text(
-                                                          "DÜZENLE",
+                                                          editText,
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white),
@@ -493,7 +302,7 @@ class Task extends State<TaskView> {
                                                                   color: Colors
                                                                       .white),
                                                               Text(
-                                                                  "ÇÖP KUTUSUNA TAŞI",
+                                                                  moveIntoTrash,
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white))
@@ -568,94 +377,12 @@ class Task extends State<TaskView> {
                             children: const [
                               Align(
                                   alignment: AlignmentDirectional.center,
-                                  child: Text('Görev bulunamadı!')),
+                                  child: Text(noTask)),
                             ],
                           ),
                         );
                       }
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Shimmer.fromColors(
-                                //period: Duration(milliseconds: 1),
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                enabled: true,
-                                child: ListView.separated(
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(
-                                    height: 10,
-                                  ),
-                                  itemBuilder: (_, __) => Container(
-                                    // shape: RoundedRectangleBorder(
-                                    //   borderRadius: BorderRadius.circular(16),
-                                    // ),
-                                    alignment: Alignment.center,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(),
-                                    ),
-                                    
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            width: 48.0,
-                                            height: 48.0,
-                                            color: Colors.white,
-                                          ),
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                          ),
-                                          Expanded(
-                                            flex: 5,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  //width: double.infinity,
-                                                  height: 10.0,
-                                                  color: Colors.white,
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0),
-                                                ),
-                                                Container(
-                                                  height: 10.0,
-                                                  color: Colors.white,
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.0),
-                                                ),
-                                                Container(
-                                                  width: 40.0,
-                                                  height: 10.0,
-                                                  color: Colors.white,
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  itemCount: 7,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      return const TaskShimmer();
                     },
                   ),
                 ),

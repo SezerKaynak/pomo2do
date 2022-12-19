@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
     final _authService = Provider.of<IAuthService>(context, listen: false);
 
     return Scaffold(
-        backgroundColor: Colors.blueGrey[50],
         appBar: AppBar(),
         body: SingleChildScrollView(
           child: Padding(
@@ -138,14 +137,14 @@ class _LoginPageState extends State<LoginPage> {
                                 type: QuickAlertType.error,
                                 title: emailAlert,
                                 text: emailAlertSubtitle,
-                                confirmBtnText: "Kapat");
+                                confirmBtnText: confirmButtonText);
                           } else if (_passwordController.text == "") {
                             QuickAlert.show(
                                 context: context,
                                 type: QuickAlertType.error,
                                 title: passwordAlert,
                                 text: passwordAlertSubtitle,
-                                confirmBtnText: "Kapat");
+                                confirmBtnText: confirmButtonText);
                           } else {
                             try {
                               await _authService.signInEmailAndPassword(
@@ -158,26 +157,26 @@ class _LoginPageState extends State<LoginPage> {
                                     type: QuickAlertType.error,
                                     title: userNotFound,
                                     text: userNotFoundSubtitle,
-                                    confirmBtnText: "Kapat");
+                                    confirmBtnText: confirmButtonText);
                               } else if (e.code == 'wrong-password') {
                                 QuickAlert.show(
                                     context: context,
                                     type: QuickAlertType.error,
                                     title: wrongPassword,
                                     text: wrongPasswordSubtitle,
-                                    confirmBtnText: "Kapat");
+                                    confirmBtnText: confirmButtonText);
                               } else if (e.code == 'invalid-email') {
                                 QuickAlert.show(
                                     context: context,
                                     type: QuickAlertType.error,
                                     title: invalidEmail,
                                     text: invalidEmailSubtitle,
-                                    confirmBtnText: "Kapat");
+                                    confirmBtnText: confirmButtonText);
                               }
                             }
                           }
                         },
-                        child: const Text("Giriş Yap"))),
+                        child: const Text(login))),
                 const SizedBox(height: 40),
                 ScreenTexts(
                     title: loginWithAccount,
@@ -205,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const RegisterPage()),
                           );
                         },
-                        child: const Text("Kayıt Ol!"))
+                        child: const Text(register))
                   ],
                 )
               ],

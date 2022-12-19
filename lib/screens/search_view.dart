@@ -1,5 +1,6 @@
 import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
@@ -15,6 +16,9 @@ class SearchView extends StatelessWidget {
       pressed: () {
         Navigator.pop(context);
       },
+      searchTextHintColor: Colors.black,
+      searchTextColor: Colors.black,
+      searchBodyBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
       firestoreCollectionName:
           'Users/${context.read<PomotodoUser>().userId}/tasks',
       searchBy: 'taskNameCaseInsensitive',
@@ -24,7 +28,7 @@ class SearchView extends StatelessWidget {
           final List<TaskModel>? dataList = snapshot.data;
           if (dataList!.isEmpty) {
             return const Center(
-              child: Text('Sonuç Bulunamadı!'),
+              child: Text(noResult),
             );
           }
           return ListView.builder(
@@ -41,7 +45,7 @@ class SearchView extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         decoration: BoxDecoration(
-                            color: getColor(data),
+                            color: getColor(data, context),
                             borderRadius: BorderRadius.circular(16.0)),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(15),
@@ -77,7 +81,7 @@ class SearchView extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasData) {
             return const Center(
-              child: Text('Sonuç Bulunamadı!'),
+              child: Text(noResult),
             );
           }
         }
@@ -88,19 +92,19 @@ class SearchView extends StatelessWidget {
     );
   }
 
-  getColor(TaskModel data) {
+  getColor(TaskModel data, BuildContext context) {
     if (data.isDone && data.isActive && data.isArchive) {
-      return Colors.cyan[200];
+      return Colors.cyan[300];
     } else if (data.isDone && data.isActive && !data.isArchive) {
-      return Colors.green[100];
+      return Colors.green[500];
     } else if (!data.isDone && !data.isActive && !data.isArchive) {
-      return Colors.red[100];
+      return Colors.red[400];
     } else if (data.isDone && !data.isActive && !data.isArchive) {
-      return Colors.red[100];
+      return Colors.red[400];
     } else if (!data.isDone && data.isActive && data.isArchive) {
       return Colors.cyan[200];
     } else if (!data.isDone && data.isActive && !data.isArchive) {
-      return Colors.blueGrey[50];
+      return Theme.of(context).cardColor;
     }
   }
 }

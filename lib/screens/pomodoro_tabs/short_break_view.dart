@@ -34,39 +34,41 @@ class ShortBreak extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                PomodoroTimer(
-                  backgroudColor: Colors.black26,
-                  onComplete: () async {
-                    context.read<PageUpdate>().startOrStop(
-                        context
-                                .read<SharedPreferences>()
-                                .getInt("breakTimerSelect")! *
-                            60,
-                        controller,
-                        widget.task,
-                        tabController,
-                        context
-                            .read<SharedPreferences>()
-                            .getInt("longBreakNumberSelect")!);
-                  },
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  isReverse: true,
-                  isReverseAnimation: true,
-                  duration: context.select((SharedPreferences prefs) =>
-                          prefs.getInt("breakTimerSelect"))! *
-                      60,
-                  autoStart: false,
-                  controller: controller,
-                  isTimerTextShown: true,
-                  neumorphicEffect: true,
-                  innerFillGradient: LinearGradient(colors: [
-                    Colors.greenAccent.shade200,
-                    Colors.blueAccent.shade400
-                  ]),
-                  neonGradient: LinearGradient(colors: [
-                    Colors.greenAccent.shade200,
-                    Colors.blueAccent.shade400
-                  ]),
+                RepaintBoundary(
+                  child: PomodoroTimer(
+                    backgroudColor: Colors.black26,
+                    onComplete: () async {
+                      context.read<PageUpdate>().startOrStop(
+                          context
+                                  .read<SharedPreferences>()
+                                  .getInt("breakTimerSelect")! *
+                              60,
+                          controller,
+                          widget.task,
+                          tabController,
+                          context
+                              .read<SharedPreferences>()
+                              .getInt("longBreakNumberSelect")!);
+                    },
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    isReverse: true,
+                    isReverseAnimation: true,
+                    duration: context.select((SharedPreferences prefs) =>
+                            prefs.getInt("breakTimerSelect"))! *
+                        60,
+                    autoStart: false,
+                    controller: controller,
+                    isTimerTextShown: true,
+                    neumorphicEffect: true,
+                    innerFillGradient: LinearGradient(colors: [
+                      Colors.greenAccent.shade200,
+                      Colors.blueAccent.shade400
+                    ]),
+                    neonGradient: LinearGradient(colors: [
+                      Colors.greenAccent.shade200,
+                      Colors.blueAccent.shade400
+                    ]),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

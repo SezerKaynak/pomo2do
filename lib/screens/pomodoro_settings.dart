@@ -1,85 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/widgets/screen_texts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PomodoroSettings extends StatelessWidget {
+class PomodoroSettings extends StatefulWidget {
   const PomodoroSettings({super.key});
 
   @override
+  State<PomodoroSettings> createState() => _PomodoroSettingsState();
+}
+
+class _PomodoroSettingsState extends State<PomodoroSettings> {
+  late TextEditingController _workTimerController;
+  late TextEditingController _breakTimerController;
+  late TextEditingController _longBreakTimerController;
+  late TextEditingController _longBreakNumberController;
+
+  @override
+  void initState() {
+    _workTimerController = TextEditingController();
+    _breakTimerController = TextEditingController();
+    _longBreakTimerController = TextEditingController();
+    _longBreakNumberController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _workTimerController.dispose();
+    _breakTimerController.dispose();
+    _longBreakTimerController.dispose();
+    _longBreakNumberController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var pomodoroTitle = "Pomodoro Ayarları";
-    var pomodoroSubtitle =
-        "Aşağıdaki alanlardan pomodoro zamanlayıcısının ayarlarını yapabilirsiniz.🙂";
-    final TextEditingController workTimerController = TextEditingController();
-    final TextEditingController breakTimerController = TextEditingController();
-    final TextEditingController longBreakTimerController =
-        TextEditingController();
-    final TextEditingController longBreakNumberController =
-        TextEditingController();
-    var workTimer = "Çalışma Zamanı Süresi";
-    var breakTimer = "Mola Süresi";
-    var longBreakTimer = "Uzun Mola Süresi";
-    var longBreakNumber = "Uzun Molanın Kaçıncı Arada Verileceği";
-    var workTimerSelect = "Çalışma Zamanı Süresini Seçiniz";
-    var breakTimerSelect = "Mola Süresini Seçiniz";
-    var longBreakTimerSelect = "Uzun Mola Süresini Seçiniz";
-    var longBreakNumberSelect =
-        "Uzun Molanın Kaçıncı Arada Verileceğini Seçiniz";
-
-    var workTimerList = [
-      '20 dakika',
-      '25 dakika',
-      '30 dakika',
-      '35 dakika',
-      '40 dakika'
-    ];
-    var breakTimerList = [
-      '5 dakika',
-      '6 dakika',
-      '7 dakika',
-      '8 dakika',
-      '9 dakika',
-      '10 dakika'
-    ];
-    var longBreakTimerList = [
-      '15 dakika',
-      '16 dakika',
-      '17 dakika',
-      '18 dakika',
-      '19 dakika',
-      '20 dakika'
-    ];
-    var longBreakNumberList = ['1', '2', '3', '4', '5'];
-    var list = [
-      'workTimerSelect',
-      'breakTimerSelect',
-      'longBreakTimerSelect',
-      'longBreakNumberSelect'
-    ];
-
-    Map<String, Object> values = <String, Object>{
-      'workTimerSelect': 25,
-      'breakTimerSelect': 5,
-      'longBreakTimerSelect': 15,
-      'longBreakNumberSelect': 1,
-    };
-
     getSettings() async {
       final prefs = await SharedPreferences.getInstance();
-      // if (prefs.getInt('workTimerSelect') == null) {
-        // await prefs.setInt('workTimerSelect', 25);
-        // await prefs.setInt('breakTimerSelect', 5);
-        // await prefs.setInt('longBreakTimerSelect', 15);
-        // await prefs.setInt('longBreakNumberSelect', 1);
-      // }
-      workTimerController.text = '${prefs.getInt('workTimerSelect')} dakika';
-      breakTimerController.text = '${prefs.getInt('breakTimerSelect')} dakika';
-      longBreakTimerController.text =
-          '${prefs.getInt('longBreakTimerSelect')} dakika';
-      longBreakNumberController.text =
+
+      _workTimerController.text = '${prefs.getInt('workTimerSelect')} $minute';
+      _breakTimerController.text = '${prefs.getInt('breakTimerSelect')} $minute';
+      _longBreakTimerController.text =
+          '${prefs.getInt('longBreakTimerSelect')} $minute';
+      _longBreakNumberController.text =
           '${prefs.getInt('longBreakNumberSelect')}';
 
       // for (int i = 0; i < list.length; i++) {
@@ -120,11 +87,11 @@ class PomodoroSettings extends StatelessWidget {
               ScreenTextField(
                   textLabel: workTimerSelect,
                   obscure: false,
-                  controller: workTimerController,
+                  controller: _workTimerController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      workTimerController.text = value;
+                      _workTimerController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
                       return workTimerList
@@ -143,11 +110,11 @@ class PomodoroSettings extends StatelessWidget {
               ScreenTextField(
                   textLabel: breakTimerSelect,
                   obscure: false,
-                  controller: breakTimerController,
+                  controller: _breakTimerController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      breakTimerController.text = value;
+                      _breakTimerController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
                       return breakTimerList
@@ -166,11 +133,11 @@ class PomodoroSettings extends StatelessWidget {
               ScreenTextField(
                   textLabel: longBreakTimerSelect,
                   obscure: false,
-                  controller: longBreakTimerController,
+                  controller: _longBreakTimerController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      longBreakTimerController.text = value;
+                      _longBreakTimerController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
                       return longBreakTimerList
@@ -189,11 +156,11 @@ class PomodoroSettings extends StatelessWidget {
               ScreenTextField(
                   textLabel: longBreakNumberSelect,
                   obscure: false,
-                  controller: longBreakNumberController,
+                  controller: _longBreakNumberController,
                   suffix: PopupMenuButton<String>(
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
-                      longBreakNumberController.text = value;
+                      _longBreakNumberController.text = value;
                     },
                     itemBuilder: (BuildContext context) {
                       return longBreakNumberList
@@ -219,18 +186,18 @@ class PomodoroSettings extends StatelessWidget {
                         await prefs.setInt(
                             'workTimerSelect',
                             int.parse(
-                                workTimerController.text.substring(0, 2)));
+                                _workTimerController.text.substring(0, 2)));
                         await prefs.setInt(
                             'breakTimerSelect',
                             int.parse(
-                                breakTimerController.text.substring(0, 2)));
+                                _breakTimerController.text.substring(0, 2)));
                         await prefs.setInt(
                             'longBreakTimerSelect',
-                            int.parse(
-                                longBreakTimerController.text.substring(0, 2)));
+                            int.parse(_longBreakTimerController.text
+                                .substring(0, 2)));
                         await prefs.setInt(
                             'longBreakNumberSelect',
-                            int.parse(longBreakNumberController.text
+                            int.parse(_longBreakNumberController.text
                                 .substring(0, 1)));
 
                         // ignore: use_build_context_synchronously
@@ -241,7 +208,7 @@ class PomodoroSettings extends StatelessWidget {
                           ModalRoute.withName('/'),
                         );
                       },
-                      child: const Text("Güncelle"))),
+                      child: const Text(updateButtonText))),
             ],
           ),
         ),

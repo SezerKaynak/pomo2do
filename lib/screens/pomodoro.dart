@@ -9,7 +9,6 @@ import 'package:flutter_application_1/widgets/tabs.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/screens/pomodoro_tabs/focus_view.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroView extends StatefulWidget {
   const PomodoroView({super.key, required this.task});
@@ -23,14 +22,15 @@ class _PomodoroViewState extends State<PomodoroView>
     with TickerProviderStateMixin, DatabaseService {
   late TabController tabController;
   late CountDownController controller;
+  late TextEditingController controller2;
   int time = 0;
 
-  final TextEditingController controller2 = TextEditingController();
   @override
   void initState() {
     super.initState();
     tabController = TabController(initialIndex: 0, length: 3, vsync: this);
     controller = CountDownController();
+    controller2 = TextEditingController();
   }
 
   @override
@@ -123,6 +123,7 @@ class _PomodoroViewState extends State<PomodoroView>
   @override
   void dispose() {
     tabController.dispose();
+    controller2.dispose();
     super.dispose();
   }
 }
