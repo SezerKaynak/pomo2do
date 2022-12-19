@@ -24,7 +24,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final AuthService _authService = AuthService();
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
   String? downloadUrl;
-  
+
   @override
   void initState() {
     super.initState();
