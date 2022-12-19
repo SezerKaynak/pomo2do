@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/providers/list_update_provider.dart';
+import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/screens/archived_tasks.dart';
 import 'package:flutter_application_1/screens/completed_tasks.dart';
 import 'package:flutter_application_1/screens/deleted_tasks.dart';
@@ -98,7 +99,9 @@ class _MyAppState extends State<MyApp> {
                   builder: FlutterSmartDialog.init(),
                   initialRoute: '/',
                   routes: {
-                    '/task': (context) => TaskView(),
+                    '/task': (context) => ChangeNotifierProvider(
+                        create: (context) => TasksProvider(),
+                        child: TaskView()),
                     '/done': (context) => const CompletedTasks(),
                     '/editTask': (context) => const EditTask(),
                     '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
@@ -106,7 +109,9 @@ class _MyAppState extends State<MyApp> {
                         child: const DeletedTasks()),
                     '/editProfile': (context) => const EditProfile(),
                     '/archived': (context) => const ArchivedTasks(),
-                    '/deneme': (context) => const Deneme(),
+                    '/deneme': (context) => ChangeNotifierProvider(
+                        create: (context) => TasksProvider(),
+                        child: const TaskDeneme()),
                   },
                   debugShowCheckedModeBanner: false,
                   theme: context.watch<DarkThemeProvider>().darkTheme

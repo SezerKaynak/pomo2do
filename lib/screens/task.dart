@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/screens/add_task.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
 import 'package:flutter_application_1/screens/search_view.dart';
@@ -25,17 +26,13 @@ class Task extends State<TaskView> {
   Future<List<TaskModel>>? taskList;
   Map<String, List<TaskModel>>? retrievedTaskList;
   List<TaskModel>? tasks;
-  final TextEditingController textController = TextEditingController();
   List<TaskModel> deletedTasks = [];
   DatabaseService dbService = DatabaseService();
-  @override
-  void initState() {
-    super.initState();
-    _initRetrieval();
-  }
-
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
+    providerOfTasks.getTasks();
     return Scaffold(
         appBar: AppBar(
             title: const Text("PomoTodo",
@@ -71,7 +68,7 @@ class Task extends State<TaskView> {
                                   border:
                                       Border(right: BorderSide(width: 0.5))),
                               child: FutureBuilder(
-                                  future: taskList,
+                                  future: providerOfTasks.taskList,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<List<TaskModel>> snapshot) {
                                     if (snapshot.hasData
@@ -80,7 +77,9 @@ class Task extends State<TaskView> {
                                       try {
                                         return Center(
                                             child: Text(
-                                          getLengthofMap().toString(),
+                                          providerOfTasks
+                                              .getLengthofMap()
+                                              .toString(),
                                           style: const TextStyle(fontSize: 20),
                                         ));
                                       } catch (e) {
@@ -107,7 +106,7 @@ class Task extends State<TaskView> {
                                   border:
                                       Border(right: BorderSide(width: 0.5))),
                               child: FutureBuilder(
-                                  future: taskList,
+                                  future: providerOfTasks.taskList,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<List<TaskModel>> snapshot) {
                                     if (snapshot.hasData
@@ -116,7 +115,10 @@ class Task extends State<TaskView> {
                                       try {
                                         return Center(
                                             child: Text(
-                                          taskLists()[0].length.toString(),
+                                          providerOfTasks
+                                              .taskLists()[0]
+                                              .length
+                                              .toString(),
                                           style: const TextStyle(fontSize: 20),
                                         ));
                                       } catch (e) {
@@ -155,27 +157,28 @@ class Task extends State<TaskView> {
             Expanded(
               flex: 12,
               child: RefreshIndicator(
-                onRefresh: _refresh,
+                onRefresh: providerOfTasks.refresh,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FutureBuilder(
-                    future: taskList,
+                    future: providerOfTasks.taskList,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TaskModel>> snapshot) {
                       if (snapshot.hasData) {
                         try {
-                          return retrievedTaskList!.isEmpty
-                              ? const Center(
-                                  child: Text(noActiveTask))
+                          return providerOfTasks.retrievedTaskList!.isEmpty
+                              ? const Center(child: Text(noActiveTask))
                               : ListView.separated(
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
                                         height: 10,
                                       ),
                                   shrinkWrap: true,
-                                  itemCount: retrievedTaskList!.length,
+                                  itemCount:
+                                      providerOfTasks.retrievedTaskList!.length,
                                   itemBuilder: (context, index) {
-                                    String key = retrievedTaskList!.keys
+                                    String key = providerOfTasks
+                                        .retrievedTaskList!.keys
                                         .elementAt(index);
                                     return Column(
                                       children: [
@@ -188,8 +191,8 @@ class Task extends State<TaskView> {
                                           separatorBuilder: (context, index) =>
                                               const SizedBox(height: 10),
                                           shrinkWrap: true,
-                                          itemCount:
-                                              retrievedTaskList![key]!.length,
+                                          itemCount: providerOfTasks
+                                              .retrievedTaskList![key]!.length,
                                           itemBuilder: (context, index) {
                                             return ClipRRect(
                                               borderRadius:
@@ -200,28 +203,16 @@ class Task extends State<TaskView> {
                                                     if (direction ==
                                                         DismissDirection
                                                             .endToStart) {
-                                                      retrievedTaskList![key]![
-                                                              index]
-                                                          .isActive = false;
-                                                      dbService.updateTask(
-                                                          retrievedTaskList![
-                                                              key]![index]);
-
-                                                      _refresh();
-                                                      _dismiss();
+                                                      providerOfTasks.dismiss(
+                                                          key, index);
                                                     } else {
                                                       {
                                                         Navigator.pushNamed(
                                                             context,
                                                             '/editTask',
-                                                            arguments:
-                                                                retrievedTaskList![
-                                                                        key]![
-                                                                    index]);
-
-                                                        setState(() {
-                                                          _refresh();
-                                                        });
+                                                            arguments: providerOfTasks
+                                                                    .retrievedTaskList![
+                                                                key]![index]);
                                                       }
                                                     }
                                                   }),
@@ -336,9 +327,7 @@ class Task extends State<TaskView> {
                                                                           PomodoroView(
                                                                         task: retrievedTaskList![key]![
                                                                             index],
-                                                                      )))).then(
-                                                              (_) =>
-                                                                  _refresh());
+                                                                      ))));
                                                         },
                                                         shape:
                                                             RoundedRectangleBorder(
@@ -347,12 +336,13 @@ class Task extends State<TaskView> {
                                                                   .circular(
                                                                       8.0),
                                                         ),
-                                                        title: Text(
-                                                            retrievedTaskList![
-                                                                    key]![index]
-                                                                .taskName),
+                                                        title: Text(providerOfTasks
+                                                            .retrievedTaskList![
+                                                                key]![index]
+                                                            .taskName),
                                                         subtitle: Text(
-                                                            retrievedTaskList![
+                                                            providerOfTasks
+                                                                .retrievedTaskList![
                                                                     key]![index]
                                                                 .taskInfo),
                                                         trailing: const Icon(Icons
@@ -367,11 +357,11 @@ class Task extends State<TaskView> {
                                     );
                                   });
                         } catch (e) {
-                          _refresh();
+                          //_refresh();
                         }
                       } else if (snapshot.connectionState ==
                               ConnectionState.done &&
-                          retrievedTaskList!.isEmpty) {
+                          providerOfTasks.retrievedTaskList!.isEmpty) {
                         return Center(
                           child: ListView(
                             children: const [
@@ -391,13 +381,33 @@ class Task extends State<TaskView> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.archive), label: "Archive"),
             BottomNavigationBarItem(icon: Icon(Icons.done), label: "Done"),
             BottomNavigationBarItem(icon: Icon(Icons.delete), label: "Trash")
           ],
-          onTap: onItemTapped,
+          onTap: (selectedIndex) {
+            switch (selectedIndex) {
+              case 0:
+                Navigator.pushNamed(context, '/archived',
+                    arguments: providerOfTasks.taskLists()[3]);
+
+                break;
+              case 1:
+                Navigator.pushNamed(context, '/done',
+                    arguments: providerOfTasks.taskLists()[0]);
+
+                break;
+              case 2:
+                Navigator.pushNamed(context, '/deleted',
+                    arguments: providerOfTasks.taskLists()[2]);
+
+                break;
+              default:
+            }
+          },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
@@ -434,106 +444,30 @@ class Task extends State<TaskView> {
         ));
   }
 
-  Text settingTitle(BuildContext context, String textTitle) => Text(
-        textTitle,
-        style: Theme.of(context)
-            .textTheme
-            .headline6
-            ?.copyWith(fontWeight: FontWeight.w400, fontSize: 18),
-      );
-  Future<void> _refresh() async {
-    taskList = service.retrieveTasks();
-    tasks = await service.retrieveTasks();
-    retrievedTaskList = separateLists(taskLists()[1]);
-    setState(() {});
-  }
-
-  List<dynamic> taskLists() {
-    List<TaskModel> incompletedTasks = [];
-    List<TaskModel> completedTasks = [];
-    List<TaskModel> trashBoxTasks = [];
-    List<TaskModel> archivedTasks = [];
-    List newList = [];
-    for (int i = 0; i < tasks!.length; i++) {
-      if (tasks![i].isDone && tasks![i].isActive && tasks![i].isArchive) {
-        archivedTasks.add(tasks![i]);
-      } else if (tasks![i].isDone &&
-          tasks![i].isActive &&
-          !tasks![i].isArchive) {
-        completedTasks.add(tasks![i]);
-      } else if (!tasks![i].isDone &&
-          !tasks![i].isActive &&
-          !tasks![i].isArchive) {
-        trashBoxTasks.add(tasks![i]);
-      } else if (tasks![i].isDone &&
-          !tasks![i].isActive &&
-          !tasks![i].isArchive) {
-        trashBoxTasks.add(tasks![i]);
-      } else if (!tasks![i].isDone &&
-          tasks![i].isActive &&
-          tasks![i].isArchive) {
-        archivedTasks.add(tasks![i]);
-      } else if (!tasks![i].isDone &&
-          tasks![i].isActive &&
-          !tasks![i].isArchive) {
-        incompletedTasks.add(tasks![i]);
-      }
-    }
-    newList.addAll(
-        [completedTasks, incompletedTasks, trashBoxTasks, archivedTasks]);
-    return newList;
-  }
-
-  Map<String, List<TaskModel>> separateLists(List<TaskModel> tasks) {
-    final groups = groupBy(tasks, (TaskModel e) {
-      return e.taskType;
-    });
-    var sortedByKeyMap = Map.fromEntries(groups.entries.toList()
-      ..sort((e1, e2) => e1.key.toLowerCase().compareTo(e2.key.toLowerCase())));
-
-    return sortedByKeyMap;
-  }
-
-  getLengthofMap() {
-    int count = 0;
-    for (int i = 0; i < retrievedTaskList!.length; i++) {
-      String key = retrievedTaskList!.keys.elementAt(i);
-      for (int j = 0; j < retrievedTaskList![key]!.length; j++) {
-        count += 1;
-      }
-    }
-    return count;
-  }
-
   void onItemTapped(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
-        Navigator.pushNamed(context, '/archived', arguments: taskLists()[3])
-            .then((_) => _refresh());
+        Navigator.pushNamed(
+          context, '/archived',
+          //arguments: providerOfTasks.taskLists()[3]
+        );
 
         break;
       case 1:
-        Navigator.pushNamed(context, '/done', arguments: taskLists()[0])
-            .then((_) {
-          _refresh();
-        });
+        Navigator.pushNamed(
+          context, '/done',
+          //arguments: providerOfTasks.taskLists()[0]
+        );
 
         break;
       case 2:
-        Navigator.pushNamed(context, '/deleted', arguments: taskLists()[2])
-            .then((_) => _refresh());
+        Navigator.pushNamed(
+          context, '/deleted',
+          //arguments: providerOfTasks.taskLists()[2]
+        );
 
         break;
       default:
     }
-  }
-
-  void _dismiss() {
-    taskList = service.retrieveTasks();
-  }
-
-  Future<void> _initRetrieval() async {
-    taskList = service.retrieveTasks();
-    tasks = await service.retrieveTasks();
   }
 }
