@@ -318,7 +318,7 @@ class Task extends State<TaskView> {
                                                                         child:
                                                                             PomodoroView(
                                                                           task:
-                                                                              retrievedTaskList![key]![index],
+                                                                              providerOfTasks.retrievedTaskList![key]![index],
                                                                         ))));
                                                       },
                                                       shape:
