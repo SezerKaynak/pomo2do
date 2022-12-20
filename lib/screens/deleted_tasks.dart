@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/providers/list_update_provider.dart';
+import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:provider/provider.dart';
 
 class DeletedTasks extends StatelessWidget {
