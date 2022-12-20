@@ -55,6 +55,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         Provider<IAuthService>(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (context) => TasksProvider()),
         Provider.value(value: await SharedPreferences.getInstance()),
       ],
       child: MyApp(theme: theme, themeDark: themeDark),

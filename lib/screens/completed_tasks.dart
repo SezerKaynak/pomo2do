@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-
+import 'package:provider/provider.dart';
 
 class CompletedTasks extends StatefulWidget {
   const CompletedTasks({super.key});
@@ -17,8 +18,8 @@ class _CompletedTasksState extends State<CompletedTasks> {
   DatabaseService dbService = DatabaseService();
   @override
   Widget build(BuildContext context) {
-    List<TaskModel> tasks =
-        ModalRoute.of(context)!.settings.arguments as List<TaskModel>;
+    List<TaskModel> tasks = Provider.of<TasksProvider>(context).taskLists()[0];
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text("Tamamlanmış Görevler"),
@@ -148,38 +149,40 @@ class _CompletedTasksState extends State<CompletedTasks> {
                     const Center(child: Text("Tamamlanmış görev bulunamadı!")),
                   if (selectedIndexes.isNotEmpty)
                     Expanded(
-                      flex: 0,
-                      child: SizedBox(
-                        width: 400,
-                        height: 60,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            onPressed: () async {
-                              int selectedNumber = selectedIndexes.length;
-                              selectedIndexes.sort();
-                              setState(() {
-                                isLoading = true;
-                              });
-                              for (int i = 0; i < selectedNumber; i++) {
-                                final TaskModel data =
-                                    tasks[selectedIndexes[i]];
-
-                                data.isDone = false;
-                                data.isActive = true;
-                                await dbService.updateTask(data);
-                              }
-                              for (int i = 0; i < selectedIndexes.length; i++) {
-                                tasks.removeAt(selectedIndexes[i] - i);
-                              }
-                              selectedIndexes.clear();
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
-                            child: const Text(
-                                "Seçili görevleri tamamlanmamış olarak işaretle")),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: 400,
+                          height: 60,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              onPressed: () async {
+                                int selectedNumber = selectedIndexes.length;
+                                selectedIndexes.sort();
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                for (int i = 0; i < selectedNumber; i++) {
+                                  final TaskModel data =
+                                      tasks[selectedIndexes[i]];
+                      
+                                  data.isDone = false;
+                                  data.isActive = true;
+                                  await dbService.updateTask(data);
+                                }
+                                for (int i = 0; i < selectedIndexes.length; i++) {
+                                  tasks.removeAt(selectedIndexes[i] - i);
+                                }
+                                selectedIndexes.clear();
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              },
+                              child: const Text(
+                                  "Seçili görevleri tamamlanmamış olarak işaretle")),
+                        ),
                       ),
                     ),
                 ],

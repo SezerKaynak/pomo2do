@@ -90,7 +90,8 @@ const String title = "Hoşgeldiniz!",
     moveIntoTrash = "ÇÖP KUTUSUNA TAŞI",
     editText = "DÜZENLE",
     noActiveTask = "Aktif görev bulunamadı!",
-    noTask = 'Görev bulunamadı!';
+    noTask = 'Görev bulunamadı!',
+    addButtonText = "Ekle";
 
 const List<String> workTimerList = [
       '20 dakika',
