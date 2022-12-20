@@ -5,6 +5,7 @@ import 'package:flutter_application_1/screens/add_task.dart';
 import 'package:flutter_application_1/screens/pomodoro.dart';
 import 'package:flutter_application_1/screens/search_view.dart';
 import 'package:flutter_application_1/project_theme_options.dart';
+import 'package:flutter_application_1/widgets/bottom_navigation.dart';
 import 'package:flutter_application_1/widgets/custom_drawer.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_application_1/providers/pomodoro_provider.dart';
@@ -28,7 +29,7 @@ class Task extends State<TaskView> {
   List<TaskModel>? tasks;
   List<TaskModel> deletedTasks = [];
   DatabaseService dbService = DatabaseService();
-  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
@@ -384,41 +385,7 @@ class Task extends State<TaskView> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.archive), label: "Archive"),
-            BottomNavigationBarItem(icon: Icon(Icons.done), label: "Done"),
-            BottomNavigationBarItem(icon: Icon(Icons.delete), label: "Trash")
-          ],
-          onTap: (selectedIndex) {
-            switch (selectedIndex) {
-              case 0:
-                Navigator.pushNamed(
-                  context,
-                  '/archived',
-                ).then((_) => providerOfTasks.refresh());
-
-                break;
-              case 1:
-                Navigator.pushNamed(
-                  context,
-                  '/done',
-                ).then((_) => providerOfTasks.refresh());
-
-                break;
-              case 2:
-                Navigator.pushNamed(
-                  context,
-                  '/deleted',
-                ).then((_) => providerOfTasks.refresh());
-
-                break;
-              default:
-            }
-          },
-        ),
+        bottomNavigationBar: const BottomNavigation(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
