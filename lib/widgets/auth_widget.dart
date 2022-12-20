@@ -24,9 +24,7 @@ class AuthWidget extends StatelessWidget {
         setPomodoroSettings();
       }
 
-      return snapShot.hasData ? ChangeNotifierProvider(
-        create: (context) => TasksProvider(), 
-        child: TaskView()) : const LoginPage();
+      return snapShot.hasData ? TaskView() : const LoginPage();
     }
     return const ErrorPage();
   }
