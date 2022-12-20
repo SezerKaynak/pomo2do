@@ -116,4 +116,4 @@ const List<String> workTimerList = [
       '19 dakika',
       '20 dakika'
     ],
-    longBreakNumberList = ['1', '2', '3', '4', '5'];    
+    longBreakNumberList = ['1', '2', '3', '4', '5'];

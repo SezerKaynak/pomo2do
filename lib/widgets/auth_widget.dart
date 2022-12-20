@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
-import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/task.dart';
 import 'package:flutter_application_1/widgets/error_page.dart';
