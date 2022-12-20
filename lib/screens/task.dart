@@ -208,11 +208,15 @@ class Task extends State<TaskView> {
                                                     } else {
                                                       {
                                                         Navigator.pushNamed(
-                                                            context,
-                                                            '/editTask',
-                                                            arguments: providerOfTasks
-                                                                    .retrievedTaskList![
-                                                                key]![index]);
+                                                                context,
+                                                                '/editTask',
+                                                                arguments:
+                                                                    providerOfTasks
+                                                                            .retrievedTaskList![key]![
+                                                                        index])
+                                                            .then((_) =>
+                                                                providerOfTasks
+                                                                    .refresh());
                                                       }
                                                     }
                                                   }),
@@ -357,7 +361,7 @@ class Task extends State<TaskView> {
                                     );
                                   });
                         } catch (e) {
-                          //_refresh();
+                          providerOfTasks.refresh();
                         }
                       } else if (snapshot.connectionState ==
                               ConnectionState.done &&
@@ -391,18 +395,24 @@ class Task extends State<TaskView> {
           onTap: (selectedIndex) {
             switch (selectedIndex) {
               case 0:
-                Navigator.pushNamed(context, '/archived',
-                    arguments: providerOfTasks.taskLists()[3]);
+                Navigator.pushNamed(
+                  context,
+                  '/archived',
+                ).then((_) => providerOfTasks.refresh());
 
                 break;
               case 1:
-                Navigator.pushNamed(context, '/done',
-                    arguments: providerOfTasks.taskLists()[0]);
+                Navigator.pushNamed(
+                  context,
+                  '/done',
+                ).then((_) => providerOfTasks.refresh());
 
                 break;
               case 2:
-                Navigator.pushNamed(context, '/deleted',
-                    arguments: providerOfTasks.taskLists()[2]);
+                Navigator.pushNamed(
+                  context,
+                  '/deleted',
+                ).then((_) => providerOfTasks.refresh());
 
                 break;
               default:
@@ -431,7 +441,7 @@ class Task extends State<TaskView> {
                   );
                 },
                 label: Text(
-                  "Ekle",
+                  addButtonText,
                   style: Theme.of(context)
                       .textTheme
                       .headline6
@@ -442,32 +452,5 @@ class Task extends State<TaskView> {
             ],
           ),
         ));
-  }
-
-  void onItemTapped(int selectedIndex) {
-    switch (selectedIndex) {
-      case 0:
-        Navigator.pushNamed(
-          context, '/archived',
-          //arguments: providerOfTasks.taskLists()[3]
-        );
-
-        break;
-      case 1:
-        Navigator.pushNamed(
-          context, '/done',
-          //arguments: providerOfTasks.taskLists()[0]
-        );
-
-        break;
-      case 2:
-        Navigator.pushNamed(
-          context, '/deleted',
-          //arguments: providerOfTasks.taskLists()[2]
-        );
-
-        break;
-      default:
-    }
   }
 }
