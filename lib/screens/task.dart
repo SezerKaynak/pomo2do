@@ -91,7 +91,8 @@ class Task extends State<TaskView> {
                                     }
                                   } else if (snapshot.connectionState ==
                                           ConnectionState.done &&
-                                      retrievedTaskList!.isEmpty) {
+                                      providerOfTasks
+                                          .retrievedTaskList!.isEmpty) {
                                     return const Center(
                                         child: Text("0",
                                             style: TextStyle(fontSize: 20)));
@@ -205,9 +206,7 @@ class Task extends State<TaskView> {
                                                       Navigator.pushNamed(
                                                               context,
                                                               '/editTask',
-                                                              arguments: providerOfTasks
-                                                                      .retrievedTaskList![
-                                                                  key]![index])
+                                                              arguments: [key, index])
                                                           .then((_) =>
                                                               providerOfTasks
                                                                   .refresh());

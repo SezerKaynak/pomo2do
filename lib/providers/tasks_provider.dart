@@ -20,6 +20,7 @@ class TasksProvider extends ChangeNotifier {
     taskList = service.retrieveTasks();
     notifyListeners();
   }
+  
   void dismiss(String key, int index) {
     retrievedTaskList![key]![index].isActive = false;
     dbService.updateTask(retrievedTaskList![key]![index]);
