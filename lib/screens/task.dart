@@ -190,6 +190,13 @@ class Task extends State<TaskView> {
                                         itemCount: providerOfTasks
                                             .retrievedTaskList![key]!.length,
                                         itemBuilder: (context, index) {
+                                          int codePoint = providerOfTasks
+                                                  .retrievedTaskList![key]![
+                                                      index]
+                                                  .taskIcon;
+                                          IconData taskIcon = IconData(
+                                              codePoint,
+                                              fontFamily: 'MaterialIcons');
                                           return ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(16.0),
@@ -204,12 +211,13 @@ class Task extends State<TaskView> {
                                                   } else {
                                                     {
                                                       Navigator.pushNamed(
-                                                              context,
-                                                              '/editTask',
-                                                              arguments: [key, index])
-                                                          .then((_) =>
-                                                              providerOfTasks
-                                                                  .refresh());
+                                                          context, '/editTask',
+                                                          arguments: [
+                                                            key,
+                                                            index
+                                                          ]).then((_) =>
+                                                          providerOfTasks
+                                                              .refresh());
                                                     }
                                                   }
                                                 }),
@@ -301,8 +309,7 @@ class Task extends State<TaskView> {
                                                       contentPadding:
                                                           const EdgeInsets.all(
                                                               15),
-                                                      leading: const Icon(
-                                                          Icons.numbers),
+                                                      leading: Icon(taskIcon),
                                                       onTap: () {
                                                         Navigator.push(
                                                             context,
