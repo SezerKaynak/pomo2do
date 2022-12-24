@@ -6,7 +6,6 @@ class ScreenTextField extends StatelessWidget {
     required this.textLabel,
     required this.obscure,
     required this.controller,
-    required this.height,
     required this.maxLines,
     this.valid,
     this.onTouch,
@@ -17,7 +16,6 @@ class ScreenTextField extends StatelessWidget {
   final String? textLabel;
   final bool obscure;
   final TextEditingController controller;
-  final double height;
   final int maxLines;
   final String? Function(String?)? valid;
   final Function()? onTouch;
@@ -26,25 +24,26 @@ class ScreenTextField extends StatelessWidget {
   final Widget? suffix;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: Center(
-        child: TextFormField(
-          keyboardType: textFieldInputType,
-          onTap: onTouch,
-          maxLines: maxLines,
-          controller: controller,
-          validator: valid,
-          obscureText: obscure,
-          decoration: InputDecoration(
-            suffixIcon: suffix,
-            icon: con,
-            labelText: textLabel,
-            filled: true,
-            //fillColor: Colors.grey[200],
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-          ),
-        ),
+    return TextFormField(
+      keyboardType: textFieldInputType,
+      onTap: onTouch,
+      maxLines: maxLines,
+      controller: controller,
+      validator: valid,
+      obscureText: obscure,
+      decoration: InputDecoration(
+        label: Text(textLabel!),
+        labelStyle:
+            MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
+          final Color color = states.contains(MaterialState.error)
+              ? Theme.of(context).colorScheme.error
+              : Theme.of(context).textTheme.bodySmall!.color!;
+          return TextStyle(color: color);
+        }),
+        suffixIcon: suffix,
+        icon: con,
+        //labelText: textLabel,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
