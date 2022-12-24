@@ -147,7 +147,6 @@ class _EditProfileState extends State<EditProfile> {
                                   textLabel: "Something went wrong",
                                   obscure: false,
                                   controller: _nameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -161,7 +160,6 @@ class _EditProfileState extends State<EditProfile> {
                                       "${asyncSnapshot.data.data()["name"]}",
                                   obscure: false,
                                   controller: _nameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -170,7 +168,6 @@ class _EditProfileState extends State<EditProfile> {
                                 textLabel: "Loading",
                                 obscure: false,
                                 controller: _nameController,
-                                height: 70,
                                 maxLines: 1,
                               );
                             }),
@@ -189,7 +186,6 @@ class _EditProfileState extends State<EditProfile> {
                                   textLabel: "Something went wrong",
                                   obscure: false,
                                   controller: _surnameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -203,7 +199,6 @@ class _EditProfileState extends State<EditProfile> {
                                       "${asyncSnapshot.data.data()["surname"]}",
                                   obscure: false,
                                   controller: _surnameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -212,7 +207,6 @@ class _EditProfileState extends State<EditProfile> {
                                 textLabel: "Loading",
                                 obscure: false,
                                 controller: _surnameController,
-                                height: 70,
                                 maxLines: 1,
                               );
                             }),
@@ -231,7 +225,6 @@ class _EditProfileState extends State<EditProfile> {
                                   textLabel: "Something went wrong",
                                   obscure: false,
                                   controller: _birthdayController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -262,7 +255,6 @@ class _EditProfileState extends State<EditProfile> {
                                       "${asyncSnapshot.data.data()["birthday"]}",
                                   obscure: false,
                                   controller: _birthdayController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -271,7 +263,6 @@ class _EditProfileState extends State<EditProfile> {
                                 textLabel: "Loading",
                                 obscure: false,
                                 controller: _birthdayController,
-                                height: 70,
                                 maxLines: 1,
                               );
                             }),

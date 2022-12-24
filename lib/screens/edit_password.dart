@@ -82,7 +82,6 @@ class _EditPasswordState extends State<EditPassword> {
                       }
                       return null;
                     },
-                    height: 70,
                     maxLines: 1),
                 ScreenTexts(
                     title: newPasswordText,
@@ -99,7 +98,6 @@ class _EditPasswordState extends State<EditPassword> {
                       }
                       return null;
                     },
-                    height: 70,
                     maxLines: 1),
                 Container(height: 30),
                 SizedBox(

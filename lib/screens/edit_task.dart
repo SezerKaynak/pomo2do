@@ -87,7 +87,6 @@ class _EditTaskState extends State<EditTask> {
                     textLabel: _taskNameController.text = selectedTask.taskName,
                     obscure: false,
                     controller: _taskNameController,
-                    height: 70,
                     maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
@@ -99,7 +98,6 @@ class _EditTaskState extends State<EditTask> {
                     textLabel: _taskTypeController.text = selectedTask.taskType,
                     obscure: false,
                     controller: _taskTypeController,
-                    height: 70,
                     maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
@@ -111,7 +109,6 @@ class _EditTaskState extends State<EditTask> {
                     textLabel: _taskInfoController.text = selectedTask.taskInfo,
                     obscure: false,
                     controller: _taskInfoController,
-                    height: 120,
                     maxLines: 3),
                 FormField(
                   initialValue: selectedTask.isDone,

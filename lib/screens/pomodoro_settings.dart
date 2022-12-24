@@ -100,7 +100,6 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                       }).toList();
                     },
                   ),
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: breakTimer,
@@ -123,7 +122,6 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                       }).toList();
                     },
                   ),
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: longBreakTimer,
@@ -146,7 +144,6 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                       }).toList();
                     },
                   ),
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: longBreakNumber,
@@ -169,7 +166,6 @@ class _PomodoroSettingsState extends State<PomodoroSettings> {
                       }).toList();
                     },
                   ),
-                  height: 70,
                   maxLines: 1),
               Container(height: 30),
               const SizedBox(height: 40),

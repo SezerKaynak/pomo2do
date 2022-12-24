@@ -80,7 +80,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   textLabel: name,
                   obscure: false,
                   controller: _nameController,
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: yourSurname,
@@ -91,7 +90,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   textLabel: surname,
                   obscure: false,
                   controller: _surnameController,
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: email,
@@ -102,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   textLabel: email,
                   obscure: false,
                   controller: _emailController,
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: password,
@@ -113,7 +110,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   textLabel: password,
                   obscure: true,
                   controller: _passwordController,
-                  height: 70,
                   maxLines: 1),
               ScreenTexts(
                   title: yourBirthday,
@@ -140,7 +136,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 textLabel: yourBirthday,
                 obscure: false,
                 controller: _birthdayController,
-                height: 70,
                 maxLines: 1,
               ),
               Container(height: 30),
