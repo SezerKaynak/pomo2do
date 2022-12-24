@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/assets/constants.dart';
+import 'package:flutter_application_1/providers/select_icon_provider.dart';
 import 'package:flutter_application_1/screens/add_task.dart';
+import 'package:provider/provider.dart';
 
 class FloatingButtons extends StatelessWidget {
   const FloatingButtons({super.key});
@@ -22,9 +24,22 @@ class FloatingButtons extends StatelessWidget {
           FloatingActionButton.extended(
             heroTag: "btn2",
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddTask()),
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const AddTask()),
+              // );
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16))),
+                builder: (BuildContext context) {
+                  return ChangeNotifierProvider(
+                      create: (context) => SelectIcon(),
+                      child: const AddTask());
+                },
               );
             },
             label: Text(
