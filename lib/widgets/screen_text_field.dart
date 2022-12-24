@@ -32,7 +32,8 @@ class ScreenTextField extends StatelessWidget {
       validator: valid,
       obscureText: obscure,
       decoration: InputDecoration(
-        label: Text(textLabel!),
+        alignLabelWithHint: true,
+        label: Align(alignment: Alignment.topLeft, child: Text(textLabel!)),
         labelStyle:
             MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
           final Color color = states.contains(MaterialState.error)

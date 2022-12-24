@@ -96,7 +96,11 @@ const String title = "Hoşgeldiniz!",
     editProfileSubtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋",
     editProfileName = "Adınız",
     editProfileSurname = "Soyadınız",
-    editProfileBirthday = "Doğum Tarihiniz";
+    editProfileBirthday = "Doğum Tarihiniz",
+    nameOfTask = 'Görev adı',
+    typeOfTask = 'Görev türü',
+    infoOfTask = 'Görev açıklaması...',
+    buttonText = "Kaydet";
 
 const List<String> workTimerList = [
       '20 dakika',

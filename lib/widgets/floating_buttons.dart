@@ -42,13 +42,11 @@ class FloatingButtons extends StatelessWidget {
                 },
               );
             },
-            label: Text(
-              addButtonText,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6
-                  ?.copyWith(color: Colors.black),
-            ),
+            label: Text(addButtonText,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    ?.copyWith(color: Theme.of(context).cardColor)),
             icon: const Icon(Icons.add),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 import 'package:flutter_application_1/models/task_model.dart';
 import 'package:flutter_application_1/providers/select_icon_provider.dart';
 import 'package:flutter_application_1/screens/task.dart';
@@ -36,10 +37,6 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
-    var textLabel2 = 'Görev adı';
-    var textLabel3 = 'Görev türü';
-    var textLabel4 = 'Görev açıklaması...';
-    var buttonText = "Kaydet";
 
     DatabaseService dbService = DatabaseService();
 
@@ -74,17 +71,17 @@ class _AddTaskState extends State<AddTask> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ScreenTextField(
-                      textLabel: textLabel2,
+                      textLabel: nameOfTask,
                       obscure: false,
                       controller: _taskNameController,
                       maxLines: 1),
                   ScreenTextField(
-                      textLabel: textLabel3,
+                      textLabel: typeOfTask,
                       obscure: false,
                       controller: _taskTypeController,
                       maxLines: 1),
                   ScreenTextField(
-                      textLabel: textLabel4,
+                      textLabel: infoOfTask,
                       obscure: false,
                       controller: _taskInfoController,
                       maxLines: 4),
@@ -121,7 +118,7 @@ class _AddTaskState extends State<AddTask> {
                           minimumSize: const Size.fromHeight(70),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16))),
-                      child: Center(child: Text(buttonText)))
+                      child: const Center(child: Text(buttonText)))
                 ],
               ),
             ),
