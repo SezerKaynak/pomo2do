@@ -90,7 +90,17 @@ const String title = "Hoşgeldiniz!",
     moveIntoTrash = "ÇÖP KUTUSUNA TAŞI",
     editText = "DÜZENLE",
     noActiveTask = "Aktif görev bulunamadı!",
-    noTask = 'Görev bulunamadı!';
+    noTask = 'Görev bulunamadı!',
+    addButtonText = "Ekle",
+    editProfileTitle = "Profil Düzenleme",
+    editProfileSubtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋",
+    editProfileName = "Adınız",
+    editProfileSurname = "Soyadınız",
+    editProfileBirthday = "Doğum Tarihiniz",
+    nameOfTask = 'Görev adı',
+    typeOfTask = 'Görev türü',
+    infoOfTask = 'Görev açıklaması...',
+    buttonText = "Kaydet";
 
 const List<String> workTimerList = [
       '20 dakika',

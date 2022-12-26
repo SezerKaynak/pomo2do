@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task_model.dart';
+import 'package:flutter_application_1/providers/tasks_provider.dart';
 import 'package:flutter_application_1/service/database_service.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:provider/provider.dart';
 
 class ArchivedTasks extends StatefulWidget {
   const ArchivedTasks({super.key});
@@ -18,7 +20,8 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
-        ModalRoute.of(context)!.settings.arguments as List<TaskModel>;
+        Provider.of<TasksProvider>(context, listen: false).taskLists()[3];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Arşivlenmiş Görevler"),
@@ -109,45 +112,47 @@ class _ArchivedTasksState extends State<ArchivedTasks> {
                     const Center(child: Text("Arşivlenmiş görev bulunamadı!")),
                   if (buttonVisible)
                     Expanded(
-                      flex: 0,
-                      child: SizedBox(
-                        width: 400,
-                        height: 60,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            onPressed: () async {
-                              int selectedNumber = selectedIndexes.length;
-                              selectedIndexes.sort();
-                              setState(() {
-                                isLoading = true;
-                              });
-                              for (int i = 0; i < selectedNumber; i++) {
-                                final TaskModel data =
-                                    tasks[selectedIndexes[i]];
-
-                                data.isArchive = false;
-                                data.isActive = true;
-                                await dbService.updateTask(data);
-                              }
-                              for (int i = 0; i < selectedIndexes.length; i++) {
-                                tasks[selectedIndexes[i] - i].isDone
-                                    ? SmartDialog.showToast(
-                                        "${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!")
-                                    : SmartDialog.showToast(
-                                        "${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
-                                tasks.removeAt(selectedIndexes[i] - i);
-                              }
-
-                              selectedIndexes.clear();
-                              buttonVisible = false;
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
-                            child:
-                                const Text("Seçili görevleri arşivden çıkar")),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: 400,
+                          height: 60,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              onPressed: () async {
+                                int selectedNumber = selectedIndexes.length;
+                                selectedIndexes.sort();
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                for (int i = 0; i < selectedNumber; i++) {
+                                  final TaskModel data =
+                                      tasks[selectedIndexes[i]];
+                        
+                                  data.isArchive = false;
+                                  data.isActive = true;
+                                  await dbService.updateTask(data);
+                                }
+                                for (int i = 0; i < selectedIndexes.length; i++) {
+                                  tasks[selectedIndexes[i] - i].isDone
+                                      ? SmartDialog.showToast(
+                                          "${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!")
+                                      : SmartDialog.showToast(
+                                          "${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
+                                  tasks.removeAt(selectedIndexes[i] - i);
+                                }
+                        
+                                selectedIndexes.clear();
+                                buttonVisible = false;
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              },
+                              child:
+                                  const Text("Seçili görevleri arşivden çıkar")),
+                        ),
                       ),
                     )
                 ],

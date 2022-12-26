@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/assets/constants.dart';
 import 'package:flutter_application_1/models/pomotodo_user.dart';
 import 'package:flutter_application_1/screens/login_page.dart';
 import 'package:flutter_application_1/screens/task.dart';
@@ -25,11 +26,17 @@ class _EditProfileState extends State<EditProfile> {
   File? image;
   File? temp;
   String? downloadUrl;
+  late TextEditingController _nameController;
+  late TextEditingController _surnameController;
+  late TextEditingController _birthdayController;
 
   @override
   void initState() {
     temp = image;
     WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
+    _nameController = TextEditingController();
+    _surnameController = TextEditingController();
+    _birthdayController = TextEditingController();
     super.initState();
   }
 
@@ -46,21 +53,19 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _surnameController.dispose();
+    _birthdayController.dispose();
+    super.dispose();
+  }
+
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
-
-    var title = "Profil Düzenleme";
-    var subtitle = "Kişisel bilgilerinizi düzenleyebilirsiniz👋";
-    var name = "Adınız";
-    var surname = "Soyadınız";
-    var birthday = "Doğum Tarihiniz";
-
-    final TextEditingController _nameController = TextEditingController();
-    final TextEditingController _surnameController = TextEditingController();
-    final TextEditingController _birthdayController = TextEditingController();
 
     return WillPopScope(
       onWillPop: () async => isLoading ? false : true,
@@ -94,14 +99,14 @@ class _EditProfileState extends State<EditProfile> {
                     child: Column(
                       children: [
                         ScreenTexts(
-                          title: title,
+                          title: editProfileTitle,
                           theme: Theme.of(context).textTheme.headline4,
                           fontW: FontWeight.w600,
                           textPosition: TextAlign.left,
                           customPadding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                         ),
                         ScreenTexts(
-                            title: subtitle,
+                            title: editProfileSubtitle,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w400,
                             textPosition: TextAlign.left,
@@ -129,7 +134,7 @@ class _EditProfileState extends State<EditProfile> {
                           ]),
                         ),
                         ScreenTexts(
-                            title: name,
+                            title: editProfileName,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w500,
                             textPosition: TextAlign.left),
@@ -142,7 +147,6 @@ class _EditProfileState extends State<EditProfile> {
                                   textLabel: "Something went wrong",
                                   obscure: false,
                                   controller: _nameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -156,7 +160,6 @@ class _EditProfileState extends State<EditProfile> {
                                       "${asyncSnapshot.data.data()["name"]}",
                                   obscure: false,
                                   controller: _nameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -165,13 +168,12 @@ class _EditProfileState extends State<EditProfile> {
                                 textLabel: "Loading",
                                 obscure: false,
                                 controller: _nameController,
-                                height: 70,
                                 maxLines: 1,
                               );
                             }),
                         const SizedBox(height: 20),
                         ScreenTexts(
-                            title: surname,
+                            title: editProfileSurname,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w500,
                             textPosition: TextAlign.left),
@@ -184,7 +186,6 @@ class _EditProfileState extends State<EditProfile> {
                                   textLabel: "Something went wrong",
                                   obscure: false,
                                   controller: _surnameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -198,7 +199,6 @@ class _EditProfileState extends State<EditProfile> {
                                       "${asyncSnapshot.data.data()["surname"]}",
                                   obscure: false,
                                   controller: _surnameController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -207,13 +207,12 @@ class _EditProfileState extends State<EditProfile> {
                                 textLabel: "Loading",
                                 obscure: false,
                                 controller: _surnameController,
-                                height: 70,
                                 maxLines: 1,
                               );
                             }),
                         const SizedBox(height: 20),
                         ScreenTexts(
-                            title: birthday,
+                            title: editProfileBirthday,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w500,
                             textPosition: TextAlign.left),
@@ -226,7 +225,6 @@ class _EditProfileState extends State<EditProfile> {
                                   textLabel: "Something went wrong",
                                   obscure: false,
                                   controller: _birthdayController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -257,7 +255,6 @@ class _EditProfileState extends State<EditProfile> {
                                       "${asyncSnapshot.data.data()["birthday"]}",
                                   obscure: false,
                                   controller: _birthdayController,
-                                  height: 70,
                                   maxLines: 1,
                                 );
                               }
@@ -266,7 +263,6 @@ class _EditProfileState extends State<EditProfile> {
                                 textLabel: "Loading",
                                 obscure: false,
                                 controller: _birthdayController,
-                                height: 70,
                                 maxLines: 1,
                               );
                             }),

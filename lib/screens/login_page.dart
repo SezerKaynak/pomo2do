@@ -69,7 +69,6 @@ class _LoginPageState extends State<LoginPage> {
                   textLabel: textLabel2,
                   obscure: false,
                   controller: _emailController,
-                  height: 70,
                   maxLines: 1,
                 ),
                 const SizedBox(height: 20),
@@ -82,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
                     textLabel: textLabel3,
                     obscure: true,
                     controller: _passwordController,
-                    height: 70,
                     maxLines: 1),
                 Align(
                     alignment: Alignment.centerRight,
@@ -99,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
                                   textLabel: enterEmailHint,
                                   obscure: false,
                                   controller: _resetEmailController,
-                                  height: 70,
                                   maxLines: 1),
                               onConfirmBtnTap: () async {
                                 FocusManager.instance.primaryFocus?.unfocus();
