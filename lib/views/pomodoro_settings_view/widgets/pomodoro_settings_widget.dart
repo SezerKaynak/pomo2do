@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/views/home_view/home.view.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_texts.dart';
-import 'package:flutter_application_1/views/sign_in_view/widgets/sign_in_widget.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/home_view/home.view.dart';
+import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
+import 'package:pomotodo/views/common/widgets/screen_texts.dart';
+import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroSettingsWidget extends StatefulWidget {

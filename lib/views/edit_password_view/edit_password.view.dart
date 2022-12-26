@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/edit_password_view/edit_password.widgets.dart';
+import 'package:pomotodo/views/edit_password_view/edit_password.widgets.dart';
 
 class EditPasswordView extends StatelessWidget with EditPasswordWidgets {
   const EditPasswordView({Key? key}) : super(key: key);
@@ -16,6 +16,7 @@ class EditPasswordView extends StatelessWidget with EditPasswordWidgets {
             icon: const Icon(Icons.arrow_back_ios, color: Colors.white)),
         actions: [
           if (isLoading)
+            // ignore: dead_code
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/sign_up_view/sign_up.widgets.dart';
+import 'package:pomotodo/views/sign_up_view/sign_up.widgets.dart';
 
 class SignUpView extends StatelessWidget with SignUpWidgets {
   const SignUpView({Key? key}) : super(key: key);

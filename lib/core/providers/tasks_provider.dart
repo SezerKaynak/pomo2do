@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
 import 'package:collection/collection.dart';
+import 'package:pomotodo/core/service/database_service.dart';
 import '../models/task_model.dart';
 
 class TasksProvider extends ChangeNotifier {

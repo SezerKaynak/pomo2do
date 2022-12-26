@@ -1,9 +1,11 @@
-import 'package:flutter_application_1/core/models/pomotodo_user.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
 
 abstract class IAuthService {
-  Future<PomotodoUser> createUserWithEmailAndPassword({required String email, required String password});
-  Future<PomotodoUser> signInEmailAndPassword({required String email, required String password});
+  Future<PomotodoUser> createUserWithEmailAndPassword(
+      {required String email, required String password});
+  Future<PomotodoUser> signInEmailAndPassword(
+      {required String email, required String password});
   Future<void> signOut();
   Future<void> resetPassword({required String email});
-  Stream<PomotodoUser?> get onAuthStateChanged; 
+  Stream<PomotodoUser?> get onAuthStateChanged;
 }

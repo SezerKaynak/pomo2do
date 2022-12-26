@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/core/providers/select_icon_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
-import 'package:flutter_application_1/views/home_view/home.view.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/select_icon_provider.dart';
+import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
+import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:provider/provider.dart';
 
 class AddTaskWidget extends StatefulWidget {

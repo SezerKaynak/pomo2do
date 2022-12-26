@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/archived_task_view/archived_task.widgets.dart';
+import 'package:pomotodo/views/archived_task_view/archived_task.widgets.dart';
 
 class ArchivedTasksView extends StatelessWidget with ArchivedTasksWidgets {
   const ArchivedTasksView({Key? key}) : super(key: key);

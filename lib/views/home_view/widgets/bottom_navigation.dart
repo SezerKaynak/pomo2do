@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/providers/tasks_provider.dart';
+import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigation extends StatelessWidget {

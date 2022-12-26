@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/core/providers/tasks_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
-import 'package:flutter_application_1/core/providers/pomodoro_provider.dart';
-import 'package:flutter_application_1/views/home_view/widgets/task_shimmer.dart';
-import 'package:flutter_application_1/views/home_view/widgets/task_statistics.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_widget.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/tasks_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
+import 'package:pomotodo/views/home_view/widgets/task_statistics.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 

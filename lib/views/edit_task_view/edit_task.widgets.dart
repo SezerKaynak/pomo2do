@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/views/edit_task_view/widgets/edit_task_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:pomotodo/views/edit_task_view/widgets/edit_task_widget.dart';
 
 class EditTaskWidgets {
   Widget body(BuildContext context) {

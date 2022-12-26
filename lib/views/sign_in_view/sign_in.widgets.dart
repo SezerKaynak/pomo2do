@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/views/sign_in_view/widgets/sign_in_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 
 class SignInWidgets {
   Widget body(BuildContext context) {
