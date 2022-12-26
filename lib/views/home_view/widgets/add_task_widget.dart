@@ -48,12 +48,27 @@ class _AddTaskState extends State<AddTaskWidget> {
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          15, 15, 15, MediaQuery.of(context).viewInsets.bottom),
+          15, 0, 15, MediaQuery.of(context).viewInsets.bottom),
       child: SizedBox(
         height: MediaQuery.of(context).size.height * .6,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            FractionallySizedBox(
+              widthFactor: 0.25,
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                ),
+                child: Container(
+                  height: 5.0,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(2.5)),
+                  ),
+                ),
+              ),
+            ),
             const Expanded(
               flex: 0,
               child: Center(
@@ -91,7 +106,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                       selectedBorderColor: Colors.blue[700],
                       selectedColor: Colors.white,
-                      fillColor: Colors.blue[200],
+                      fillColor: Theme.of(context).primaryColor,
                       color: Colors.blue[400],
                       isSelected: selectedIcon.selectedWeather,
                       children: icons,
