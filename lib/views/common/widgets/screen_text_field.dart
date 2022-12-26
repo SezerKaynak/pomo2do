@@ -33,7 +33,7 @@ class ScreenTextField extends StatelessWidget {
       obscureText: obscure,
       decoration: InputDecoration(
         alignLabelWithHint: true,
-        label: Align(alignment: Alignment.topLeft, child: Text(textLabel!)),
+        //label: Align(alignment: Alignment.topLeft, child: Text(textLabel!)),
         labelStyle:
             MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
           final Color color = states.contains(MaterialState.error)
@@ -43,7 +43,7 @@ class ScreenTextField extends StatelessWidget {
         }),
         suffixIcon: suffix,
         icon: con,
-        //labelText: textLabel,
+        labelText: textLabel,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );

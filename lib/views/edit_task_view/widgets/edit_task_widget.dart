@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/core/providers/tasks_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/views/home_view/home.view.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_texts.dart';
-import 'package:flutter_application_1/views/signIn_view/widgets/sign_in_widget.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/tasks_provider.dart';
+import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
+import 'package:pomotodo/views/common/widgets/screen_texts.dart';
+import 'package:pomotodo/views/home_view/home.view.dart';
+import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:provider/provider.dart';
 
 class EditTaskWidget extends StatefulWidget {

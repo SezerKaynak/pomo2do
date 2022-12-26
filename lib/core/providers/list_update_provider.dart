@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/service/database_service.dart';
 
 class ListUpdate extends ChangeNotifier {
   bool isLoading = false;

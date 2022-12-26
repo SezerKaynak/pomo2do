@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/core/providers/select_icon_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
-import 'package:flutter_application_1/views/home_view/home.view.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/select_icon_provider.dart';
+import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
+import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:provider/provider.dart';
 
 class AddTaskWidget extends StatefulWidget {
@@ -48,12 +48,27 @@ class _AddTaskState extends State<AddTaskWidget> {
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          15, 15, 15, MediaQuery.of(context).viewInsets.bottom),
+          15, 0, 15, MediaQuery.of(context).viewInsets.bottom),
       child: SizedBox(
         height: MediaQuery.of(context).size.height * .6,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            FractionallySizedBox(
+              widthFactor: 0.25,
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                ),
+                child: Container(
+                  height: 5.0,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(2.5)),
+                  ),
+                ),
+              ),
+            ),
             const Expanded(
               flex: 0,
               child: Center(
@@ -91,7 +106,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                       selectedBorderColor: Colors.blue[700],
                       selectedColor: Colors.white,
-                      fillColor: Colors.blue[200],
+                      fillColor: Theme.of(context).primaryColor,
                       color: Colors.blue[400],
                       isSelected: selectedIcon.selectedWeather,
                       children: icons,

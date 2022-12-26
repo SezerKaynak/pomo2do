@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_tabs/long_break_view.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_tabs/short_break_view.dart';
-import 'package:flutter_application_1/core/providers/pomodoro_provider.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/tabs.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/long_break_view.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/short_break_view.dart';
+import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/tabs.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_tabs/focus_view.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/focus_view.dart';
 import 'package:quickalert/quickalert.dart';
 
 class PomodoroWidget extends StatefulWidget {

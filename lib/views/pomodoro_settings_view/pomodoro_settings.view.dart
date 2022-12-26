@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/pomodoro_settings_view/pomodoro_settings.widgets.dart';
+import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.widgets.dart';
 
 class PomodoroSettingsView extends StatelessWidget
     with PomodoroSettingsWidgets {

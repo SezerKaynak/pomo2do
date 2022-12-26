@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer_painter.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer_painter.dart';
 
 /// Create a Circular Countdown Timer.
 class PomodoroTimer extends StatefulWidget {

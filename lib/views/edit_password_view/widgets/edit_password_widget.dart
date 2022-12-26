@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/core/service/firebase_service.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_texts.dart';
-import 'package:flutter_application_1/views/signIn_view/widgets/sign_in_widget.dart';
+import 'package:pomotodo/core/service/firebase_service.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
+import 'package:pomotodo/views/common/widgets/screen_texts.dart';
+import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:quickalert/quickalert.dart';
 
 class EditPasswordWidget extends StatefulWidget {

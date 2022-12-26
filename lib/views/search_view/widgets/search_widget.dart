@@ -1,10 +1,10 @@
 import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/pomotodo_user.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/core/providers/pomodoro_provider.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_widget.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatelessWidget {

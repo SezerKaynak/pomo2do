@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/providers/select_icon_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/views/home_view/widgets/add_task_widget.dart';
+import 'package:pomotodo/core/providers/select_icon_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/home_view/widgets/add_task_widget.dart';
 import 'package:provider/provider.dart';
 
 class FloatingButtons extends StatelessWidget {
@@ -24,10 +24,6 @@ class FloatingButtons extends StatelessWidget {
           FloatingActionButton.extended(
             heroTag: "btn2",
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const AddTask()),
-              // );
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/home_view/home.widgets.dart';
-import 'package:flutter_application_1/views/home_view/widgets/bottom_navigation.dart';
-import 'package:flutter_application_1/views/home_view/widgets/custom_drawer.dart';
-import 'package:flutter_application_1/views/home_view/widgets/floating_buttons.dart';
-import 'package:flutter_application_1/views/search_view/search.view.dart';
+import 'package:pomotodo/views/home_view/home.widgets.dart';
+import 'package:pomotodo/views/home_view/widgets/bottom_navigation.dart';
+import 'package:pomotodo/views/home_view/widgets/custom_drawer.dart';
+import 'package:pomotodo/views/home_view/widgets/floating_buttons.dart';
+import 'package:pomotodo/views/search_view/search.view.dart';
 
 class HomeView extends StatelessWidget with HomeWidgets {
   const HomeView({Key? key}) : super(key: key);

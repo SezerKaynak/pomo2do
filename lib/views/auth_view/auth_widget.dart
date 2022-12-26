@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/pomotodo_user.dart';
-import 'package:flutter_application_1/views/auth_view/error_page.dart';
-import 'package:flutter_application_1/views/home_view/home.view.dart';
-import 'package:flutter_application_1/views/signin_view/signIn.view.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/views/auth_view/error_page.dart';
+import 'package:pomotodo/views/home_view/home.view.dart';
+import 'package:pomotodo/views/sign_in_view/sign_in.view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

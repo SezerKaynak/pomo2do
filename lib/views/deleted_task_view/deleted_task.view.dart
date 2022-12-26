@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/deleted_task_view/deleted_task.widgets.dart';
+import 'package:pomotodo/views/deleted_task_view/deleted_task.widgets.dart';
 
 class DeletedTasksView extends StatelessWidget with DeletedTasksWidgets {
   const DeletedTasksView({Key? key}) : super(key: key);

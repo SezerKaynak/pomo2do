@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/providers/dark_theme_provider.dart';
-import 'package:flutter_application_1/views/home_view/widgets/custom_switch.dart';
+import 'package:pomotodo/core/providers/dark_theme_provider.dart';
+import 'package:pomotodo/views/home_view/widgets/custom_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

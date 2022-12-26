@@ -2,15 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/pomotodo_user.dart';
-import 'package:flutter_application_1/core/providers/dark_theme_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/views/edit_password_view/edit_password.view.dart';
-import 'package:flutter_application_1/core/service/firebase_service.dart';
-import 'package:flutter_application_1/views/home_view/widgets/custom_switch.dart';
-import 'package:flutter_application_1/views/home_view/widgets/settings.dart'
-    as settings;
-import 'package:flutter_application_1/views/pomodoro_settings_view/pomodoro_settings.view.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/core/providers/dark_theme_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/edit_password_view/edit_password.view.dart';
+import 'package:pomotodo/core/service/firebase_service.dart';
+import 'package:pomotodo/views/home_view/widgets/custom_switch.dart';
+import 'package:pomotodo/views/home_view/widgets/settings.dart' as settings;
+import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.view.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -96,7 +95,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       child: SizedBox.fromSize(
                                         size: const Size.fromRadius(70),
                                         child: Image.asset(
-                                          'assets/person.png',
+                                          'assets/images/person.png',
                                           fit: BoxFit.cover,
                                         ),
                                       ),

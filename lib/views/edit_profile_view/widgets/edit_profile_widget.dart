@@ -3,16 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/core/models/pomotodo_user.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/views/home_view/home.view.dart';
-import 'package:flutter_application_1/views/edit_profile_view/widgets/custom_avatar.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
-import 'package:flutter_application_1/views/common/widgets/screen_texts.dart';
-import 'package:flutter_application_1/views/signIn_view/widgets/sign_in_widget.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
+import 'package:pomotodo/views/common/widgets/screen_texts.dart';
+import 'package:pomotodo/views/edit_profile_view/widgets/custom_avatar.dart';
+import 'package:pomotodo/views/home_view/home.view.dart';
+import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileWidget extends StatefulWidget {

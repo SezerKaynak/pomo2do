@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/models/task_model.dart';
-import 'package:flutter_application_1/core/providers/tasks_provider.dart';
-import 'package:flutter_application_1/utils/constants/constants.dart';
-import 'package:flutter_application_1/core/service/database_service.dart';
-import 'package:flutter_application_1/core/providers/pomodoro_provider.dart';
-import 'package:flutter_application_1/views/home_view/widgets/task_shimmer.dart';
-import 'package:flutter_application_1/views/pomodoro_view/pomodoro.view.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_widget.dart';
+import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/tasks_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
+import 'package:pomotodo/views/home_view/widgets/task_statistics.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -36,94 +36,7 @@ class Task extends State<HomeWidget> {
             flex: 1,
             child: Container(
               color: Theme.of(context).primaryColorLight,
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Container(
-                          decoration: const BoxDecoration(
-                              border: Border(right: BorderSide(width: 0.5))),
-                          child: FutureBuilder(
-                              future: providerOfTasks.taskList,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<TaskModel>> snapshot) {
-                                if (snapshot.hasData
-                                    //&& snapshot.data!.isNotEmpty
-                                    ) {
-                                  try {
-                                    return Center(
-                                        child: Text(
-                                      providerOfTasks
-                                          .getLengthofMap()
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 20),
-                                    ));
-                                  } catch (e) {
-                                    return const Center(
-                                        child: RepaintBoundary(
-                                            child:
-                                                CircularProgressIndicator()));
-                                  }
-                                } else if (snapshot.connectionState ==
-                                        ConnectionState.done &&
-                                    providerOfTasks
-                                        .retrievedTaskList!.isEmpty) {
-                                  return const Center(
-                                      child: Text("0",
-                                          style: TextStyle(fontSize: 20)));
-                                }
-                                return const Center(
-                                    child: RepaintBoundary(
-                                        child: CircularProgressIndicator()));
-                              }))),
-                  Expanded(
-                      child: Container(
-                          decoration: const BoxDecoration(
-                              border: Border(right: BorderSide(width: 0.5))),
-                          child: FutureBuilder(
-                              future: providerOfTasks.taskList,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<List<TaskModel>> snapshot) {
-                                if (snapshot.hasData
-                                    //&& snapshot.data!.isNotEmpty
-                                    ) {
-                                  try {
-                                    return Center(
-                                        child: Text(
-                                      providerOfTasks
-                                          .taskLists()[0]
-                                          .length
-                                          .toString(),
-                                      style: const TextStyle(fontSize: 20),
-                                    ));
-                                  } catch (e) {
-                                    return const Center(
-                                        child: RepaintBoundary(
-                                            child:
-                                                CircularProgressIndicator()));
-                                  }
-                                } else if (snapshot.connectionState ==
-                                        ConnectionState.done &&
-                                    retrievedTaskList!.isEmpty) {
-                                  return const Center(
-                                      child: Text("0",
-                                          style: TextStyle(fontSize: 20)));
-                                }
-                                return const Center(
-                                    child: RepaintBoundary(
-                                        child: CircularProgressIndicator()));
-                              }))),
-                  Expanded(
-                      child: Container(
-                          decoration: const BoxDecoration(
-                              border: Border(right: BorderSide(width: 0.5))),
-                          child: const Center(
-                              child:
-                                  Text("0", style: TextStyle(fontSize: 20))))),
-                  const Expanded(
-                      child: Center(
-                          child: Text("0", style: TextStyle(fontSize: 20)))),
-                ],
-              ),
+              child: const TaskStatistics(),
             )),
         Expanded(
           flex: 12,

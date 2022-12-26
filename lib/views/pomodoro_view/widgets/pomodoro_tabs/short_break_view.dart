@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/core/providers/pomodoro_provider.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/pomodoro_widget.dart';
-import 'package:flutter_application_1/views/pomodoro_view/widgets/task_info_list_tile.dart';
+import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/task_info_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
