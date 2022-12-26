@@ -96,7 +96,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       child: SizedBox.fromSize(
                                         size: const Size.fromRadius(70),
                                         child: Image.asset(
-                                          'assets/person.png',
+                                          'assets/images/person.png',
                                           fit: BoxFit.cover,
                                         ),
                                       ),

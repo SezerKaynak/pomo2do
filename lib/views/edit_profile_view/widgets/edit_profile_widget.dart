@@ -9,7 +9,7 @@ import 'package:flutter_application_1/views/home_view/home.view.dart';
 import 'package:flutter_application_1/views/edit_profile_view/widgets/custom_avatar.dart';
 import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/views/common/widgets/screen_texts.dart';
-import 'package:flutter_application_1/views/signIn_view/widgets/sign_in_widget.dart';
+import 'package:flutter_application_1/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';

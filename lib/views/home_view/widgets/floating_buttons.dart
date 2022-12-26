@@ -24,10 +24,6 @@ class FloatingButtons extends StatelessWidget {
           FloatingActionButton.extended(
             heroTag: "btn2",
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const AddTask()),
-              // );
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,

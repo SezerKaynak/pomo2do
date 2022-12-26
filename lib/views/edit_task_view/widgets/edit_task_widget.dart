@@ -6,7 +6,7 @@ import 'package:flutter_application_1/views/home_view/home.view.dart';
 import 'package:flutter_application_1/core/service/database_service.dart';
 import 'package:flutter_application_1/views/common/widgets/screen_text_field.dart';
 import 'package:flutter_application_1/views/common/widgets/screen_texts.dart';
-import 'package:flutter_application_1/views/signIn_view/widgets/sign_in_widget.dart';
+import 'package:flutter_application_1/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:provider/provider.dart';
 
