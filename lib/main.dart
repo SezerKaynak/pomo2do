@@ -2,21 +2,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/models/pomotodo_user.dart';
-import 'package:flutter_application_1/providers/list_update_provider.dart';
-import 'package:flutter_application_1/providers/tasks_provider.dart';
-import 'package:flutter_application_1/screens/archived_tasks.dart';
-import 'package:flutter_application_1/screens/completed_tasks.dart';
-import 'package:flutter_application_1/screens/deleted_tasks.dart';
-import 'package:flutter_application_1/screens/deneme.dart';
-import 'package:flutter_application_1/screens/edit_profile.dart';
-import 'package:flutter_application_1/screens/edit_task.dart';
-import 'package:flutter_application_1/screens/task.dart';
-import 'package:flutter_application_1/providers/dark_theme_provider.dart';
-import 'package:flutter_application_1/service/firebase_service.dart';
-import 'package:flutter_application_1/service/i_auth_service.dart';
-import 'package:flutter_application_1/widgets/auth_widget.dart';
-import 'package:flutter_application_1/widgets/auth_widget_builder.dart';
+import 'package:flutter_application_1/core/models/pomotodo_user.dart';
+import 'package:flutter_application_1/core/providers/list_update_provider.dart';
+import 'package:flutter_application_1/core/providers/tasks_provider.dart';
+import 'package:flutter_application_1/views/archived_task_view/archived_task.view.dart';
+import 'package:flutter_application_1/views/auth_view/auth_widget.dart';
+import 'package:flutter_application_1/views/auth_view/auth_widget_builder.dart';
+import 'package:flutter_application_1/views/completed_task_view/completed_task.view.dart';
+import 'package:flutter_application_1/views/deleted_task_view/deleted_task.view.dart';
+import 'package:flutter_application_1/views/deneme.dart';
+import 'package:flutter_application_1/views/edit_profile_view/edit_profile.view.dart';
+import 'package:flutter_application_1/views/edit_task_view/edit_task.view.dart';
+import 'package:flutter_application_1/views/home_view/home.view.dart';
+import 'package:flutter_application_1/core/providers/dark_theme_provider.dart';
+import 'package:flutter_application_1/core/service/firebase_service.dart';
+import 'package:flutter_application_1/core/service/i_auth_service.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +39,8 @@ Future<void> main() async {
     return theme;
   }
 
-  theme = await loadTheme("assets/appainter_theme.json");
-  themeDark = await loadTheme("assets/appainter_theme_dark.json");
+  theme = await loadTheme("assets/app_theme/appainter_theme.json");
+  themeDark = await loadTheme("assets/app_theme/appainter_theme_dark.json");
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -100,14 +100,14 @@ class _MyAppState extends State<MyApp> {
                   builder: FlutterSmartDialog.init(),
                   initialRoute: '/',
                   routes: {
-                    '/task': (context) => TaskView(),
-                    '/done': (context) => const CompletedTasks(),
-                    '/editTask': (context) => const EditTask(),
+                    '/task': (context) => const HomeView(),
+                    '/done': (context) => const CompletedTasksView(),
+                    '/editTask': (context) => const EditTaskView(),
                     '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
                         create: (context) => ListUpdate(),
-                        child: const DeletedTasks()),
-                    '/editProfile': (context) => const EditProfile(),
-                    '/archived': (context) => const ArchivedTasks(),
+                        child: const DeletedTasksView()),
+                    '/editProfile': (context) => const EditProfileView(),
+                    '/archived': (context) => const ArchivedTasksView(),
                     '/deneme': (context) => const Deneme(),
                   },
                   debugShowCheckedModeBanner: false,
