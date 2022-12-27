@@ -145,7 +145,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                               if (asyncSnapshot.hasError) {
                                 return ScreenTextField(
                                   textLabel: "Something went wrong",
-                                  obscure: false,
                                   controller: _nameController,
                                   maxLines: 1,
                                 );
@@ -158,7 +157,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                                 return ScreenTextField(
                                   textLabel:
                                       "${asyncSnapshot.data.data()["name"]}",
-                                  obscure: false,
                                   controller: _nameController,
                                   maxLines: 1,
                                 );
@@ -166,7 +164,6 @@ class _EditProfileState extends State<EditProfileWidget> {
 
                               return ScreenTextField(
                                 textLabel: "Loading",
-                                obscure: false,
                                 controller: _nameController,
                                 maxLines: 1,
                               );
@@ -184,7 +181,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                               if (asyncSnapshot.hasError) {
                                 return ScreenTextField(
                                   textLabel: "Something went wrong",
-                                  obscure: false,
                                   controller: _surnameController,
                                   maxLines: 1,
                                 );
@@ -197,7 +193,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                                 return ScreenTextField(
                                   textLabel:
                                       "${asyncSnapshot.data.data()["surname"]}",
-                                  obscure: false,
                                   controller: _surnameController,
                                   maxLines: 1,
                                 );
@@ -205,7 +200,6 @@ class _EditProfileState extends State<EditProfileWidget> {
 
                               return ScreenTextField(
                                 textLabel: "Loading",
-                                obscure: false,
                                 controller: _surnameController,
                                 maxLines: 1,
                               );
@@ -223,7 +217,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                               if (asyncSnapshot.hasError) {
                                 return ScreenTextField(
                                   textLabel: "Something went wrong",
-                                  obscure: false,
                                   controller: _birthdayController,
                                   maxLines: 1,
                                 );
@@ -253,7 +246,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                                   con: const Icon(Icons.calendar_today),
                                   textLabel:
                                       "${asyncSnapshot.data.data()["birthday"]}",
-                                  obscure: false,
                                   controller: _birthdayController,
                                   maxLines: 1,
                                 );
@@ -261,7 +253,6 @@ class _EditProfileState extends State<EditProfileWidget> {
 
                               return ScreenTextField(
                                 textLabel: "Loading",
-                                obscure: false,
                                 controller: _birthdayController,
                                 maxLines: 1,
                               );

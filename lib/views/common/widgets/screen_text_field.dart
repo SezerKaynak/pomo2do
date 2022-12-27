@@ -4,7 +4,7 @@ class ScreenTextField extends StatelessWidget {
   const ScreenTextField({
     Key? key,
     required this.textLabel,
-    required this.obscure,
+    this.obscure = false,
     required this.controller,
     required this.maxLines,
     this.valid,
