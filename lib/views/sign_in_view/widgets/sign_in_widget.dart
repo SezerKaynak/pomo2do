@@ -182,7 +182,9 @@ class _SignInWidgetState extends State<SignInWidget> {
               child: SizedBox(
                   height: 30,
                   child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        _authService.signInWithGoogle();
+                      },
                       child: Image.asset("assets/images/google.png",
                           fit: BoxFit.fitHeight))),
             ),
