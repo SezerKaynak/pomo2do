@@ -45,7 +45,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized();
   var initializationSettingsAndroid =
       const AndroidInitializationSettings("google");
   var initializationSettings =
