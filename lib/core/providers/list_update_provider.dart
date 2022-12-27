@@ -42,6 +42,8 @@ class ListUpdate extends ChangeNotifier {
   void deleteTasksButton(List selectedIndexes, List<TaskModel> tasks) async {
     int selectedNumber = selectedIndexes.length;
     selectedIndexes.sort();
+    isLoading = true;
+    notifyListeners();
     for (int i = 0; i < selectedNumber; i++) {
       await dbService.deleteTask(tasks[selectedIndexes[i]].id.toString());
     }
@@ -50,6 +52,7 @@ class ListUpdate extends ChangeNotifier {
       tasks.removeAt(selectedIndexes[i] - i);
     }
     selectedIndexes.clear();
+    isLoading = false;
     notifyListeners();
   }
 }
