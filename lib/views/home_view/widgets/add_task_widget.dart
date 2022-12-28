@@ -85,17 +85,14 @@ class _AddTaskState extends State<AddTaskWidget> {
                 children: [
                   ScreenTextField(
                       textLabel: nameOfTask,
-                      obscure: false,
                       controller: _taskNameController,
                       maxLines: 1),
                   ScreenTextField(
                       textLabel: typeOfTask,
-                      obscure: false,
                       controller: _taskTypeController,
                       maxLines: 1),
                   ScreenTextField(
                       textLabel: infoOfTask,
-                      obscure: false,
                       controller: _taskInfoController,
                       maxLines: 4),
                   RepaintBoundary(

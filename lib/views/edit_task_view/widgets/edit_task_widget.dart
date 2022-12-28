@@ -85,7 +85,6 @@ class _EditTaskState extends State<EditTaskWidget> {
                     textPosition: TextAlign.left),
                 ScreenTextField(
                     textLabel: _taskNameController.text = selectedTask.taskName,
-                    obscure: false,
                     controller: _taskNameController,
                     maxLines: 1),
                 const SizedBox(height: 20),
@@ -96,7 +95,6 @@ class _EditTaskState extends State<EditTaskWidget> {
                     textPosition: TextAlign.left),
                 ScreenTextField(
                     textLabel: _taskTypeController.text = selectedTask.taskType,
-                    obscure: false,
                     controller: _taskTypeController,
                     maxLines: 1),
                 const SizedBox(height: 20),
@@ -107,7 +105,6 @@ class _EditTaskState extends State<EditTaskWidget> {
                     textPosition: TextAlign.left),
                 ScreenTextField(
                     textLabel: _taskInfoController.text = selectedTask.taskInfo,
-                    obscure: false,
                     controller: _taskInfoController,
                     maxLines: 3),
                 FormField(

@@ -64,7 +64,6 @@ class _SignInWidgetState extends State<SignInWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
               textLabel: textLabel2,
-              obscure: false,
               controller: _emailController,
               maxLines: 1,
             ),
@@ -92,7 +91,6 @@ class _SignInWidgetState extends State<SignInWidget> {
                           cancelBtnText: 'İptal Et',
                           widget: ScreenTextField(
                               textLabel: enterEmailHint,
-                              obscure: false,
                               controller: _resetEmailController,
                               maxLines: 1),
                           onConfirmBtnTap: () async {

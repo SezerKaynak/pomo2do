@@ -70,7 +70,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: name,
-                obscure: false,
                 controller: _nameController,
                 maxLines: 1),
             ScreenTexts(
@@ -80,7 +79,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: surname,
-                obscure: false,
                 controller: _surnameController,
                 maxLines: 1),
             ScreenTexts(
@@ -90,7 +88,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: email,
-                obscure: false,
                 controller: _emailController,
                 maxLines: 1),
             ScreenTexts(
@@ -126,7 +123,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               },
               con: const Icon(Icons.calendar_today),
               textLabel: yourBirthday,
-              obscure: false,
               controller: _birthdayController,
               maxLines: 1,
             ),

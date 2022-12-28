@@ -79,7 +79,6 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: workTimerSelect,
-                obscure: false,
                 controller: _workTimerController,
                 suffix: PopupMenuButton<String>(
                   icon: const Icon(Icons.arrow_drop_down),
@@ -101,7 +100,6 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: breakTimerSelect,
-                obscure: false,
                 controller: _breakTimerController,
                 suffix: PopupMenuButton<String>(
                   icon: const Icon(Icons.arrow_drop_down),
@@ -123,7 +121,6 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: longBreakTimerSelect,
-                obscure: false,
                 controller: _longBreakTimerController,
                 suffix: PopupMenuButton<String>(
                   icon: const Icon(Icons.arrow_drop_down),
@@ -145,7 +142,6 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 textPosition: TextAlign.left),
             ScreenTextField(
                 textLabel: longBreakNumberSelect,
-                obscure: false,
                 controller: _longBreakNumberController,
                 suffix: PopupMenuButton<String>(
                   icon: const Icon(Icons.arrow_drop_down),
