@@ -30,6 +30,7 @@ dependencies:
   cached_network_image: ^3.2.2
   cloud_firestore: ^3.5.0
   cupertino_icons: ^1.0.2
+  extension_google_sign_in_as_googleapis_auth: ^2.0.7
   firebase_auth: ^3.11.0
   firebase_core: ^1.24.0
   firebase_database: ^9.1.6
@@ -43,6 +44,7 @@ dependencies:
   flutter_slidable: ^2.0.0
   flutter_smart_dialog: ^4.5.5+6
   google_sign_in: ^5.4.2
+  googleapis: ^9.2.0
   image_picker: ^0.8.6
   intl: ^0.17.0
   json_theme: ^4.0.3+1
