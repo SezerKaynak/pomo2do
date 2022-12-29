@@ -12,6 +12,7 @@ class SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<PomotodoUser>(context, listen: false).userId;
     return FirestoreSearchScaffold(
       pressed: () {
         Navigator.pop(context);
@@ -20,7 +21,7 @@ class SearchWidget extends StatelessWidget {
       searchTextColor: Colors.black,
       searchBodyBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
       firestoreCollectionName:
-          'Users/${context.read<PomotodoUser>().userId}/tasks',
+          'Users/$user/tasks',
       searchBy: 'taskNameCaseInsensitive',
       dataListFromSnapshot: TaskModel().dataListFromSnapshot,
       builder: (context, snapshot) {
@@ -35,7 +36,6 @@ class SearchWidget extends StatelessWidget {
               itemCount: dataList.length,
               itemBuilder: (context, index) {
                 final TaskModel data = dataList[index];
-
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
