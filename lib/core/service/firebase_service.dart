@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
@@ -54,8 +55,10 @@ class AuthService with ConvertUser implements IAuthService {
     var peopleApi =
         PeopleServiceApi((await _googleSignIn.authenticatedClient())!);
 
-    var birthday =
+    Person person =
         await peopleApi.people.get("people/me", personFields: 'birthdays');
+
+    Birthday birthday = person.birthdays!.first;
 
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
     await users.doc(FirebaseAuth.instance.currentUser!.uid).set({
@@ -65,20 +68,15 @@ class AuthService with ConvertUser implements IAuthService {
           ? googleUser.displayName!.split(' ')[1]
           : "",
       'birthday':
-          '${birthday.birthdays![0].date!.day}.${birthday.birthdays![0].date!.month}.${birthday.birthdays![0].date!.year}'
+          '${birthday.date!.day}.${birthday.date!.month}.${birthday.date!.year}'
     });
-    googleUser.clearAuthCache();
     return convertUser(_tempUser);
   }
 
   @override
   Future<void> signOut() async {
     if (_googleSignIn.currentUser != null) {
-      try {
-        await _googleSignIn.signOut();
-      } catch (e) {
-        debugPrint("olmadı");
-      }
+      await _googleSignIn.signOut();
     }
     await _authInstance.signOut();
   }

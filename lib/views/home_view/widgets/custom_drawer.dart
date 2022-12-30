@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
@@ -23,6 +24,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthService _authService = AuthService();
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   String? downloadUrl;
 
   @override
@@ -31,18 +33,76 @@ class _CustomDrawerState extends State<CustomDrawer> {
     WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
   }
 
+  // baglantiAl() async {
+  //   final storageRef = FirebaseStorage.instance
+  //       .ref()
+  //       .child("profilresimleri")
+  //       .child(context.read<PomotodoUser>().userId)
+  //       .child('profilResmi.png');
+  //   try {
+  //     final path = await storageRef.getDownloadURL();
+  //     setState(() {
+  //       downloadUrl = path;
+  //     });
+  //   } on FirebaseException catch (e) {
+  //     // Caught an exception from Firebase.
+  //     print("Failed with error '${e.code}': ${e.message}");
+  //     setState(() {
+  //       downloadUrl = _auth.currentUser!.photoURL;
+  //     });
+  //   }
+  // }
+
   baglantiAl() async {
-    String yol = await FirebaseStorage.instance
+    await FirebaseStorage.instance
         .ref()
-        .child("profilresimleri")
+        .child('profilresimleri')
         .child(context.read<PomotodoUser>().userId)
         .child("profilResmi.png")
-        .getDownloadURL();
-
-    setState(() {
-      downloadUrl = yol;
+        .getDownloadURL()
+        .then((url) {
+      setState(() {
+        downloadUrl = url;
+      });
+    }).catchError((err) {
+      setState(() {
+        downloadUrl = _auth.currentUser!.photoURL;
+      });
     });
   }
+
+  // baglantiAl() async {
+  //   if (_auth.currentUser!.providerData[0].providerId;) {
+      
+  //   } else {
+      
+  //   }
+  //   var deneme = 
+  //   print(deneme);
+  //   // var yol = await FirebaseStorage.instance
+  //   //     .ref()
+  //   //     .child('profilresimleri')
+  //   //     .child(context.read<PomotodoUser>().userId)
+  //   //     .child("profilResmi.png")
+  //   //     .getDownloadURL()
+  //   //     .then((value) {
+  //   //   setState(() {
+  //   //     downloadUrl = value;
+  //   //   });
+  //   // }, onError: (err) {
+  //   //   setState(() {
+  //   //     downloadUrl = _auth.currentUser!.photoURL;
+  //   //   });
+  //   // });
+  // }
+
+  // print(yol);
+
+  //
+  //
+  // setState(() {
+  //   downloadUrl = yol;
+  // });
 
   @override
   Widget build(BuildContext context) {
