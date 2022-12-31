@@ -33,77 +33,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
     WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
   }
 
-  // baglantiAl() async {
-  //   final storageRef = FirebaseStorage.instance
-  //       .ref()
-  //       .child("profilresimleri")
-  //       .child(context.read<PomotodoUser>().userId)
-  //       .child('profilResmi.png');
-  //   try {
-  //     final path = await storageRef.getDownloadURL();
-  //     setState(() {
-  //       downloadUrl = path;
-  //     });
-  //   } on FirebaseException catch (e) {
-  //     // Caught an exception from Firebase.
-  //     print("Failed with error '${e.code}': ${e.message}");
-  //     setState(() {
-  //       downloadUrl = _auth.currentUser!.photoURL;
-  //     });
-  //   }
-  // }
-
   baglantiAl() async {
-    await FirebaseStorage.instance
+    var reference = FirebaseStorage.instance
         .ref()
         .child('profilresimleri')
-        .child(context.read<PomotodoUser>().userId)
-        .child("profilResmi.png")
-        .getDownloadURL()
-        .then((url) {
-      setState(() {
-        downloadUrl = url;
+        .child(context.read<PomotodoUser>().userId);
+
+    if (await reference.list().then((value) => value.items.isNotEmpty)) {
+      await reference.child("profilResmi.png").getDownloadURL().then((url) {
+        setState(() {
+          downloadUrl = url;
+        });
       });
-    }).catchError((err) {
+    } else {
       setState(() {
         downloadUrl = _auth.currentUser!.photoURL;
       });
-    });
+    }
   }
-
-  // baglantiAl() async {
-  //   if (_auth.currentUser!.providerData[0].providerId;) {
-      
-  //   } else {
-      
-  //   }
-  //   var deneme = 
-  //   print(deneme);
-  //   // var yol = await FirebaseStorage.instance
-  //   //     .ref()
-  //   //     .child('profilresimleri')
-  //   //     .child(context.read<PomotodoUser>().userId)
-  //   //     .child("profilResmi.png")
-  //   //     .getDownloadURL()
-  //   //     .then((value) {
-  //   //   setState(() {
-  //   //     downloadUrl = value;
-  //   //   });
-  //   // }, onError: (err) {
-  //   //   setState(() {
-  //   //     downloadUrl = _auth.currentUser!.photoURL;
-  //   //   });
-  //   // });
-  // }
-
-  // print(yol);
-
-  //
-  //
-  // setState(() {
-  //   downloadUrl = yol;
-  // });
-
+  
   @override
   Widget build(BuildContext context) {
     var user = users.doc(context.read<PomotodoUser>().userId);
