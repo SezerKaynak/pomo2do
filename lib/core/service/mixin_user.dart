@@ -4,6 +4,6 @@ import '../models/pomotodo_user.dart';
 
 mixin ConvertUser{
   PomotodoUser convertUser(UserCredential user){
-    return PomotodoUser(userId: user.user!.uid, userMail: user.user!.email!);
+    return PomotodoUser(userId: user.user!.uid, userMail: user.user!.email!, userPhotoUrl: user.user!.photoURL!);
   }
 }

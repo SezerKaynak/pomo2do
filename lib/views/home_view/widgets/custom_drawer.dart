@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
@@ -24,7 +23,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthService _authService = AuthService();
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   String? downloadUrl;
 
   @override
@@ -47,7 +46,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       });
     } else {
       setState(() {
-        downloadUrl = _auth.currentUser!.photoURL;
+        downloadUrl = context.read<PomotodoUser>().userPhotoUrl;
       });
     }
   }
