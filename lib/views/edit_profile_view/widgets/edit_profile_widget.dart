@@ -41,16 +41,22 @@ class _EditProfileState extends State<EditProfileWidget> {
   }
 
   baglantiAl() async {
-    String yol = await FirebaseStorage.instance
+    var yol = FirebaseStorage.instance
         .ref()
         .child("profilresimleri")
-        .child(context.read<PomotodoUser>().userId)
-        .child("profilResmi.png")
-        .getDownloadURL();
+        .child(context.read<PomotodoUser>().userId);
 
-    setState(() {
-      downloadUrl = yol;
-    });
+    if (await yol.list().then((value) => value.items.isNotEmpty)) {
+      await yol.child("profilResmi.png").getDownloadURL().then((url) {
+        setState(() {
+          downloadUrl = url;
+        });
+      });
+    } else {
+      setState(() {
+        downloadUrl = context.read<PomotodoUser>().userPhotoUrl;
+      });
+    }
   }
 
   @override
@@ -66,7 +72,6 @@ class _EditProfileState extends State<EditProfileWidget> {
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
-
     return WillPopScope(
       onWillPop: () async => isLoading ? false : true,
       child: Scaffold(
