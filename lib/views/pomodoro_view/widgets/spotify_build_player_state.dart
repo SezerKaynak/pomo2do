@@ -17,7 +17,7 @@ Widget buildPlayerStateWidget(BuildContext context) {
       spotifyProvider.currentTrackImageUri = track?.imageUri;
       var playerState = snapshot.data;
 
-      if (playerState == null || track == null) {
+      if (playerState == null) {
         return Center(
           child: Container(
             decoration: BoxDecoration(
@@ -38,7 +38,34 @@ Widget buildPlayerStateWidget(BuildContext context) {
             ),
           ),
         );
+      } else if (track == null) {
+        return Container(
+            color: Theme.of(context).primaryColor,
+            height: kToolbarHeight,
+            child: Center(
+              child: AutoSizeText(
+                "Spotify'a bağlandı, uygulamadan şarkıyı açın.",
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                maxLines: 1,
+                overflowReplacement: SizedBox(
+                  height: kToolbarHeight,
+                  child: Marquee(
+                    blankSpace: 10,
+                    text: "Spotify'a bağlandı, uygulamadan şarkıyı açın.",
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                    velocity: 20.0,
+                  ),
+                ),
+              ),
+            ));
       }
+      spotifyProvider.isPlaying = !playerState.isPaused;
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
