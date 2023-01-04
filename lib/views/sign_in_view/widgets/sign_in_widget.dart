@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
@@ -180,8 +182,24 @@ class _SignInWidgetState extends State<SignInWidget> {
               child: SizedBox(
                   height: 30,
                   child: InkWell(
-                      onTap: () {
-                        _authService.signInWithGoogle();
+                      onTap: () async {
+                        try {
+                          await _authService.signInWithGoogle();
+                        } on PlatformException catch (e) {
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: "Giriş Başarısız!",
+                              text: e.code,
+                              confirmBtnText: confirmButtonText);
+                        } catch (e) {
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: "Giriş Başarısız!",
+                              text: "Uygulamaya giriş yapılamadı.",
+                              confirmBtnText: confirmButtonText);
+                        }
                       },
                       child: Image.asset("assets/images/google.png",
                           fit: BoxFit.fitHeight))),
