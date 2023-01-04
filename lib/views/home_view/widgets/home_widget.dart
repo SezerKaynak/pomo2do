@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/database_service.dart';
@@ -189,18 +190,24 @@ class Task extends State<HomeWidget> {
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ChangeNotifierProvider<
-                                                                          PageUpdate>(
-                                                                      create:
-                                                                          (context) {
-                                                                        return PageUpdate();
-                                                                      },
-                                                                      child:
-                                                                          PomodoroWidget(
-                                                                        task: providerOfTasks
-                                                                            .retrievedTaskList![key]![index],
-                                                                      ))));
+                                                            builder: (context) =>
+                                                                // MultiProvider(
+                                                                //     providers: [
+                                                                //   ChangeNotifierProvider(
+                                                                //       create: (context) =>
+                                                                //           PageUpdate()),
+                                                                //    ChangeNotifierProvider(
+                                                                //        create: (context) =>
+                                                                //            SpotifyProvider())
+                                                                // ],
+                                                                ChangeNotifierProvider(
+                                                                    create: (context) => PageUpdate(),
+                                                                    child: PomodoroWidget(
+                                                                      task: providerOfTasks
+                                                                              .retrievedTaskList![key]![
+                                                                          index],
+                                                                    )),
+                                                          ));
                                                     },
                                                     shape:
                                                         RoundedRectangleBorder(
