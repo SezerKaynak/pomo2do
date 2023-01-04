@@ -14,17 +14,16 @@ class SpotifyProvider extends ChangeNotifier {
     try {
       loading = true;
       notifyListeners();
-
       await SpotifySdk.connectToSpotifyRemote(
           clientId: dotenv.env["clientId"].toString(),
           redirectUrl: dotenv.env["redirectUrl"].toString());
-
       loading = false;
       connected = true;
       notifyListeners();
     } on PlatformException catch (_) {
       loading = false;
       notifyListeners();
+      throw PlatformException(code: "Spotify uygulaması bulunamadı.");
     } on MissingPluginException {
       loading = false;
       notifyListeners();
