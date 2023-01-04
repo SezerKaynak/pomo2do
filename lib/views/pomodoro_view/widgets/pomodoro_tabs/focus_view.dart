@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/spotify_build_player_state.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/task_info_list_tile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -152,18 +155,6 @@ class _FocusViewState extends State<FocusView> {
                         borderRadius: BorderRadius.circular(8)),
                     child: Column(
                       children: [
-                        if (!spotifyProvider.connected)
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: SizedBox(
-                              height: 0.5,
-                              child: Visibility(
-                                  visible: spotifyProvider.loading,
-                                  child: const LinearProgressIndicator(
-                                      color: Colors.red)),
-                            ),
-                          ),
                         ClipRRect(
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(8),
@@ -187,31 +178,58 @@ class _FocusViewState extends State<FocusView> {
                                         ),
                                       )
                                     : Expanded(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(8),
-                                                      topRight:
-                                                          Radius.circular(8))),
-                                          height: kToolbarHeight,
-                                          child: InkWell(
-                                            onTap: () {
-                                              context
-                                                  .read<SpotifyProvider>()
-                                                  .connectToSpotifyRemote();
-                                            },
-                                            child: const Center(
-                                                child: Text(
-                                              "Spotify'a Bağlan",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            )),
-                                          ),
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8))),
+                                              height: kToolbarHeight,
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  try {
+                                                    await context
+                                                        .read<SpotifyProvider>()
+                                                        .connectToSpotifyRemote();
+                                                  } on PlatformException catch (e) {
+                                                    QuickAlert.show(
+                                                        context: context,
+                                                        type: QuickAlertType
+                                                            .error,
+                                                        title:
+                                                            "Bağlanamadı!",
+                                                        text: e.code,
+                                                        confirmBtnText:
+                                                            confirmButtonText);
+                                                  }
+                                                },
+                                                child: const Center(
+                                                    child: Text(
+                                                  "Spotify'a Bağlan",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
+                                              ),
+                                            ),
+                                            Center(
+                                              child: Visibility(
+                                                  visible:
+                                                      spotifyProvider.loading,
+                                                  child:
+                                                      const CircularProgressIndicator(
+                                                          color: Colors.red)),
+                                            ),
+                                          ],
                                         ),
                                       )
                               ],

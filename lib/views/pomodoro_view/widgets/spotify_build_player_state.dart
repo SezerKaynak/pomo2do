@@ -39,7 +39,6 @@ Widget buildPlayerStateWidget(BuildContext context) {
           ),
         );
       }
-
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
