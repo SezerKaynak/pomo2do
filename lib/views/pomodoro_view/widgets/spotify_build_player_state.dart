@@ -16,7 +16,6 @@ Widget buildPlayerStateWidget(BuildContext context) {
       var track = snapshot.data?.track;
       spotifyProvider.currentTrackImageUri = track?.imageUri;
       var playerState = snapshot.data;
-
       if (playerState == null) {
         return Center(
           child: Container(
@@ -89,6 +88,7 @@ Widget buildPlayerStateWidget(BuildContext context) {
                         width: kToolbarHeight * 3,
                         height: kToolbarHeight,
                         child: Marquee(
+                          blankSpace: 10,
                           text: track.name,
                           style: const TextStyle(
                             fontSize: 15,

@@ -191,18 +191,11 @@ class Task extends State<HomeWidget> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                // MultiProvider(
-                                                                //     providers: [
-                                                                //   ChangeNotifierProvider(
-                                                                //       create: (context) =>
-                                                                //           PageUpdate()),
-                                                                //    ChangeNotifierProvider(
-                                                                //        create: (context) =>
-                                                                //            SpotifyProvider())
-                                                                // ],
                                                                 ChangeNotifierProvider(
-                                                                    create: (context) => PageUpdate(),
-                                                                    child: PomodoroWidget(
+                                                                    create: (context) =>
+                                                                        PageUpdate(),
+                                                                    child:
+                                                                        PomodoroWidget(
                                                                       task: providerOfTasks
                                                                               .retrievedTaskList![key]![
                                                                           index],
