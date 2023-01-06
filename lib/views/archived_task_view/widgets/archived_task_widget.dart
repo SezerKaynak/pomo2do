@@ -56,7 +56,7 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                                     color: data.isDone == true
                                         ? Colors.green[500]
                                         : Theme.of(context).cardColor,
-                                    borderRadius: BorderRadius.circular(16.0)),
+                                    borderRadius: BorderRadius.circular(8.0)),
                                 child: ListTile(
                                   contentPadding: const EdgeInsets.all(15),
                                   leading: Checkbox(
@@ -108,7 +108,7 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
+                                    borderRadius: BorderRadius.circular(8))),
                             onPressed: () async {
                               int selectedNumber = selectedIndexes.length;
                               selectedIndexes.sort();

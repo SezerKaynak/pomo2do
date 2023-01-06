@@ -20,9 +20,13 @@ class SpotifyProvider extends ChangeNotifier {
       loading = false;
       connected = true;
       notifyListeners();
-    } on PlatformException catch (_) {
+    } on PlatformException catch (e) {
       loading = false;
       notifyListeners();
+      if (e.code == "NotLoggedInException") {
+        throw PlatformException(
+            code: "Spotify'a giriş yapmalısınız.");
+      }
       throw PlatformException(code: "Spotify uygulaması bulunamadı.");
     } on MissingPluginException {
       loading = false;

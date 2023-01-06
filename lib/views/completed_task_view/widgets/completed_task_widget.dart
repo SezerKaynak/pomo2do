@@ -52,7 +52,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.green[500],
-                                  borderRadius: BorderRadius.circular(16.0)),
+                                  borderRadius: BorderRadius.circular(8.0)),
                               child: ListTile(
                                 contentPadding: const EdgeInsets.all(15),
                                 leading: Checkbox(
@@ -79,15 +79,23 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                title: Text(data.taskName),
-                                subtitle: Text(data.taskInfo),
+                                title: Text(
+                                  data.taskName,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                subtitle: Text(data.taskInfo,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
                                 trailing: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     InkWell(
-                                        child: const Icon(Icons.archive),
+                                        child: const Icon(
+                                          Icons.archive,
+                                          color: Colors.white,
+                                        ),
                                         onTap: () async {
                                           setState(() {
                                             isLoading = true;
@@ -107,7 +115,10 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                                               "Görev arşive taşındı!");
                                         }),
                                     InkWell(
-                                        child: const Icon(Icons.delete),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
                                         onTap: () async {
                                           setState(() {
                                             isLoading = true;
@@ -147,7 +158,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
+                                    borderRadius: BorderRadius.circular(8))),
                             onPressed: () async {
                               int selectedNumber = selectedIndexes.length;
                               selectedIndexes.sort();
@@ -171,7 +182,9 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                               });
                             },
                             child: const Text(
-                                "Seçili görevleri tamamlanmamış olarak işaretle")),
+                              "Seçili görevleri tamamlanmamış olarak işaretle",
+                              textAlign: TextAlign.center,
+                            )),
                       ),
                     ),
                   ),

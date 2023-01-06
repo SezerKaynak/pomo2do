@@ -30,13 +30,13 @@ class LongBreak extends StatelessWidget {
             pomodoroCount: widget.task.pomodoroCount,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.55,
+            height: MediaQuery.of(context).size.height * 0.50,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 RepaintBoundary(
                   child: PomodoroTimer(
-                    backgroudColor: Colors.black26,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     onComplete: () {
                       context.read<PageUpdate>().startOrStop(
                           context
@@ -50,7 +50,6 @@ class LongBreak extends StatelessWidget {
                               .read<SharedPreferences>()
                               .getInt("longBreakNumberSelect")!);
                     },
-                    width: MediaQuery.of(context).size.width * 0.7,
                     isReverse: true,
                     isReverseAnimation: true,
                     duration: context.select((SharedPreferences prefs) =>
@@ -59,15 +58,11 @@ class LongBreak extends StatelessWidget {
                     autoStart: false,
                     controller: controller,
                     isTimerTextShown: true,
-                    neumorphicEffect: true,
-                    innerFillGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
-                    neonGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
+                    neumorphicEffect: false,
+                    strokeWidth: 20,
+                    innerFillColor: Theme.of(context).primaryColor,
+                    neonColor: Theme.of(context).primaryColor,
+                    backgroudColor: Theme.of(context).focusColor,
                   ),
                 ),
                 Row(

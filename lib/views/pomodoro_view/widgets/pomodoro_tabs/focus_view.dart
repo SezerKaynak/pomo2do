@@ -51,8 +51,7 @@ class _FocusViewState extends State<FocusView> {
               children: [
                 RepaintBoundary(
                   child: PomodoroTimer(
-                    backgroudColor: Theme.of(context).focusColor,
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     isReverse: true,
                     isReverseAnimation: true,
                     onComplete: () async {
@@ -92,15 +91,11 @@ class _FocusViewState extends State<FocusView> {
                     autoStart: false,
                     controller: widget.controller,
                     isTimerTextShown: true,
-                    neumorphicEffect: true,
-                    innerFillGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
-                    neonGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
+                    neumorphicEffect: false,
+                    strokeWidth: 20,
+                    innerFillColor: Theme.of(context).primaryColor,
+                    neonColor: Theme.of(context).primaryColor,
+                    backgroudColor: Theme.of(context).focusColor,
                   ),
                 ),
                 Row(
@@ -148,131 +143,144 @@ class _FocusViewState extends State<FocusView> {
               children: [
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: kToolbarHeight * 2,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1),
+                  child: Card(
+                    clipBehavior: Clip.hardEdge,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            width: 1, color: Colors.grey.withOpacity(0.5)),
                         borderRadius: BorderRadius.circular(8)),
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              topRight: Radius.circular(8)),
-                          clipBehavior: Clip.hardEdge,
-                          child: SizedBox(
-                            height: kToolbarHeight,
-                            child: Row(
-                              children: [
-                                spotifyProvider.connected
-                                    ? Expanded(
-                                        child: Wrap(
-                                          alignment: WrapAlignment.spaceBetween,
-                                          children: [
-                                            Stack(
+                    elevation: 10,
+                    child: SizedBox(
+                      height: kToolbarHeight * 2,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8)),
+                            clipBehavior: Clip.hardEdge,
+                            child: SizedBox(
+                              height: kToolbarHeight,
+                              child: Row(
+                                children: [
+                                  spotifyProvider.connected
+                                      ? Expanded(
+                                          child: Wrap(
+                                            alignment:
+                                                WrapAlignment.spaceBetween,
+                                            children: [
+                                              Stack(
+                                                children: [
+                                                  buildPlayerStateWidget(
+                                                      context),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: Material(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  topRight: Radius.circular(8)),
+                                            ),
+                                            child: Stack(
                                               children: [
-                                                buildPlayerStateWidget(context),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    : Expanded(
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  8),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  8))),
-                                              height: kToolbarHeight,
-                                              child: InkWell(
-                                                onTap: () async {
-                                                  try {
-                                                    await context
-                                                        .read<SpotifyProvider>()
-                                                        .connectToSpotifyRemote();
-                                                  } on PlatformException catch (e) {
-                                                    QuickAlert.show(
-                                                        context: context,
-                                                        type: QuickAlertType
-                                                            .error,
-                                                        title:
-                                                            "Bağlanamadı!",
-                                                        text: e.code,
-                                                        confirmBtnText:
-                                                            confirmButtonText);
-                                                  }
-                                                },
-                                                child: const Center(
-                                                    child: Text(
-                                                  "Spotify'a Bağlan",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )),
-                                              ),
-                                            ),
-                                            Center(
-                                              child: Visibility(
+                                                Visibility(
                                                   visible:
-                                                      spotifyProvider.loading,
-                                                  child:
-                                                      const CircularProgressIndicator(
-                                                          color: Colors.red)),
+                                                      !spotifyProvider.loading,
+                                                  child: SizedBox(
+                                                    height: kToolbarHeight,
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        try {
+                                                          await context
+                                                              .read<
+                                                                  SpotifyProvider>()
+                                                              .connectToSpotifyRemote();
+                                                        } on PlatformException catch (e) {
+                                                          QuickAlert.show(
+                                                              context: context,
+                                                              type:
+                                                                  QuickAlertType
+                                                                      .error,
+                                                              title:
+                                                                  "Bağlanamadı!",
+                                                              text: e.code,
+                                                              confirmBtnText:
+                                                                  confirmButtonText);
+                                                        }
+                                                      },
+                                                      child: const Center(
+                                                          child: Text(
+                                                        "Spotify'a Bağlan",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Visibility(
+                                                      visible: spotifyProvider
+                                                          .loading,
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                              color: Colors
+                                                                  .white)),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      )
-                              ],
+                                          ),
+                                        )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Material(
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(8))),
-                                  color: Colors.green[500],
-                                  child: InkWell(
-                                    onTap: () {},
-                                    child: SizedBox(
-                                      //metni görevi tamamlandı olarak işaretle cümlesine benzer bir cümleyle değiştir
-                                      child: Center(
-                                        child: Wrap(
-                                          children: const [
-                                            Text(
-                                              "Tamamlandı Olarak İşaretle",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Material(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(8))),
+                                    color: Colors.green[500],
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: SizedBox(
+                                        //metni görevi tamamlandı olarak işaretle cümlesine benzer bir cümleyle değiştir
+                                        child: Center(
+                                          child: Wrap(
+                                            children: const [
+                                              Text(
+                                                "Tamamlandı Olarak İşaretle",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Material(
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(8))),
-                                  color: Colors.red[400],
-                                  child: InkWell(
+                                Expanded(
+                                  child: Material(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8))),
+                                    color: Colors.red[400],
+                                    child: InkWell(
                                       onTap: () {
                                         context
                                             .read<PageUpdate>()
@@ -286,24 +294,22 @@ class _FocusViewState extends State<FocusView> {
                                               WrapCrossAlignment.center,
                                           direction: Axis.vertical,
                                           children: const [
-                                            Text('Pomodoro Sayacını',
+                                            Text('Pomodoro Sayacını \n Sıfırla',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Text(
-                                              'Sıfırla',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            )
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)),
                                           ],
                                         )),
-                                      )),
-                                ),
-                              )
-                            ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 )

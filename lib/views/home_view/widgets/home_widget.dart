@@ -85,7 +85,7 @@ class Task extends State<HomeWidget> {
                                             fontFamily: 'MaterialIcons');
                                         return ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(16.0),
+                                              BorderRadius.circular(8.0),
                                           child: Dismissible(
                                               onDismissed: ((direction) async {
                                                 if (direction ==
@@ -202,12 +202,6 @@ class Task extends State<HomeWidget> {
                                                                     )),
                                                           ));
                                                     },
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                    ),
                                                     title: Text(providerOfTasks
                                                         .retrievedTaskList![
                                                             key]![index]
