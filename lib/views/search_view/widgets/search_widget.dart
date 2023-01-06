@@ -46,7 +46,7 @@ class SearchWidget extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                             color: getColor(data, context),
-                            borderRadius: BorderRadius.circular(16.0)),
+                            borderRadius: BorderRadius.circular(8.0)),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(15),
                           leading: const Icon(Icons.numbers),
@@ -64,9 +64,6 @@ class SearchWidget extends StatelessWidget {
                                   ),
                                 ));
                           },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
                           title: Text(data.taskName),
                           subtitle: Text(data.taskInfo),
                           trailing: const Icon(Icons.arrow_right_sharp),
