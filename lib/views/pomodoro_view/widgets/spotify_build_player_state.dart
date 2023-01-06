@@ -18,22 +18,25 @@ Widget buildPlayerStateWidget(BuildContext context) {
       var playerState = snapshot.data;
       if (playerState == null) {
         return Center(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+          child: SizedBox(
             height: kToolbarHeight,
-            child: InkWell(
-              onTap: () {
-                spotifyProvider.connectToSpotifyRemote();
-              },
-              child: const Center(
-                  child: Text(
-                "Spotify'a Bağlan",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              )),
+            child: Material(
+              color: Theme.of(context).primaryColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+              ),
+              child: InkWell(
+                onTap: () {
+                  spotifyProvider.connectToSpotifyRemote();
+                },
+                child: const Center(
+                    child: Text(
+                  "Spotify'a Bağlan",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                )),
+              ),
             ),
           ),
         );
@@ -77,24 +80,27 @@ Widget buildPlayerStateWidget(BuildContext context) {
                   width: kToolbarHeight * 3,
                   height: kToolbarHeight,
                   child: Center(
-                    child: AutoSizeText(
-                      track.name,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflowReplacement: SizedBox(
-                        width: kToolbarHeight * 3,
-                        height: kToolbarHeight,
-                        child: Marquee(
-                          blankSpace: 10,
-                          text: track.name,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: AutoSizeText(
+                        track.name,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflowReplacement: SizedBox(
+                          width: kToolbarHeight * 3,
+                          height: kToolbarHeight,
+                          child: Marquee(
+                            blankSpace: 10,
+                            text: track.name,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            velocity: 20.0,
                           ),
-                          velocity: 20.0,
                         ),
                       ),
                     ),
