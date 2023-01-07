@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/edit_profile_view/widgets/custom_avatar.dart';
@@ -263,50 +264,43 @@ class _EditProfileState extends State<EditProfileWidget> {
                               );
                             }),
                         const SizedBox(height: 40),
-                        SizedBox(
-                            width: 400,
-                            height: 60,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                onPressed: () async {
-                                  CollectionReference users = FirebaseFirestore
-                                      .instance
-                                      .collection('Users');
-                                  var user = users
-                                      .doc(context.read<PomotodoUser>().userId);
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  user.set({
-                                    'name': _nameController.text,
-                                    'surname': _surnameController.text,
-                                    'birthday': _birthdayController.text,
-                                    'email': context
-                                        .read<PomotodoUser>()
-                                        .userMail
-                                        .toString(),
-                                  });
+                        CustomElevatedButton(
+                          onPressed: () async {
+                            CollectionReference users =
+                                FirebaseFirestore.instance.collection('Users');
+                            var user =
+                                users.doc(context.read<PomotodoUser>().userId);
+                            setState(() {
+                              isLoading = true;
+                            });
+                            user.set({
+                              'name': _nameController.text,
+                              'surname': _surnameController.text,
+                              'birthday': _birthdayController.text,
+                              'email': context
+                                  .read<PomotodoUser>()
+                                  .userMail
+                                  .toString(),
+                            });
 
-                                  if (temp != image) {
-                                    await uploadImage();
-                                  }
+                            if (temp != image) {
+                              await uploadImage();
+                            }
 
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                  //ignore: use_build_context_synchronously
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            const HomeView()),
-                                    ModalRoute.withName('/'),
-                                  );
-                                },
-                                child: const Text("Güncelle"))),
+                            setState(() {
+                              isLoading = false;
+                            });
+                            //ignore: use_build_context_synchronously
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const HomeView()),
+                              ModalRoute.withName('/'),
+                            );
+                          },
+                          child: const Text(updateButtonText),
+                        )
                       ],
                     ),
                   ),

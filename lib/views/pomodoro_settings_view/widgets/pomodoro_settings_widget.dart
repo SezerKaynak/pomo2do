@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
@@ -158,41 +159,32 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 maxLines: 1),
             Container(height: 30),
             const SizedBox(height: 40),
-            SizedBox(
-                width: 400,
-                height: 60,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    onPressed: () async {
-                      final prefs = await SharedPreferences.getInstance();
+            CustomElevatedButton(
+                onPressed: () async {
+                  final prefs = await SharedPreferences.getInstance();
 
-                      await prefs.setInt('workTimerSelect',
-                          int.parse(_workTimerController.text.substring(0, 2)));
-                      await prefs.setInt(
-                          'breakTimerSelect',
-                          int.parse(
-                              _breakTimerController.text.substring(0, 2)));
-                      await prefs.setInt(
-                          'longBreakTimerSelect',
-                          int.parse(
-                              _longBreakTimerController.text.substring(0, 2)));
-                      await prefs.setInt(
-                          'longBreakNumberSelect',
-                          int.parse(
-                              _longBreakNumberController.text.substring(0, 1)));
+                  await prefs.setInt('workTimerSelect',
+                      int.parse(_workTimerController.text.substring(0, 2)));
+                  await prefs.setInt('breakTimerSelect',
+                      int.parse(_breakTimerController.text.substring(0, 2)));
+                  await prefs.setInt(
+                      'longBreakTimerSelect',
+                      int.parse(
+                          _longBreakTimerController.text.substring(0, 2)));
+                  await prefs.setInt(
+                      'longBreakNumberSelect',
+                      int.parse(
+                          _longBreakNumberController.text.substring(0, 1)));
 
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const HomeView()),
-                        ModalRoute.withName('/'),
-                      );
-                    },
-                    child: const Text(updateButtonText))),
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => const HomeView()),
+                    ModalRoute.withName('/'),
+                  );
+                },
+                child: const Text(updateButtonText))
           ],
         ),
       ),

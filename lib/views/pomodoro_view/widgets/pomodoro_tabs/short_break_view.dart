@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/task_info_list_tile.dart';
@@ -68,25 +69,27 @@ class ShortBreak extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              var btn = context.read<PageUpdate>();
-                              btn.startOrStop(
-                                  context
-                                          .read<SharedPreferences>()
-                                          .getInt("breakTimerSelect")! *
-                                      60,
-                                  controller,
-                                  widget.task,
-                                  tabController,
-                                  context
-                                      .read<SharedPreferences>()
-                                      .getInt("longBreakNumberSelect")!);
-                            },
-                            child: context.read<PageUpdate>().callText())),
+                    CustomElevatedButton(
+                      buttonHeight: MediaQuery.of(context).size.height * 0.06,
+                      buttonWidth: MediaQuery.of(context).size.width * 0.5,
+                      onPressed: () {
+                        var btn = context.read<PageUpdate>();
+                        btn.startOrStop(
+                            context
+                                    .read<SharedPreferences>()
+                                    .getInt("breakTimerSelect")! *
+                                60,
+                            controller,
+                            widget.task,
+                            tabController,
+                            context
+                                .read<SharedPreferences>()
+                                .getInt("longBreakNumberSelect")!);
+                      },
+                      child: context.select(
+                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                      ),
+                    ),
                     if (context.read<PageUpdate>().skipButtonVisible)
                       IconButton(
                           onPressed: () {
