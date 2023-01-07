@@ -10,7 +10,7 @@ class SelectIcon extends ChangeNotifier {
     Icons.grade,
     Icons.menu_book,
   ];
-  int codePoint = 0;
+  int codePoint = 984310;
   final List<bool> selectedWeather = [
     true,
     false,

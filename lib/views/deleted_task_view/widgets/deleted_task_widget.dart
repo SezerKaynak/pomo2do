@@ -48,7 +48,7 @@ class DeletedTasksWidget extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         color: Colors.red[400],
                                         borderRadius:
-                                            BorderRadius.circular(16.0)),
+                                            BorderRadius.circular(8.0)),
                                     child: Consumer<ListUpdate>(
                                       builder: (context, value, child) {
                                         return ListTile(
@@ -82,7 +82,7 @@ class DeletedTasksWidget extends StatelessWidget {
                                           subtitle: Text(
                                             data.taskInfo,
                                             style: const TextStyle(
-                                                color: Colors.white),
+                                                color: Colors.white70),
                                           ),
                                           trailing: const Icon(
                                               Icons.arrow_right_sharp),

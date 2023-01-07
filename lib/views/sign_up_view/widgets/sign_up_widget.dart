@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
@@ -69,9 +70,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: name,
-                controller: _nameController,
-                maxLines: 1),
+                textLabel: name, controller: _nameController, maxLines: 1),
             ScreenTexts(
                 title: yourSurname,
                 theme: Theme.of(context).textTheme.subtitle1,
@@ -87,9 +86,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: email,
-                controller: _emailController,
-                maxLines: 1),
+                textLabel: email, controller: _emailController, maxLines: 1),
             ScreenTexts(
                 title: password,
                 theme: Theme.of(context).textTheme.subtitle1,
@@ -127,93 +124,87 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               maxLines: 1,
             ),
             Container(height: 30),
-            SizedBox(
-                width: 400,
-                height: 60,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    onPressed: () async {
-                      if (_emailController.text == "") {
+            CustomElevatedButton(
+                onPressed: () async {
+                  if (_emailController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: nameAlert,
+                        text: nameAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else if (_passwordController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: surnameAlert,
+                        text: surnameAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else if (_nameController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: emailAlert,
+                        text: emailAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else if (_surnameController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: passwordAlert,
+                        text: passwordAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else if (_birthdayController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: birthdayAlert,
+                        text: birthdayAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else {
+                    try {
+                      await _authService.createUserWithEmailAndPassword(
+                          email: _emailController.text,
+                          password: _passwordController.text);
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'weak-password') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: nameAlert,
-                            text: nameAlertSubtitle,
+                            title: weakPassword,
+                            text: weakPasswordSubtitle,
                             confirmBtnText: confirmButtonText);
-                      } else if (_passwordController.text == "") {
+                      } else if (e.code == 'email-already-in-use') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: surnameAlert,
-                            text: surnameAlertSubtitle,
+                            title: emailAlreadyInUse,
+                            text: emailAlreadyInUseSubtitle,
                             confirmBtnText: confirmButtonText);
-                      } else if (_nameController.text == "") {
+                      } else if (e.code == 'invalid-email') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: emailAlert,
-                            text: emailAlertSubtitle,
+                            title: invalidEmail,
+                            text: invalidEmailSubtitle,
                             confirmBtnText: confirmButtonText);
-                      } else if (_surnameController.text == "") {
-                        QuickAlert.show(
-                            context: context,
-                            type: QuickAlertType.error,
-                            title: passwordAlert,
-                            text: passwordAlertSubtitle,
-                            confirmBtnText: confirmButtonText);
-                      } else if (_birthdayController.text == "") {
-                        QuickAlert.show(
-                            context: context,
-                            type: QuickAlertType.error,
-                            title: birthdayAlert,
-                            text: birthdayAlertSubtitle,
-                            confirmBtnText: confirmButtonText);
-                      } else {
-                        try {
-                          await _authService.createUserWithEmailAndPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text);
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'weak-password') {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: weakPassword,
-                                text: weakPasswordSubtitle,
-                                confirmBtnText: confirmButtonText);
-                          } else if (e.code == 'email-already-in-use') {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: emailAlreadyInUse,
-                                text: emailAlreadyInUseSubtitle,
-                                confirmBtnText: confirmButtonText);
-                          } else if (e.code == 'invalid-email') {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: invalidEmail,
-                                text: invalidEmailSubtitle,
-                                confirmBtnText: confirmButtonText);
-                          }
-                        }
-                        CollectionReference users =
-                            FirebaseFirestore.instance.collection('Users');
-
-                        users
-                            // ignore: use_build_context_synchronously
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .set({
-                          'email': _emailController.text,
-                          'name': _nameController.text,
-                          'surname': _surnameController.text,
-                          'birthday': _birthdayController.text
-                        });
                       }
-                    },
-                    child: const Text("Kayıt Ol"))),
+                    }
+                    CollectionReference users =
+                        FirebaseFirestore.instance.collection('Users');
+
+                    users
+                        // ignore: use_build_context_synchronously
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .set({
+                      'email': _emailController.text,
+                      'name': _nameController.text,
+                      'surname': _surnameController.text,
+                      'birthday': _birthdayController.text
+                    });
+                  }
+                },
+                child: const Text("Kayıt Ol")),
           ],
         ),
       ),

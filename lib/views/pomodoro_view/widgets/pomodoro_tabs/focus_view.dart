@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/spotify_build_player_state.dart';
@@ -101,26 +102,27 @@ class _FocusViewState extends State<FocusView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              var btn = context.read<PageUpdate>();
-                              btn.startOrStop(
-                                  context
-                                          .read<SharedPreferences>()
-                                          .getInt("workTimerSelect")! *
-                                      60,
-                                  widget.controller,
-                                  widget.widget.task,
-                                  widget.tabController,
-                                  context
-                                      .read<SharedPreferences>()
-                                      .getInt("longBreakNumberSelect")!);
-                            },
-                            child: context.select((PageUpdate pageNotifier) =>
-                                pageNotifier.callText()))),
+                    CustomElevatedButton(
+                      buttonWidth: MediaQuery.of(context).size.width * 0.5,
+                      buttonHeight: MediaQuery.of(context).size.height * 0.06,
+                      onPressed: () {
+                        var btn = context.read<PageUpdate>();
+                        btn.startOrStop(
+                            context
+                                    .read<SharedPreferences>()
+                                    .getInt("workTimerSelect")! *
+                                60,
+                            widget.controller,
+                            widget.widget.task,
+                            widget.tabController,
+                            context
+                                .read<SharedPreferences>()
+                                .getInt("longBreakNumberSelect")!);
+                      },
+                      child: context.select(
+                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                      ),
+                    ),
                     if (context.select((PageUpdate pageNotifier) =>
                         pageNotifier.skipButtonVisible))
                       IconButton(
