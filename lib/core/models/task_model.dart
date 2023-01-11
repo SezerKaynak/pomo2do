@@ -11,6 +11,9 @@ class TaskModel {
 
   int pomodoroCount, taskIcon;
   bool isDone, isActive, isArchive;
+
+  Map<String, dynamic>? taskStatistics;
+
   TaskModel(
       {this.id,
       this.isArchive = false,
@@ -23,7 +26,8 @@ class TaskModel {
       this.breakPassingTime = "0",
       this.longBreakPassingTime = "0",
       this.pomodoroCount = 0,
-      this.taskIcon = 984386});
+      this.taskIcon = 984386,
+      this.taskStatistics});
 
   Map<String, dynamic> toMap() {
     return {
@@ -38,7 +42,8 @@ class TaskModel {
       'breakPassingTime': breakPassingTime,
       'longBreakPassingTime': longBreakPassingTime,
       'pomodoroCount': pomodoroCount,
-      'taskIcon': taskIcon
+      'taskIcon': taskIcon,
+      'taskStatistics': taskStatistics
     };
   }
 
@@ -54,7 +59,17 @@ class TaskModel {
         breakPassingTime = doc.data()?["breakPassingTime"] ?? "0",
         longBreakPassingTime = doc.data()?["longBreakPassingTime"] ?? "0",
         pomodoroCount = doc.data()?["pomodoroCount"] ?? 0,
-        taskIcon = doc.data()?["taskIcon"] ?? 984386;
+        taskIcon = doc.data()?["taskIcon"] ?? 984386,
+        taskStatistics = doc.data()?["09-01-2023"] 
+        ??
+            {
+              "09-01-2023": {
+                "taskPassingTime": "0",
+                "breakPassingTime": "0",
+                "longBreakPassingTime": "0"
+              }
+            }
+            ;
 
   List<TaskModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((snapshot) {
