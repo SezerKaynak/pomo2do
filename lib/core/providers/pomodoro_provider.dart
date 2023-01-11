@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/models/task_statistics_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 
@@ -54,9 +55,26 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
       case 0:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-        task.taskPassingTime =
-            (passingTime + int.parse(task.taskPassingTime)).toString();
-        await updateTask(task);
+        // task.taskPassingTime =
+        //     (passingTime + int.parse(task.taskPassingTime)).toString();
+        // await updateTask(task);
+
+        var map = TaskStatisticsModel(
+                taskPassingTime:
+                    (passingTime + int.parse(task.taskPassingTime)).toString(),
+                breakPassingTime: task.breakPassingTime,
+                longBreakPassingTime: task.longBreakPassingTime)
+            .toMap();
+
+        await updateTaskStatistics(task, map);
+
+        DatabaseService service = DatabaseService();
+        Future<void> getTaskStatistics() async {
+          var statistics = await service.retrieveTaskStatistics(task);
+          //print(statistics);
+        }
+        getTaskStatistics();
+
         if (passingTime == time && task.pomodoroCount < longBreakNumberSelect) {
           tabController.animateTo(1);
         } else if (passingTime == time) {
