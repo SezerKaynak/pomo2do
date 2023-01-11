@@ -15,7 +15,7 @@ class TasksProvider extends ChangeNotifier {
     tasks = await service.retrieveTasks();
     retrievedTaskList = separateLists(taskLists()[1]);
   }
-
+  
   Future<void> refresh() async {
     taskList = service.retrieveTasks();
     notifyListeners();

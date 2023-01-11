@@ -17,14 +17,16 @@ class ScreenTexts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 400,
-        child: Padding(
-          padding: customPadding ?? const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Text(title,
-              textAlign: textPosition,
-              style: theme?.copyWith(
-                  fontWeight: fontW,
-                  color: Theme.of(context).iconTheme.color)),
-        ));
+      width: 400,
+      child: Padding(
+        padding: customPadding ?? const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Text(
+          title,
+          textAlign: textPosition,
+          style: theme?.copyWith(
+              fontWeight: fontW, color: Theme.of(context).iconTheme.color),
+        ),
+      ),
+    );
   }
 }
