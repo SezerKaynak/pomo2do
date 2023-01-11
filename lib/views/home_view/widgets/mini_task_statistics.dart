@@ -3,8 +3,8 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:provider/provider.dart';
 
-class TaskStatistics extends StatelessWidget {
-  const TaskStatistics({super.key});
+class MiniTaskStatistics extends StatelessWidget {
+  const MiniTaskStatistics({super.key});
 
   @override
   Widget build(BuildContext context) {

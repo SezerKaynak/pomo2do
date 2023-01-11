@@ -6,7 +6,7 @@ import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
-import 'package:pomotodo/views/home_view/widgets/task_statistics.dart';
+import 'package:pomotodo/views/home_view/widgets/mini_task_statistics.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
@@ -37,7 +37,7 @@ class Task extends State<HomeWidget> {
             flex: 1,
             child: Container(
               color: Theme.of(context).primaryColorLight,
-              child: const TaskStatistics(),
+              child: const MiniTaskStatistics(),
             )),
         Expanded(
           flex: 12,
