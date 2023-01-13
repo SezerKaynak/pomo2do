@@ -18,7 +18,7 @@ class FloatingButtons extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             heroTag: "btn1",
             onPressed: () {
-              Navigator.pushNamed(context, '/deneme');
+              Navigator.pushNamed(context, '/taskStatistics');
             },
             child: const Icon(Icons.stacked_bar_chart),
           ),

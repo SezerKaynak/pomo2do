@@ -5,13 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/list_update_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/views/archived_task_view/archived_task.view.dart';
 import 'package:pomotodo/views/auth_view/auth_widget.dart';
 import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
 import 'package:pomotodo/views/completed_task_view/completed_task.view.dart';
 import 'package:pomotodo/views/deleted_task_view/deleted_task.view.dart';
-import 'package:pomotodo/views/deneme/deneme.dart';
+import 'package:pomotodo/views/task_statistics/task_statistics.view.dart';
 import 'package:pomotodo/views/edit_profile_view/edit_profile.view.dart';
 import 'package:pomotodo/views/edit_task_view/edit_task.view.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
@@ -113,7 +114,9 @@ class _MyAppState extends State<MyApp> {
                         child: const DeletedTasksView()),
                     '/editProfile': (context) => const EditProfileView(),
                     '/archived': (context) => const ArchivedTasksView(),
-                    '/deneme': (context) => const Deneme(),
+                    '/taskStatistics': (context) => ChangeNotifierProvider(
+                        create: (context) => TaskStatsProvider(),
+                        child: const TaskStatisticsView()),
                   },
                   debugShowCheckedModeBanner: false,
                   theme: context.watch<DarkThemeProvider>().darkTheme
