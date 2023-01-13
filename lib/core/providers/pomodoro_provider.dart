@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/models/task_statistics_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
@@ -8,6 +9,7 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
   bool skipButtonVisible = false;
   bool startStop = true;
   bool onWillPop = true;
+  String startDate = "";
   final String basla = "BAŞLAT";
   final String durdur = "DURDUR";
 
@@ -15,7 +17,7 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
     controller.resume();
     skipButtonVisible = true;
     startStop = false;
-
+    startDate = getTime();
     notifyListeners();
   }
 
@@ -45,9 +47,17 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
     notifyListeners();
   }
 
+  String getTime() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat("dd-MM-yyyy");
+    final String formattedDate = formatter.format(now);
+    return formattedDate;
+  }
+
   void stop(CountDownController controller, TaskModel task, int time,
       TabController tabController, int longBreakNumberSelect) async {
     startStop = true;
+    notifyListeners();
     controller.pause();
     int passingTime;
 
@@ -55,25 +65,12 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
       case 0:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-        // task.taskPassingTime =
-        //     (passingTime + int.parse(task.taskPassingTime)).toString();
-        // await updateTask(task);
 
-        var map = TaskStatisticsModel(
-                taskPassingTime:
-                    (passingTime + int.parse(task.taskPassingTime)).toString(),
-                breakPassingTime: task.breakPassingTime,
-                longBreakPassingTime: task.longBreakPassingTime)
-            .toMap();
-
-        await updateTaskStatistics(task, map);
-
-        DatabaseService service = DatabaseService();
-        Future<void> getTaskStatistics() async {
-          var statistics = await service.retrieveTaskStatistics(task);
-          //print(statistics);
+        if (getTime() == startDate) {
+          await updateTaskStatistics(task, passingTime, startDate, 0);
+        } else {
+          await updateTaskStatistics(task, passingTime, getTime(), 0);
         }
-        getTaskStatistics();
 
         if (passingTime == time && task.pomodoroCount < longBreakNumberSelect) {
           tabController.animateTo(1);
@@ -84,9 +81,13 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
       case 1:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-        task.breakPassingTime =
-            (passingTime + int.parse(task.breakPassingTime)).toString();
-        updateTask(task);
+
+        if (getTime() == startDate) {
+          await updateTaskStatistics(task, passingTime, startDate, 1);
+        } else {
+          await updateTaskStatistics(task, passingTime, getTime(), 1);
+        }
+
         if (passingTime == time) {
           tabController.animateTo(0);
         }
@@ -94,9 +95,12 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
       case 2:
         var countDown = controller.getTimeInSeconds();
         passingTime = time - countDown;
-        task.longBreakPassingTime =
-            (passingTime + int.parse(task.longBreakPassingTime)).toString();
-        updateTask(task);
+
+        if (getTime() == startDate) {
+          await updateTaskStatistics(task, passingTime, startDate, 2);
+        } else {
+          await updateTaskStatistics(task, passingTime, getTime(), 2);
+        }
         break;
       default:
     }
