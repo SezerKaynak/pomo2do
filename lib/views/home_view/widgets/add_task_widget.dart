@@ -82,6 +82,7 @@ class _AddTaskState extends State<AddTaskWidget> {
             Expanded(
               flex: 10,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ScreenTextField(
@@ -101,6 +102,9 @@ class _AddTaskState extends State<AddTaskWidget> {
                       onPressed: (int index) {
                         selectedIcon.selectedIcon(index);
                       },
+                      constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width * .12,
+                          minHeight: MediaQuery.of(context).size.height * .06),
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                       selectedBorderColor: Colors.blue[700],
                       selectedColor: Colors.white,

@@ -33,20 +33,23 @@ class Task extends State<HomeWidget> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Expanded(
-            flex: 1,
-            child: Container(
-              color: Theme.of(context).primaryColorLight,
-              child: ChangeNotifierProvider(
-                  create: (context) => TaskStatsProvider(),
-                  child: const MiniTaskStatistics()),
-            )),
+        Card(
+          elevation: 3,
+          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: SizedBox(
+            height: kToolbarHeight,
+            child: ChangeNotifierProvider(
+                create: (context) => TaskStatsProvider(),
+                child: const MiniTaskStatistics()),
+          ),
+        ),
         Expanded(
           flex: 12,
           child: RefreshIndicator(
             onRefresh: providerOfTasks.refresh,
             child: Padding(
-              padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: FutureBuilder(
                 future: providerOfTasks.taskList,
                 builder: (BuildContext context,
@@ -93,143 +96,152 @@ class Task extends State<HomeWidget> {
                                         return ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(8.0),
-                                          child: Dismissible(
-                                              onDismissed: ((direction) async {
-                                                if (direction ==
-                                                    DismissDirection
-                                                        .endToStart) {
-                                                  providerOfTasks.dismiss(
-                                                      key, index);
-                                                } else {
-                                                  {
-                                                    Navigator.pushNamed(
-                                                        context, '/editTask',
-                                                        arguments: [
-                                                          key,
-                                                          index
-                                                        ]);
+                                          child: Card(
+                                            margin: EdgeInsets.zero,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: Dismissible(
+                                                onDismissed:
+                                                    ((direction) async {
+                                                  if (direction ==
+                                                      DismissDirection
+                                                          .endToStart) {
+                                                    providerOfTasks.dismiss(
+                                                        key, index);
+                                                  } else {
+                                                    {
+                                                      Navigator.pushNamed(
+                                                          context, '/editTask',
+                                                          arguments: [
+                                                            key,
+                                                            index
+                                                          ]);
+                                                    }
                                                   }
-                                                }
-                                              }),
-                                              confirmDismiss: (DismissDirection
-                                                  direction) async {
-                                                if (direction ==
-                                                    DismissDirection
-                                                        .endToStart) {
-                                                  return await QuickAlert.show(
-                                                    context: context,
-                                                    type:
-                                                        QuickAlertType.confirm,
-                                                    title: alertTitle,
-                                                    text: alertSubtitle,
-                                                    confirmBtnText:
-                                                        alertApprove,
-                                                    cancelBtnText: alertReject,
-                                                    confirmBtnColor:
-                                                        Theme.of(context)
-                                                            .errorColor,
-                                                    onConfirmBtnTap: () =>
-                                                        Navigator.of(context)
-                                                            .pop(true),
-                                                    onCancelBtnTap: () =>
-                                                        Navigator.of(context)
-                                                            .pop(false),
-                                                  );
-                                                }
-                                                return true;
-                                              },
-                                              background: Container(
-                                                color: const Color(0xFF21B7CA),
-                                                padding: const EdgeInsets.only(
-                                                    left: 28.0),
-                                                alignment: AlignmentDirectional
-                                                    .centerStart,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: const [
-                                                    Icon(Icons.edit,
-                                                        color: Colors.white),
-                                                    Text(
-                                                      editText,
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              secondaryBackground: Container(
-                                                  color: Colors.red,
+                                                }),
+                                                confirmDismiss:
+                                                    (DismissDirection
+                                                        direction) async {
+                                                  if (direction ==
+                                                      DismissDirection
+                                                          .endToStart) {
+                                                    return await QuickAlert
+                                                        .show(
+                                                      context: context,
+                                                      type: QuickAlertType
+                                                          .confirm,
+                                                      title: alertTitle,
+                                                      text: alertSubtitle,
+                                                      confirmBtnText:
+                                                          alertApprove,
+                                                      cancelBtnText:
+                                                          alertReject,
+                                                      confirmBtnColor:
+                                                          Theme.of(context)
+                                                              .errorColor,
+                                                      onConfirmBtnTap: () =>
+                                                          Navigator.of(context)
+                                                              .pop(true),
+                                                      onCancelBtnTap: () =>
+                                                          Navigator.of(context)
+                                                              .pop(false),
+                                                    );
+                                                  }
+                                                  return true;
+                                                },
+                                                background: Container(
+                                                  color:
+                                                      const Color(0xFF21B7CA),
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          right: 28.0),
+                                                          left: 28.0),
                                                   alignment:
                                                       AlignmentDirectional
-                                                          .centerEnd,
+                                                          .centerStart,
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
                                                     children: const [
-                                                      Icon(Icons.delete,
+                                                      Icon(Icons.edit,
                                                           color: Colors.white),
-                                                      Text(moveIntoTrash,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white))
+                                                      Text(
+                                                        editText,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      )
                                                     ],
-                                                  )),
-                                              resizeDuration: const Duration(
-                                                  milliseconds: 200),
-                                              key: UniqueKey(),
-                                              child: Center(
-                                                child: Container(
-                                                  color: Theme.of(context)
-                                                      .cardColor,
-                                                  child: ListTile(
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 10,
-                                                            vertical: 5),
-                                                    leading: Icon(taskIcon),
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    ChangeNotifierProvider(
-                                                                        create: (context) =>
-                                                                            PageUpdate(),
-                                                                        child:
-                                                                            PomodoroWidget(
-                                                                          task:
-                                                                              providerOfTasks.retrievedTaskList![key]![index],
-                                                                        )),
-                                                              ))
-                                                          .then((value) =>
-                                                              providerOfTasks
-                                                                  .refresh());
-                                                    },
-                                                    title: Text(
-                                                      providerOfTasks
-                                                          .retrievedTaskList![
-                                                              key]![index]
-                                                          .taskName,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    subtitle: Text(
-                                                        providerOfTasks
-                                                            .retrievedTaskList![
-                                                                key]![index]
-                                                            .taskInfo),
-                                                    trailing: const Icon(Icons
-                                                        .arrow_right_sharp),
                                                   ),
                                                 ),
-                                              )),
+                                                secondaryBackground: Container(
+                                                    color: Colors.red,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 28.0),
+                                                    alignment:
+                                                        AlignmentDirectional
+                                                            .centerEnd,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: const [
+                                                        Icon(Icons.delete,
+                                                            color:
+                                                                Colors.white),
+                                                        Text(moveIntoTrash,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white))
+                                                      ],
+                                                    )),
+                                                resizeDuration: const Duration(
+                                                    milliseconds: 200),
+                                                key: UniqueKey(),
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 5),
+                                                  leading: Icon(taskIcon),
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ChangeNotifierProvider(
+                                                                      create: (context) =>
+                                                                          PageUpdate(),
+                                                                      child:
+                                                                          PomodoroWidget(
+                                                                        task: providerOfTasks
+                                                                            .retrievedTaskList![key]![index],
+                                                                      )),
+                                                            ))
+                                                        .then((value) =>
+                                                            providerOfTasks
+                                                                .refresh());
+                                                  },
+                                                  title: Text(
+                                                    providerOfTasks
+                                                        .retrievedTaskList![
+                                                            key]![index]
+                                                        .taskName,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  subtitle: Text(providerOfTasks
+                                                      .retrievedTaskList![key]![
+                                                          index]
+                                                      .taskInfo),
+                                                  trailing: const Icon(
+                                                      Icons.arrow_right_sharp),
+                                                )),
+                                          ),
                                         );
                                       },
                                     )
