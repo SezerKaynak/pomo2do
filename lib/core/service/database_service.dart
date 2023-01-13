@@ -15,7 +15,7 @@ class DatabaseService {
     await _db
         .collection("Users/$uid/tasks")
         .doc(taskData.id)
-        .set(taskData.toMap());
+        .set(taskData.toMap(), SetOptions(merge: true));
   }
 
   Future<void> deleteTask(String documentId) async {
