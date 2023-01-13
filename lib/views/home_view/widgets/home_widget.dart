@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
-import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/database_service.dart';
@@ -37,14 +37,16 @@ class Task extends State<HomeWidget> {
             flex: 1,
             child: Container(
               color: Theme.of(context).primaryColorLight,
-              child: const MiniTaskStatistics(),
+              child: ChangeNotifierProvider(
+                  create: (context) => TaskStatsProvider(),
+                  child: const MiniTaskStatistics()),
             )),
         Expanded(
           flex: 12,
           child: RefreshIndicator(
             onRefresh: providerOfTasks.refresh,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 5.0, right: 5.0, top: 10),
               child: FutureBuilder(
                 future: providerOfTasks.taskList,
                 builder: (BuildContext context,
@@ -66,14 +68,19 @@ class Task extends State<HomeWidget> {
                                     .retrievedTaskList!.keys
                                     .elementAt(index);
                                 return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(key,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500)),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Text(key,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w500)),
+                                    ),
                                     ListView.separated(
                                       physics: const ClampingScrollPhysics(),
                                       separatorBuilder: (context, index) =>
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 5),
                                       shrinkWrap: true,
                                       itemCount: providerOfTasks
                                           .retrievedTaskList![key]!.length,
@@ -100,9 +107,7 @@ class Task extends State<HomeWidget> {
                                                         arguments: [
                                                           key,
                                                           index
-                                                        ]).then((_) =>
-                                                        providerOfTasks
-                                                            .refresh());
+                                                        ]);
                                                   }
                                                 }
                                               }),
@@ -183,29 +188,38 @@ class Task extends State<HomeWidget> {
                                                       .cardColor,
                                                   child: ListTile(
                                                     contentPadding:
-                                                        const EdgeInsets.all(
-                                                            15),
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 10,
+                                                            vertical: 5),
                                                     leading: Icon(taskIcon),
                                                     onTap: () {
                                                       Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ChangeNotifierProvider(
-                                                                    create: (context) =>
-                                                                        PageUpdate(),
-                                                                    child:
-                                                                        PomodoroWidget(
-                                                                      task: providerOfTasks
-                                                                              .retrievedTaskList![key]![
-                                                                          index],
-                                                                    )),
-                                                          ));
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ChangeNotifierProvider(
+                                                                        create: (context) =>
+                                                                            PageUpdate(),
+                                                                        child:
+                                                                            PomodoroWidget(
+                                                                          task:
+                                                                              providerOfTasks.retrievedTaskList![key]![index],
+                                                                        )),
+                                                              ))
+                                                          .then((value) =>
+                                                              providerOfTasks
+                                                                  .refresh());
                                                     },
-                                                    title: Text(providerOfTasks
-                                                        .retrievedTaskList![
-                                                            key]![index]
-                                                        .taskName),
+                                                    title: Text(
+                                                      providerOfTasks
+                                                          .retrievedTaskList![
+                                                              key]![index]
+                                                          .taskName,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
                                                     subtitle: Text(
                                                         providerOfTasks
                                                             .retrievedTaskList![
