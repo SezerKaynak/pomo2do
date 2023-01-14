@@ -46,7 +46,7 @@ class TaskModel {
         isActive = doc.data()?["isActive"] ?? true,
         pomodoroCount = doc.data()?["pomodoroCount"] ?? 0,
         taskIcon = doc.data()?["taskIcon"] ?? 984386,
-        taskStatistics = doc.data()?[date] ??
+        taskStatistics = doc.data() ??
             {
               "taskPassingTime": "0",
               "breakPassingTime": "0",

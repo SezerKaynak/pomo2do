@@ -79,4 +79,11 @@ class DatabaseService {
             : TaskStatisticsModel.fromDocumentSnapshot({}))
         .toList();
   }
+
+  tekCekimDeneme() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _db.collection("Users/$uid/tasks").get();
+    
+    //snapshot.docs.map((e) => TaskModel.fromDocumentSnapshot(e, date));
+  }
 }
