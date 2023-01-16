@@ -36,7 +36,7 @@ class TaskModel {
   }
 
   TaskModel.fromDocumentSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> doc, String date)
+      DocumentSnapshot<Map<String, dynamic>> doc)
       : id = doc.id,
         taskInfo = doc.data()!["taskInfo"],
         taskName = doc.data()!["taskName"],

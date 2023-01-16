@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/models/task_statistics_model.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String uid = FirebaseAuth.instance.currentUser!.uid;
+
   Future<void> addTask(TaskModel taskData) async {
     await _db.collection("Users/$uid/tasks").add(taskData.toMap());
   }
@@ -21,17 +21,13 @@ class DatabaseService {
   Future<void> deleteTask(String documentId) async {
     await _db.collection("Users/$uid/tasks").doc(documentId).delete();
   }
-
+  
   Future<List<TaskModel>> retrieveTasks() async {
-    DateTime now = DateTime.now();
-    DateFormat formatter = DateFormat("dd-MM-yyyy");
-    String formattedDate = formatter.format(now);
-
+    print(uid);
     QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Users/$uid/tasks").get();
+        await _db.collection("Users/${uid}/tasks").get();
     return snapshot.docs
-        .map((docSnapshot) =>
-            TaskModel.fromDocumentSnapshot(docSnapshot, formattedDate))
+        .map((docSnapshot) => TaskModel.fromDocumentSnapshot(docSnapshot))
         .toList();
   }
 
@@ -78,12 +74,5 @@ class DatabaseService {
             ? TaskStatisticsModel.fromDocumentSnapshot(docSnapshot.data()[date])
             : TaskStatisticsModel.fromDocumentSnapshot({}))
         .toList();
-  }
-
-  tekCekimDeneme() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Users/$uid/tasks").get();
-    
-    //snapshot.docs.map((e) => TaskModel.fromDocumentSnapshot(e, date));
   }
 }
