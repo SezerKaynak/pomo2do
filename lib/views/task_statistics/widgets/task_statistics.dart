@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/sum_of_task_time_model.dart';
 import 'package:pomotodo/core/models/task_by_task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -160,25 +161,72 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                       width: 1.0, color: Colors.grey.withOpacity(0.5)),
                   borderRadius: BorderRadius.circular(8)),
               elevation: 5,
-              child: FutureBuilder(
-                future: taskStatsProvider.getTasks(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    taskStatsProvider.table3.clear();
-                    return SfCalendar(
-                      view: CalendarView.month,
-                      showDatePickerButton: true,
-                      monthCellBuilder: taskStatsProvider.monthCellBuilder,
-                      monthViewSettings: const MonthViewSettings(
-                        showTrailingAndLeadingDates: false,
-                      ),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: FutureBuilder(
+                  future: taskStatsProvider.getTasks(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      taskStatsProvider.table3.clear();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            child: SfCalendar(
+                              todayHighlightColor: Colors.white,
+                              view: CalendarView.month,
+                              showDatePickerButton: true,
+                              monthCellBuilder:
+                                  taskStatsProvider.monthCellBuilder,
+                              monthViewSettings: const MonthViewSettings(
+                                showTrailingAndLeadingDates: false,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              width: MediaQuery.of(context).size.width * .5,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: const [Text("Az"), Text("Çok")],
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width * .5,
+                                    height:
+                                        MediaQuery.of(context).size.height * .015,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          kLightGrey,
+                                          kLightGreen,
+                                          kMidGreen,
+                                          kDarkGreen,
+                                          kDarkerGreen,
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
               ),
             )
           ],

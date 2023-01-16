@@ -7,12 +7,7 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/models/task_statistics_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
-const Color _kLightGrey = Color.fromRGBO(238, 238, 238, 1);
-const Color _kLightGreen = Color.fromRGBO(198, 228, 139, 1);
-const Color _kMidGreen = Color.fromRGBO(123, 201, 111, 1);
-const Color _kDarkGreen = Color.fromRGBO(35, 154, 59, 1);
-const Color _kDarkerGreen = Color.fromRGBO(25, 97, 39, 1);
+import 'package:pomotodo/utils/constants/constants.dart';
 
 class TaskStatsProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
@@ -25,7 +20,6 @@ class TaskStatsProvider extends ChangeNotifier {
   List<ActiveDaysModel> table3 = [];
   ValueNotifier<int> count = ValueNotifier<int>(6);
   List<TaskModel> tasks = [];
-  int counter = 0;
 
 
   List<dynamic> getWeekDays() {
@@ -44,7 +38,6 @@ class TaskStatsProvider extends ChangeNotifier {
   Future<void> getTasks() async {
     var stats = await service.retrieveTasks();
     tasks = stats;
-    counter +=1;
   }
 
   sumOfTaskTimeMontly(DateTime date) {
@@ -61,7 +54,7 @@ class TaskStatsProvider extends ChangeNotifier {
     ActiveDaysModel monthCell = ActiveDaysModel(formattedDate, totalTime);
     table3.add(monthCell);
   }
-
+  //bunu sadece tek bir snapshot alınacak şekilde tekrar düzenle
   Future<void> sumOfTaskTime() async {
     List<String> date = getWeekDays()[0];
     DateTime now = getWeekDays()[1];
@@ -94,12 +87,11 @@ class TaskStatsProvider extends ChangeNotifier {
     }
   }
 
-  Widget monthCellBuilder(BuildContext buildContext, MonthCellDetails details) {
+  Widget monthCellBuilder(BuildContext context, MonthCellDetails details) {
     sumOfTaskTimeMontly(details.date);
     print(table3.length);
     final Color backgroundColor =
         _getMonthCellBackgroundColor(table3[table3.length - 1].time);
-    print("counter: $counter");
     const Color defaultColor = Colors.white;
     return Container(
       decoration: BoxDecoration(
@@ -115,21 +107,21 @@ class TaskStatsProvider extends ChangeNotifier {
   }
 
   Color _getMonthCellBackgroundColor(int time) {
-    if (time > 100) {
-      return _kDarkerGreen;
-    } else if (time > 75) {
-      return _kMidGreen;
+    if (time > 150) {
+      return kDarkerGreen;
+    } else if (time > 100) {
+      return kMidGreen;
     } else if (time > 50) {
-      return _kDarkGreen;
-    } else if (time > 25) {
-      return _kLightGreen;
+      return kDarkGreen;
+    } else if (time > 0) {
+      return kLightGreen;
     } else {
-      return _kLightGrey;
+      return kLightGrey;
     }
   }
 
   Color _getCellTextColor(Color backgroundColor) {
-    if (backgroundColor == _kDarkGreen || backgroundColor == _kDarkerGreen) {
+    if (backgroundColor == kDarkGreen || backgroundColor == kDarkerGreen) {
       return Colors.white;
     }
 
