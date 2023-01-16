@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 const String title = "Hoşgeldiniz!",
     subtitle = "Lütfen öncelikle giriş yapınız👋",
     email = "Email",
@@ -126,3 +128,9 @@ const List<String> workTimerList = [
       '20 dakika'
     ],
     longBreakNumberList = ['1', '2', '3', '4', '5'];
+
+const Color kLightGrey = Color.fromRGBO(238, 238, 238, 1),
+    kLightGreen = Color.fromRGBO(198, 228, 139, 1),
+    kMidGreen = Color.fromRGBO(123, 201, 111, 1),
+    kDarkGreen = Color.fromRGBO(35, 154, 59, 1),
+    kDarkerGreen = Color.fromRGBO(25, 97, 39, 1);

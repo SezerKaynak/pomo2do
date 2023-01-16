@@ -19,7 +19,7 @@ class TaskInfoListTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(color: Colors.grey.withOpacity(0.5), width: 1)),
-      elevation: 5,
+      elevation: 3,
       child: ListTile(
         trailing: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,

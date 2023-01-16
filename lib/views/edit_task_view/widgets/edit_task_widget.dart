@@ -159,6 +159,7 @@ class _EditTaskState extends State<EditTaskWidget> {
                       selectedTask.isDone = isCheckedDone;
                       selectedTask.isArchive = isCheckedArchive;
                       selectedTask.isActive = true;
+
                       await dbService.updateTask(selectedTask);
 
                       isCheckedDone && isCheckedArchive

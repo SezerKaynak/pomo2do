@@ -16,7 +16,7 @@ final GoogleSignIn _googleSignIn =
 class AuthService with ConvertUser implements IAuthService {
   PomotodoUser _getUser(User? user) {
     return PomotodoUser(
-        userId: user!.uid, userMail: user.email!, userPhotoUrl: user.photoURL!);
+        userId: user!.uid, userMail: user.email!, userPhotoUrl: user.photoURL);
   }
 
   @override

@@ -2,26 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskModel {
   String? id;
-  String taskInfo,
-      taskName,
-      taskType;
+  String taskInfo, taskName, taskType;
 
   int pomodoroCount, taskIcon;
   bool isDone, isActive, isArchive;
 
   Map<String, dynamic>? taskStatistics;
 
-  TaskModel(
-      {this.id,
-      this.isArchive = false,
-      this.isDone = false,
-      this.isActive = true,
-      this.taskInfo = "",
-      this.taskName = "",
-      this.taskType = "",
-      this.pomodoroCount = 0,
-      this.taskIcon = 984386,
-      this.taskStatistics});
+  TaskModel({
+    this.id,
+    this.isArchive = false,
+    this.isDone = false,
+    this.isActive = true,
+    this.taskInfo = "",
+    this.taskName = "",
+    this.taskType = "",
+    this.pomodoroCount = 0,
+    this.taskIcon = 984386,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,12 +32,11 @@ class TaskModel {
       'isArchive': isArchive,
       'pomodoroCount': pomodoroCount,
       'taskIcon': taskIcon,
-      'taskStatistics': taskStatistics
     };
   }
 
   TaskModel.fromDocumentSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> doc, String date)
+      DocumentSnapshot<Map<String, dynamic>> doc)
       : id = doc.id,
         taskInfo = doc.data()!["taskInfo"],
         taskName = doc.data()!["taskName"],
@@ -49,13 +46,11 @@ class TaskModel {
         isActive = doc.data()?["isActive"] ?? true,
         pomodoroCount = doc.data()?["pomodoroCount"] ?? 0,
         taskIcon = doc.data()?["taskIcon"] ?? 984386,
-        taskStatistics = doc.data()?[date] ??
+        taskStatistics = doc.data() ??
             {
-              
-                "taskPassingTime": "0",
-                "breakPassingTime": "0",
-                "longBreakPassingTime": "0"
-              
+              "taskPassingTime": "0",
+              "breakPassingTime": "0",
+              "longBreakPassingTime": "0"
             };
 
   List<TaskModel> dataListFromSnapshot(QuerySnapshot querySnapshot) {
