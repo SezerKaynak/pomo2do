@@ -59,9 +59,12 @@ dependencies:
   spotify_sdk: ^2.3.0
   syncfusion_flutter_calendar: ^20.4.43
   syncfusion_flutter_charts: ^20.4.43
+  syncfusion_localizations: ^20.4.43
 
 dev_dependencies:
   flutter_lints: ^2.0.0
+  flutter_localizations:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 
