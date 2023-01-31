@@ -13,14 +13,11 @@ class TaskStatsProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
   List<TaskStatisticsModel>? stats;
   int totalTaskTime = 0;
-  List<TaskStatisticsModel>? dayStats;
-  List<TaskModel>? dayTasks;
   List<TaskByTaskModel> table2 = [];
   List<SumOfTaskTimeModel> table1 = [];
   List<ActiveDaysModel> table3 = [];
   ValueNotifier<int> count = ValueNotifier<int>(6);
   List<TaskModel> tasks = [];
-
 
   List<dynamic> getWeekDays() {
     List<String> dates = [];
@@ -36,11 +33,12 @@ class TaskStatsProvider extends ChangeNotifier {
   }
 
   Future<void> getTasks() async {
-    var stats = await service.retrieveTasks();
-    tasks = stats;
+    tasks = await service.retrieveTasks();
+    sumOfTaskTime();
   }
 
   sumOfTaskTimeMontly(DateTime date) {
+    List<ActiveDaysModel> cell = [];
     final DateFormat formatter = DateFormat("dd-MM-yyyy");
     final String formattedDate = formatter.format(date);
     int totalTime = 0;
@@ -52,19 +50,40 @@ class TaskStatsProvider extends ChangeNotifier {
       totalTime += int.parse(ikinciDeneme.taskPassingTime);
     }
     ActiveDaysModel monthCell = ActiveDaysModel(formattedDate, totalTime);
-    table3.add(monthCell);
+    cell.add(monthCell);
+    table3 = cell;
   }
-  //bunu sadece tek bir snapshot alınacak şekilde tekrar düzenle
-  Future<void> sumOfTaskTime() async {
+
+  taskToTaskStats(String date) {
+    List<TaskStatisticsModel> stats = [];
+
+    for (var i = 0; i < tasks.length; i++) {
+      var task = tasks[i].taskStatistics![date];
+      task != null
+          ? stats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
+          : stats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
+    }
+    return stats;
+  }
+
+  sumOfTaskTime() {
     List<String> date = getWeekDays()[0];
     DateTime now = getWeekDays()[1];
     table1.clear();
     List<String> dayOfWeeks = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 
     for (var i = 6; i >= 0; i--) {
-      stats = await service.retrieveTaskStatistics(date[i]);
+      List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
+
+      // for (var j = 0; j < tasks.length; j++) {
+      //   var task = tasks[j].taskStatistics![date[i]];
+      //   task != null
+      //       ? stats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
+      //       : stats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
+      // }
+
       int totalTime = 0;
-      for (var element in stats!) {
+      for (var element in stats) {
         totalTime += int.parse(element.taskPassingTime);
       }
       SumOfTaskTimeModel newColumn =
@@ -75,21 +94,27 @@ class TaskStatsProvider extends ChangeNotifier {
 
   Future<void> taskByTaskStat() async {
     List<String> date = getWeekDays()[0];
-    table2.clear();
-    dayTasks = await service.retrieveTasks();
+    List<TaskByTaskModel> taskByTask = [];
+    List<TaskStatisticsModel> dayStats =
+        taskToTaskStats(date[-count.value + 6]);
 
-    dayStats = await service.retrieveTaskStatistics(date[-count.value + 6]);
+    // for (var i = 0; i < tasks.length; i++) {
+    //   var task = tasks[i].taskStatistics![date[-count.value + 6]];
+    //   task != null
+    //       ? dayStats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
+    //       : dayStats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
+    // }
 
-    for (var i = 0; i < dayTasks!.length; i++) {
+    for (var i = 0; i < tasks.length; i++) {
       TaskByTaskModel deneme = TaskByTaskModel(
-          dayTasks![i].taskName, int.parse(dayStats![i].taskPassingTime));
-      table2.add(deneme);
+          tasks[i].taskName, int.parse(dayStats[i].taskPassingTime));
+      taskByTask.add(deneme);
     }
+    table2 = taskByTask;
   }
 
   Widget monthCellBuilder(BuildContext context, MonthCellDetails details) {
     sumOfTaskTimeMontly(details.date);
-    print(table3.length);
     final Color backgroundColor =
         _getMonthCellBackgroundColor(table3[table3.length - 1].time);
     const Color defaultColor = Colors.white;
@@ -110,9 +135,9 @@ class TaskStatsProvider extends ChangeNotifier {
     if (time > 150) {
       return kDarkerGreen;
     } else if (time > 100) {
-      return kMidGreen;
-    } else if (time > 50) {
       return kDarkGreen;
+    } else if (time > 50) {
+      return kMidGreen;
     } else if (time > 0) {
       return kLightGreen;
     } else {

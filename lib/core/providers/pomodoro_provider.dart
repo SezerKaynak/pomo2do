@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
-import 'package:pomotodo/core/models/task_statistics_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 
