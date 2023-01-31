@@ -23,9 +23,8 @@ class DatabaseService {
   }
   
   Future<List<TaskModel>> retrieveTasks() async {
-    print(uid);
     QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Users/${uid}/tasks").get();
+        await _db.collection("Users/$uid/tasks").get();
     return snapshot.docs
         .map((docSnapshot) => TaskModel.fromDocumentSnapshot(docSnapshot))
         .toList();
