@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/core/providers/drawer_image_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class AuthWidgetBuilder extends StatelessWidget {
           if (_userData != null) {
             return MultiProvider(providers: [
               Provider.value(value: _userData),
+              ChangeNotifierProvider(create: (context) => DrawerImageProvider()),
               ChangeNotifierProvider(create: (context) => TasksProvider()),
             ], child: onPageBuilder(context, snapShot));
           }

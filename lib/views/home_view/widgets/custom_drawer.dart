@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
+import 'package:pomotodo/core/providers/drawer_image_provider.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/edit_password_view/edit_password.view.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
@@ -23,34 +23,17 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   final AuthService _authService = AuthService();
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
-
-  String? downloadUrl;
+  late DrawerImageProvider drawerImageProvider;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => baglantiAl());
+    drawerImageProvider =
+        Provider.of<DrawerImageProvider>(context, listen: false);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => drawerImageProvider.baglantiAl(context));
   }
 
-  baglantiAl() async {
-    var reference = FirebaseStorage.instance
-        .ref()
-        .child('profilresimleri')
-        .child(context.read<PomotodoUser>().userId);
-
-    if (await reference.list().then((value) => value.items.isNotEmpty)) {
-      await reference.child("profilResmi.png").getDownloadURL().then((url) {
-        setState(() {
-          downloadUrl = url;
-        });
-      });
-    } else {
-      setState(() {
-        downloadUrl = context.read<PomotodoUser>().userPhotoUrl;
-      });
-    }
-  }
-  
   @override
   Widget build(BuildContext context) {
     var user = users.doc(context.read<PomotodoUser>().userId);
@@ -74,39 +57,48 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             padding: const EdgeInsets.all(5),
                             child: CircleAvatar(
                               radius: 50.0,
-                              child: downloadUrl != null
-                                  ? CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: downloadUrl!,
-                                      imageBuilder: (context, imageProvider) {
-                                        return ClipOval(
-                                            child: SizedBox.fromSize(
+                              child: Consumer<DrawerImageProvider>(
+                                builder: (context, value, child) {
+                                  return drawerImageProvider.downloadUrl != null
+                                      ? CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl:
+                                              drawerImageProvider.downloadUrl!,
+                                          imageBuilder:
+                                              (context, imageProvider) {
+                                            return ClipOval(
+                                              child: SizedBox.fromSize(
                                                 size: const Size.fromRadius(50),
                                                 child: Image(
                                                     image: imageProvider,
-                                                    fit: BoxFit.cover)));
-                                      },
-                                      placeholder: (context, url) {
-                                        return ClipOval(
-                                            child: SizedBox.fromSize(
-                                          size: const Size.fromRadius(20),
-                                          child:
-                                              const CircularProgressIndicator(
-                                                  color: Colors.white),
-                                        ));
-                                      },
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    )
-                                  : ClipOval(
-                                      child: SizedBox.fromSize(
-                                        size: const Size.fromRadius(70),
-                                        child: Image.asset(
-                                          'assets/images/person.png',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
+                                                    fit: BoxFit.cover),
+                                              ),
+                                            );
+                                          },
+                                          placeholder: (context, url) {
+                                            return ClipOval(
+                                              child: SizedBox.fromSize(
+                                                size: const Size.fromRadius(20),
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                        color: Colors.white),
+                                              ),
+                                            );
+                                          },
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        )
+                                      : ClipOval(
+                                          child: SizedBox.fromSize(
+                                            size: const Size.fromRadius(70),
+                                            child: Image.asset(
+                                              'assets/images/person.png',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        );
+                                },
+                              ),
                             ),
                           ),
                           Expanded(
