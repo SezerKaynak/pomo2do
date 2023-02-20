@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class DrawerImageProvider extends ChangeNotifier {
   String? downloadUrl;
 
-  Future<void> baglantiAl(BuildContext context) async {
+  Future<void> getURL(BuildContext context) async {
     var reference = FirebaseStorage.instance
         .ref()
         .child('profilresimleri')
