@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
-import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PomodoroSettingsWidget extends StatefulWidget {
@@ -15,49 +15,31 @@ class PomodoroSettingsWidget extends StatefulWidget {
 }
 
 class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
-  late TextEditingController _workTimerController;
-  late TextEditingController _breakTimerController;
-  late TextEditingController _longBreakTimerController;
-  late TextEditingController _longBreakNumberController;
+  late int _workTimeSliderValue;
+  late int _breakTimeSliderValue;
+  late int _longBreakTimeSliderValue;
+  late int _setOfPomodoroSliderValue;
 
   @override
   void initState() {
-    _workTimerController = TextEditingController();
-    _breakTimerController = TextEditingController();
-    _longBreakTimerController = TextEditingController();
-    _longBreakNumberController = TextEditingController();
+    _workTimeSliderValue =
+        context.read<SharedPreferences>().getInt('workTimerSelect')!;
+    _breakTimeSliderValue =
+        context.read<SharedPreferences>().getInt('breakTimerSelect')!;
+    _longBreakTimeSliderValue =
+        context.read<SharedPreferences>().getInt('longBreakTimerSelect')!;
+    _setOfPomodoroSliderValue =
+        context.read<SharedPreferences>().getInt('longBreakNumberSelect')!;
     super.initState();
   }
 
   @override
   void dispose() {
-    _workTimerController.dispose();
-    _breakTimerController.dispose();
-    _longBreakTimerController.dispose();
-    _longBreakNumberController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    getSettings() async {
-      final prefs = await SharedPreferences.getInstance();
-
-      _workTimerController.text = '${prefs.getInt('workTimerSelect')} $minute';
-      _breakTimerController.text =
-          '${prefs.getInt('breakTimerSelect')} $minute';
-      _longBreakTimerController.text =
-          '${prefs.getInt('longBreakTimerSelect')} $minute';
-      _longBreakNumberController.text =
-          '${prefs.getInt('longBreakNumberSelect')}';
-
-      // for (int i = 0; i < list.length; i++) {
-      //   await prefs.remove(list[i]);
-      // }
-    }
-
-    getSettings();
-
     return SingleChildScrollView(
       child: Padding(
         padding: ScreenPadding().screenPadding.copyWith(top: 0),
@@ -78,103 +60,113 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: workTimerSelect,
-                controller: _workTimerController,
-                suffix: PopupMenuButton<String>(
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onSelected: (String value) {
-                    _workTimerController.text = value;
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return workTimerList
-                        .map<PopupMenuItem<String>>((String value) {
-                      return PopupMenuItem(value: value, child: Text(value));
-                    }).toList();
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [Text('20 dakika'), Text('40 dakika')],
+                ),
+                Slider(
+                  value: _workTimeSliderValue.toDouble(),
+                  min: 20,
+                  max: 40,
+                  divisions: 4,
+                  label: '$_workTimeSliderValue $minute',
+                  onChanged: (value) {
+                    setState(() {
+                      _workTimeSliderValue = value.toInt();
+                    });
                   },
                 ),
-                maxLines: 1),
+              ],
+            ),
             ScreenTexts(
                 title: breakTimer,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: breakTimerSelect,
-                controller: _breakTimerController,
-                suffix: PopupMenuButton<String>(
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onSelected: (String value) {
-                    _breakTimerController.text = value;
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return breakTimerList
-                        .map<PopupMenuItem<String>>((String value) {
-                      return PopupMenuItem(value: value, child: Text(value));
-                    }).toList();
+            Column(
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [Text("5 dakika"), Text("10 dakika")]),
+                Slider(
+                  value: _breakTimeSliderValue.toDouble(),
+                  max: 10,
+                  min: 5,
+                  divisions: 5,
+                  label: '$_breakTimeSliderValue $minute',
+                  onChanged: (value) {
+                    setState(() {
+                      _breakTimeSliderValue = value.toInt();
+                    });
                   },
                 ),
-                maxLines: 1),
+              ],
+            ),
             ScreenTexts(
                 title: longBreakTimer,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: longBreakTimerSelect,
-                controller: _longBreakTimerController,
-                suffix: PopupMenuButton<String>(
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onSelected: (String value) {
-                    _longBreakTimerController.text = value;
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return longBreakTimerList
-                        .map<PopupMenuItem<String>>((String value) {
-                      return PopupMenuItem(value: value, child: Text(value));
-                    }).toList();
+            Column(
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [Text("15 dakika"), Text("20 dakika")]),
+                Slider(
+                  value: _longBreakTimeSliderValue.toDouble(),
+                  max: 20,
+                  min: 15,
+                  divisions: 5,
+                  label: '$_longBreakTimeSliderValue $minute',
+                  onChanged: (value) {
+                    setState(() {
+                      _longBreakTimeSliderValue = value.toInt();
+                    });
                   },
                 ),
-                maxLines: 1),
+              ],
+            ),
             ScreenTexts(
                 title: longBreakNumber,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: longBreakNumberSelect,
-                controller: _longBreakNumberController,
-                suffix: PopupMenuButton<String>(
-                  icon: const Icon(Icons.arrow_drop_down),
-                  onSelected: (String value) {
-                    _longBreakNumberController.text = value;
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return longBreakNumberList
-                        .map<PopupMenuItem<String>>((String value) {
-                      return PopupMenuItem(value: value, child: Text(value));
-                    }).toList();
+            Column(
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("1.arada uzun mola"),
+                      Text("5.arada uzun mola")
+                    ]),
+                Slider(
+                  value: _setOfPomodoroSliderValue.toDouble(),
+                  max: 5,
+                  min: 1,
+                  divisions: 4,
+                  label: '$_setOfPomodoroSliderValue',
+                  onChanged: (value) {
+                    setState(() {
+                      _setOfPomodoroSliderValue = value.toInt();
+                    });
                   },
                 ),
-                maxLines: 1),
+              ],
+            ),
             Container(height: 30),
             const SizedBox(height: 40),
             CustomElevatedButton(
                 onPressed: () async {
                   final prefs = await SharedPreferences.getInstance();
 
-                  await prefs.setInt('workTimerSelect',
-                      int.parse(_workTimerController.text.substring(0, 2)));
-                  await prefs.setInt('breakTimerSelect',
-                      int.parse(_breakTimerController.text.substring(0, 2)));
+                  await prefs.setInt('workTimerSelect', _workTimeSliderValue);
+                  await prefs.setInt('breakTimerSelect', _breakTimeSliderValue);
                   await prefs.setInt(
-                      'longBreakTimerSelect',
-                      int.parse(
-                          _longBreakTimerController.text.substring(0, 2)));
+                      'longBreakTimerSelect', _longBreakTimeSliderValue);
                   await prefs.setInt(
-                      'longBreakNumberSelect',
-                      int.parse(
-                          _longBreakNumberController.text.substring(0, 1)));
+                      'longBreakNumberSelect', _setOfPomodoroSliderValue);
 
                   // ignore: use_build_context_synchronously
                   Navigator.pushAndRemoveUntil(

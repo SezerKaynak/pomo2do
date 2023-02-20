@@ -41,7 +41,19 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                           width: 1.0, color: Colors.grey.withOpacity(0.5))),
                   child: Column(
                     children: [
-                      const Text("Çalışma Süresi"),
+                      const SizedBox(
+                        height: kToolbarHeight / 1.5,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Çalışma Süresi",
+                              style: TextStyle(fontSize: 16)
+                            ),
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.3,
                         child: SfCartesianChart(
@@ -84,8 +96,17 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                     builder: (context, value, child) {
                       return Column(
                         children: [
-                          Text(taskStatsProvider.getWeekDays()[0]
-                              [-taskStatsProvider.count.value + 6]),
+                          SizedBox(
+                            height: kToolbarHeight / 1.5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(taskStatsProvider.getWeekDays()[0]
+                                    [-taskStatsProvider.count.value + 6], style: const TextStyle(fontSize: 16),),
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.2,
                             child: FutureBuilder(
@@ -165,7 +186,7 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.35,
                           child: SfCalendar(
-                            todayHighlightColor: Colors.white,
+                            todayHighlightColor: Colors.black,
                             view: CalendarView.month,
                             showDatePickerButton: true,
                             monthCellBuilder:

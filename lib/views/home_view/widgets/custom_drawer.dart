@@ -31,7 +31,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     drawerImageProvider =
         Provider.of<DrawerImageProvider>(context, listen: false);
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => drawerImageProvider.baglantiAl(context));
+        .addPostFrameCallback((_) => drawerImageProvider.getURL(context));
   }
 
   @override

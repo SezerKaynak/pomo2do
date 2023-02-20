@@ -87,7 +87,7 @@ const String title = "Hoşgeldiniz!",
     breakTimerSelect = "Mola Süresini Seçiniz",
     longBreakTimerSelect = "Uzun Mola Süresini Seçiniz",
     longBreakNumberSelect = "Uzun Molanın Kaçıncı Arada Verileceğini Seçiniz",
-    minute = "dakika",
+    minute = 'dakika',
     noResult = 'Sonuç Bulunamadı!',
     moveIntoTrash = "ÇÖP KUTUSUNA TAŞI",
     editText = "DÜZENLE",
@@ -102,32 +102,8 @@ const String title = "Hoşgeldiniz!",
     nameOfTask = 'Görev adı',
     typeOfTask = 'Görev türü',
     infoOfTask = 'Görev açıklaması...',
-    buttonText = "Kaydet";
-
-const List<String> workTimerList = [
-      '20 dakika',
-      '25 dakika',
-      '30 dakika',
-      '35 dakika',
-      '40 dakika'
-    ],
-    breakTimerList = [
-      '5 dakika',
-      '6 dakika',
-      '7 dakika',
-      '8 dakika',
-      '9 dakika',
-      '10 dakika'
-    ],
-    longBreakTimerList = [
-      '15 dakika',
-      '16 dakika',
-      '17 dakika',
-      '18 dakika',
-      '19 dakika',
-      '20 dakika'
-    ],
-    longBreakNumberList = ['1', '2', '3', '4', '5'];
+    buttonText = "Kaydet",
+    statisticsTitle = "İstatistikler";
 
 const Color kLightGrey = Color.fromRGBO(238, 238, 238, 1),
     kLightGreen = Color.fromRGBO(198, 228, 139, 1),
