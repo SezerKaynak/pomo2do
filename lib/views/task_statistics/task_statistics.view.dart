@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/task_statistics/task_statistics.widgets.dart';
 
 class TaskStatisticsView extends StatefulWidget with TaskStatisticsWidget {
@@ -13,6 +14,8 @@ class _TaskStatisticsViewState extends State<TaskStatisticsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text(statisticsTitle),
+        centerTitle: true,
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

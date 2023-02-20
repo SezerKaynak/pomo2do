@@ -102,8 +102,9 @@ const String title = "Hoşgeldiniz!",
     nameOfTask = 'Görev adı',
     typeOfTask = 'Görev türü',
     infoOfTask = 'Görev açıklaması...',
-    buttonText = "Kaydet";
-
+    buttonText = "Kaydet",
+    statisticsTitle = "İstatistikler";
+    
 const List<String> workTimerList = [
       '20 dakika',
       '25 dakika',
