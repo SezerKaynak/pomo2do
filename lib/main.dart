@@ -4,13 +4,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/list_update_provider.dart';
+import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/views/archived_task_view/archived_task.view.dart';
 import 'package:pomotodo/views/auth_view/auth_widget.dart';
 import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
 import 'package:pomotodo/views/completed_task_view/completed_task.view.dart';
 import 'package:pomotodo/views/deleted_task_view/deleted_task.view.dart';
-import 'package:pomotodo/views/deneme.dart';
+import 'package:pomotodo/views/task_statistics/task_statistics.view.dart';
 import 'package:pomotodo/views/edit_profile_view/edit_profile.view.dart';
 import 'package:pomotodo/views/edit_task_view/edit_task.view.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
@@ -21,9 +23,12 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -51,11 +56,14 @@ Future<void> main() async {
       InitializationSettings(android: initializationSettingsAndroid);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   tz.initializeTimeZones();
+
+  await dotenv.load(fileName: ".env");
+
   runApp(
     MultiProvider(
       providers: [
         Provider<IAuthService>(create: (_) => AuthService()),
-        ChangeNotifierProvider(create: (context) => TasksProvider()),
+        ChangeNotifierProvider(create: (context) => SpotifyProvider()),
         Provider.value(value: await SharedPreferences.getInstance()),
       ],
       child: MyApp(theme: theme, themeDark: themeDark),
@@ -95,7 +103,18 @@ class _MyAppState extends State<MyApp> {
       child: AuthWidgetBuilder(
           onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
               MaterialApp(
+                  localizationsDelegates: const [
+                    SfGlobalLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
                   navigatorObservers: [FlutterSmartDialog.observer],
+                  supportedLocales: const [
+                    Locale('en'),
+                    Locale('tr'),
+                  ],
+                  locale: const Locale('tr'),
                   builder: FlutterSmartDialog.init(),
                   initialRoute: '/',
                   routes: {
@@ -107,7 +126,9 @@ class _MyAppState extends State<MyApp> {
                         child: const DeletedTasksView()),
                     '/editProfile': (context) => const EditProfileView(),
                     '/archived': (context) => const ArchivedTasksView(),
-                    '/deneme': (context) => const Deneme(),
+                    '/taskStatistics': (context) => ChangeNotifierProvider(
+                        create: (context) => TaskStatsProvider(),
+                        child: const TaskStatisticsView()),
                   },
                   debugShowCheckedModeBanner: false,
                   theme: context.watch<DarkThemeProvider>().darkTheme

@@ -3,6 +3,7 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/select_icon_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:provider/provider.dart';
@@ -81,6 +82,7 @@ class _AddTaskState extends State<AddTaskWidget> {
             Expanded(
               flex: 10,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ScreenTextField(
@@ -100,7 +102,10 @@ class _AddTaskState extends State<AddTaskWidget> {
                       onPressed: (int index) {
                         selectedIcon.selectedIcon(index);
                       },
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width * .12,
+                          minHeight: MediaQuery.of(context).size.height * .06),
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                       selectedBorderColor: Colors.blue[700],
                       selectedColor: Colors.white,
                       fillColor: Theme.of(context).primaryColor,
@@ -109,26 +114,23 @@ class _AddTaskState extends State<AddTaskWidget> {
                       children: icons,
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        TaskModel newTask = TaskModel();
-                        newTask.taskName = _taskNameController.text;
-                        newTask.taskType = _taskTypeController.text;
-                        newTask.taskInfo = _taskInfoController.text;
-                        newTask.taskIcon = selectedIcon.codePoint;
-                        await dbService.addTask(newTask);
+                  CustomElevatedButton(
+                    onPressed: () async {
+                      TaskModel newTask = TaskModel();
+                      newTask.taskName = _taskNameController.text;
+                      newTask.taskType = _taskTypeController.text;
+                      newTask.taskInfo = _taskInfoController.text;
+                      newTask.taskIcon = selectedIcon.codePoint;
+                      await dbService.addTask(newTask);
 
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomeView()));
-                      },
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(70),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16))),
-                      child: const Center(child: Text(buttonText)))
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeView()));
+                    },
+                    child: const Text(buttonText),
+                  )
                 ],
               ),
             ),

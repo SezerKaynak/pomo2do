@@ -3,6 +3,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:provider/provider.dart';
 
 class CompletedTasksWidget extends StatefulWidget {
@@ -52,7 +53,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.green[500],
-                                  borderRadius: BorderRadius.circular(16.0)),
+                                  borderRadius: BorderRadius.circular(8.0)),
                               child: ListTile(
                                 contentPadding: const EdgeInsets.all(15),
                                 leading: Checkbox(
@@ -79,15 +80,24 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                title: Text(data.taskName),
-                                subtitle: Text(data.taskInfo),
+                                title: Text(
+                                  data.taskName,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                subtitle: Text(
+                                  data.taskInfo,
+                                  style: const TextStyle(color: Colors.white70),
+                                ),
                                 trailing: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     InkWell(
-                                        child: const Icon(Icons.archive),
+                                        child: const Icon(
+                                          Icons.archive,
+                                          color: Colors.white,
+                                        ),
                                         onTap: () async {
                                           setState(() {
                                             isLoading = true;
@@ -107,7 +117,10 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                                               "Görev arşive taşındı!");
                                         }),
                                     InkWell(
-                                        child: const Icon(Icons.delete),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          color: Colors.white,
+                                        ),
                                         onTap: () async {
                                           setState(() {
                                             isLoading = true;
@@ -141,37 +154,30 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                   Expanded(
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: 400,
-                        height: 60,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            onPressed: () async {
-                              int selectedNumber = selectedIndexes.length;
-                              selectedIndexes.sort();
-                              setState(() {
-                                isLoading = true;
-                              });
-                              for (int i = 0; i < selectedNumber; i++) {
-                                final TaskModel data =
-                                    tasks[selectedIndexes[i]];
+                      child: CustomElevatedButton(
+                        onPressed: () async {
+                          int selectedNumber = selectedIndexes.length;
+                          selectedIndexes.sort();
+                          setState(() {
+                            isLoading = true;
+                          });
+                          for (int i = 0; i < selectedNumber; i++) {
+                            final TaskModel data = tasks[selectedIndexes[i]];
 
-                                data.isDone = false;
-                                data.isActive = true;
-                                await dbService.updateTask(data);
-                              }
-                              for (int i = 0; i < selectedIndexes.length; i++) {
-                                tasks.removeAt(selectedIndexes[i] - i);
-                              }
-                              selectedIndexes.clear();
-                              setState(() {
-                                isLoading = false;
-                              });
-                            },
-                            child: const Text(
-                                "Seçili görevleri tamamlanmamış olarak işaretle")),
+                            data.isDone = false;
+                            data.isActive = true;
+                            await dbService.updateTask(data);
+                          }
+                          for (int i = 0; i < selectedIndexes.length; i++) {
+                            tasks.removeAt(selectedIndexes[i] - i);
+                          }
+                          selectedIndexes.clear();
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
+                        child:
+                            const Text("Seçili görevleri tamamlanmamış olarak işaretle"),
                       ),
                     ),
                   ),

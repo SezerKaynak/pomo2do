@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/task_info_list_tile.dart';
@@ -30,13 +31,13 @@ class ShortBreak extends StatelessWidget {
             pomodoroCount: widget.task.pomodoroCount,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.55,
+            height: MediaQuery.of(context).size.height * 0.50,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 RepaintBoundary(
                   child: PomodoroTimer(
-                    backgroudColor: Colors.black26,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     onComplete: () async {
                       context.read<PageUpdate>().startOrStop(
                           context
@@ -50,7 +51,6 @@ class ShortBreak extends StatelessWidget {
                               .read<SharedPreferences>()
                               .getInt("longBreakNumberSelect")!);
                     },
-                    width: MediaQuery.of(context).size.width * 0.7,
                     isReverse: true,
                     isReverseAnimation: true,
                     duration: context.select((SharedPreferences prefs) =>
@@ -59,39 +59,37 @@ class ShortBreak extends StatelessWidget {
                     autoStart: false,
                     controller: controller,
                     isTimerTextShown: true,
-                    neumorphicEffect: true,
-                    innerFillGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
-                    neonGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
+                    neumorphicEffect: false,
+                    strokeWidth: 20,
+                    innerFillColor: Theme.of(context).primaryColor,
+                    neonColor: Theme.of(context).primaryColor,
+                    backgroudColor: Theme.of(context).focusColor,
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              var btn = context.read<PageUpdate>();
-                              btn.startOrStop(
-                                  context
-                                          .read<SharedPreferences>()
-                                          .getInt("breakTimerSelect")! *
-                                      60,
-                                  controller,
-                                  widget.task,
-                                  tabController,
-                                  context
-                                      .read<SharedPreferences>()
-                                      .getInt("longBreakNumberSelect")!);
-                            },
-                            child: context.read<PageUpdate>().callText())),
+                    CustomElevatedButton(
+                      buttonHeight: MediaQuery.of(context).size.height * 0.06,
+                      buttonWidth: MediaQuery.of(context).size.width * 0.5,
+                      onPressed: () {
+                        var btn = context.read<PageUpdate>();
+                        btn.startOrStop(
+                            context
+                                    .read<SharedPreferences>()
+                                    .getInt("breakTimerSelect")! *
+                                60,
+                            controller,
+                            widget.task,
+                            tabController,
+                            context
+                                .read<SharedPreferences>()
+                                .getInt("longBreakNumberSelect")!);
+                      },
+                      child: context.select(
+                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                      ),
+                    ),
                     if (context.read<PageUpdate>().skipButtonVisible)
                       IconButton(
                           onPressed: () {

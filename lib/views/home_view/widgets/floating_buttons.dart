@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/select_icon_provider.dart';
-import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/home_view/widgets/add_task_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -15,13 +14,17 @@ class FloatingButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           FloatingActionButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             heroTag: "btn1",
             onPressed: () {
-              Navigator.pushNamed(context, '/deneme');
+              Navigator.pushNamed(context, '/taskStatistics');
             },
             child: const Icon(Icons.stacked_bar_chart),
           ),
-          FloatingActionButton.extended(
+          FloatingActionButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             heroTag: "btn2",
             onPressed: () {
               showModalBottomSheet(
@@ -38,12 +41,7 @@ class FloatingButtons extends StatelessWidget {
                 },
               );
             },
-            label: Text(addButtonText,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: Theme.of(context).cardColor)),
-            icon: const Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ],
       ),

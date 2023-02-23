@@ -12,7 +12,7 @@ class SignUpView extends StatelessWidget with SignUpWidgets {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios, color: Colors.blueGrey[300])),
+            icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: body(context),
     );

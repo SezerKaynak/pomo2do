@@ -4,6 +4,7 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
@@ -150,39 +151,33 @@ class _EditTaskState extends State<EditTaskWidget> {
                   },
                 ),
                 const SizedBox(height: 40),
-                SizedBox(
-                    width: 400,
-                    height: 60,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20))),
-                        onPressed: () async {
-                          selectedTask.taskName = _taskNameController.text;
-                          selectedTask.taskType = _taskTypeController.text;
-                          selectedTask.taskInfo = _taskInfoController.text;
-                          selectedTask.isDone = isCheckedDone;
-                          selectedTask.isArchive = isCheckedArchive;
-                          selectedTask.isActive = true;
-                          await dbService.updateTask(selectedTask);
+                CustomElevatedButton(
+                    onPressed: () async {
+                      selectedTask.taskName = _taskNameController.text;
+                      selectedTask.taskType = _taskTypeController.text;
+                      selectedTask.taskInfo = _taskInfoController.text;
+                      selectedTask.isDone = isCheckedDone;
+                      selectedTask.isArchive = isCheckedArchive;
+                      selectedTask.isActive = true;
 
-                          isCheckedDone && isCheckedArchive
-                              ? SmartDialog.showToast(taskMovedIntoArchive)
-                              : isCheckedDone
-                                  ? SmartDialog.showToast(
-                                      taskMovedIntoCompleted)
-                                  : isCheckedArchive
-                                      ? SmartDialog.showToast(
-                                          taskMovedIntoArchive)
-                                      : DoNothingAction();
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeView()),
-                              ModalRoute.withName("/Task"));
-                        },
-                        child: const Text(updateButtonText))),
+                      await dbService.updateTask(selectedTask);
+
+                      isCheckedDone && isCheckedArchive
+                          ? SmartDialog.showToast(taskMovedIntoArchive)
+                          : isCheckedDone
+                              ? SmartDialog.showToast(taskMovedIntoCompleted)
+                              : isCheckedArchive
+                                  ? SmartDialog.showToast(taskMovedIntoArchive)
+                                  : DoNothingAction();
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeView()),
+                        ModalRoute.withName("/Task"),
+                      );
+                    },
+                    child: const Text(updateButtonText))
               ],
             ),
           ),

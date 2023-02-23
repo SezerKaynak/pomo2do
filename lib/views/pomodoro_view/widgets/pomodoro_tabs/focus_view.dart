@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
+import 'package:pomotodo/views/pomodoro_view/widgets/spotify_build_player_state.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/task_info_list_tile.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-class FocusView extends StatelessWidget {
+class FocusView extends StatefulWidget {
   const FocusView({
     Key? key,
     required this.widget,
@@ -20,26 +26,33 @@ class FocusView extends StatelessWidget {
   final PomodoroWidget widget;
   final CountDownController controller;
   final TabController tabController;
+
+  @override
+  State<FocusView> createState() => _FocusViewState();
+}
+
+class _FocusViewState extends State<FocusView> {
   @override
   Widget build(BuildContext context) {
-    int pomodoroCount = widget.task.pomodoroCount;
+    SpotifyProvider spotifyProvider =
+        Provider.of<SpotifyProvider>(context, listen: true);
+    int pomodoroCount = widget.widget.task.pomodoroCount;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           TaskInfoListTile(
-              taskName: widget.task.taskName,
-              taskInfo: widget.task.taskInfo,
-              pomodoroCount: widget.task.pomodoroCount),
+              taskName: widget.widget.task.taskName,
+              taskInfo: widget.widget.task.taskInfo,
+              pomodoroCount: widget.widget.task.pomodoroCount),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.55,
+            height: MediaQuery.of(context).size.height * 0.50,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 RepaintBoundary(
                   child: PomodoroTimer(
-                    backgroudColor: Theme.of(context).focusColor,
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.65,
                     isReverse: true,
                     isReverseAnimation: true,
                     onComplete: () async {
@@ -48,14 +61,14 @@ class FocusView extends StatelessWidget {
                                   .read<SharedPreferences>()
                                   .getInt("workTimerSelect")! *
                               60,
-                          controller,
-                          widget.task,
-                          tabController,
+                          widget.controller,
+                          widget.widget.task,
+                          widget.tabController,
                           context
                               .read<SharedPreferences>()
                               .getInt("longBreakNumberSelect")!);
                       context.read<PageUpdate>().floatingActionOnPressed(
-                          widget.task, pomodoroCount + 1);
+                          widget.widget.task, pomodoroCount + 1);
                       await FlutterLocalNotificationsPlugin().zonedSchedule(
                           0,
                           'scheduled title',
@@ -77,47 +90,45 @@ class FocusView extends StatelessWidget {
                             prefs.getInt("workTimerSelect"))! *
                         60,
                     autoStart: false,
-                    controller: controller,
+                    controller: widget.controller,
                     isTimerTextShown: true,
-                    neumorphicEffect: true,
-                    innerFillGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
-                    neonGradient: LinearGradient(colors: [
-                      Colors.greenAccent.shade200,
-                      Colors.blueAccent.shade400
-                    ]),
+                    neumorphicEffect: false,
+                    strokeWidth: 20,
+                    innerFillColor: Theme.of(context).primaryColor,
+                    neonColor: Theme.of(context).primaryColor,
+                    backgroudColor: Theme.of(context).focusColor,
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              var btn = context.read<PageUpdate>();
-                              btn.startOrStop(
-                                  context
-                                          .read<SharedPreferences>()
-                                          .getInt("workTimerSelect")! *
-                                      60,
-                                  controller,
-                                  widget.task,
-                                  tabController,
-                                  context
-                                      .read<SharedPreferences>()
-                                      .getInt("longBreakNumberSelect")!);
-                            },
-                            child: context.select((PageUpdate pageNotifier) =>
-                                pageNotifier.callText()))),
+                    CustomElevatedButton(
+                      buttonWidth: MediaQuery.of(context).size.width * 0.5,
+                      buttonHeight: MediaQuery.of(context).size.height * 0.06,
+                      onPressed: () {
+                        var btn = context.read<PageUpdate>();
+                        btn.startOrStop(
+                            context
+                                    .read<SharedPreferences>()
+                                    .getInt("workTimerSelect")! *
+                                60,
+                            widget.controller,
+                            widget.widget.task,
+                            widget.tabController,
+                            context
+                                .read<SharedPreferences>()
+                                .getInt("longBreakNumberSelect")!);
+                      },
+                      child: context.select(
+                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                      ),
+                    ),
                     if (context.select((PageUpdate pageNotifier) =>
                         pageNotifier.skipButtonVisible))
                       IconButton(
                           onPressed: () {
-                            tabController.animateTo(tabController.index + 1);
+                            widget.tabController
+                                .animateTo(widget.tabController.index + 1);
                             context.read<PageUpdate>().skipButtonVisible =
                                 false;
                             context.read<PageUpdate>().startStop = true;
@@ -129,92 +140,184 @@ class FocusView extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: kToolbarHeight,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Material(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8))),
-                          color: Colors.green[500],
-                          child: InkWell(
-                            onTap: () {},
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Card(
+                    clipBehavior: Clip.hardEdge,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            width: 1, color: Colors.grey.withOpacity(0.5)),
+                        borderRadius: BorderRadius.circular(8)),
+                    elevation: 10,
+                    child: SizedBox(
+                      height: kToolbarHeight * 2,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8)),
+                            clipBehavior: Clip.hardEdge,
                             child: SizedBox(
-                              //metni görevi tamamlandı olarak işaretle cümlesine benzer bir cümleyle değiştir
-                              child: Center(
-                                child: Wrap(
-                                  children: const [
-                                    Text(
-                                      "Tamamlandı",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
+                              height: kToolbarHeight,
+                              child: Row(
+                                children: [
+                                  spotifyProvider.connected
+                                      ? Expanded(
+                                          child: Wrap(
+                                            alignment:
+                                                WrapAlignment.spaceBetween,
+                                            children: [
+                                              Stack(
+                                                children: [
+                                                  buildPlayerStateWidget(
+                                                      context),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: Material(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  topRight: Radius.circular(8)),
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Visibility(
+                                                  visible:
+                                                      !spotifyProvider.loading,
+                                                  child: SizedBox(
+                                                    height: kToolbarHeight,
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        try {
+                                                          await context
+                                                              .read<
+                                                                  SpotifyProvider>()
+                                                              .connectToSpotifyRemote();
+                                                        } on PlatformException catch (e) {
+                                                          QuickAlert.show(
+                                                              context: context,
+                                                              type:
+                                                                  QuickAlertType
+                                                                      .error,
+                                                              title:
+                                                                  "Bağlanamadı!",
+                                                              text: e.code,
+                                                              confirmBtnText:
+                                                                  confirmButtonText);
+                                                        }
+                                                      },
+                                                      child: const Center(
+                                                          child: Text(
+                                                        "Spotify'a Bağlan",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      )),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Visibility(
+                                                      visible: spotifyProvider
+                                                          .loading,
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                              color: Colors
+                                                                  .white)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                ],
                               ),
                             ),
                           ),
-                        ),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Material(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(8))),
+                                    color: Colors.green[500],
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: SizedBox(
+                                        //metni görevi tamamlandı olarak işaretle cümlesine benzer bir cümleyle değiştir
+                                        child: Center(
+                                          child: Wrap(
+                                            children: const [
+                                              Text(
+                                                "Tamamlandı Olarak İşaretle",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Material(
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8))),
+                                    color: Colors.red[400],
+                                    child: InkWell(
+                                      onTap: () {
+                                        context
+                                            .read<PageUpdate>()
+                                            .floatingActionOnPressed(
+                                                widget.widget.task, 0);
+                                      },
+                                      child: SizedBox(
+                                        child: Center(
+                                            child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          direction: Axis.vertical,
+                                          children: const [
+                                            Text('Pomodoro Sayacını \n Sıfırla',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white)),
+                                          ],
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: Material(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8))),
-                          color: Colors.red[400],
-                          child: InkWell(
-                              // onTap: () {
-                              //   SystemChrome.setEnabledSystemUIMode(
-                              //       SystemUiMode.immersiveSticky);
-                              // },
-                              // onLongPress: () {
-                              //   SystemChrome.setEnabledSystemUIMode(
-                              //     SystemUiMode.manual,
-                              //     overlays: [
-                              //       SystemUiOverlay.top,
-                              //       SystemUiOverlay.bottom
-                              //     ],
-                              //   );
-                              // },
-                              onTap: () {
-                                context
-                                    .read<PageUpdate>()
-                                    .floatingActionOnPressed(widget.task, 0);
-                              },
-                              child: SizedBox(
-                                child: Center(
-                                    child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  direction: Axis.vertical,
-                                  children: const [
-                                    Text('Pomodoro Sayacını',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    Text(
-                                      'Sıfırla',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                              )),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                )),
-          )
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );

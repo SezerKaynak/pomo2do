@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
+import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -115,60 +118,54 @@ class _SignInWidgetState extends State<SignInWidget> {
                             .subtitle1
                             ?.copyWith(fontWeight: FontWeight.w300)))),
             const SizedBox(height: 50),
-            SizedBox(
-                width: 400,
-                height: 60,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    onPressed: () async {
-                      if (_emailController.text == "") {
+            CustomElevatedButton(
+                onPressed: () async {
+                  if (_emailController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: emailAlert,
+                        text: emailAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else if (_passwordController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: passwordAlert,
+                        text: passwordAlertSubtitle,
+                        confirmBtnText: confirmButtonText);
+                  } else {
+                    try {
+                      await _authService.signInEmailAndPassword(
+                          email: _emailController.text,
+                          password: _passwordController.text);
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'user-not-found') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: emailAlert,
-                            text: emailAlertSubtitle,
+                            title: userNotFound,
+                            text: userNotFoundSubtitle,
                             confirmBtnText: confirmButtonText);
-                      } else if (_passwordController.text == "") {
+                      } else if (e.code == 'wrong-password') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: passwordAlert,
-                            text: passwordAlertSubtitle,
+                            title: wrongPassword,
+                            text: wrongPasswordSubtitle,
                             confirmBtnText: confirmButtonText);
-                      } else {
-                        try {
-                          await _authService.signInEmailAndPassword(
-                              email: _emailController.text,
-                              password: _passwordController.text);
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: userNotFound,
-                                text: userNotFoundSubtitle,
-                                confirmBtnText: confirmButtonText);
-                          } else if (e.code == 'wrong-password') {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: wrongPassword,
-                                text: wrongPasswordSubtitle,
-                                confirmBtnText: confirmButtonText);
-                          } else if (e.code == 'invalid-email') {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.error,
-                                title: invalidEmail,
-                                text: invalidEmailSubtitle,
-                                confirmBtnText: confirmButtonText);
-                          }
-                        }
+                      } else if (e.code == 'invalid-email') {
+                        QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: invalidEmail,
+                            text: invalidEmailSubtitle,
+                            confirmBtnText: confirmButtonText);
                       }
-                    },
-                    child: const Text(login))),
+                    }
+                  }
+                },
+                child: const Text(login)),
             const SizedBox(height: 40),
             ScreenTexts(
                 title: loginWithAccount,
@@ -180,8 +177,24 @@ class _SignInWidgetState extends State<SignInWidget> {
               child: SizedBox(
                   height: 30,
                   child: InkWell(
-                      onTap: () {
-                        _authService.signInWithGoogle();
+                      onTap: () async {
+                        try {
+                          await _authService.signInWithGoogle();
+                        } on PlatformException catch (e) {
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: "Giriş Başarısız!",
+                              text: e.code,
+                              confirmBtnText: confirmButtonText);
+                        } catch (e) {
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.error,
+                              title: "Giriş Başarısız!",
+                              text: "Uygulamaya giriş yapılamadı.",
+                              confirmBtnText: confirmButtonText);
+                        }
                       },
                       child: Image.asset("assets/images/google.png",
                           fit: BoxFit.fitHeight))),
