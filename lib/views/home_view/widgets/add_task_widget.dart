@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/select_icon_provider.dart';
+import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
@@ -39,6 +40,15 @@ class _AddTaskState extends State<AddTaskWidget> {
   @override
   Widget build(BuildContext context) {
     DatabaseService dbService = DatabaseService();
+
+    List<TaskModel>? tasks = context.read<TasksProvider>().tasks;
+    List<String> taskTypes = [];
+
+    for (var element in tasks!) {
+      !taskTypes.contains(element.taskType)
+          ? taskTypes.add(element.taskType)
+          : null;
+    }
 
     final selectedIcon = Provider.of<SelectIcon>(context, listen: true);
     List<IconData> iconData = selectedIcon.icons;
@@ -89,10 +99,35 @@ class _AddTaskState extends State<AddTaskWidget> {
                       textLabel: nameOfTask,
                       controller: _taskNameController,
                       maxLines: 1),
-                  ScreenTextField(
-                      textLabel: typeOfTask,
-                      controller: _taskTypeController,
-                      maxLines: 1),
+                  Stack(
+                    alignment: AlignmentDirectional.centerEnd,
+                    children: [
+                      ScreenTextField(
+                        textLabel: typeOfTask,
+                        controller: _taskTypeController,
+                        maxLines: 1,
+                      ),
+                      Visibility(
+                        visible: taskTypes.isNotEmpty,
+                        child: PopupMenuButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          onSelected: (String value) {
+                            setState(() {
+                              _taskTypeController.text = value;
+                            });
+                          },
+                          itemBuilder: (context) {
+                            return taskTypes.map((String element) {
+                              return PopupMenuItem(
+                                  value: element, child: Text(element));
+                            }).toList();
+                          },
+                          icon: const Icon(Icons.arrow_drop_down),
+                        ),
+                      )
+                    ],
+                  ),
                   ScreenTextField(
                       textLabel: infoOfTask,
                       controller: _taskInfoController,
