@@ -108,7 +108,7 @@ class TaskStatsProvider extends ChangeNotifier {
     for (var i = 0; i < tasks.length; i++) {
       TaskByTaskModel deneme = TaskByTaskModel(
           tasks[i].taskName, int.parse(dayStats[i].taskPassingTime));
-      taskByTask.add(deneme);
+      if (deneme.passingTime != 0) taskByTask.add(deneme);
     }
     table2 = taskByTask;
   }

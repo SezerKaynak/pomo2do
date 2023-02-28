@@ -103,7 +103,10 @@ const String title = "Hoşgeldiniz!",
     typeOfTask = 'Görev türü',
     infoOfTask = 'Görev açıklaması...',
     buttonText = "Kaydet",
-    statisticsTitle = "İstatistikler";
+    statisticsTitle = "İstatistikler",
+    taskFound = "Görev bulundu!",
+    taskFoundDetailed =
+        "Aynı isimli başka bir görev bulunuyor, lütfen görev adını değiştirin.";
 
 const Color kLightGrey = Color.fromRGBO(238, 238, 238, 1),
     kLightGreen = Color.fromRGBO(198, 228, 139, 1),

@@ -8,6 +8,8 @@ import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class AddTaskWidget extends StatefulWidget {
   const AddTaskWidget({super.key});
@@ -41,7 +43,8 @@ class _AddTaskState extends State<AddTaskWidget> {
   Widget build(BuildContext context) {
     DatabaseService dbService = DatabaseService();
 
-    List<TaskModel>? tasks = context.read<TasksProvider>().tasks;
+    List<TaskModel>? tasks =
+        Provider.of<TasksProvider>(context, listen: false).tasks;
     List<String> taskTypes = [];
 
     for (var element in tasks!) {
@@ -152,17 +155,28 @@ class _AddTaskState extends State<AddTaskWidget> {
                   CustomElevatedButton(
                     onPressed: () async {
                       TaskModel newTask = TaskModel();
-                      newTask.taskName = _taskNameController.text;
                       newTask.taskType = _taskTypeController.text;
                       newTask.taskInfo = _taskInfoController.text;
                       newTask.taskIcon = selectedIcon.codePoint;
-                      await dbService.addTask(newTask);
+                      if (!tasks
+                          .map((e) => e.taskName)
+                          .contains(_taskNameController.text)) {
+                        newTask.taskName = _taskNameController.text;
+                        await dbService.addTask(newTask);
 
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeView()));
+                        // ignore: use_build_context_synchronously
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomeView()));
+                      } else {
+                        QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: taskFound,
+                            text: taskFoundDetailed,
+                            confirmBtnText: confirmButtonText);
+                      }
                     },
                     child: const Text(buttonText),
                   )
