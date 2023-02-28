@@ -115,7 +115,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           "${asyncSnapshot.data.data()["name"]}"
                           " ${asyncSnapshot.data.data()["surname"]}",
                           style: const TextStyle(
-                              color: Colors.black, fontSize: 20),
+                              color: Colors.black,
+                              fontSize: 23,
+                              fontWeight: FontWeight.normal),
                         );
                       }
                       return const Text("Loading");
@@ -179,14 +181,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 );
               }),
           const Divider(thickness: 1),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: CustomSwitch(
-              switchValue: themeChange.darkTheme,
-              switchOnChanged: (bool? value) {
-                themeChange.darkTheme = value!;
-              },
-            ),
+          CustomSwitch(
+            switchValue: themeChange.darkTheme,
+            switchOnChanged: (bool? value) {
+              themeChange.darkTheme = value!;
+            },
           )
         ],
       ),
