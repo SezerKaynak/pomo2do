@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
@@ -36,6 +37,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    // var deneme = FirebaseAuth.instance.currentUser!.providerData
+    //     .map((e) => e.providerId).contains('google.com');
+    // print('deneme: $deneme');
     var user = users.doc(context.read<PomotodoUser>().userId);
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return Drawer(
@@ -134,18 +138,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
             },
           ),
           const Divider(thickness: 1),
-          settings.Settings(
-            settingIcon: Icons.password,
-            subtitle: "Şifrenizi değiştirebilirsiniz.",
-            title: settingTitle(context, 'Şifreyi Değiştir'),
-            tap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const EditPasswordView()));
-            },
+          Visibility(
+            visible: !context.read<PomotodoUser>().loginProviderData!,
+            child: Column(
+              children: [
+                settings.Settings(
+                  settingIcon: Icons.password,
+                  subtitle: "Şifrenizi değiştirebilirsiniz.",
+                  title: settingTitle(context, 'Şifreyi Değiştir'),
+                  tap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EditPasswordView()));
+                  },
+                ),
+                const Divider(thickness: 1),
+              ],
+            ),
           ),
-          const Divider(thickness: 1),
           settings.Settings(
               settingIcon: Icons.notifications,
               subtitle: "Bildirim ayarlarını yapabilirsiniz.",

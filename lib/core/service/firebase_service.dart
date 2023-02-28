@@ -16,7 +16,11 @@ final GoogleSignIn _googleSignIn =
 class AuthService with ConvertUser implements IAuthService {
   PomotodoUser _getUser(User? user) {
     return PomotodoUser(
-        userId: user!.uid, userMail: user.email!, userPhotoUrl: user.photoURL);
+        userId: user!.uid,
+        userMail: user.email!,
+        userPhotoUrl: user.photoURL,
+        loginProviderData:
+            user.providerData.map((e) => e.providerId).contains('google.com'));
   }
 
   @override
@@ -43,8 +47,7 @@ class AuthService with ConvertUser implements IAuthService {
   Future<PomotodoUser> signInWithGoogle() async {
     final googleUser = await _googleSignIn.signIn();
 
-    GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     OAuthCredential? credential;
     UserCredential? _tempUser;
     try {
