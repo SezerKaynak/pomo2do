@@ -50,6 +50,7 @@ class AuthService with ConvertUser implements IAuthService {
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     OAuthCredential? credential;
     UserCredential? _tempUser;
+
     try {
       credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
@@ -78,7 +79,7 @@ class AuthService with ConvertUser implements IAuthService {
       return convertUser(_tempUser);
     } on FirebaseAuthException catch (_) {
       googleUser!.clearAuthCache();
-      throw PlatformException(code: "Lütfen uygulamayı yeniden başlatın.");
+      throw PlatformException(code: "Lütfen tekrar giriş yapmayı deneyin.");
     } catch (e) {
       throw Exception("Giriş yapılamadı");
     }
@@ -86,10 +87,9 @@ class AuthService with ConvertUser implements IAuthService {
 
   @override
   Future<void> signOut() async {
-    if (_googleSignIn.currentUser != null) {
-      await _googleSignIn.signOut();
-    }
-    await _authInstance.signOut();
+    await _authInstance.signOut().then((_) {
+      _googleSignIn.signOut();
+    });
   }
 
   @override
