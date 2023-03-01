@@ -31,7 +31,45 @@ class FocusView extends StatefulWidget {
   State<FocusView> createState() => _FocusViewState();
 }
 
-class _FocusViewState extends State<FocusView> {
+class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
+  late DateTime firstDateTime;
+  late DateTime secondDateTime;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    SharedPreferences durationController = Provider.of<SharedPreferences>(context, listen: false);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+        widget.controller.pause();
+        var timer = widget.controller.getTime();
+        firstDateTime = DateTime.now();
+        print('state = $timer');
+        break;
+      case AppLifecycleState.resumed:
+        secondDateTime = DateTime.now();
+        var differenceDateTime = secondDateTime.difference(firstDateTime);
+        var newDuration = durationController.getInt("workTimerSelect")! * 60 - int.parse(differenceDateTime.toString().split(":")[2].split(".")[0]);
+        widget.controller.restart(duration: newDuration);
+        break;
+
+      default:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SpotifyProvider spotifyProvider =
@@ -86,8 +124,12 @@ class _FocusViewState extends State<FocusView> {
                               UILocalNotificationDateInterpretation
                                   .absoluteTime);
                     },
-                    duration: context.select((SharedPreferences prefs) =>
-                            prefs.getInt("workTimerSelect"))! *
+                    // duration: context.select((SharedPreferences prefs) =>
+                    //         prefs.getInt("workTimerSelect"))! *
+                    //     60,
+                    duration: context
+                            .read<SharedPreferences>()
+                            .getInt("workTimerSelect")! *
                         60,
                     autoStart: false,
                     controller: widget.controller,
