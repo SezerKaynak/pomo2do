@@ -15,7 +15,7 @@ their motivation and focus.
 
 People Api, Google Authentication, Spotify Android SDK
 
-## Screenshot
+## Screenshots
 
 |Home View | Pomodoro View  |
 |--|--|
