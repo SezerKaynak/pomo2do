@@ -11,9 +11,12 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
   String startDate = "";
   final String basla = "BAŞLAT";
   final String durdur = "DURDUR";
+  int countDown = 0, countDown2 = 0, countDown3 = 0;
+  bool timerWorking = false;
 
   void startButton(CountDownController controller, int time) {
     controller.resume();
+    countDown = controller.getTimeInSeconds();
     skipButtonVisible = true;
     startStop = false;
     startDate = getTime();
@@ -25,11 +28,22 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
     if (startStop == true) {
       startButton(controller, time);
       onWillPop = false;
+      notifyListeners();
     } else {
       stop(controller, task, time, tabController, longBreakTimerSelect);
       onWillPop = true;
       skipButtonVisible = false;
+      notifyListeners();
     }
+  }
+
+  void restartTimer(CountDownController controller, int newDuration) {
+    controller.restart(duration: newDuration);
+    countDown = controller.getTimeInSeconds();
+    skipButtonVisible = true;
+    startStop = false;
+    onWillPop = false;
+    notifyListeners();
   }
 
   Widget callText() {
@@ -59,11 +73,17 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
     notifyListeners();
     controller.pause();
     int passingTime;
+    int screenOffCounter = 0;
 
     switch (tabController.index) {
       case 0:
-        var countDown = controller.getTimeInSeconds();
-        passingTime = time - countDown;
+        if (timerWorking) {
+          screenOffCounter = countDown2 - countDown;
+        }
+
+        countDown2 = controller.getTimeInSeconds();
+
+        passingTime = screenOffCounter + countDown - countDown2;
 
         if (getTime() == startDate) {
           await updateTaskStatistics(task, passingTime, startDate, 0);
@@ -78,8 +98,15 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
         }
         break;
       case 1:
-        var countDown = controller.getTimeInSeconds();
-        passingTime = time - countDown;
+        if (timerWorking) {
+          print("gökalp");
+          screenOffCounter = countDown2 - countDown;
+        }
+
+        countDown2 = controller.getTimeInSeconds();
+
+        passingTime = screenOffCounter + countDown - countDown2;
+
 
         if (getTime() == startDate) {
           await updateTaskStatistics(task, passingTime, startDate, 1);
@@ -92,8 +119,13 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
         }
         break;
       case 2:
-        var countDown = controller.getTimeInSeconds();
-        passingTime = time - countDown;
+        if (timerWorking) {
+          screenOffCounter = countDown2 - countDown;
+        }
+
+        countDown2 = controller.getTimeInSeconds();
+
+        passingTime = screenOffCounter + countDown - countDown2;
 
         if (getTime() == startDate) {
           await updateTaskStatistics(task, passingTime, startDate, 2);

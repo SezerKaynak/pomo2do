@@ -31,7 +31,60 @@ class FocusView extends StatefulWidget {
   State<FocusView> createState() => _FocusViewState();
 }
 
-class _FocusViewState extends State<FocusView> {
+class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
+  late DateTime firstDateTime;
+  late DateTime secondDateTime;
+  late PageUpdate pageUpdateProvider;
+  
+  @override
+  void initState() {
+    pageUpdateProvider = Provider.of<PageUpdate>(context, listen: false);
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (pageUpdateProvider.timerWorking) {
+      switch (state) {
+        case AppLifecycleState.paused:
+        
+        pageUpdateProvider.timerWorking = true;
+          context.read<PageUpdate>().startOrStop(
+              context.read<SharedPreferences>().getInt("workTimerSelect")! * 60,
+              widget.controller,
+              widget.widget.task,
+              widget.tabController,
+              context
+                  .read<SharedPreferences>()
+                  .getInt("longBreakNumberSelect")!);
+          firstDateTime = DateTime.now(); 
+          break;
+        case AppLifecycleState.resumed:
+        
+          secondDateTime = DateTime.now();
+          var differenceDateTime = secondDateTime.difference(firstDateTime);
+
+          var newDuration = widget.controller.getTimeInSeconds() -
+              differenceDateTime.inSeconds;
+          context
+              .read<PageUpdate>()
+              .restartTimer(widget.controller, newDuration);
+
+          pageUpdateProvider.timerWorking = false;
+          break;
+
+        default:
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SpotifyProvider spotifyProvider =
@@ -56,7 +109,7 @@ class _FocusViewState extends State<FocusView> {
                     isReverse: true,
                     isReverseAnimation: true,
                     onComplete: () async {
-                      context.read<PageUpdate>().startOrStop(
+                      pageUpdateProvider.startOrStop(
                           context
                                   .read<SharedPreferences>()
                                   .getInt("workTimerSelect")! *
@@ -67,7 +120,7 @@ class _FocusViewState extends State<FocusView> {
                           context
                               .read<SharedPreferences>()
                               .getInt("longBreakNumberSelect")!);
-                      context.read<PageUpdate>().floatingActionOnPressed(
+                      pageUpdateProvider.floatingActionOnPressed(
                           widget.widget.task, pomodoroCount + 1);
                       await FlutterLocalNotificationsPlugin().zonedSchedule(
                           0,
@@ -106,8 +159,7 @@ class _FocusViewState extends State<FocusView> {
                       buttonWidth: MediaQuery.of(context).size.width * 0.5,
                       buttonHeight: MediaQuery.of(context).size.height * 0.06,
                       onPressed: () {
-                        var btn = context.read<PageUpdate>();
-                        btn.startOrStop(
+                        pageUpdateProvider.startOrStop(
                             context
                                     .read<SharedPreferences>()
                                     .getInt("workTimerSelect")! *
@@ -127,11 +179,19 @@ class _FocusViewState extends State<FocusView> {
                         pageNotifier.skipButtonVisible))
                       IconButton(
                           onPressed: () {
+                            pageUpdateProvider.startOrStop(
+                                context
+                                        .read<SharedPreferences>()
+                                        .getInt("workTimerSelect")! *
+                                    60,
+                                widget.controller,
+                                widget.widget.task,
+                                widget.tabController,
+                                context
+                                    .read<SharedPreferences>()
+                                    .getInt("longBreakNumberSelect")!);
                             widget.tabController
                                 .animateTo(widget.tabController.index + 1);
-                            context.read<PageUpdate>().skipButtonVisible =
-                                false;
-                            context.read<PageUpdate>().startStop = true;
                           },
                           icon: const Icon(Icons.skip_next))
                   ],
@@ -199,9 +259,7 @@ class _FocusViewState extends State<FocusView> {
                                                     child: InkWell(
                                                       onTap: () async {
                                                         try {
-                                                          await context
-                                                              .read<
-                                                                  SpotifyProvider>()
+                                                          await spotifyProvider
                                                               .connectToSpotifyRemote();
                                                         } on PlatformException catch (e) {
                                                           QuickAlert.show(
@@ -284,8 +342,7 @@ class _FocusViewState extends State<FocusView> {
                                     color: Colors.red[400],
                                     child: InkWell(
                                       onTap: () {
-                                        context
-                                            .read<PageUpdate>()
+                                        pageUpdateProvider
                                             .floatingActionOnPressed(
                                                 widget.widget.task, 0);
                                       },
