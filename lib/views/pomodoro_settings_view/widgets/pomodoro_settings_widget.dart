@@ -42,7 +42,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: ScreenPadding().screenPadding.copyWith(top: 0),
+        padding: ScreenPadding().screenPadding.copyWith(top: 20),
         child: Column(
           children: [
             ScreenTexts(
@@ -113,12 +113,12 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [Text("15 dakika"), Text("20 dakika")]),
+                    children: const [Text("15 dakika"), Text("30 dakika")]),
                 Slider(
                   value: _longBreakTimeSliderValue.toDouble(),
-                  max: 20,
+                  max: 30,
                   min: 15,
-                  divisions: 5,
+                  divisions: 3,
                   label: '$_longBreakTimeSliderValue $minute',
                   onChanged: (value) {
                     setState(() {

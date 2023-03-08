@@ -16,7 +16,7 @@ class AuthWidget extends StatelessWidget {
       void setPomodoroSettings() {
         pomodoroSettings.setInt('workTimerSelect', 25);
         pomodoroSettings.setInt('breakTimerSelect', 5);
-        pomodoroSettings.setInt('longBreakTimerSelect', 30);
+        pomodoroSettings.setInt('longBreakTimerSelect', 20);
         pomodoroSettings.setInt('longBreakNumberSelect', 4);
       }
 
