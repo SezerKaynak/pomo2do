@@ -3,7 +3,6 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
-import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
 import 'package:pomotodo/views/home_view/widgets/mini_task_statistics.dart';
@@ -52,8 +51,25 @@ class HomeWidget extends StatelessWidget {
                                   ),
                               shrinkWrap: true,
                               itemCount:
-                                  providerOfTasks.retrievedTaskList!.length,
+                                  providerOfTasks.retrievedTaskList!.length + 1,
                               itemBuilder: (context, index) {
+                                if (index ==
+                                    providerOfTasks.retrievedTaskList!.length) {
+                                  return Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 50,
+                                        padding: const EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
                                 String key = providerOfTasks
                                     .retrievedTaskList!.keys
                                     .elementAt(index);
@@ -86,8 +102,9 @@ class HomeWidget extends StatelessWidget {
                                           child: Card(
                                             margin: EdgeInsets.zero,
                                             shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8)),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
                                             child: Dismissible(
                                                 onDismissed:
                                                     ((direction) async {
