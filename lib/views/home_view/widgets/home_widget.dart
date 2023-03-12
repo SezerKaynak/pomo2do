@@ -11,25 +11,12 @@ import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
-class HomeWidget extends StatefulWidget {
-  const HomeWidget({Key? key}) : super(key: key);
-
-  @override
-  State<HomeWidget> createState() => Task();
-}
-
-class Task extends State<HomeWidget> {
-  DatabaseService service = DatabaseService();
-  Future<List<TaskModel>>? taskList;
-  Map<String, List<TaskModel>>? retrievedTaskList;
-  List<TaskModel>? tasks;
-  List<TaskModel> deletedTasks = [];
-  DatabaseService dbService = DatabaseService();
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
-    providerOfTasks.getTasks();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -51,7 +38,7 @@ class Task extends State<HomeWidget> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: FutureBuilder(
-                future: providerOfTasks.taskList,
+                future: providerOfTasks.getTasks(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<TaskModel>> snapshot) {
                   if (snapshot.hasData) {
@@ -116,7 +103,9 @@ class Task extends State<HomeWidget> {
                                                           arguments: [
                                                             key,
                                                             index
-                                                          ]);
+                                                          ]).then((_) =>
+                                                          providerOfTasks
+                                                              .refresh());
                                                     }
                                                   }
                                                 }),
@@ -221,7 +210,7 @@ class Task extends State<HomeWidget> {
                                                                             .retrievedTaskList![key]![index],
                                                                       )),
                                                             ))
-                                                        .then((value) =>
+                                                        .then((_) =>
                                                             providerOfTasks
                                                                 .refresh());
                                                   },

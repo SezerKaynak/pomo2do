@@ -5,15 +5,16 @@ import '../models/task_model.dart';
 
 class TasksProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
-  Future<List<TaskModel>>? taskList;
+  late Future<List<TaskModel>> taskList;
   Map<String, List<TaskModel>>? retrievedTaskList;
   List<TaskModel>? tasks;
   DatabaseService dbService = DatabaseService();
 
-  Future<void> getTasks() async {
+  Future<List<TaskModel>> getTasks() async {
     taskList = service.retrieveTasks();
     tasks = await service.retrieveTasks();
     retrievedTaskList = separateLists(taskLists()[1]);
+    return taskList;
   }
   
   Future<void> refresh() async {
