@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pomotodo/core/providers/drawer_image_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/clippers.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/custom_clip_path.dart';
@@ -32,6 +30,14 @@ class _WeeklyTabState extends State<WeeklyTab> {
           future: leaderboardProvider.leaderboardStats(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
+              LeaderboardImages first =
+                  LeaderboardImages(uid: leaderboardProvider.newList[0].uid!);
+
+              LeaderboardImages second =
+                  LeaderboardImages(uid: leaderboardProvider.newList[1].uid!);
+
+              LeaderboardImages third =
+                  LeaderboardImages(uid: leaderboardProvider.newList[2].uid!);
               return Column(
                 children: [
                   SizedBox(
@@ -45,13 +51,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                           children: [
                             Column(
                               children: [
-                                Consumer<DrawerImageProvider>(
-                                  builder: (context, value, child) {
-                                    return LeaderboardImages(
-                                        uid: leaderboardProvider
-                                            .newList[1].uid!);
-                                  },
-                                ),
+                                first,
                                 Text(leaderboardProvider.newList[1].userName!),
                                 Text(
                                   leaderboardProvider.newList[1].taskPassingTime
@@ -83,8 +83,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                           children: [
                             Column(
                               children: [
-                                LeaderboardImages(
-                                    uid: leaderboardProvider.newList[0].uid!),
+                                second,
                                 Text(leaderboardProvider.newList[0].userName!),
                                 Text(
                                   leaderboardProvider.newList[0].taskPassingTime
@@ -116,8 +115,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                           children: [
                             Column(
                               children: [
-                                LeaderboardImages(
-                                    uid: leaderboardProvider.newList[2].uid!),
+                                third,
                                 Text(leaderboardProvider.newList[2].userName!),
                                 Text(
                                   leaderboardProvider.newList[2].taskPassingTime
@@ -147,35 +145,40 @@ class _WeeklyTabState extends State<WeeklyTab> {
                       ],
                     ),
                   ),
-                  // Container(
-                  //   height: 100,
-                  //   color: Colors.white,
-                  //   child: ListView.separated(
-                  //       itemBuilder: (context, index) {
-                  //         return Row(
-                  //           children: [
-                  //             Text(
-                  //               leaderboardProvider.newList[index].userName!,
-                  //             ),
-                  //             Text(
-                  //               leaderboardProvider
-                  //                   .newList[index].taskPassingTime!
-                  //                   .toString(),
-                  //             ),
-                  //           ],
-                  //         );
-                  //       },
-                  //       separatorBuilder: (context, index) {
-                  //         return const SizedBox(
-                  //           height: 10,
-                  //         );
-                  //       },
-                  //       itemCount: leaderboardProvider.newList.length),
-                  // )
+                  Container(
+                    height: 200,
+                    color: Colors.white,
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return Row(
+                            children: [
+                              Text(
+                                leaderboardProvider.newList[index].userName!,
+                              ),
+                              Text(
+                                leaderboardProvider
+                                    .newList[index].taskPassingTime!
+                                    .toString(),
+                              ),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemCount: leaderboardProvider.newList.length),
+                  )
                 ],
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 2.8,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
             }
           },
         ),

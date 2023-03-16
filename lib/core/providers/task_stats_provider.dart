@@ -172,6 +172,7 @@ class TaskStatsProvider extends ChangeNotifier {
 
   Future<void> leaderboardStats() async {
     getTasks();
+
     newList = await service.leaderboard();
     newList.sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
   }

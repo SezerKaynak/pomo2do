@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 
 class DrawerImageProvider extends ChangeNotifier {
   String? downloadUrl;
-  List<String> leaderboardImages = [];
-   
+
   Future<void> getURL(BuildContext context, String? uid) async {
     var reference = FirebaseStorage.instance
         .ref()
