@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:pomotodo/core/models/leaderboard_model.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/models/task_statistics_model.dart';
 
@@ -21,7 +23,7 @@ class DatabaseService {
   Future<void> deleteTask(String documentId) async {
     await _db.collection("Users/$uid/tasks").doc(documentId).delete();
   }
-  
+
   Future<List<TaskModel>> retrieveTasks() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection("Users/$uid/tasks").get();
@@ -73,5 +75,29 @@ class DatabaseService {
             ? TaskStatisticsModel.fromDocumentSnapshot(docSnapshot.data()[date])
             : TaskStatisticsModel.fromDocumentSnapshot({}))
         .toList();
+  }
+
+  Future<List<LeaderboardModel>> leaderboard() async {
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _db.collection("Users").get();
+
+    return snapshot.docs.map((docSnapshot) => LeaderboardModel(
+        uid: docSnapshot.id,
+        userName: docSnapshot.data()['name'],
+        taskPassingTime: docSnapshot.data()["weeklyTaskPassingTime"] ?? 0)).toList();
+
+    // QuerySnapshot<Map<String, dynamic>> snapshot =
+    //     await _db.collection("Users").get();
+    // return snapshot.docs
+    //     .map((docSnapshot) =>
+    //         LeaderboardModel.fromDocumentSnapshot(docSnapshot.data()))
+    //     .toList();
+  }
+
+  Future<void> setTaskPassingTime(int weeklyTaskPassingTime) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    await users
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({'weeklyTaskPassingTime': weeklyTaskPassingTime}, SetOptions(merge: true));
   }
 }

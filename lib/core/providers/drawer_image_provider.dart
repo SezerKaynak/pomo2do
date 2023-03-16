@@ -5,12 +5,13 @@ import 'package:provider/provider.dart';
 
 class DrawerImageProvider extends ChangeNotifier {
   String? downloadUrl;
-
-  Future<void> getURL(BuildContext context) async {
+  List<String> leaderboardImages = [];
+   
+  Future<void> getURL(BuildContext context, String? uid) async {
     var reference = FirebaseStorage.instance
         .ref()
         .child('profilresimleri')
-        .child(context.read<PomotodoUser>().userId);
+        .child(uid ?? context.read<PomotodoUser>().userId);
 
     if (await reference.list().then((value) => value.items.isNotEmpty)) {
       await reference.child("profilResmi.png").getDownloadURL().then((url) {
