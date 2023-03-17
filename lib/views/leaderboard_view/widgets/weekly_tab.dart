@@ -24,165 +24,137 @@ class _WeeklyTabState extends State<WeeklyTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FutureBuilder(
-          future: leaderboardProvider.leaderboardStats(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              LeaderboardImages first =
-                  LeaderboardImages(uid: leaderboardProvider.newList[0].uid!);
+    return FutureBuilder(
+      future: leaderboardProvider.leaderboardStats(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          LeaderboardImages first =
+              LeaderboardImages(uid: leaderboardProvider.newList[0].uid!);
 
-              LeaderboardImages second =
-                  LeaderboardImages(uid: leaderboardProvider.newList[1].uid!);
+          LeaderboardImages second =
+              LeaderboardImages(uid: leaderboardProvider.newList[1].uid!);
 
-              LeaderboardImages third =
-                  LeaderboardImages(uid: leaderboardProvider.newList[2].uid!);
-              return Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 2.8,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+          LeaderboardImages third =
+              LeaderboardImages(uid: leaderboardProvider.newList[2].uid!);
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 2.7,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Column(
-                              children: [
-                                first,
-                                Text(leaderboardProvider.newList[1].userName!),
-                                Text(
-                                  leaderboardProvider.newList[1].taskPassingTime
-                                      .toString(),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                CustomClipPath(
-                                  clipper: FirstClipper(),
-                                  color: Colors.black,
-                                  height: 15,
-                                  fontSize: 40,
-                                ),
-                                CustomClipPath(
-                                  clipper: RectangleClipper(),
-                                  color: Colors.pink,
-                                  height: 100,
-                                  fontSize: 70,
-                                  text: "2",
-                                ),
-                              ],
+                            first,
+                            Text(leaderboardProvider.newList[1].userName!),
+                            Text(
+                              leaderboardProvider.newList[1].taskPassingTime
+                                  .toString(),
                             ),
                           ],
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Column(
-                              children: [
-                                second,
-                                Text(leaderboardProvider.newList[0].userName!),
-                                Text(
-                                  leaderboardProvider.newList[0].taskPassingTime
-                                      .toString(),
-                                ),
-                              ],
+                            CustomClipPath(
+                              clipper: FirstClipper(),
+                              color: Colors.black,
+                              height: 15,
+                              fontSize: 40,
                             ),
-                            Column(
-                              children: [
-                                CustomClipPath(
-                                  clipper: MiddleClipper(),
-                                  color: Colors.black,
-                                  height: 15,
-                                  fontSize: 40,
-                                ),
-                                CustomClipPath(
-                                  clipper: RectangleClipper(),
-                                  color: Colors.green,
-                                  height: 140,
-                                  fontSize: 100,
-                                  text: '1',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Column(
-                              children: [
-                                third,
-                                Text(leaderboardProvider.newList[2].userName!),
-                                Text(
-                                  leaderboardProvider.newList[2].taskPassingTime
-                                      .toString(),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                CustomClipPath(
-                                  clipper: LastClipper(),
-                                  color: Colors.black,
-                                  height: 15,
-                                  fontSize: 40,
-                                ),
-                                CustomClipPath(
-                                  clipper: RectangleClipper(),
-                                  color: Colors.yellow,
-                                  fontSize: 40,
-                                  height: 60,
-                                  text: '3',
-                                ),
-                              ],
+                            CustomClipPath(
+                              clipper: RectangleClipper(),
+                              color: Colors.pink,
+                              height: 100,
+                              fontSize: 70,
+                              text: "2",
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ),
-                  Container(
-                    height: 200,
-                    color: Colors.white,
-                    child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              Text(
-                                leaderboardProvider.newList[index].userName!,
-                              ),
-                              Text(
-                                leaderboardProvider
-                                    .newList[index].taskPassingTime!
-                                    .toString(),
-                              ),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemCount: leaderboardProvider.newList.length),
-                  )
-                ],
-              );
-            } else {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height / 2.8,
-                child: const Center(
-                  child: CircularProgressIndicator(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          children: [
+                            second,
+                            Text(leaderboardProvider.newList[0].userName!),
+                            Text(
+                              leaderboardProvider.newList[0].taskPassingTime
+                                  .toString(),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            CustomClipPath(
+                              clipper: MiddleClipper(),
+                              color: Colors.black,
+                              height: 15,
+                              fontSize: 40,
+                            ),
+                            CustomClipPath(
+                              clipper: RectangleClipper(),
+                              color: Colors.green,
+                              height: 140,
+                              fontSize: 100,
+                              text: '1',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          children: [
+                            third,
+                            Text(leaderboardProvider.newList[2].userName!),
+                            Text(
+                              leaderboardProvider.newList[2].taskPassingTime
+                                  .toString(),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            CustomClipPath(
+                              clipper: LastClipper(),
+                              color: Colors.black,
+                              height: 15,
+                              fontSize: 40,
+                            ),
+                            CustomClipPath(
+                              clipper: RectangleClipper(),
+                              color: Colors.yellow,
+                              fontSize: 40,
+                              height: 60,
+                              text: '3',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              );
-            }
-          },
-        ),
-      ],
+              ),
+            ],
+          );
+        } else {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 2.8,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 }

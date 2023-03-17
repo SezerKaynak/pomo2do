@@ -29,9 +29,10 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget>
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 8.0),
+          padding: EdgeInsets.only(
+              left: 50.0, right: 50.0, top: MediaQuery.of(context).size.height / 9),
           child: Container(
-            height: 45,
+            height: MediaQuery.of(context).size.height / 18,
             decoration: BoxDecoration(
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(25),

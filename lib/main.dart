@@ -138,9 +138,6 @@ class _MyAppState extends State<MyApp> {
                     '/leaderboard': (context) => MultiProvider(
                           providers: [
                             ChangeNotifierProvider(
-                              create: (context) => DrawerImageProvider(),
-                            ),
-                            ChangeNotifierProvider(
                               create: (context) => LeaderboardProvider(),
                             ),
                             ChangeNotifierProvider(
@@ -148,7 +145,7 @@ class _MyAppState extends State<MyApp> {
                             )
                           ],
                           child: const LeaderboardView(),
-                        )
+                        ),
                   },
                   debugShowCheckedModeBanner: false,
                   theme: context.watch<DarkThemeProvider>().darkTheme
