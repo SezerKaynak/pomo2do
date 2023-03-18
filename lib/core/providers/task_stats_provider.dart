@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/active_days_model.dart';
@@ -8,13 +7,12 @@ import 'package:pomotodo/core/models/task_by_task_model.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/models/task_statistics_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
-import 'package:pomotodo/core/service/firebase_service.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 
 class TaskStatsProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
-  List<LeaderboardModel> newList = [];
+  List<LeaderboardModel> leaderboardWeeklyList = [];
   List<TaskStatisticsModel>? stats;
   int totalTaskTime = 0;
   List<TaskByTaskModel> table2 = [];
@@ -173,8 +171,8 @@ class TaskStatsProvider extends ChangeNotifier {
   Future<void> leaderboardStats() async {
     getTasks();
 
-    newList = await service.leaderboard();
-    newList.sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
+    leaderboardWeeklyList = await service.leaderboard();
+    leaderboardWeeklyList.sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
   }
 
   setWeeklyTaskPassingTime() {

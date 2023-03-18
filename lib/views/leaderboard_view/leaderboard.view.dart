@@ -3,6 +3,7 @@ import 'package:pomotodo/core/providers/task_stats_provider.dart';
 
 import 'package:pomotodo/views/leaderboard_view/leaderboard.widgets.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/leaderboard_appbar.dart';
+import 'package:pomotodo/views/leaderboard_view/widgets/leaderboard_images.dart';
 import 'package:provider/provider.dart';
 
 class LeaderboardView extends StatefulWidget with LeaderboardWidgets {
@@ -26,6 +27,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        cacheExtent: 9999,
         slivers: <Widget>[
           const LeaderboardAppBar(),
           FutureBuilder(
@@ -35,33 +37,48 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                 itemExtent: 90.0,
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)),
-                        child: SizedBox(
-                          height: kToolbarHeight * 1.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                (index + 4).toString(),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 8,
+                              child: Center(
+                                child: Text(
+                                  (index + 4).toString(),
+                                ),
                               ),
-                              Text(leaderboardProvider
-                                  .newList[index + 3].userName!),
-                              Text(
-                                leaderboardProvider
-                                    .newList[index + 3].taskPassingTime!
-                                    .toString(),
-                              )
-                            ],
-                          ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 5,
+                              child: LeaderboardImages(
+                                  user: leaderboardProvider
+                                      .leaderboardWeeklyList[index + 3]),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "${leaderboardProvider.leaderboardWeeklyList[index + 3].userName!} ${leaderboardProvider.leaderboardWeeklyList[index + 3].surname!}"),
+                                Text(
+                                  leaderboardProvider
+                                      .leaderboardWeeklyList[index + 3]
+                                      .taskPassingTime!
+                                      .toString(),
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     );
                   },
-                  childCount: leaderboardProvider.newList.length - 3,
+                  childCount:
+                      leaderboardProvider.leaderboardWeeklyList.length - 3,
                 ),
               );
             },

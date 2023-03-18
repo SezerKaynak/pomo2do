@@ -30,18 +30,18 @@ class _WeeklyTabState extends State<WeeklyTab> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           LeaderboardImages first =
-              LeaderboardImages(user: leaderboardProvider.newList[0]);
+              LeaderboardImages(user: leaderboardProvider.leaderboardWeeklyList[0]);
 
           LeaderboardImages second =
-              LeaderboardImages(user: leaderboardProvider.newList[1]);
+              LeaderboardImages(user: leaderboardProvider.leaderboardWeeklyList[1]);
 
           LeaderboardImages third =
-              LeaderboardImages(user: leaderboardProvider.newList[2]);
+              LeaderboardImages(user: leaderboardProvider.leaderboardWeeklyList[2]);
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height / 2.7,
+                height: MediaQuery.of(context).size.height / 2.5,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -52,9 +52,9 @@ class _WeeklyTabState extends State<WeeklyTab> {
                         Column(
                           children: [
                             first,
-                            Text(leaderboardProvider.newList[1].userName!),
+                            Text(leaderboardProvider.leaderboardWeeklyList[1].userName!),
                             Text(
-                              leaderboardProvider.newList[1].taskPassingTime
+                              leaderboardProvider.leaderboardWeeklyList[1].taskPassingTime
                                   .toString(),
                             ),
                           ],
@@ -86,9 +86,9 @@ class _WeeklyTabState extends State<WeeklyTab> {
                             const FaIcon(FontAwesomeIcons.crown,
                                 color: Color.fromARGB(255, 230, 200, 35)),
                             second,
-                            Text(leaderboardProvider.newList[0].userName!),
+                            Text(leaderboardProvider.leaderboardWeeklyList[0].userName!),
                             Text(
-                              leaderboardProvider.newList[0].taskPassingTime
+                              leaderboardProvider.leaderboardWeeklyList[0].taskPassingTime
                                   .toString(),
                             ),
                           ],
@@ -118,9 +118,9 @@ class _WeeklyTabState extends State<WeeklyTab> {
                         Column(
                           children: [
                             third,
-                            Text(leaderboardProvider.newList[2].userName!),
+                            Text(leaderboardProvider.leaderboardWeeklyList[2].userName!),
                             Text(
-                              leaderboardProvider.newList[2].taskPassingTime
+                              leaderboardProvider.leaderboardWeeklyList[2].taskPassingTime
                                   .toString(),
                             ),
                           ],
