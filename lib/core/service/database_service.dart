@@ -80,12 +80,13 @@ class DatabaseService {
   Future<List<LeaderboardModel>> leaderboard() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection("Users").get();
-
+        
     return snapshot.docs
         .map((docSnapshot) => LeaderboardModel(
             uid: docSnapshot.id,
             userPhotoUrl: docSnapshot.data()['userPhotoUrl'],
             userName: docSnapshot.data()['name'],
+            surname: docSnapshot.data()['surname'],
             taskPassingTime: docSnapshot.data()["weeklyTaskPassingTime"] ?? 0))
         .toList();
 
