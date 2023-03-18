@@ -33,7 +33,7 @@ class _LeaderboardAppBarState extends State<LeaderboardAppBar> {
         },
         icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
       ),
-      expandedHeight: MediaQuery.of(context).size.height / 1.8,
+      expandedHeight: MediaQuery.of(context).size.height / 1.75,
       elevation: 0.0,
       pinned: true,
       floating: false,

@@ -29,14 +29,14 @@ class _WeeklyTabState extends State<WeeklyTab> {
       future: leaderboardProvider.leaderboardStats(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          LeaderboardImages first =
-              LeaderboardImages(user: leaderboardProvider.leaderboardWeeklyList[0]);
+          LeaderboardImages first = LeaderboardImages(
+              user: leaderboardProvider.leaderboardWeeklyList[0]);
 
-          LeaderboardImages second =
-              LeaderboardImages(user: leaderboardProvider.leaderboardWeeklyList[1]);
+          LeaderboardImages second = LeaderboardImages(
+              user: leaderboardProvider.leaderboardWeeklyList[1]);
 
-          LeaderboardImages third =
-              LeaderboardImages(user: leaderboardProvider.leaderboardWeeklyList[2]);
+          LeaderboardImages third = LeaderboardImages(
+              user: leaderboardProvider.leaderboardWeeklyList[2]);
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -52,10 +52,18 @@ class _WeeklyTabState extends State<WeeklyTab> {
                         Column(
                           children: [
                             first,
-                            Text(leaderboardProvider.leaderboardWeeklyList[1].userName!),
                             Text(
-                              leaderboardProvider.leaderboardWeeklyList[1].taskPassingTime
+                              leaderboardProvider
+                                  .leaderboardWeeklyList[1].userName!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              leaderboardProvider
+                                  .leaderboardWeeklyList[1].taskPassingTime
                                   .toString(),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ],
                         ),
@@ -86,10 +94,20 @@ class _WeeklyTabState extends State<WeeklyTab> {
                             const FaIcon(FontAwesomeIcons.crown,
                                 color: Color.fromARGB(255, 230, 200, 35)),
                             second,
-                            Text(leaderboardProvider.leaderboardWeeklyList[0].userName!),
                             Text(
-                              leaderboardProvider.leaderboardWeeklyList[0].taskPassingTime
+                              leaderboardProvider
+                                  .leaderboardWeeklyList[0].userName!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              leaderboardProvider
+                                  .leaderboardWeeklyList[0].taskPassingTime
                                   .toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -118,10 +136,20 @@ class _WeeklyTabState extends State<WeeklyTab> {
                         Column(
                           children: [
                             third,
-                            Text(leaderboardProvider.leaderboardWeeklyList[2].userName!),
                             Text(
-                              leaderboardProvider.leaderboardWeeklyList[2].taskPassingTime
+                              leaderboardProvider
+                                  .leaderboardWeeklyList[2].userName!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              leaderboardProvider
+                                  .leaderboardWeeklyList[2].taskPassingTime
                                   .toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -135,7 +163,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                             ),
                             CustomClipPath(
                               clipper: RectangleClipper(),
-                              color: Colors.yellow,
+                              color: Colors.orange,
                               fontSize: 40,
                               height: 60,
                               text: '3',
