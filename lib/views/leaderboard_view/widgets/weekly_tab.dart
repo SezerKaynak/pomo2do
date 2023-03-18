@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/clippers.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/custom_clip_path.dart';
@@ -29,13 +30,13 @@ class _WeeklyTabState extends State<WeeklyTab> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           LeaderboardImages first =
-              LeaderboardImages(uid: leaderboardProvider.newList[0].uid!);
+              LeaderboardImages(user: leaderboardProvider.newList[0]);
 
           LeaderboardImages second =
-              LeaderboardImages(uid: leaderboardProvider.newList[1].uid!);
+              LeaderboardImages(user: leaderboardProvider.newList[1]);
 
           LeaderboardImages third =
-              LeaderboardImages(uid: leaderboardProvider.newList[2].uid!);
+              LeaderboardImages(user: leaderboardProvider.newList[2]);
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -82,6 +83,8 @@ class _WeeklyTabState extends State<WeeklyTab> {
                       children: [
                         Column(
                           children: [
+                            const FaIcon(FontAwesomeIcons.crown,
+                                color: Color.fromARGB(255, 230, 200, 35)),
                             second,
                             Text(leaderboardProvider.newList[0].userName!),
                             Text(

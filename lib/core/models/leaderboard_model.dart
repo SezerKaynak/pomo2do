@@ -2,12 +2,10 @@ class LeaderboardModel {
   String? uid;
   String? userName;
   int? taskPassingTime;
+  String? userPhotoUrl;
 
-  LeaderboardModel({
-    this.uid,
-    this.userName,
-    this.taskPassingTime,
-  });
+  LeaderboardModel(
+      {this.uid, this.userName, this.taskPassingTime, this.userPhotoUrl});
 
   LeaderboardModel.fromDocumentSnapshot(Map<String, dynamic> doc)
       : uid = doc["uid"],

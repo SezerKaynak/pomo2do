@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
-import 'package:pomotodo/views/leaderboard_view/widgets/clippers.dart';
-import 'package:pomotodo/views/leaderboard_view/widgets/custom_clip_path.dart';
-import 'package:pomotodo/views/leaderboard_view/widgets/leaderboard_images.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/leaderboard_widget.dart';
-import 'package:pomotodo/views/leaderboard_view/widgets/weekly_tab.dart';
 import 'package:provider/provider.dart';
 
-class WeeklyTabAppBar extends StatefulWidget {
-  const WeeklyTabAppBar({super.key});
+class LeaderboardAppBar extends StatefulWidget {
+  const LeaderboardAppBar({super.key});
 
   @override
-  State<WeeklyTabAppBar> createState() => _WeeklyTabAppBarState();
+  State<LeaderboardAppBar> createState() => _LeaderboardAppBarState();
 }
 
-class _WeeklyTabAppBarState extends State<WeeklyTabAppBar> {
+class _LeaderboardAppBarState extends State<LeaderboardAppBar> {
   late TaskStatsProvider leaderboardProvider;
 
   @override
@@ -30,7 +26,6 @@ class _WeeklyTabAppBarState extends State<WeeklyTabAppBar> {
       title: const Text(
         "Liderlik Sıralaması",
       ),
-      //automaticallyImplyLeading: false,
       centerTitle: true,
       leading: IconButton(
         onPressed: () {
@@ -47,7 +42,7 @@ class _WeeklyTabAppBarState extends State<WeeklyTabAppBar> {
         background: LeaderboardWidget(),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(0.0),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Container(
           height: 30,
           alignment: Alignment.center,

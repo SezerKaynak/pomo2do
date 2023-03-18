@@ -67,6 +67,7 @@ class AuthService with ConvertUser implements IAuthService {
 
       CollectionReference users =
           FirebaseFirestore.instance.collection('Users');
+
       await users.doc(FirebaseAuth.instance.currentUser!.uid).set({
         'email': googleUser!.email,
         'name': googleUser.displayName!.split(' ')[0],
@@ -74,8 +75,10 @@ class AuthService with ConvertUser implements IAuthService {
             ? googleUser.displayName!.split(' ')[1]
             : "",
         'birthday':
-            '${birthday.date!.day}.${birthday.date!.month}.${birthday.date!.year}'
+            '${birthday.date!.day}.${birthday.date!.month}.${birthday.date!.year}',
+        'userPhotoUrl': _tempUser.user!.photoURL
       });
+
       return convertUser(_tempUser);
     } on FirebaseAuthException catch (_) {
       googleUser!.clearAuthCache();

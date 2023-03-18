@@ -81,10 +81,13 @@ class DatabaseService {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection("Users").get();
 
-    return snapshot.docs.map((docSnapshot) => LeaderboardModel(
-        uid: docSnapshot.id,
-        userName: docSnapshot.data()['name'],
-        taskPassingTime: docSnapshot.data()["weeklyTaskPassingTime"] ?? 0)).toList();
+    return snapshot.docs
+        .map((docSnapshot) => LeaderboardModel(
+            uid: docSnapshot.id,
+            userPhotoUrl: docSnapshot.data()['userPhotoUrl'],
+            userName: docSnapshot.data()['name'],
+            taskPassingTime: docSnapshot.data()["weeklyTaskPassingTime"] ?? 0))
+        .toList();
 
     // QuerySnapshot<Map<String, dynamic>> snapshot =
     //     await _db.collection("Users").get();
@@ -96,8 +99,8 @@ class DatabaseService {
 
   Future<void> setTaskPassingTime(int weeklyTaskPassingTime) async {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
-    await users
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({'weeklyTaskPassingTime': weeklyTaskPassingTime}, SetOptions(merge: true));
+    await users.doc(FirebaseAuth.instance.currentUser!.uid).set(
+        {'weeklyTaskPassingTime': weeklyTaskPassingTime},
+        SetOptions(merge: true));
   }
 }

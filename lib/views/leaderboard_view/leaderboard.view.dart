@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 
 import 'package:pomotodo/views/leaderboard_view/leaderboard.widgets.dart';
-import 'package:pomotodo/views/leaderboard_view/widgets/weekly_tab_appbar.dart';
+import 'package:pomotodo/views/leaderboard_view/widgets/leaderboard_appbar.dart';
 import 'package:provider/provider.dart';
 
 class LeaderboardView extends StatefulWidget with LeaderboardWidgets {
@@ -27,40 +27,41 @@ class _LeaderboardViewState extends State<LeaderboardView> {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          const WeeklyTabAppBar(),
+          const LeaderboardAppBar(),
           FutureBuilder(
             future: leaderboardProvider.leaderboardStats(),
             builder: (context, snapshot) {
-              return SliverGrid(
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: MediaQuery.of(context).size.height,
-                  childAspectRatio: 5.0,
-                ),
+              return SliverFixedExtentList(
+                itemExtent: 90.0,
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     return SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: Card(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        ),
+                            borderRadius: BorderRadius.circular(16)),
                         child: SizedBox(
                           height: kToolbarHeight * 1.5,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              Text(
+                                (index + 4).toString(),
+                              ),
                               Text(leaderboardProvider
-                                  .newList[index].userName!),
-                              Text(leaderboardProvider
-                                  .newList[index].taskPassingTime!
-                                  .toString())
+                                  .newList[index + 3].userName!),
+                              Text(
+                                leaderboardProvider
+                                    .newList[index + 3].taskPassingTime!
+                                    .toString(),
+                              )
                             ],
                           ),
                         ),
                       ),
                     );
                   },
-                  childCount: leaderboardProvider.newList.length,
+                  childCount: leaderboardProvider.newList.length - 3,
                 ),
               );
             },

@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pomotodo/core/models/leaderboard_model.dart';
 import 'package:pomotodo/core/providers/drawer_image_provider.dart';
 
 class LeaderboardImages extends StatefulWidget {
   const LeaderboardImages({
     Key? key,
-    required this.uid,
+    required this.user,
   }) : super(key: key);
-  final String uid;
+  final LeaderboardModel user;
   @override
   State<LeaderboardImages> createState() => _LeaderboardImagesState();
 }
@@ -19,14 +20,14 @@ class _LeaderboardImagesState extends State<LeaderboardImages> {
   void initState() {
     newProvider = DrawerImageProvider();
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => newProvider.getURL(context, widget.uid));
+        .addPostFrameCallback((_) => newProvider.getURL(context, widget.user));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: newProvider.getURL(context, widget.uid),
+      future: newProvider.getURL(context, widget.user),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return CircleAvatar(
