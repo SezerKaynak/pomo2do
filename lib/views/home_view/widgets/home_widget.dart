@@ -3,7 +3,6 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
-import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
 import 'package:pomotodo/views/home_view/widgets/mini_task_statistics.dart';
@@ -11,25 +10,12 @@ import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
-class HomeWidget extends StatefulWidget {
-  const HomeWidget({Key? key}) : super(key: key);
-
-  @override
-  State<HomeWidget> createState() => Task();
-}
-
-class Task extends State<HomeWidget> {
-  DatabaseService service = DatabaseService();
-  Future<List<TaskModel>>? taskList;
-  Map<String, List<TaskModel>>? retrievedTaskList;
-  List<TaskModel>? tasks;
-  List<TaskModel> deletedTasks = [];
-  DatabaseService dbService = DatabaseService();
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
-    providerOfTasks.getTasks();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -51,7 +37,7 @@ class Task extends State<HomeWidget> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: FutureBuilder(
-                future: providerOfTasks.taskList,
+                future: providerOfTasks.getTasks(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<TaskModel>> snapshot) {
                   if (snapshot.hasData) {
@@ -65,8 +51,25 @@ class Task extends State<HomeWidget> {
                                   ),
                               shrinkWrap: true,
                               itemCount:
-                                  providerOfTasks.retrievedTaskList!.length,
+                                  providerOfTasks.retrievedTaskList!.length + 1,
                               itemBuilder: (context, index) {
+                                if (index ==
+                                    providerOfTasks.retrievedTaskList!.length) {
+                                  return Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 50,
+                                        padding: const EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
                                 String key = providerOfTasks
                                     .retrievedTaskList!.keys
                                     .elementAt(index);
@@ -99,8 +102,9 @@ class Task extends State<HomeWidget> {
                                           child: Card(
                                             margin: EdgeInsets.zero,
                                             shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8)),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
                                             child: Dismissible(
                                                 onDismissed:
                                                     ((direction) async {
@@ -116,7 +120,9 @@ class Task extends State<HomeWidget> {
                                                           arguments: [
                                                             key,
                                                             index
-                                                          ]);
+                                                          ]).then((_) =>
+                                                          providerOfTasks
+                                                              .refresh());
                                                     }
                                                   }
                                                 }),
@@ -221,7 +227,7 @@ class Task extends State<HomeWidget> {
                                                                             .retrievedTaskList![key]![index],
                                                                       )),
                                                             ))
-                                                        .then((value) =>
+                                                        .then((_) =>
                                                             providerOfTasks
                                                                 .refresh());
                                                   },
