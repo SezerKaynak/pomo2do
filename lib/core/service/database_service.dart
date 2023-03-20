@@ -77,7 +77,7 @@ class DatabaseService {
         .toList();
   }
 
-  Future<List<LeaderboardModel>> leaderboard() async {
+  Future<List<LeaderboardModel>> leaderboardWeekly() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection("Users").get();
         
@@ -97,11 +97,18 @@ class DatabaseService {
     //         LeaderboardModel.fromDocumentSnapshot(docSnapshot.data()))
     //     .toList();
   }
-
-  Future<void> setTaskPassingTime(int weeklyTaskPassingTime) async {
+  
+  Future<void> setWeeklyTaskPassingTime(int weeklyTaskPassingTime) async {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
     await users.doc(FirebaseAuth.instance.currentUser!.uid).set(
         {'weeklyTaskPassingTime': weeklyTaskPassingTime},
+        SetOptions(merge: true));
+  }
+
+  Future<void> setMontlyTaskPassingTime(int montlyTaskPassingTime) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    await users.doc(FirebaseAuth.instance.currentUser!.uid).set(
+        {'montlyTaskPassingTime': montlyTaskPassingTime},
         SetOptions(merge: true));
   }
 }

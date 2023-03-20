@@ -66,9 +66,12 @@ class _LeaderboardImagesState extends State<LeaderboardImages> {
                   ),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.white,
+          return SizedBox.fromSize(
+            size: const Size.fromRadius(30),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
             ),
           );
         }

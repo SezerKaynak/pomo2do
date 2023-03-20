@@ -34,6 +34,19 @@ class TaskStatsProvider extends ChangeNotifier {
     return [dates, now];
   }
 
+  List<dynamic> getMonthDays() {
+    List<String> dates = [];
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat("dd-MM-yyyy");
+
+    for (var i = 0; i < 30; i++) {
+      DateTime previousDay = now.subtract(Duration(days: i));
+      String formattedDate = formatter.format(previousDay);
+      dates.add(formattedDate);
+    }
+    return [dates, now];
+  }
+
   Future<void> getTasks() async {
     tasks = await service.retrieveTasks();
     sumOfTaskTime();
@@ -77,13 +90,6 @@ class TaskStatsProvider extends ChangeNotifier {
     for (var i = 6; i >= 0; i--) {
       List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
 
-      // for (var j = 0; j < tasks.length; j++) {
-      //   var task = tasks[j].taskStatistics![date[i]];
-      //   task != null
-      //       ? stats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
-      //       : stats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
-      // }
-
       int totalTime = 0;
       for (var element in stats) {
         totalTime += int.parse(element.taskPassingTime);
@@ -99,13 +105,6 @@ class TaskStatsProvider extends ChangeNotifier {
     List<TaskByTaskModel> taskByTask = [];
     List<TaskStatisticsModel> dayStats =
         taskToTaskStats(date[-count.value + 6]);
-
-    // for (var i = 0; i < tasks.length; i++) {
-    //   var task = tasks[i].taskStatistics![date[-count.value + 6]];
-    //   task != null
-    //       ? dayStats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
-    //       : dayStats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
-    // }
 
     for (var i = 0; i < tasks.length; i++) {
       TaskByTaskModel deneme = TaskByTaskModel(
@@ -168,19 +167,38 @@ class TaskStatsProvider extends ChangeNotifier {
     totalTaskTime = totalTime;
   }
 
-  Future<void> leaderboardStats() async {
-    getTasks();
+  Future<void> leaderboardWeeklyStats() async {
+    // getTasks();
 
-    leaderboardWeeklyList = await service.leaderboard();
-    leaderboardWeeklyList.sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
+    leaderboardWeeklyList = await service.leaderboardWeekly();
+    leaderboardWeeklyList
+        .sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
   }
 
-  setWeeklyTaskPassingTime() {
+  weeklyTaskPassingTime() {
     int weeklyTaskPassingTime = 0;
     for (var i = 0; i < table1.length; i++) {
       weeklyTaskPassingTime += table1[i].sum;
     }
 
-    service.setTaskPassingTime(weeklyTaskPassingTime);
+    service.setWeeklyTaskPassingTime(weeklyTaskPassingTime);
   }
+
+  montlyTaskPassingTime() async {
+    tasks = await service.retrieveTasks();
+    List<String> date = getMonthDays()[0];
+    int montlyTaskPassingTime = 0;
+    
+    for (var i = 0; i < date.length; i++) {
+      List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
+
+      for (var element in stats) {
+        montlyTaskPassingTime += int.parse(element.taskPassingTime);
+
+      }
+    }
+    service.setMontlyTaskPassingTime(montlyTaskPassingTime);
+  }
+
+  Future<void> leaderboardMontlyStats() async {}
 }

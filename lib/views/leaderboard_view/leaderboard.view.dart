@@ -31,7 +31,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
         slivers: <Widget>[
           const LeaderboardAppBar(),
           FutureBuilder(
-            future: leaderboardProvider.leaderboardStats(),
+            future: leaderboardProvider.leaderboardWeeklyStats(),
             builder: (context, snapshot) {
               return SliverFixedExtentList(
                 itemExtent: 90.0,
