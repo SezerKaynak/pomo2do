@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/core/providers/drawer_image_provider.dart';
+import 'package:pomotodo/core/providers/leaderboard_provider.dart';
 import 'package:pomotodo/core/providers/list_update_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
@@ -12,6 +15,7 @@ import 'package:pomotodo/views/auth_view/auth_widget.dart';
 import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
 import 'package:pomotodo/views/completed_task_view/completed_task.view.dart';
 import 'package:pomotodo/views/deleted_task_view/deleted_task.view.dart';
+import 'package:pomotodo/views/leaderboard_view/leaderboard.view.dart';
 import 'package:pomotodo/views/task_statistics/task_statistics.view.dart';
 import 'package:pomotodo/views/edit_profile_view/edit_profile.view.dart';
 import 'package:pomotodo/views/edit_task_view/edit_task.view.dart';
@@ -122,13 +126,26 @@ class _MyAppState extends State<MyApp> {
                     '/done': (context) => const CompletedTasksView(),
                     '/editTask': (context) => const EditTaskView(),
                     '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
-                        create: (context) => ListUpdate(),
-                        child: const DeletedTasksView()),
+                          create: (context) => ListUpdate(),
+                          child: const DeletedTasksView(),
+                        ),
                     '/editProfile': (context) => const EditProfileView(),
                     '/archived': (context) => const ArchivedTasksView(),
                     '/taskStatistics': (context) => ChangeNotifierProvider(
-                        create: (context) => TaskStatsProvider(),
-                        child: const TaskStatisticsView()),
+                          create: (context) => TaskStatsProvider(),
+                          child: const TaskStatisticsView(),
+                        ),
+                    '/leaderboard': (context) => MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider(
+                              create: (context) => LeaderboardProvider(),
+                            ),
+                            ChangeNotifierProvider(
+                              create: (context) => TaskStatsProvider(),
+                            )
+                          ],
+                          child: const LeaderboardView(),
+                        ),
                   },
                   debugShowCheckedModeBanner: false,
                   theme: context.watch<DarkThemeProvider>().darkTheme
