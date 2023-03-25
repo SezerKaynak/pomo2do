@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
+import 'package:pomotodo/core/service/google_ads.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
@@ -214,6 +215,8 @@ class HomeWidget extends StatelessWidget {
                                                           vertical: 5),
                                                   leading: Icon(taskIcon),
                                                   onTap: () {
+                                                    GoogleAds()
+                                                        .loadInterstitialAd();
                                                     Navigator.push(
                                                             context,
                                                             MaterialPageRoute(

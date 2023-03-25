@@ -47,7 +47,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Provider.of<IAuthService>(context, listen: false);
+    final authService = Provider.of<IAuthService>(context, listen: false);
 
     return SingleChildScrollView(
       child: Padding(
@@ -163,7 +163,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         confirmBtnText: confirmButtonText);
                   } else {
                     try {
-                      await _authService.createUserWithEmailAndPassword(
+                      await authService.createUserWithEmailAndPassword(
                           email: _emailController.text,
                           password: _passwordController.text);
                     } on FirebaseAuthException catch (e) {

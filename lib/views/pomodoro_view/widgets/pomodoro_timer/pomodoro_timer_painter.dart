@@ -62,9 +62,9 @@ class CustomTimerPainter extends CustomPainter {
     if (neonGradient != null) {
       final rect = Rect.fromCircle(
           center: size.center(Offset.zero), radius: size.width / 2);
-      blurPaint..shader = neonGradient!.createShader(rect);
+      blurPaint.shader = neonGradient!.createShader(rect);
     } else {
-      blurPaint..shader = null;
+      blurPaint.shader = null;
     }
 
     double progress = (animation!.value) * 2 * math.pi;
@@ -72,9 +72,9 @@ class CustomTimerPainter extends CustomPainter {
     if (innerFillGradient != null) {
       final rect = Rect.fromCircle(
           center: size.center(Offset.zero), radius: size.width / 2);
-      strokePaint..shader = innerFillGradient!.createShader(rect);
+      strokePaint.shader = innerFillGradient!.createShader(rect);
     } else {
-      strokePaint..shader = null;
+      strokePaint.shader = null;
       strokePaint.color = innerFillColor!;
     }
     Path path = Path();

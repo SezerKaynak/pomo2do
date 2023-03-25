@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/core/service/google_ads.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 
 class PageUpdate extends ChangeNotifier with DatabaseService {
@@ -15,6 +16,7 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
   bool timerWorking = false;
 
   void startButton(CountDownController controller, int time) {
+    GoogleAds().loadInterstitialAd(showAfterLoad: true);
     controller.resume();
     countDown = controller.getTimeInSeconds();
     skipButtonVisible = true;
@@ -99,7 +101,6 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
         break;
       case 1:
         if (timerWorking) {
-          print("gökalp");
           screenOffCounter = countDown2 - countDown;
         }
 
