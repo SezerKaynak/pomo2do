@@ -4,12 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
-import 'package:pomotodo/core/providers/drawer_image_provider.dart';
 import 'package:pomotodo/core/providers/leaderboard_provider.dart';
 import 'package:pomotodo/core/providers/list_update_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
-import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/views/archived_task_view/archived_task.view.dart';
 import 'package:pomotodo/views/auth_view/auth_widget.dart';
 import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
@@ -40,6 +38,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   ThemeData theme, themeDark;
   WidgetsFlutterBinding.ensureInitialized();
+
+  MobileAds.instance.initialize();
 
   Future<ThemeData> loadTheme(String path) async {
     final themeStr = await rootBundle.loadString(path);

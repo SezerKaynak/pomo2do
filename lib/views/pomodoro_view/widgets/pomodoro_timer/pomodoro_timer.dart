@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer_painter.dart';
 
