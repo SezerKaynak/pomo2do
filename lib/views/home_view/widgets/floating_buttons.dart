@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/select_icon_provider.dart';
+import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/views/home_view/widgets/add_task_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,16 @@ class FloatingButtons extends StatelessWidget {
               Navigator.pushNamed(context, '/taskStatistics');
             },
             child: const Icon(Icons.stacked_bar_chart),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/leaderboard');
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            heroTag: "btn3",
+            child: const Icon(Icons.leaderboard),
           ),
           FloatingActionButton(
             shape:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/active_days_model.dart';
+import 'package:pomotodo/core/models/leaderboard_model.dart';
 import 'package:pomotodo/core/models/sum_of_task_time_model.dart';
 import 'package:pomotodo/core/models/task_by_task_model.dart';
 import 'package:pomotodo/core/models/task_model.dart';
@@ -11,6 +12,7 @@ import 'package:pomotodo/utils/constants/constants.dart';
 
 class TaskStatsProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
+  List<LeaderboardModel> leaderboardWeeklyList = [];
   List<TaskStatisticsModel>? stats;
   int totalTaskTime = 0;
   List<TaskByTaskModel> table2 = [];
@@ -25,6 +27,19 @@ class TaskStatsProvider extends ChangeNotifier {
     final DateFormat formatter = DateFormat("dd-MM-yyyy");
 
     for (var i = 0; i < 7; i++) {
+      DateTime previousDay = now.subtract(Duration(days: i));
+      String formattedDate = formatter.format(previousDay);
+      dates.add(formattedDate);
+    }
+    return [dates, now];
+  }
+
+  List<dynamic> getMonthDays() {
+    List<String> dates = [];
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat("dd-MM-yyyy");
+
+    for (var i = 0; i < 30; i++) {
       DateTime previousDay = now.subtract(Duration(days: i));
       String formattedDate = formatter.format(previousDay);
       dates.add(formattedDate);
@@ -75,13 +90,6 @@ class TaskStatsProvider extends ChangeNotifier {
     for (var i = 6; i >= 0; i--) {
       List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
 
-      // for (var j = 0; j < tasks.length; j++) {
-      //   var task = tasks[j].taskStatistics![date[i]];
-      //   task != null
-      //       ? stats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
-      //       : stats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
-      // }
-
       int totalTime = 0;
       for (var element in stats) {
         totalTime += int.parse(element.taskPassingTime);
@@ -97,13 +105,6 @@ class TaskStatsProvider extends ChangeNotifier {
     List<TaskByTaskModel> taskByTask = [];
     List<TaskStatisticsModel> dayStats =
         taskToTaskStats(date[-count.value + 6]);
-
-    // for (var i = 0; i < tasks.length; i++) {
-    //   var task = tasks[i].taskStatistics![date[-count.value + 6]];
-    //   task != null
-    //       ? dayStats.add(TaskStatisticsModel.fromDocumentSnapshot(task))
-    //       : dayStats.add(TaskStatisticsModel.fromDocumentSnapshot({}));
-    // }
 
     for (var i = 0; i < tasks.length; i++) {
       TaskByTaskModel deneme = TaskByTaskModel(
@@ -165,4 +166,39 @@ class TaskStatsProvider extends ChangeNotifier {
 
     totalTaskTime = totalTime;
   }
+
+  Future<void> leaderboardWeeklyStats() async {
+    // getTasks();
+
+    leaderboardWeeklyList = await service.leaderboardWeekly();
+    leaderboardWeeklyList
+        .sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
+  }
+
+  weeklyTaskPassingTime() {
+    int weeklyTaskPassingTime = 0;
+    for (var i = 0; i < table1.length; i++) {
+      weeklyTaskPassingTime += table1[i].sum;
+    }
+
+    service.setWeeklyTaskPassingTime(weeklyTaskPassingTime);
+  }
+
+  montlyTaskPassingTime() async {
+    tasks = await service.retrieveTasks();
+    List<String> date = getMonthDays()[0];
+    int montlyTaskPassingTime = 0;
+    
+    for (var i = 0; i < date.length; i++) {
+      List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
+
+      for (var element in stats) {
+        montlyTaskPassingTime += int.parse(element.taskPassingTime);
+
+      }
+    }
+    service.setMontlyTaskPassingTime(montlyTaskPassingTime);
+  }
+
+  Future<void> leaderboardMontlyStats() async {}
 }
