@@ -56,7 +56,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                         children: [
                           Column(
                             children: [
-                              first,
+                              second,
                               Text(
                                 leaderboardProvider
                                     .leaderboardWeeklyList[1].userName!,
@@ -98,7 +98,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                             children: [
                               const FaIcon(FontAwesomeIcons.crown,
                                   color: Color.fromARGB(255, 230, 200, 35)),
-                              second,
+                              first,
                               Text(
                                 leaderboardProvider
                                     .leaderboardWeeklyList[0].userName!,
