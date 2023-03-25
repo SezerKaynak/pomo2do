@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/views/leaderboard_view/widgets/montly_tab.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/weekly_tab.dart';
 
 class LeaderboardWidget extends StatefulWidget {
@@ -62,9 +63,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget>
             controller: _tabController,
             children: const [
               WeeklyTab(),
-              Center(
-                child: Text('Aylık'),
-              )
+              MontlyTab()
             ],
           ),
         )
