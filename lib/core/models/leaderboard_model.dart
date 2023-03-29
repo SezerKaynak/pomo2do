@@ -2,20 +2,22 @@ class LeaderboardModel {
   String? uid;
   String? userName;
   String? surname;
-  int? taskPassingTime;
+  int? weeklyTaskPassingTime;
+  int? montlyTaskPassingTime;
   String? userPhotoUrl;
 
   LeaderboardModel(
       {this.uid,
       this.userName,
       this.surname,
-      this.taskPassingTime,
+      this.weeklyTaskPassingTime,
+      this.montlyTaskPassingTime,
       this.userPhotoUrl});
 
   LeaderboardModel.fromDocumentSnapshot(Map<String, dynamic> doc)
       : uid = doc["uid"],
         userName = doc["name"],
-        taskPassingTime = doc["weeklyTaskPassingTime"] ?? 0;
+        weeklyTaskPassingTime = doc["weeklyTaskPassingTime"] ?? 0;
 
   // LeaderboardModel copyWith({
   //   String? userName,

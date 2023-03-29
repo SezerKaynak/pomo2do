@@ -20,6 +20,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
   void initState() {
     leaderboardProvider =
         Provider.of<TaskStatsProvider>(context, listen: false);
+
     super.initState();
   }
 
@@ -31,7 +32,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
         slivers: <Widget>[
           const LeaderboardAppBar(),
           FutureBuilder(
-            future: leaderboardProvider.leaderboardWeeklyStats(),
+            future: leaderboardProvider.leaderboardWeeklyStats(2),
             builder: (context, snapshot) {
               return SliverFixedExtentList(
                 itemExtent: 90.0,
@@ -67,7 +68,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                                 Text(
                                   leaderboardProvider
                                       .leaderboardWeeklyList[index + 3]
-                                      .taskPassingTime!
+                                      .weeklyTaskPassingTime!
                                       .toString(),
                                 )
                               ],

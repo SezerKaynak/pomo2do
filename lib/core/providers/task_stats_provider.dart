@@ -13,6 +13,7 @@ import 'package:pomotodo/utils/constants/constants.dart';
 class TaskStatsProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
   List<LeaderboardModel> leaderboardWeeklyList = [];
+  List<LeaderboardModel> leaderboardMontlyList = [];
   List<TaskStatisticsModel>? stats;
   int totalTaskTime = 0;
   List<TaskByTaskModel> table2 = [];
@@ -167,12 +168,25 @@ class TaskStatsProvider extends ChangeNotifier {
     totalTaskTime = totalTime;
   }
 
-  Future<void> leaderboardWeeklyStats() async {
+  Future<void> leaderboardWeeklyStats(int index) async {
     // getTasks();
-
-    leaderboardWeeklyList = await service.leaderboardWeekly();
-    leaderboardWeeklyList
-        .sort((a, b) => b.taskPassingTime!.compareTo(a.taskPassingTime!));
+    switch (index) {
+      case 1:
+        leaderboardWeeklyList = await service.leaderboardStats();
+        leaderboardWeeklyList.sort(
+          (a, b) =>
+              b.weeklyTaskPassingTime!.compareTo(a.weeklyTaskPassingTime!),
+        );
+        break;
+      case 2:
+        leaderboardMontlyList = await service.leaderboardStats();
+        leaderboardMontlyList.sort(
+          (a, b) =>
+              b.montlyTaskPassingTime!.compareTo(a.montlyTaskPassingTime!),
+        );
+        break;
+      default:
+    }
   }
 
   weeklyTaskPassingTime() {
@@ -188,17 +202,21 @@ class TaskStatsProvider extends ChangeNotifier {
     tasks = await service.retrieveTasks();
     List<String> date = getMonthDays()[0];
     int montlyTaskPassingTime = 0;
-    
+
     for (var i = 0; i < date.length; i++) {
       List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
 
       for (var element in stats) {
         montlyTaskPassingTime += int.parse(element.taskPassingTime);
-
       }
     }
     service.setMontlyTaskPassingTime(montlyTaskPassingTime);
   }
 
-  Future<void> leaderboardMontlyStats() async {}
+  Future<void> leaderboardMontlyStats() async {
+    leaderboardMontlyList = await service.leaderboardStats();
+    leaderboardMontlyList.sort(
+      (a, b) => b.montlyTaskPassingTime!.compareTo(a.montlyTaskPassingTime!),
+    );
+  }
 }
