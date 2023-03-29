@@ -25,6 +25,9 @@ class FloatingButtons extends StatelessWidget {
           ),
           FloatingActionButton(
             onPressed: () {
+              TaskStatsProvider deneme = TaskStatsProvider();
+              deneme.montlyTaskPassingTime();
+
               Navigator.pushNamed(context, '/leaderboard');
             },
             shape: RoundedRectangleBorder(

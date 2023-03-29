@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/core/providers/leaderboard_provider.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/montly_tab.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/weekly_tab.dart';
+import 'package:provider/provider.dart';
 
 class LeaderboardWidget extends StatefulWidget {
   const LeaderboardWidget({super.key});
@@ -12,9 +14,11 @@ class LeaderboardWidget extends StatefulWidget {
 class _LeaderboardWidgetState extends State<LeaderboardWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late LeaderboardProvider tabProvider;
 
   @override
   void initState() {
+    tabProvider = Provider.of<LeaderboardProvider>(context, listen: false);
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -31,7 +35,9 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget>
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: 50.0, right: 50.0, top: MediaQuery.of(context).size.height / 9),
+              left: 50.0,
+              right: 50.0,
+              top: MediaQuery.of(context).size.height / 9),
           child: Container(
             height: MediaQuery.of(context).size.height / 18,
             decoration: BoxDecoration(
@@ -45,6 +51,9 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget>
                 borderRadius: BorderRadius.circular(25.0),
                 color: Colors.green,
               ),
+              onTap: (value) {
+                tabProvider.count.value = _tabController.index;
+              },
               labelColor: Colors.white,
               unselectedLabelColor: Colors.black,
               tabs: const [
@@ -63,7 +72,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget>
             controller: _tabController,
             children: const [
               WeeklyTab(),
-              MontlyTab()
+              MontlyTab(),
             ],
           ),
         )

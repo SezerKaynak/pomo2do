@@ -26,17 +26,17 @@ class _MontlyTabState extends State<MontlyTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: montlyLeaderboardProvider.leaderboardMontlyStats(),
+      future: montlyLeaderboardProvider.leaderboardListProvider(1),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           LeaderboardImages first = LeaderboardImages(
-              user: montlyLeaderboardProvider.leaderboardWeeklyList[0]);
+              user: montlyLeaderboardProvider.leaderboardList[0]);
 
           LeaderboardImages second = LeaderboardImages(
-              user: montlyLeaderboardProvider.leaderboardWeeklyList[1]);
+              user: montlyLeaderboardProvider.leaderboardList[1]);
 
           LeaderboardImages third = LeaderboardImages(
-              user: montlyLeaderboardProvider.leaderboardWeeklyList[2]);
+              user: montlyLeaderboardProvider.leaderboardList[2]);
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -58,12 +58,12 @@ class _MontlyTabState extends State<MontlyTab> {
                               second,
                               Text(
                                 montlyLeaderboardProvider
-                                    .leaderboardMontlyList[1].userName!,
+                                    .leaderboardList[1].userName!,
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(
                                 montlyLeaderboardProvider
-                                    .leaderboardMontlyList[1].montlyTaskPassingTime!
+                                    .leaderboardList[1].montlyTaskPassingTime!
                                     .toString(),
                                 style: const TextStyle(color: Colors.white),
                               )
@@ -97,12 +97,12 @@ class _MontlyTabState extends State<MontlyTab> {
                               first,
                               Text(
                                 montlyLeaderboardProvider
-                                    .leaderboardMontlyList[0].userName!,
+                                    .leaderboardList[0].userName!,
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(
                                 montlyLeaderboardProvider
-                                    .leaderboardMontlyList[0].montlyTaskPassingTime!
+                                    .leaderboardList[0].montlyTaskPassingTime!
                                     .toString(),
                                 style: const TextStyle(color: Colors.white),
                               )
@@ -135,12 +135,12 @@ class _MontlyTabState extends State<MontlyTab> {
                               third,
                               Text(
                                 montlyLeaderboardProvider
-                                    .leaderboardMontlyList[2].userName!,
+                                    .leaderboardList[2].userName!,
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(
                                 montlyLeaderboardProvider
-                                    .leaderboardMontlyList[2].montlyTaskPassingTime!
+                                    .leaderboardList[2].montlyTaskPassingTime!
                                     .toString(),
                                 style: const TextStyle(color: Colors.white),
                               )

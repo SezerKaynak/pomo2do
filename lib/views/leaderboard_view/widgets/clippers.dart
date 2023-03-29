@@ -49,10 +49,10 @@ class MiddleClipper extends CustomClipper<Path> {
 
     Path path = Path();
 
-    path.moveTo(w - 80, 0);
+    path.moveTo(w - 90, 0);
     path.lineTo(0, h);
     path.lineTo(w, h);
-    path.lineTo(w - 20, 0);
+    path.lineTo(w - 10, 0);
     path.close();
 
     return path;

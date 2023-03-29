@@ -47,10 +47,8 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                           padding: EdgeInsets.all(8.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Çalışma Süresi",
-                              style: TextStyle(fontSize: 16)
-                            ),
+                            child: Text("Çalışma Süresi",
+                                style: TextStyle(fontSize: 16)),
                           ),
                         ),
                       ),
@@ -102,8 +100,11 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                               padding: const EdgeInsets.all(8.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(taskStatsProvider.getWeekDays()[0]
-                                    [-taskStatsProvider.count.value + 6], style: const TextStyle(fontSize: 16),),
+                                child: Text(
+                                  taskStatsProvider.getWeekDays()[0]
+                                      [-taskStatsProvider.count.value + 6],
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                           ),
