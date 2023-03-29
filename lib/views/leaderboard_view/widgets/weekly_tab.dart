@@ -26,17 +26,17 @@ class _WeeklyTabState extends State<WeeklyTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: weeklyLeaderboardProvider.leaderboardWeeklyStats(1),
+      future: weeklyLeaderboardProvider.leaderboardListProvider(0),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           LeaderboardImages first = LeaderboardImages(
-              user: weeklyLeaderboardProvider.leaderboardWeeklyList[0]);
+              user: weeklyLeaderboardProvider.leaderboardList[0]);
 
           LeaderboardImages second = LeaderboardImages(
-              user: weeklyLeaderboardProvider.leaderboardWeeklyList[1]);
+              user: weeklyLeaderboardProvider.leaderboardList[1]);
 
           LeaderboardImages third = LeaderboardImages(
-              user: weeklyLeaderboardProvider.leaderboardWeeklyList[2]);
+              user: weeklyLeaderboardProvider.leaderboardList[2]);
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -58,14 +58,14 @@ class _WeeklyTabState extends State<WeeklyTab> {
                               second,
                               Text(
                                 weeklyLeaderboardProvider
-                                    .leaderboardWeeklyList[1].userName!,
+                                    .leaderboardList[1].userName!,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
                               Text(
                                 weeklyLeaderboardProvider
-                                    .leaderboardWeeklyList[1]
+                                    .leaderboardList[1]
                                     .weeklyTaskPassingTime
                                     .toString(),
                                 style: const TextStyle(color: Colors.white),
@@ -101,14 +101,14 @@ class _WeeklyTabState extends State<WeeklyTab> {
                               first,
                               Text(
                                 weeklyLeaderboardProvider
-                                    .leaderboardWeeklyList[0].userName!,
+                                    .leaderboardList[0].userName!,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
                               Text(
                                 weeklyLeaderboardProvider
-                                    .leaderboardWeeklyList[0]
+                                    .leaderboardList[0]
                                     .weeklyTaskPassingTime
                                     .toString(),
                                 style: const TextStyle(
@@ -144,14 +144,14 @@ class _WeeklyTabState extends State<WeeklyTab> {
                               third,
                               Text(
                                 weeklyLeaderboardProvider
-                                    .leaderboardWeeklyList[2].userName!,
+                                    .leaderboardList[2].userName!,
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
                               Text(
                                 weeklyLeaderboardProvider
-                                    .leaderboardWeeklyList[2]
+                                    .leaderboardList[2]
                                     .weeklyTaskPassingTime
                                     .toString(),
                                 style: const TextStyle(

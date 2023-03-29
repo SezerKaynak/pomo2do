@@ -12,8 +12,7 @@ import 'package:pomotodo/utils/constants/constants.dart';
 
 class TaskStatsProvider extends ChangeNotifier {
   DatabaseService service = DatabaseService();
-  List<LeaderboardModel> leaderboardWeeklyList = [];
-  List<LeaderboardModel> leaderboardMontlyList = [];
+  List<LeaderboardModel> leaderboardList = [];
   List<TaskStatisticsModel>? stats;
   int totalTaskTime = 0;
   List<TaskByTaskModel> table2 = [];
@@ -168,19 +167,17 @@ class TaskStatsProvider extends ChangeNotifier {
     totalTaskTime = totalTime;
   }
 
-  Future<void> leaderboardWeeklyStats(int index) async {
-    // getTasks();
+  Future<void> leaderboardListProvider(int index) async {
+    leaderboardList = await service.leaderboardStats();
     switch (index) {
-      case 1:
-        leaderboardWeeklyList = await service.leaderboardStats();
-        leaderboardWeeklyList.sort(
+      case 0:
+        leaderboardList.sort(
           (a, b) =>
               b.weeklyTaskPassingTime!.compareTo(a.weeklyTaskPassingTime!),
         );
         break;
-      case 2:
-        leaderboardMontlyList = await service.leaderboardStats();
-        leaderboardMontlyList.sort(
+      case 1:
+        leaderboardList.sort(
           (a, b) =>
               b.montlyTaskPassingTime!.compareTo(a.montlyTaskPassingTime!),
         );
@@ -211,12 +208,5 @@ class TaskStatsProvider extends ChangeNotifier {
       }
     }
     service.setMontlyTaskPassingTime(montlyTaskPassingTime);
-  }
-
-  Future<void> leaderboardMontlyStats() async {
-    leaderboardMontlyList = await service.leaderboardStats();
-    leaderboardMontlyList.sort(
-      (a, b) => b.montlyTaskPassingTime!.compareTo(a.montlyTaskPassingTime!),
-    );
   }
 }
