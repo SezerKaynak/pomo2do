@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_flags/country_flags.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/providers/drawer_image_provider.dart';
+import 'package:pomotodo/core/providers/locale_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/edit_password_view/edit_password.view.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
@@ -25,12 +28,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final AuthService _authService = AuthService();
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
   late DrawerImageProvider drawerImageProvider;
+  late LocaleModel localeProvider;
 
   @override
   void initState() {
     super.initState();
     drawerImageProvider =
         Provider.of<DrawerImageProvider>(context, listen: false);
+    localeProvider = Provider.of<LocaleModel>(context, listen: false);
     WidgetsBinding.instance
         .addPostFrameCallback((_) => drawerImageProvider.getURL(context, null));
   }
@@ -42,6 +47,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     // print('deneme: $deneme');
     var user = users.doc(context.read<PomotodoUser>().userId);
     final themeChange = Provider.of<DarkThemeProvider>(context);
+
     return Drawer(
       width: MediaQuery.of(context).size.width * 0.745,
       child: ListView(
@@ -105,11 +111,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     builder:
                         (BuildContext context, AsyncSnapshot asyncSnapshot) {
                       if (asyncSnapshot.hasError) {
-                        return const Text("Bir şeyler yanlış gitti");
+                        return Text(L10n.of(context)!.somethingWrong);
                       } else if (asyncSnapshot.hasData &&
                           !asyncSnapshot.data!.exists) {
-                        return const Text(
-                          "Hesap ayarları sayfasından profil resmi seçebilirsiniz",
+                        return Text(
+                          L10n.of(context)!.uSelectPic,
                           overflow: TextOverflow.clip,
                           maxLines: 3,
                         );
@@ -124,15 +130,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               fontWeight: FontWeight.normal),
                         );
                       }
-                      return const Text("Loading");
+                      return Text(L10n.of(context)!.loading);
                     }),
               ],
             ),
           ),
           settings.Settings(
             settingIcon: Icons.account_circle,
-            title: settingTitle(context, "Hesap Ayarları"),
-            subtitle: "Profilinizi düzenleyebilirsiniz.",
+            title: settingTitle(context, L10n.of(context)!.accSettings),
+            subtitle: L10n.of(context)!.uEditProfile,
             tap: () {
               Navigator.pushNamed(context, '/editProfile');
             },
@@ -144,8 +150,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               children: [
                 settings.Settings(
                   settingIcon: Icons.password,
-                  subtitle: "Şifrenizi değiştirebilirsiniz.",
-                  title: settingTitle(context, 'Şifreyi Değiştir'),
+                  subtitle: L10n.of(context)!.uChangePassword,
+                  title:
+                      settingTitle(context, L10n.of(context)!.changePassword),
                   tap: () {
                     Navigator.push(
                         context,
@@ -159,14 +166,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           settings.Settings(
               settingIcon: Icons.notifications,
-              subtitle: "Bildirim ayarlarını yapabilirsiniz.",
-              title: settingTitle(context, 'Bildirim Ayarları'),
+              subtitle: L10n.of(context)!.uEditNotification,
+              title:
+                  settingTitle(context, L10n.of(context)!.notificationSettings),
               tap: () {}),
           const Divider(thickness: 1),
           settings.Settings(
               settingIcon: Icons.watch,
-              subtitle: "Pomodoro sayacı vb. ayarları yapabilirsiniz.",
-              title: settingTitle(context, 'Pomodoro Ayarları'),
+              subtitle: L10n.of(context)!.uEditPomodoro,
+              title: settingTitle(context, L10n.of(context)!.pomodoroTitle),
               tap: () {
                 Navigator.push(
                     context,
@@ -176,16 +184,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
           const Divider(thickness: 1),
           settings.Settings(
               settingIcon: Icons.logout,
-              subtitle: "Hesaptan çıkış yapın.",
-              title: settingTitle(context, 'Çıkış Yap'),
+              subtitle: L10n.of(context)!.logOutAcc,
+              title: settingTitle(context, L10n.of(context)!.logOut),
               tap: () {
                 QuickAlert.show(
                   context: context,
                   type: QuickAlertType.confirm,
-                  title: alertTitleLogOut,
-                  text: alertSubtitleLogOut,
-                  confirmBtnText: alertApprove,
-                  cancelBtnText: alertReject,
+                  title: L10n.of(context)!.alertTitleLogOut,
+                  text: L10n.of(context)!.alertSubtitleLogOut,
+                  confirmBtnText: L10n.of(context)!.alertApprove,
+                  cancelBtnText: L10n.of(context)!.alertReject,
                   confirmBtnColor: Theme.of(context).errorColor,
                   onConfirmBtnTap: () async => await _authService.signOut(),
                   onCancelBtnTap: () => Navigator.of(context).pop(false),
@@ -197,6 +205,33 @@ class _CustomDrawerState extends State<CustomDrawer> {
             switchOnChanged: (bool? value) {
               themeChange.darkTheme = value!;
             },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {
+                  localeProvider.set(const Locale('tr', 'TR'));
+                },
+                child: CountryFlags.flag(
+                  'tr',
+                  height: 40,
+                  width: 40,
+                  borderRadius: 8,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  localeProvider.set(const Locale('en', 'US'));
+                },
+                child: CountryFlags.flag(
+                  'us',
+                  height: 40,
+                  width: 40,
+                  borderRadius: 8,
+                ),
+              ),
+            ],
           )
         ],
       ),

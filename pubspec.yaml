@@ -30,6 +30,7 @@ dependencies:
   auto_size_text: ^3.0.0
   cached_network_image: ^3.2.2
   cloud_firestore: ^3.5.0
+  country_flags: ^1.1.1
   cupertino_icons: ^1.0.2
   extension_google_sign_in_as_googleapis_auth: ^2.0.7
   firebase_auth: ^3.11.0
@@ -74,7 +75,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: false
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -6,8 +6,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/leaderboard_provider.dart';
 import 'package:pomotodo/core/providers/list_update_provider.dart';
+import 'package:pomotodo/core/providers/locale_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/archived_task_view/archived_task.view.dart';
 import 'package:pomotodo/views/auth_view/auth_widget.dart';
 import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
@@ -100,58 +102,51 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) {
-        return themeChangeProvider;
-      },
-      child: AuthWidgetBuilder(
-          onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
-              MaterialApp(
-                  localizationsDelegates: const [
-                    SfGlobalLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  navigatorObservers: [FlutterSmartDialog.observer],
-                  supportedLocales: const [
-                    Locale('en'),
-                    Locale('tr'),
-                  ],
-                  locale: const Locale('tr'),
-                  builder: FlutterSmartDialog.init(),
-                  initialRoute: '/',
-                  routes: {
-                    '/task': (context) => const HomeView(),
-                    '/done': (context) => const CompletedTasksView(),
-                    '/editTask': (context) => const EditTaskView(),
-                    '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
-                          create: (context) => ListUpdate(),
-                          child: const DeletedTasksView(),
-                        ),
-                    '/editProfile': (context) => const EditProfileView(),
-                    '/archived': (context) => const ArchivedTasksView(),
-                    '/taskStatistics': (context) => ChangeNotifierProvider(
-                          create: (context) => TaskStatsProvider(),
-                          child: const TaskStatisticsView(),
-                        ),
-                    '/leaderboard': (context) => MultiProvider(
-                          providers: [
-                            ChangeNotifierProvider(
-                              create: (context) => LeaderboardProvider(),
-                            ),
-                            ChangeNotifierProvider(
-                              create: (context) => TaskStatsProvider(),
-                            )
-                          ],
-                          child: const LeaderboardView(),
-                        ),
-                  },
-                  debugShowCheckedModeBanner: false,
-                  theme: context.watch<DarkThemeProvider>().darkTheme
-                      ? widget.themeDark
-                      : widget.theme,
-                  home: AuthWidget(snapShot: snapShot))),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => LocaleModel()),
+          ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
+        ],
+        child: AuthWidgetBuilder(
+            onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
+                MaterialApp(
+                    localizationsDelegates: L10n.localizationsDelegates,
+                    navigatorObservers: [FlutterSmartDialog.observer],
+                    supportedLocales: L10n.supportedLocales,
+                    locale: context.watch<LocaleModel>().locale,
+                    builder: FlutterSmartDialog.init(),
+                    initialRoute: '/',
+                    routes: {
+                      '/task': (context) => const HomeView(),
+                      '/done': (context) => const CompletedTasksView(),
+                      '/editTask': (context) => const EditTaskView(),
+                      '/deleted': (context) =>
+                          ChangeNotifierProvider<ListUpdate>(
+                            create: (context) => ListUpdate(),
+                            child: const DeletedTasksView(),
+                          ),
+                      '/editProfile': (context) => const EditProfileView(),
+                      '/archived': (context) => const ArchivedTasksView(),
+                      '/taskStatistics': (context) => ChangeNotifierProvider(
+                            create: (context) => TaskStatsProvider(),
+                            child: const TaskStatisticsView(),
+                          ),
+                      '/leaderboard': (context) => MultiProvider(
+                            providers: [
+                              ChangeNotifierProvider(
+                                create: (context) => LeaderboardProvider(),
+                              ),
+                              ChangeNotifierProvider(
+                                create: (context) => TaskStatsProvider(),
+                              )
+                            ],
+                            child: const LeaderboardView(),
+                          ),
+                    },
+                    debugShowCheckedModeBanner: false,
+                    theme: context.watch<DarkThemeProvider>().darkTheme
+                        ? widget.themeDark
+                        : widget.theme,
+                    home: AuthWidget(snapShot: snapShot))));
   }
 }
