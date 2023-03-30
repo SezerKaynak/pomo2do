@@ -3,6 +3,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
@@ -45,6 +46,7 @@ class _EditTaskState extends State<EditTaskWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     List keyAndIndex = ModalRoute.of(context)!.settings.arguments as List;
 
     TaskModel selectedTask = Provider.of<TasksProvider>(context)
@@ -69,18 +71,18 @@ class _EditTaskState extends State<EditTaskWidget> {
             child: Column(
               children: [
                 ScreenTexts(
-                  title: taskPageTitle,
+                  title: l10n.taskPageTitle,
                   theme: Theme.of(context).textTheme.headline4,
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left,
                 ),
                 ScreenTexts(
-                    title: taskPageSubtitle,
+                    title: l10n.taskPageSubtitle,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 ScreenTexts(
-                    title: taskPageTaskName,
+                    title: l10n.taskPageTaskName,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -90,7 +92,7 @@ class _EditTaskState extends State<EditTaskWidget> {
                     maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
-                    title: taskPageTaskType,
+                    title: l10n.taskPageTaskType,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -100,7 +102,7 @@ class _EditTaskState extends State<EditTaskWidget> {
                     maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
-                    title: taskPageTaskInfo,
+                    title: l10n.taskPageTaskInfo,
                     theme: Theme.of(context).textTheme.subtitle1,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
@@ -114,7 +116,7 @@ class _EditTaskState extends State<EditTaskWidget> {
                     return Column(
                       children: [
                         CheckboxListTile(
-                          title: const Text(isTaskDone),
+                          title: Text(l10n.isTaskDone),
                           activeColor: Colors.blue,
                           value: state.value,
                           onChanged: (value) {
@@ -135,7 +137,7 @@ class _EditTaskState extends State<EditTaskWidget> {
                     return Column(
                       children: [
                         CheckboxListTile(
-                          title: const Text(isTaskArchive),
+                          title: Text(l10n.isTaskArchive),
                           activeColor: Colors.blue,
                           value: state.value,
                           onChanged: (value) {
@@ -163,11 +165,13 @@ class _EditTaskState extends State<EditTaskWidget> {
                       await dbService.updateTask(selectedTask);
 
                       isCheckedDone && isCheckedArchive
-                          ? SmartDialog.showToast(taskMovedIntoArchive)
+                          ? SmartDialog.showToast(l10n.taskMovedIntoArchive)
                           : isCheckedDone
-                              ? SmartDialog.showToast(taskMovedIntoCompleted)
+                              ? SmartDialog.showToast(
+                                  l10n.taskMovedIntoCompleted)
                               : isCheckedArchive
-                                  ? SmartDialog.showToast(taskMovedIntoArchive)
+                                  ? SmartDialog.showToast(
+                                      l10n.taskMovedIntoArchive)
                                   : DoNothingAction();
                       // ignore: use_build_context_synchronously
                       Navigator.pushAndRemoveUntil(
@@ -177,7 +181,7 @@ class _EditTaskState extends State<EditTaskWidget> {
                         ModalRoute.withName("/Task"),
                       );
                     },
-                    child: const Text(updateButtonText))
+                    child: Text(l10n.updateButtonText))
               ],
             ),
           ),

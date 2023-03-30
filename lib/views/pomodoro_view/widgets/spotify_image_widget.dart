@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
@@ -23,13 +24,13 @@ Widget spotifyImageWidget(ImageUri image) {
           return SizedBox(
             width: ImageDimension.large.value.toDouble(),
             height: ImageDimension.large.value.toDouble(),
-            child: const Center(child: Text('Fotoğraf alınırken hata oluştu...')),
+            child: Center(child: Text(L10n.of(context)!.errorPic)),
           );
         } else {
           return SizedBox(
             width: ImageDimension.large.value.toDouble(),
             height: ImageDimension.large.value.toDouble(),
-            child: const Center(child: Text('Fotoğraf alınıyor...')),
+            child: Center(child: Text(L10n.of(context)!.takingPic)),
           );
         }
       });

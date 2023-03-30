@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/long_break_view.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/short_break_view.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
@@ -35,12 +36,13 @@ class _PomodoroViewState extends State<PomodoroWidget>
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     final pageUpdateNotifier = context.watch<PageUpdate>();
     return WillPopScope(
       onWillPop: () async => pageUpdateNotifier.onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Pomodoro"),
+          title: Text(l10n.pomodoro),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -50,10 +52,10 @@ class _PomodoroViewState extends State<PomodoroWidget>
                       ? QuickAlert.show(
                           context: context,
                           type: QuickAlertType.confirm,
-                          title: 'Emin misin?',
-                          text: 'Pomodoro sayacı sıfırlanacak!',
-                          confirmBtnText: 'Onayla',
-                          cancelBtnText: 'İptal Et',
+                          title: l10n.uSure,
+                          text: l10n.pomodoroWillReset,
+                          confirmBtnText: l10n.alertApprove,
+                          cancelBtnText: l10n.alertReject,
                           confirmBtnColor: Colors.green,
                           onConfirmBtnTap: () {
                             widget.task.pomodoroCount = 0;
@@ -82,10 +84,10 @@ class _PomodoroViewState extends State<PomodoroWidget>
                     onTap: (_) {
                       pageUpdateNotifier.skipButtonVisible = false;
                     },
-                    tabs: const [
-                      Tabs(tabName: 'Pomodoro'),
-                      Tabs(tabName: 'Kısa Ara'),
-                      Tabs(tabName: 'Uzun Ara'),
+                    tabs: [
+                      Tabs(tabName: l10n.pomodoro),
+                      Tabs(tabName: l10n.shortBreak),
+                      Tabs(tabName: l10n.longBreak),
                     ],
                   ),
                 )),

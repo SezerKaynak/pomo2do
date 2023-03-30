@@ -3,6 +3,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
   @override
   Widget build(BuildContext context) {
     List<TaskModel> tasks = Provider.of<TasksProvider>(context).taskLists()[0];
+    var l10n = L10n.of(context)!;
 
     return Column(
       children: [
@@ -114,7 +116,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                                             isLoading = false;
                                           });
                                           SmartDialog.showToast(
-                                              "Görev arşive taşındı!");
+                                              l10n.taskMovedIntoArchive);
                                         }),
                                     InkWell(
                                         child: const Icon(
@@ -137,7 +139,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                                             isLoading = false;
                                           });
                                           SmartDialog.showToast(
-                                              "Görev çöp kutusuna taşındı!");
+                                              l10n.moveTrashBin);
                                         })
                                   ],
                                 ),
@@ -149,7 +151,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                     ),
                   )
                 else
-                  const Center(child: Text("Tamamlanmış görev bulunamadı!")),
+                  Center(child: Text(l10n.noDoneTask)),
                 if (selectedIndexes.isNotEmpty)
                   Expanded(
                     child: Align(
@@ -176,8 +178,7 @@ class _CompletedTasksState extends State<CompletedTasksWidget> {
                             isLoading = false;
                           });
                         },
-                        child:
-                            const Text("Seçili görevleri tamamlanmamış olarak işaretle"),
+                        child: Text(l10n.selectUndone),
                       ),
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/list_update_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:provider/provider.dart';
 
 class DeletedTasksWidget extends StatelessWidget {
@@ -95,8 +96,7 @@ class DeletedTasksWidget extends StatelessWidget {
                         ),
                       )
                     else
-                      const Center(
-                          child: Text("Çöp kutusunda görev bulunamadı!")),
+                      Center(child: Text(L10n.of(context)!.noTaskTrash)),
                     if (selectedIndexes.isNotEmpty)
                       Card(
                         clipBehavior: Clip.hardEdge,
@@ -125,12 +125,12 @@ class DeletedTasksWidget extends StatelessWidget {
                                       elevatedButtonWorks.taskActivationButton(
                                           selectedIndexes, tasks);
                                     },
-                                    child: const SizedBox(
+                                    child: SizedBox(
                                       child: Center(
                                         child: Text(
-                                          "Aktif Et",
+                                          L10n.of(context)!.activeButton,
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -153,11 +153,11 @@ class DeletedTasksWidget extends StatelessWidget {
                                         elevatedButtonWorks.deleteTasksButton(
                                             selectedIndexes, tasks);
                                       },
-                                      child: const SizedBox(
+                                      child:  SizedBox(
                                         child: Center(
                                             child: Text(
-                                          "Sil",
-                                          style: TextStyle(
+                                          L10n.of(context)!.deleteButton,
+                                          style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
                                         )),

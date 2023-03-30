@@ -474,4 +474,10 @@ class L10nTr extends L10n {
 
   @override
   String get sunday => 'Paz';
+
+  @override
+  String get start => 'BAŞLAT';
+
+  @override
+  String get stop => 'DURDUR';
 }

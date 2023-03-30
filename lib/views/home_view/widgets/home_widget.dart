@@ -3,6 +3,7 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/google_ads.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/views/home_view/widgets/task_shimmer.dart';
@@ -16,6 +17,7 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -44,7 +46,7 @@ class HomeWidget extends StatelessWidget {
                   if (snapshot.hasData) {
                     try {
                       return providerOfTasks.retrievedTaskList!.isEmpty
-                          ? const Center(child: Text(noActiveTask))
+                          ? Center(child: Text(l10n.noActiveTask))
                           : ListView.separated(
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
@@ -138,12 +140,14 @@ class HomeWidget extends StatelessWidget {
                                                       context: context,
                                                       type: QuickAlertType
                                                           .confirm,
-                                                      title: alertTitle,
-                                                      text: alertSubtitle,
+                                                      title:
+                                                          l10n.trashAlertTitle,
+                                                      text: l10n
+                                                          .trashAlertSubtitle,
                                                       confirmBtnText:
-                                                          alertApprove,
+                                                          l10n.alertApprove,
                                                       cancelBtnText:
-                                                          alertReject,
+                                                          l10n.alertReject,
                                                       confirmBtnColor:
                                                           Theme.of(context)
                                                               .errorColor,
@@ -170,12 +174,12 @@ class HomeWidget extends StatelessWidget {
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
-                                                    children: const [
-                                                      Icon(Icons.edit,
+                                                    children: [
+                                                      const Icon(Icons.edit,
                                                           color: Colors.white),
                                                       Text(
-                                                        editText,
-                                                        style: TextStyle(
+                                                        l10n.editText,
+                                                        style: const TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       )
@@ -194,14 +198,15 @@ class HomeWidget extends StatelessWidget {
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
-                                                      children: const [
-                                                        Icon(Icons.delete,
+                                                      children: [
+                                                        const Icon(Icons.delete,
                                                             color:
                                                                 Colors.white),
-                                                        Text(moveIntoTrash,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white))
+                                                        Text(l10n.moveIntoTrash,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white))
                                                       ],
                                                     )),
                                                 resizeDuration: const Duration(
