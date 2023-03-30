@@ -156,5 +156,7 @@
     "thursday":"Thu",
     "friday":"Fri",
     "saturday":"Sat",
-    "sunday":"Sun"
+    "sunday":"Sun",
+    "start":"START",
+    "stop":"STOP"
 }

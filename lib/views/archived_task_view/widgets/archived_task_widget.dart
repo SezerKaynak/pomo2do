@@ -3,6 +3,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
   Widget build(BuildContext context) {
     List<TaskModel> tasks =
         Provider.of<TasksProvider>(context, listen: false).taskLists()[3];
-
+    var l10n = L10n.of(context)!;
     return Column(
       children: [
         SizedBox(
@@ -105,7 +106,7 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                         }),
                   )
                 else
-                  const Center(child: Text("Arşivlenmiş görev bulunamadı!")),
+                  Center(child: Text(l10n.noArchiveTask)),
                 if (buttonVisible)
                   Expanded(
                     child: Align(
@@ -127,9 +128,11 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                           for (int i = 0; i < selectedIndexes.length; i++) {
                             tasks[selectedIndexes[i] - i].isDone
                                 ? SmartDialog.showToast(
-                                    "${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!")
+                                    "${tasks[selectedIndexes[i - i]].taskName}"
+                                    "${l10n.moveDonePage}")
                                 : SmartDialog.showToast(
-                                    "${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
+                                    "${tasks[selectedIndexes[i - i]].taskName}"
+                                    "${l10n.moveTaskPage}");
                             tasks.removeAt(selectedIndexes[i] - i);
                           }
 
@@ -139,7 +142,7 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                             isLoading = false;
                           });
                         },
-                        child: const Text("Seçili görevleri arşivden çıkar"),
+                        child: Text(l10n.moveArchive),
                       ),
                     ),
                   )

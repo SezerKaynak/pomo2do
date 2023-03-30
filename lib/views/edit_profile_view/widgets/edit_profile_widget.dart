@@ -7,6 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
@@ -71,6 +72,7 @@ class _EditProfileState extends State<EditProfileWidget> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
     return WillPopScope(
@@ -105,14 +107,14 @@ class _EditProfileState extends State<EditProfileWidget> {
                     child: Column(
                       children: [
                         ScreenTexts(
-                          title: editProfileTitle,
+                          title: l10n.editProfileTitle,
                           theme: Theme.of(context).textTheme.headline4,
                           fontW: FontWeight.w600,
                           textPosition: TextAlign.left,
                           customPadding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                         ),
                         ScreenTexts(
-                            title: editProfileSubtitle,
+                            title: l10n.editProfileSubtitle,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w400,
                             textPosition: TextAlign.left,
@@ -140,7 +142,7 @@ class _EditProfileState extends State<EditProfileWidget> {
                           ]),
                         ),
                         ScreenTexts(
-                            title: editProfileName,
+                            title: l10n.yourName,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w500,
                             textPosition: TextAlign.left),
@@ -150,7 +152,7 @@ class _EditProfileState extends State<EditProfileWidget> {
                                 AsyncSnapshot asyncSnapshot) {
                               if (asyncSnapshot.hasError) {
                                 return ScreenTextField(
-                                  textLabel: "Something went wrong",
+                                  textLabel: l10n.somethingWrong,
                                   controller: _nameController,
                                   maxLines: 1,
                                 );
@@ -169,14 +171,14 @@ class _EditProfileState extends State<EditProfileWidget> {
                               }
 
                               return ScreenTextField(
-                                textLabel: "Loading",
+                                textLabel: l10n.loading,
                                 controller: _nameController,
                                 maxLines: 1,
                               );
                             }),
                         const SizedBox(height: 20),
                         ScreenTexts(
-                            title: editProfileSurname,
+                            title: l10n.yourSurname,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w500,
                             textPosition: TextAlign.left),
@@ -186,7 +188,7 @@ class _EditProfileState extends State<EditProfileWidget> {
                                 AsyncSnapshot asyncSnapshot) {
                               if (asyncSnapshot.hasError) {
                                 return ScreenTextField(
-                                  textLabel: "Something went wrong",
+                                  textLabel: l10n.somethingWrong,
                                   controller: _surnameController,
                                   maxLines: 1,
                                 );
@@ -205,14 +207,14 @@ class _EditProfileState extends State<EditProfileWidget> {
                               }
 
                               return ScreenTextField(
-                                textLabel: "Loading",
+                                textLabel: l10n.loading,
                                 controller: _surnameController,
                                 maxLines: 1,
                               );
                             }),
                         const SizedBox(height: 20),
                         ScreenTexts(
-                            title: editProfileBirthday,
+                            title: l10n.yourBirthday,
                             theme: Theme.of(context).textTheme.subtitle1,
                             fontW: FontWeight.w500,
                             textPosition: TextAlign.left),
@@ -222,7 +224,7 @@ class _EditProfileState extends State<EditProfileWidget> {
                                 AsyncSnapshot asyncSnapshot) {
                               if (asyncSnapshot.hasError) {
                                 return ScreenTextField(
-                                  textLabel: "Something went wrong",
+                                  textLabel: l10n.somethingWrong,
                                   controller: _birthdayController,
                                   maxLines: 1,
                                 );
@@ -258,7 +260,7 @@ class _EditProfileState extends State<EditProfileWidget> {
                               }
 
                               return ScreenTextField(
-                                textLabel: "Loading",
+                                textLabel: l10n.loading,
                                 controller: _birthdayController,
                                 maxLines: 1,
                               );
@@ -299,7 +301,7 @@ class _EditProfileState extends State<EditProfileWidget> {
                               ModalRoute.withName('/'),
                             );
                           },
-                          child: const Text(updateButtonText),
+                          child: Text(l10n.updateButtonText),
                         )
                       ],
                     ),
@@ -331,7 +333,7 @@ class _EditProfileState extends State<EditProfileWidget> {
         image = imageTemporary;
       });
     } on PlatformException catch (_) {
-      SmartDialog.showToast("Resim seçilemedi!");
+      SmartDialog.showToast(L10n.of(context)!.noPic);
     }
   }
 
@@ -342,18 +344,19 @@ class _EditProfileState extends State<EditProfileWidget> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          const Text("Profil Resmi Seçin", style: TextStyle(fontSize: 20)),
+          Text(L10n.of(context)!.selectPic,
+              style: const TextStyle(fontSize: 20)),
           const SizedBox(height: 20),
           Row(
             children: [
               TextButton.icon(
                 icon: const Icon(Icons.camera),
-                label: const Text("Kamera"),
+                label: Text(L10n.of(context)!.camera),
                 onPressed: () => pickImage(ImageSource.camera),
               ),
               TextButton.icon(
                 icon: const Icon(Icons.image),
-                label: const Text("Galeri"),
+                label: Text(L10n.of(context)!.gallery),
                 onPressed: () => pickImage(ImageSource.gallery),
               )
             ],

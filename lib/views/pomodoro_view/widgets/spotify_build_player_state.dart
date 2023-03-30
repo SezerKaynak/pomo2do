@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/sized_icon_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/spotify_image_widget.dart';
 import 'package:provider/provider.dart';
@@ -30,10 +31,10 @@ Widget buildPlayerStateWidget(BuildContext context) {
                 onTap: () {
                   spotifyProvider.connectToSpotifyRemote();
                 },
-                child: const Center(
+                child: Center(
                     child: Text(
-                  "Spotify'a Bağlan",
-                  style: TextStyle(
+                  L10n.of(context)!.connectSpotify,
+                  style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 )),
               ),
@@ -46,7 +47,7 @@ Widget buildPlayerStateWidget(BuildContext context) {
             height: kToolbarHeight,
             child: Center(
               child: AutoSizeText(
-                "Spotify'a bağlandı, uygulamadan şarkıyı açın.",
+                L10n.of(context)!.openSong,
                 style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -56,7 +57,7 @@ Widget buildPlayerStateWidget(BuildContext context) {
                   height: kToolbarHeight,
                   child: Marquee(
                     blankSpace: 10,
-                    text: "Spotify'a bağlandı, uygulamadan şarkıyı açın.",
+                    text: L10n.of(context)!.openSong,
                     style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/home_view/home.widgets.dart';
 import 'package:pomotodo/views/home_view/widgets/bottom_navigation.dart';
 import 'package:pomotodo/views/home_view/widgets/custom_drawer.dart';
@@ -12,8 +13,8 @@ class HomeView extends StatelessWidget with HomeWidgets {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("PomoTodo",
-              style: TextStyle(color: Colors.white, fontSize: 18)),
+          title: Text(L10n.of(context)!.pomoTodo,
+              style: const TextStyle(color: Colors.white, fontSize: 18)),
           leading: Builder(
               builder: (context) => IconButton(
                   onPressed: () => Scaffold.of(context).openDrawer(),

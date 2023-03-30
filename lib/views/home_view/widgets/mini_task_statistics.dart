@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:provider/provider.dart';
 
 class MiniTaskStatistics extends StatelessWidget {
@@ -33,10 +34,10 @@ class MiniTaskStatistics extends StatelessWidget {
                                 providerOfTasks.getLengthofMap().toString(),
                                 style: const TextStyle(fontSize: 20),
                               ),
-                              const Text(
-                                "Tamamlanması Gereken Görevler",
+                              Text(
+                                L10n.of(context)!.taskBeCompleted,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 10),
                               )
                             ],
                           );
@@ -78,10 +79,10 @@ class MiniTaskStatistics extends StatelessWidget {
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(fontSize: 20),
                               ),
-                              const Text(
-                                "Tamamlanmış Görevler",
+                              Text(
+                                L10n.of(context)!.doneTask,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 10),
                               )
                             ],
                           );
@@ -116,10 +117,10 @@ class MiniTaskStatistics extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 20),
                       ),
-                      const Text(
-                        "Görevlerde Bugün Geçen Süre",
+                      Text(
+                        L10n.of(context)!.passingTime,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 10,
                         ),
                       )

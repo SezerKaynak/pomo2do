@@ -156,5 +156,7 @@
     "thursday":"Per",
     "friday":"Cum",
     "saturday":"Cmt",
-    "sunday":"Paz"
+    "sunday":"Paz",
+    "start":"BAŞLAT",
+    "stop":"DURDUR"
 }

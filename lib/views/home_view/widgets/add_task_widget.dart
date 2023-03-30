@@ -3,6 +3,7 @@ import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/select_icon_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
@@ -41,6 +42,7 @@ class _AddTaskState extends State<AddTaskWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     DatabaseService dbService = DatabaseService();
 
     List<TaskModel>? tasks =
@@ -83,12 +85,13 @@ class _AddTaskState extends State<AddTaskWidget> {
                 ),
               ),
             ),
-            const Expanded(
+            Expanded(
               flex: 0,
               child: Center(
                 child: Text(
-                  "Görev Ekle",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  l10n.addTask,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -99,14 +102,14 @@ class _AddTaskState extends State<AddTaskWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ScreenTextField(
-                      textLabel: nameOfTask,
+                      textLabel: l10n.taskPageTaskName,
                       controller: _taskNameController,
                       maxLines: 1),
                   Stack(
                     alignment: AlignmentDirectional.centerEnd,
                     children: [
                       ScreenTextField(
-                        textLabel: typeOfTask,
+                        textLabel: l10n.taskPageTaskType,
                         controller: _taskTypeController,
                         maxLines: 1,
                       ),
@@ -132,7 +135,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                     ],
                   ),
                   ScreenTextField(
-                      textLabel: infoOfTask,
+                      textLabel: l10n.taskPageTaskInfo,
                       controller: _taskInfoController,
                       maxLines: 4),
                   RepaintBoundary(
@@ -173,12 +176,12 @@ class _AddTaskState extends State<AddTaskWidget> {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: taskFound,
-                            text: taskFoundDetailed,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.taskFound,
+                            text: l10n.taskFoundDetailed,
+                            confirmBtnText: l10n.confirmButtonText);
                       }
                     },
-                    child: const Text(buttonText),
+                    child: Text(l10n.buttonText),
                   )
                 ],
               ),

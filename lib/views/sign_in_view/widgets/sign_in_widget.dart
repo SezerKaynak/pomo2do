@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
@@ -41,6 +42,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     final _authService = Provider.of<IAuthService>(context, listen: false);
 
     return SingleChildScrollView(
@@ -49,34 +51,34 @@ class _SignInWidgetState extends State<SignInWidget> {
         child: Column(
           children: [
             ScreenTexts(
-                title: title,
+                title: l10n.welcome,
                 theme: Theme.of(context).textTheme.headline4,
                 fontW: FontWeight.w600,
                 textPosition: TextAlign.left),
             ScreenTexts(
-                title: subtitle,
+                title: l10n.firstSignIn,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w400,
                 textPosition: TextAlign.left),
             const SizedBox(height: 40),
             ScreenTexts(
-                title: email,
+                title: l10n.email,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-              textLabel: textLabel2,
+              textLabel: l10n.emailText,
               controller: _emailController,
               maxLines: 1,
             ),
             const SizedBox(height: 20),
             ScreenTexts(
-                title: sifre,
+                title: l10n.password,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: textLabel3,
+                textLabel: l10n.enterPassword,
                 obscure: true,
                 controller: _passwordController,
                 maxLines: 1),
@@ -88,11 +90,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                           context: context,
                           type: QuickAlertType.custom,
                           showCancelBtn: true,
-                          title: enterEmail,
-                          confirmBtnText: 'Onayla',
-                          cancelBtnText: 'İptal Et',
+                          title: l10n.enterEmail,
+                          confirmBtnText: l10n.alertApprove,
+                          cancelBtnText: l10n.alertReject,
                           widget: ScreenTextField(
-                              textLabel: enterEmailHint,
+                              textLabel: l10n.enterEmailHint,
                               controller: _resetEmailController,
                               maxLines: 1),
                           onConfirmBtnTap: () async {
@@ -111,7 +113,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                           },
                           onCancelBtnTap: () => Navigator.pop(context));
                     },
-                    child: Text(forgotPassword,
+                    child: Text(l10n.forgotPassword,
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
@@ -123,16 +125,16 @@ class _SignInWidgetState extends State<SignInWidget> {
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.error,
-                        title: emailAlert,
-                        text: emailAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
+                        title: l10n.emailAlert,
+                        text: l10n.emailAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
                   } else if (_passwordController.text == "") {
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.error,
-                        title: passwordAlert,
-                        text: passwordAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
+                        title: l10n.passwordAlert,
+                        text: l10n.passwordAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
                   } else {
                     try {
                       await _authService.signInEmailAndPassword(
@@ -143,31 +145,31 @@ class _SignInWidgetState extends State<SignInWidget> {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: userNotFound,
-                            text: userNotFoundSubtitle,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.userNotFound,
+                            text: l10n.userNotFoundSubtitle,
+                            confirmBtnText: l10n.confirmButtonText);
                       } else if (e.code == 'wrong-password') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: wrongPassword,
-                            text: wrongPasswordSubtitle,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.wrongPassword,
+                            text: l10n.wrongPasswordSubtitle,
+                            confirmBtnText: l10n.confirmButtonText);
                       } else if (e.code == 'invalid-email') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: invalidEmail,
-                            text: invalidEmailSubtitle,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.invalidEmail,
+                            text: l10n.invalidEmailSubtitle,
+                            confirmBtnText: l10n.confirmButtonText);
                       }
                     }
                   }
                 },
-                child: const Text(login)),
+                child: Text(l10n.login)),
             const SizedBox(height: 40),
             ScreenTexts(
-                title: loginWithAccount,
+                title: l10n.loginWithAccount,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w300,
                 textPosition: TextAlign.center),
@@ -183,16 +185,16 @@ class _SignInWidgetState extends State<SignInWidget> {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
-                              title: "Giriş Başarısız!",
+                              title: l10n.failedSignIn,
                               text: e.code,
-                              confirmBtnText: confirmButtonText);
+                              confirmBtnText: l10n.confirmButtonText);
                         } catch (e) {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
-                              title: "Giriş Başarısız!",
-                              text: "Uygulamaya giriş yapılamadı.",
-                              confirmBtnText: confirmButtonText);
+                              title: l10n.failedSignIn,
+                              text: l10n.noSignIn,
+                              confirmBtnText: l10n.confirmButtonText);
                         }
                       },
                       child: Image.asset("assets/images/google.png",
@@ -201,7 +203,7 @@ class _SignInWidgetState extends State<SignInWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(dontHaveAccount),
+                Text(l10n.dontHaveAccount),
                 TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -210,7 +212,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                             builder: (context) => const SignUpView()),
                       );
                     },
-                    child: const Text(register))
+                    child: Text(l10n.register))
               ],
             )
           ],
