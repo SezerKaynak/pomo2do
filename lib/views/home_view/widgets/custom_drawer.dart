@@ -42,9 +42,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // var deneme = FirebaseAuth.instance.currentUser!.providerData
-    //     .map((e) => e.providerId).contains('google.com');
-    // print('deneme: $deneme');
     var user = users.doc(context.read<PomotodoUser>().userId);
     final themeChange = Provider.of<DarkThemeProvider>(context);
 
