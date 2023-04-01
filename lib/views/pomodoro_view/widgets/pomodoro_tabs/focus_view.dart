@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class FocusView extends StatefulWidget {
@@ -35,7 +35,7 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
   late DateTime firstDateTime;
   late DateTime secondDateTime;
   late PageUpdate pageUpdateProvider;
-  
+
   @override
   void initState() {
     pageUpdateProvider = Provider.of<PageUpdate>(context, listen: false);
@@ -54,8 +54,7 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
     if (pageUpdateProvider.timerWorking) {
       switch (state) {
         case AppLifecycleState.paused:
-        
-        pageUpdateProvider.timerWorking = true;
+          pageUpdateProvider.timerWorking = true;
           context.read<PageUpdate>().startOrStop(
               context.read<SharedPreferences>().getInt("workTimerSelect")! * 60,
               widget.controller,
@@ -64,10 +63,9 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
               context
                   .read<SharedPreferences>()
                   .getInt("longBreakNumberSelect")!);
-          firstDateTime = DateTime.now(); 
+          firstDateTime = DateTime.now();
           break;
         case AppLifecycleState.resumed:
-        
           secondDateTime = DateTime.now();
           var differenceDateTime = secondDateTime.difference(firstDateTime);
 
@@ -261,23 +259,28 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                                         try {
                                                           await spotifyProvider
                                                               .connectToSpotifyRemote();
-                                                        } on PlatformException catch (e) {
+                                                        } on PlatformException {
                                                           QuickAlert.show(
                                                               context: context,
                                                               type:
                                                                   QuickAlertType
                                                                       .error,
-                                                              title:
-                                                                  "Bağlanamadı!",
-                                                              text: e.code,
-                                                              confirmBtnText:
-                                                                  confirmButtonText);
+                                                              title: L10n.of(
+                                                                      context)!
+                                                                  .failConnect,
+                                                              text: L10n.of(
+                                                                      context)!
+                                                                  .noSpotify,
+                                                              confirmBtnText: L10n
+                                                                      .of(context)!
+                                                                  .confirmButtonText);
                                                         }
                                                       },
-                                                      child: const Center(
+                                                      child: Center(
                                                           child: Text(
-                                                        "Spotify'a Bağlan",
-                                                        style: TextStyle(
+                                                        L10n.of(context)!
+                                                            .connectSpotify,
+                                                        style: const TextStyle(
                                                             color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight
@@ -319,11 +322,11 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                         //metni görevi tamamlandı olarak işaretle cümlesine benzer bir cümleyle değiştir
                                         child: Center(
                                           child: Wrap(
-                                            children: const [
+                                            children: [
                                               Text(
-                                                "Tamamlandı Olarak İşaretle",
+                                                L10n.of(context)!.selectDone,
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white),
                                               ),
@@ -352,10 +355,11 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                           crossAxisAlignment:
                                               WrapCrossAlignment.center,
                                           direction: Axis.vertical,
-                                          children: const [
-                                            Text('Pomodoro Sayacını \n Sıfırla',
+                                          children: [
+                                            Text(
+                                                L10n.of(context)!.resetPomodoro,
                                                 textAlign: TextAlign.center,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white)),
                                           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
@@ -40,23 +41,24 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     return SingleChildScrollView(
       child: Padding(
         padding: ScreenPadding().screenPadding.copyWith(top: 20),
         child: Column(
           children: [
             ScreenTexts(
-                title: pomodoroTitle,
+                title: l10n.pomodoroTitle,
                 theme: Theme.of(context).textTheme.headline4,
                 fontW: FontWeight.w600,
                 textPosition: TextAlign.left),
             ScreenTexts(
-                title: pomodoroSubtitle,
+                title: l10n.pomodoroSubtitle,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w400,
                 textPosition: TextAlign.left),
             ScreenTexts(
-                title: workTimer,
+                title: l10n.workTimer,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
@@ -64,7 +66,10 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [Text('20 dakika'), Text('40 dakika')],
+                  children: [
+                    Text('20' '${l10n.minute}'),
+                    Text('40' '${l10n.minute}')
+                  ],
                 ),
                 Slider(
                   value: _workTimeSliderValue.toDouble(),
@@ -81,15 +86,19 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
               ],
             ),
             ScreenTexts(
-                title: breakTimer,
+                title: l10n.breakTimer,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             Column(
               children: [
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [Text("5 dakika"), Text("10 dakika")]),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('5' '${l10n.minute}'),
+                    Text('10' '${l10n.minute}')
+                  ],
+                ),
                 Slider(
                   value: _breakTimeSliderValue.toDouble(),
                   max: 10,
@@ -105,15 +114,19 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
               ],
             ),
             ScreenTexts(
-                title: longBreakTimer,
+                title: l10n.longBreakTimer,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             Column(
               children: [
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [Text("15 dakika"), Text("30 dakika")]),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('15' '${l10n.minute}'),
+                    Text('30' '${l10n.minute}')
+                  ],
+                ),
                 Slider(
                   value: _longBreakTimeSliderValue.toDouble(),
                   max: 30,
@@ -129,7 +142,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
               ],
             ),
             ScreenTexts(
-                title: longBreakNumber,
+                title: l10n.longBreakNumber,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
@@ -137,10 +150,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("1.arada uzun mola"),
-                      Text("5.arada uzun mola")
-                    ]),
+                    children: [Text(l10n.longBreak1), Text(l10n.longBreak5)]),
                 Slider(
                   value: _setOfPomodoroSliderValue.toDouble(),
                   max: 5,
@@ -176,7 +186,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                     ModalRoute.withName('/'),
                   );
                 },
-                child: const Text(updateButtonText))
+                child: Text(l10n.updateButtonText))
           ],
         ),
       ),

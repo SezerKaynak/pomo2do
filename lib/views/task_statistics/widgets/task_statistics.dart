@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/sum_of_task_time_model.dart';
 import 'package:pomotodo/core/models/task_by_task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -25,6 +26,7 @@ class _TaskStatisticsState extends State<TaskStatistics> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -41,14 +43,14 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                           width: 1.0, color: Colors.grey.withOpacity(0.5))),
                   child: Column(
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         height: kToolbarHeight / 1.5,
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Çalışma Süresi",
-                                style: TextStyle(fontSize: 16)),
+                            child: Text(l10n.workTime,
+                                style: const TextStyle(fontSize: 16)),
                           ),
                         ),
                       ),
@@ -57,7 +59,7 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                         child: SfCartesianChart(
                           selectionType: SelectionType.point,
                           tooltipBehavior: TooltipBehavior(
-                              header: "Çalışma Süresi", enable: true),
+                              header: l10n.workTime, enable: true),
                           plotAreaBorderWidth: 0,
                           primaryXAxis: CategoryAxis(
                               majorGridLines: const MajorGridLines(width: 0)),
@@ -208,7 +210,7 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [Text("Az"), Text("Çok")],
+                                  children: [Text(l10n.few), Text(l10n.much)],
                                 ),
                                 Container(
                                   width: MediaQuery.of(context).size.width * .5,

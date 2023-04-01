@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
@@ -47,6 +48,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     final authService = Provider.of<IAuthService>(context, listen: false);
 
     return SingleChildScrollView(
@@ -55,50 +57,52 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         child: Column(
           children: [
             ScreenTexts(
-                title: register,
+                title: l10n.register,
                 theme: Theme.of(context).textTheme.headline4,
                 fontW: FontWeight.w600,
                 textPosition: TextAlign.left),
             ScreenTexts(
-                title: subtitle2,
+                title: l10n.subtitle2,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w400,
                 textPosition: TextAlign.left),
             ScreenTexts(
-                title: yourName,
+                title: l10n.yourName,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: name, controller: _nameController, maxLines: 1),
+                textLabel: l10n.name, controller: _nameController, maxLines: 1),
             ScreenTexts(
-                title: yourSurname,
+                title: l10n.yourSurname,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: surname,
+                textLabel: l10n.surname,
                 controller: _surnameController,
                 maxLines: 1),
             ScreenTexts(
-                title: email,
+                title: l10n.email,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: email, controller: _emailController, maxLines: 1),
+                textLabel: l10n.email,
+                controller: _emailController,
+                maxLines: 1),
             ScreenTexts(
-                title: password,
+                title: l10n.password,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: password,
+                textLabel: l10n.password,
                 obscure: true,
                 controller: _passwordController,
                 maxLines: 1),
             ScreenTexts(
-                title: yourBirthday,
+                title: l10n.yourBirthday,
                 theme: Theme.of(context).textTheme.subtitle1,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
@@ -119,48 +123,48 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 } else {}
               },
               con: const Icon(Icons.calendar_today),
-              textLabel: yourBirthday,
+              textLabel: l10n.yourBirthday,
               controller: _birthdayController,
               maxLines: 1,
             ),
             Container(height: 30),
             CustomElevatedButton(
                 onPressed: () async {
-                  if (_emailController.text == "") {
+                  if (_nameController.text == "") {
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.error,
-                        title: nameAlert,
-                        text: nameAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
-                  } else if (_passwordController.text == "") {
-                    QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.error,
-                        title: surnameAlert,
-                        text: surnameAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
-                  } else if (_nameController.text == "") {
-                    QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.error,
-                        title: emailAlert,
-                        text: emailAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
+                        title: l10n.nameAlert,
+                        text: l10n.nameAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
                   } else if (_surnameController.text == "") {
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.error,
-                        title: passwordAlert,
-                        text: passwordAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
+                        title: l10n.surnameAlert,
+                        text: l10n.surnameAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
+                  } else if (_emailController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: l10n.emailAlert,
+                        text: l10n.emailAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
+                  } else if (_passwordController.text == "") {
+                    QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.error,
+                        title: l10n.passwordAlert,
+                        text: l10n.passwordAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
                   } else if (_birthdayController.text == "") {
                     QuickAlert.show(
                         context: context,
                         type: QuickAlertType.error,
-                        title: birthdayAlert,
-                        text: birthdayAlertSubtitle,
-                        confirmBtnText: confirmButtonText);
+                        title: l10n.birthdayAlert,
+                        text: l10n.birthdayAlertSubtitle,
+                        confirmBtnText: l10n.confirmButtonText);
                   } else {
                     try {
                       await authService.createUserWithEmailAndPassword(
@@ -171,23 +175,23 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: weakPassword,
-                            text: weakPasswordSubtitle,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.weakPassword,
+                            text: l10n.weakPasswordSubtitle,
+                            confirmBtnText: l10n.confirmButtonText);
                       } else if (e.code == 'email-already-in-use') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: emailAlreadyInUse,
-                            text: emailAlreadyInUseSubtitle,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.emailAlreadyInUse,
+                            text: l10n.emailAlreadyInUseSubtitle,
+                            confirmBtnText: l10n.confirmButtonText);
                       } else if (e.code == 'invalid-email') {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.error,
-                            title: invalidEmail,
-                            text: invalidEmailSubtitle,
-                            confirmBtnText: confirmButtonText);
+                            title: l10n.invalidEmail,
+                            text: l10n.invalidEmailSubtitle,
+                            confirmBtnText: l10n.confirmButtonText);
                       }
                     }
                     CollectionReference users =
@@ -204,7 +208,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     });
                   }
                 },
-                child: const Text("Kayıt Ol")),
+                child: Text(l10n.register)),
           ],
         ),
       ),

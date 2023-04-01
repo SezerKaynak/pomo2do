@@ -1034,6 +1034,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Sun'**
   String get sunday;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'START'**
+  String get start;
+
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'STOP'**
+  String get stop;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

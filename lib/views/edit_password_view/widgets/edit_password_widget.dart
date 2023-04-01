@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
@@ -32,6 +33,7 @@ class _EditPasswordState extends State<EditPasswordWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var l10n = L10n.of(context)!;
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -42,43 +44,43 @@ class _EditPasswordState extends State<EditPasswordWidget> {
           child: Column(
             children: [
               ScreenTexts(
-                  title: changePassword,
+                  title: l10n.changePassword,
                   theme: Theme.of(context).textTheme.headline4,
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left),
               ScreenTexts(
-                  title: subtitle3,
+                  title: l10n.rePassword,
                   theme: Theme.of(context).textTheme.subtitle1,
                   fontW: FontWeight.w400,
                   textPosition: TextAlign.left),
               ScreenTexts(
-                  title: oldPassword,
+                  title: l10n.oldPassword,
                   theme: Theme.of(context).textTheme.subtitle1,
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: oldPasswordHint,
+                  textLabel: l10n.oldPasswordHint,
                   obscure: true,
                   controller: _oldpasswordController,
                   valid: (value) {
                     if (value == null) {
-                      return "Lütfen şifrenizi giriniz";
+                      return l10n.passwordAlertSubtitle;
                     }
                     return null;
                   },
                   maxLines: 1),
               ScreenTexts(
-                  title: newPasswordText,
+                  title: l10n.newPasswordText,
                   theme: Theme.of(context).textTheme.subtitle1,
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
-                  textLabel: passwordHint,
+                  textLabel: l10n.passwordHint,
                   obscure: true,
                   controller: _passwordController,
                   valid: (value) {
                     if (value == null) {
-                      return "Lütfen şifrenizi giriniz";
+                      return l10n.passwordAlertSubtitle;
                     }
                     return null;
                   },
@@ -90,16 +92,16 @@ class _EditPasswordState extends State<EditPasswordWidget> {
                       QuickAlert.show(
                           context: context,
                           type: QuickAlertType.error,
-                          title: oldPassword,
-                          text: oldPasswordAlertSubtitle,
-                          confirmBtnText: "Kapat");
+                          title: l10n.oldPassword,
+                          text: l10n.oldPasswordAlertSubtitle,
+                          confirmBtnText: l10n.confirmButtonText);
                     } else if (_passwordController.text == "") {
                       QuickAlert.show(
                           context: context,
                           type: QuickAlertType.error,
-                          title: newPasswordAlert,
-                          text: newPasswordAlertSubtitle,
-                          confirmBtnText: "Kapat");
+                          title: l10n.newPasswordAlert,
+                          text: l10n.newPasswordAlertSubtitle,
+                          confirmBtnText: l10n.confirmButtonText);
                     } else {
                       try {
                         if (_formKey.currentState!.validate()) {
@@ -120,9 +122,9 @@ class _EditPasswordState extends State<EditPasswordWidget> {
                           QuickAlert.show(
                             context: context,
                             type: QuickAlertType.success,
-                            title: passwordConfirmed,
-                            text: newPasswordAlertSubtitle,
-                            confirmBtnText: "Onayla",
+                            title: l10n.passwordConfirmed,
+                            text: l10n.passwordConfirmedSubtitle,
+                            confirmBtnText: l10n.alertApprove,
                             onConfirmBtnTap: () {
                               _authService.signOut();
                             },
@@ -136,21 +138,21 @@ class _EditPasswordState extends State<EditPasswordWidget> {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
-                              title: weakPassword,
-                              text: weakPasswordSubtitle,
-                              confirmBtnText: "Kapat");
+                              title: l10n.weakPassword,
+                              text: l10n.weakPasswordSubtitle,
+                              confirmBtnText: l10n.confirmButtonText);
                         } else if (e.code == 'wrong-password') {
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.error,
-                              title: wrongPassword,
-                              text: wrongPasswordSubtitle,
-                              confirmBtnText: "Kapat");
+                              title: l10n.wrongPassword,
+                              text: l10n.wrongPasswordSubtitle,
+                              confirmBtnText: l10n.confirmButtonText);
                         }
                       }
                     }
                   },
-                  child: const Text("Şifreyi Değiştir"))
+                  child: Text(l10n.changePassword))
             ],
           ),
         ),

@@ -474,4 +474,10 @@ class L10nEn extends L10n {
 
   @override
   String get sunday => 'Sun';
+
+  @override
+  String get start => 'START';
+
+  @override
+  String get stop => 'STOP';
 }
