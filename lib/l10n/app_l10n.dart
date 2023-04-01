@@ -366,7 +366,7 @@ abstract class L10n {
   /// No description provided for @alertTitleLogOut.
   ///
   /// In en, this message translates to:
-  /// **'LogOut!'**
+  /// **'Log out!'**
   String get alertTitleLogOut;
 
   /// No description provided for @alertSubtitleLogOut.
@@ -666,7 +666,7 @@ abstract class L10n {
   /// No description provided for @noSignIn.
   ///
   /// In en, this message translates to:
-  /// **'Login failed'**
+  /// **'Login failed, please try again.'**
   String get noSignIn;
 
   /// No description provided for @noArchiveTask.
@@ -858,7 +858,7 @@ abstract class L10n {
   /// No description provided for @passingTime.
   ///
   /// In en, this message translates to:
-  /// **'The passing time on tasks'**
+  /// **'Time spent on tasks today'**
   String get passingTime;
 
   /// No description provided for @pomoTodo.

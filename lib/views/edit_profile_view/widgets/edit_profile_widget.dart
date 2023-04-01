@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
-import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
@@ -108,14 +107,14 @@ class _EditProfileState extends State<EditProfileWidget> {
                       children: [
                         ScreenTexts(
                           title: l10n.editProfileTitle,
-                          theme: Theme.of(context).textTheme.headline4,
+                          theme: Theme.of(context).textTheme.headlineMedium,
                           fontW: FontWeight.w600,
                           textPosition: TextAlign.left,
                           customPadding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
                         ),
                         ScreenTexts(
                             title: l10n.editProfileSubtitle,
-                            theme: Theme.of(context).textTheme.subtitle1,
+                            theme: Theme.of(context).textTheme.titleMedium,
                             fontW: FontWeight.w400,
                             textPosition: TextAlign.left,
                             customPadding:
@@ -141,130 +140,93 @@ class _EditProfileState extends State<EditProfileWidget> {
                                 ))
                           ]),
                         ),
-                        ScreenTexts(
-                            title: l10n.yourName,
-                            theme: Theme.of(context).textTheme.subtitle1,
-                            fontW: FontWeight.w500,
-                            textPosition: TextAlign.left),
                         StreamBuilder(
-                            stream: user.snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot asyncSnapshot) {
-                              if (asyncSnapshot.hasError) {
-                                return ScreenTextField(
-                                  textLabel: l10n.somethingWrong,
-                                  controller: _nameController,
-                                  maxLines: 1,
-                                );
-                              }
-
-                              if (asyncSnapshot.connectionState ==
-                                  ConnectionState.active) {
-                                _nameController.text =
-                                    asyncSnapshot.data.data()["name"];
-                                return ScreenTextField(
-                                  textLabel:
-                                      "${asyncSnapshot.data.data()["name"]}",
-                                  controller: _nameController,
-                                  maxLines: 1,
-                                );
-                              }
-
+                          stream: user.snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot asyncSnapshot) {
+                            if (asyncSnapshot.hasError) {
                               return ScreenTextField(
-                                textLabel: l10n.loading,
+                                textLabel: l10n.somethingWrong,
                                 controller: _nameController,
                                 maxLines: 1,
                               );
-                            }),
-                        const SizedBox(height: 20),
-                        ScreenTexts(
-                            title: l10n.yourSurname,
-                            theme: Theme.of(context).textTheme.subtitle1,
-                            fontW: FontWeight.w500,
-                            textPosition: TextAlign.left),
-                        StreamBuilder(
-                            stream: user.snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot asyncSnapshot) {
-                              if (asyncSnapshot.hasError) {
-                                return ScreenTextField(
-                                  textLabel: l10n.somethingWrong,
-                                  controller: _surnameController,
-                                  maxLines: 1,
-                                );
-                              }
+                            }
 
-                              if (asyncSnapshot.connectionState ==
-                                  ConnectionState.active) {
-                                _surnameController.text =
-                                    asyncSnapshot.data.data()["surname"];
-                                return ScreenTextField(
-                                  textLabel:
-                                      "${asyncSnapshot.data.data()["surname"]}",
-                                  controller: _surnameController,
-                                  maxLines: 1,
-                                );
-                              }
+                            if (asyncSnapshot.connectionState ==
+                                ConnectionState.active) {
+                              _nameController.text =
+                                  asyncSnapshot.data.data()["name"];
+                              _surnameController.text =
+                                  asyncSnapshot.data.data()["surname"];
+                              _birthdayController.text =
+                                  asyncSnapshot.data.data()["birthday"];
+                              return Column(
+                                children: [
+                                  ScreenTexts(
+                                      title: l10n.yourName,
+                                      theme: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                      fontW: FontWeight.w500,
+                                      textPosition: TextAlign.left),
+                                  ScreenTextField(
+                                    controller: _nameController,
+                                    maxLines: 1,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ScreenTexts(
+                                      title: l10n.yourSurname,
+                                      theme: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                      fontW: FontWeight.w500,
+                                      textPosition: TextAlign.left),
+                                  ScreenTextField(
+                                    controller: _surnameController,
+                                    maxLines: 1,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ScreenTexts(
+                                      title: l10n.yourBirthday,
+                                      theme: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                      fontW: FontWeight.w500,
+                                      textPosition: TextAlign.left),
+                                  ScreenTextField(
+                                    textFieldInputType: TextInputType.none,
+                                    onTouch: () async {
+                                      DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(1950),
+                                              lastDate: DateTime(2100));
 
-                              return ScreenTextField(
-                                textLabel: l10n.loading,
-                                controller: _surnameController,
-                                maxLines: 1,
+                                      if (pickedDate != null) {
+                                        String formattedDate =
+                                            DateFormat('dd.MM.yyyy')
+                                                .format(pickedDate);
+
+                                        _birthdayController.text =
+                                            formattedDate;
+                                      } else {}
+                                    },
+                                    con: const Icon(Icons.calendar_today),
+                                    controller: _birthdayController,
+                                    maxLines: 1,
+                                  ),
+                                ],
                               );
-                            }),
-                        const SizedBox(height: 20),
-                        ScreenTexts(
-                            title: l10n.yourBirthday,
-                            theme: Theme.of(context).textTheme.subtitle1,
-                            fontW: FontWeight.w500,
-                            textPosition: TextAlign.left),
-                        StreamBuilder(
-                            stream: user.snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot asyncSnapshot) {
-                              if (asyncSnapshot.hasError) {
-                                return ScreenTextField(
-                                  textLabel: l10n.somethingWrong,
-                                  controller: _birthdayController,
-                                  maxLines: 1,
-                                );
-                              }
+                            }
 
-                              if (asyncSnapshot.connectionState ==
-                                  ConnectionState.active) {
-                                _birthdayController.text =
-                                    asyncSnapshot.data.data()["birthday"];
-                                return ScreenTextField(
-                                  textFieldInputType: TextInputType.none,
-                                  onTouch: () async {
-                                    DateTime? pickedDate = await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime(1950),
-                                        lastDate: DateTime(2100));
-
-                                    if (pickedDate != null) {
-                                      String formattedDate =
-                                          DateFormat('dd.MM.yyyy')
-                                              .format(pickedDate);
-
-                                      _birthdayController.text = formattedDate;
-                                    } else {}
-                                  },
-                                  con: const Icon(Icons.calendar_today),
-                                  textLabel:
-                                      "${asyncSnapshot.data.data()["birthday"]}",
-                                  controller: _birthdayController,
-                                  maxLines: 1,
-                                );
-                              }
-
-                              return ScreenTextField(
-                                textLabel: l10n.loading,
-                                controller: _birthdayController,
-                                maxLines: 1,
-                              );
-                            }),
+                            return ScreenTextField(
+                              textLabel: l10n.loading,
+                              controller: _nameController,
+                              maxLines: 1,
+                            );
+                          },
+                        ),
                         const SizedBox(height: 40),
                         CustomElevatedButton(
                           onPressed: () async {
