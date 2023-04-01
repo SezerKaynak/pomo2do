@@ -58,52 +58,42 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           children: [
             ScreenTexts(
                 title: l10n.register,
-                theme: Theme.of(context).textTheme.headline4,
+                theme: Theme.of(context).textTheme.headlineMedium,
                 fontW: FontWeight.w600,
                 textPosition: TextAlign.left),
             ScreenTexts(
                 title: l10n.subtitle2,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w400,
                 textPosition: TextAlign.left),
             ScreenTexts(
                 title: l10n.yourName,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: l10n.name, controller: _nameController, maxLines: 1),
+            ScreenTextField(controller: _nameController, maxLines: 1),
             ScreenTexts(
                 title: l10n.yourSurname,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: l10n.surname,
-                controller: _surnameController,
-                maxLines: 1),
+            ScreenTextField(controller: _surnameController, maxLines: 1),
             ScreenTexts(
                 title: l10n.email,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
-            ScreenTextField(
-                textLabel: l10n.email,
-                controller: _emailController,
-                maxLines: 1),
+            ScreenTextField(controller: _emailController, maxLines: 1),
             ScreenTexts(
                 title: l10n.password,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
-                textLabel: l10n.password,
-                obscure: true,
-                controller: _passwordController,
-                maxLines: 1),
+                obscure: true, controller: _passwordController, maxLines: 1),
             ScreenTexts(
                 title: l10n.yourBirthday,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             ScreenTextField(
@@ -123,7 +113,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 } else {}
               },
               con: const Icon(Icons.calendar_today),
-              textLabel: l10n.yourBirthday,
               controller: _birthdayController,
               maxLines: 1,
             ),
