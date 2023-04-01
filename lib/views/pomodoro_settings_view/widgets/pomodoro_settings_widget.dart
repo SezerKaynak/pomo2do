@@ -49,17 +49,17 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
           children: [
             ScreenTexts(
                 title: l10n.pomodoroTitle,
-                theme: Theme.of(context).textTheme.headline4,
+                theme: Theme.of(context).textTheme.headlineMedium,
                 fontW: FontWeight.w600,
                 textPosition: TextAlign.left),
             ScreenTexts(
                 title: l10n.pomodoroSubtitle,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w400,
                 textPosition: TextAlign.left),
             ScreenTexts(
                 title: l10n.workTimer,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             Column(
@@ -87,7 +87,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
             ),
             ScreenTexts(
                 title: l10n.breakTimer,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             Column(
@@ -115,7 +115,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
             ),
             ScreenTexts(
                 title: l10n.longBreakTimer,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             Column(
@@ -143,14 +143,28 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
             ),
             ScreenTexts(
                 title: l10n.longBreakNumber,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w500,
                 textPosition: TextAlign.left),
             Column(
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Text(l10n.longBreak1), Text(l10n.longBreak5)]),
+                    children: [
+                      Flexible(
+                        child: Text(
+                          l10n.longBreak1,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          l10n.longBreak5,
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.end,
+                        ),
+                      )
+                    ]),
                 Slider(
                   value: _setOfPomodoroSliderValue.toDouble(),
                   max: 5,

@@ -86,13 +86,13 @@ class L10nEn extends L10n {
   String get surname => 'Surname';
 
   @override
-  String get yourName => 'Your Name';
+  String get yourName => 'Name';
 
   @override
-  String get yourSurname => 'Your Surname';
+  String get yourSurname => 'Surname';
 
   @override
-  String get yourBirthday => 'Your Birthday';
+  String get yourBirthday => 'Birthday';
 
   @override
   String get weakPassword => 'Weak Password!';

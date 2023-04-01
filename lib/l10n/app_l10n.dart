@@ -258,19 +258,19 @@ abstract class L10n {
   /// No description provided for @yourName.
   ///
   /// In en, this message translates to:
-  /// **'Your Name'**
+  /// **'Name'**
   String get yourName;
 
   /// No description provided for @yourSurname.
   ///
   /// In en, this message translates to:
-  /// **'Your Surname'**
+  /// **'Surname'**
   String get yourSurname;
 
   /// No description provided for @yourBirthday.
   ///
   /// In en, this message translates to:
-  /// **'Your Birthday'**
+  /// **'Birthday'**
   String get yourBirthday;
 
   /// No description provided for @weakPassword.
