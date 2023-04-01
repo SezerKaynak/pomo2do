@@ -9,11 +9,11 @@ their motivation and focus.
 
 **Language:** Dart
 
-**Database** Firebase Firestore, Shared Preferences
+**Database:** Firebase Firestore, Shared Preferences
 
-**State Management** Provider
+**State Management:** Provider
 
-People Api, Google Authentication, Spotify Android SDK
+People Api, Google Authentication, Spotify Android SDK, L10n Multiple Language Support
 
 ## Screenshots
 
