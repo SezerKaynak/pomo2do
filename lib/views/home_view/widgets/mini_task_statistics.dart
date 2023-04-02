@@ -103,6 +103,7 @@ class MiniTaskStatistics extends StatelessWidget {
                     }))),
         Expanded(
           child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             decoration: const BoxDecoration(
                 border: Border(right: BorderSide(width: 0.5))),
             child: FutureBuilder(

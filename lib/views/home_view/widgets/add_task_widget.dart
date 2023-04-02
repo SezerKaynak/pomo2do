@@ -4,7 +4,6 @@ import 'package:pomotodo/core/providers/select_icon_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
-import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';

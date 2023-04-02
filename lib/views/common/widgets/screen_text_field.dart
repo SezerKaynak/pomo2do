@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ScreenTextField extends StatelessWidget {
   const ScreenTextField({
     Key? key,
-    required this.textLabel,
+    this.textLabel,
     this.obscure = false,
     required this.controller,
     required this.maxLines,
@@ -32,7 +32,7 @@ class ScreenTextField extends StatelessWidget {
       validator: valid,
       obscureText: obscure,
       decoration: InputDecoration(
-        alignLabelWithHint: true,
+        // alignLabelWithHint: true,
         //label: Align(alignment: Alignment.topLeft, child: Text(textLabel!)),
         labelStyle:
             MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {

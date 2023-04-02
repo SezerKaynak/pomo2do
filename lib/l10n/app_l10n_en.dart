@@ -86,13 +86,13 @@ class L10nEn extends L10n {
   String get surname => 'Surname';
 
   @override
-  String get yourName => 'Your Name';
+  String get yourName => 'Name';
 
   @override
-  String get yourSurname => 'Your Surname';
+  String get yourSurname => 'Surname';
 
   @override
-  String get yourBirthday => 'Your Birthday';
+  String get yourBirthday => 'Birthday';
 
   @override
   String get weakPassword => 'Weak Password!';
@@ -140,7 +140,7 @@ class L10nEn extends L10n {
   String get alertReject => 'Cancel';
 
   @override
-  String get alertTitleLogOut => 'LogOut!';
+  String get alertTitleLogOut => 'Log out!';
 
   @override
   String get alertSubtitleLogOut => 'Are you sure you want to sign out?';
@@ -290,7 +290,7 @@ class L10nEn extends L10n {
   String get reSignIn => 'Please try logging in again.';
 
   @override
-  String get noSignIn => 'Login failed';
+  String get noSignIn => 'Login failed, please try again.';
 
   @override
   String get noArchiveTask => 'Archived task not found!';
@@ -386,7 +386,7 @@ class L10nEn extends L10n {
   String get taskBeCompleted => 'Tasks to Complete';
 
   @override
-  String get passingTime => 'The passing time on tasks';
+  String get passingTime => 'Time spent on tasks today';
 
   @override
   String get pomoTodo => 'PomoTodo';
