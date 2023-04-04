@@ -392,7 +392,10 @@ class L10nTr extends L10n {
   String get pomoTodo => 'PomoTodo';
 
   @override
-  String get leaderBoard => 'Liderlik Sıralaması';
+  String get leaderboard => 'Liderlik Sıralaması';
+
+  @override
+  String get stats => 'İstatistikler';
 
   @override
   String get weekly => 'Haftalık';

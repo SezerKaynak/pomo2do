@@ -150,7 +150,7 @@ class HomeWidget extends StatelessWidget {
                                                           l10n.alertReject,
                                                       confirmBtnColor:
                                                           Theme.of(context)
-                                                              .errorColor,
+                                                              .colorScheme.error,
                                                       onConfirmBtnTap: () =>
                                                           Navigator.of(context)
                                                               .pop(true),

@@ -867,11 +867,17 @@ abstract class L10n {
   /// **'PomoTodo'**
   String get pomoTodo;
 
-  /// No description provided for @leaderBoard.
+  /// No description provided for @leaderboard.
   ///
   /// In en, this message translates to:
-  /// **'LeaderBoard'**
-  String get leaderBoard;
+  /// **'Leaderboard'**
+  String get leaderboard;
+
+  /// No description provided for @stats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get stats;
 
   /// No description provided for @weekly.
   ///

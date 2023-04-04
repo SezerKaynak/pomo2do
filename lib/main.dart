@@ -86,11 +86,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+  LocaleModel languageProvider = LocaleModel();
 
   @override
   void initState() {
     super.initState();
     getCurrentAppTheme();
+    getCurrentAppLanguage();
   }
 
   void getCurrentAppTheme() async {
@@ -98,12 +100,22 @@ class _MyAppState extends State<MyApp> {
         await themeChangeProvider.darkThemePreference.getTheme();
   }
 
+  void getCurrentAppLanguage() async {
+    String languageCode = await languageProvider.languagePreference
+        .getLocale()
+        .then((value) => value[0]);
+    String countryCode = await languageProvider.languagePreference
+        .getLocale()
+        .then((value) => value[1]);
+    languageProvider.locale = Locale(languageCode, countryCode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => LocaleModel()),
-          ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
+          ChangeNotifierProvider(create: (context) => languageProvider),
+          ChangeNotifierProvider(create: (context) => themeChangeProvider),
         ],
         child: AuthWidgetBuilder(
             onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>

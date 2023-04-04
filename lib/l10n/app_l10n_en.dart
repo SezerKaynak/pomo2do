@@ -392,7 +392,10 @@ class L10nEn extends L10n {
   String get pomoTodo => 'PomoTodo';
 
   @override
-  String get leaderBoard => 'LeaderBoard';
+  String get leaderboard => 'Leaderboard';
+
+  @override
+  String get stats => 'Stats';
 
   @override
   String get weekly => 'Weekly';

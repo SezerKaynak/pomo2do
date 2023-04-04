@@ -13,23 +13,26 @@ class HomeView extends StatelessWidget with HomeWidgets {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(L10n.of(context)!.pomoTodo,
-              style: const TextStyle(color: Colors.white, fontSize: 18)),
-          leading: Builder(
-              builder: (context) => IconButton(
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  icon: const Icon(Icons.menu_rounded))),
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SearchView()));
-                },
-                icon: const Icon(Icons.search))
-          ]),
+        title: Text(L10n.of(context)!.pomoTodo,
+            style: const TextStyle(color: Colors.white, fontSize: 18)),
+        leading: Builder(
+            builder: (context) => IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: const Icon(Icons.menu_rounded))),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchView(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.search))
+        ],
+      ),
       drawer: const CustomDrawer(),
       body: body(context),
       bottomNavigationBar: const BottomNavigation(),

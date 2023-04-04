@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/utils/languages/language_preference.dart';
 
 class LocaleModel extends ChangeNotifier {
-  Locale? _locale;
+  LanguagePreference languagePreference = LanguagePreference();
+  Locale _locale = const Locale('tr', 'TR');
 
-  Locale? get locale => _locale;
+  Locale get locale => _locale;
 
-  void set(Locale locale) {
-    _locale = locale;
+  set locale(Locale value) {
+    _locale = value;
+    languagePreference.setLanguageCode(value.languageCode);
+    languagePreference.setCountryCode(value.countryCode!);
     notifyListeners();
   }
 }
