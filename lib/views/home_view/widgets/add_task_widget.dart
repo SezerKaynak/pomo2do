@@ -140,7 +140,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                   RepaintBoundary(
                     child: ToggleButtons(
                       onPressed: (int index) {
-                        selectedIcon.selectedIcon(index);
+                        selectedIcon.selectIcon(index);
                       },
                       constraints: BoxConstraints(
                           minWidth: MediaQuery.of(context).size.width * .12,
@@ -150,7 +150,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                       selectedColor: Colors.white,
                       fillColor: Theme.of(context).primaryColor,
                       color: Colors.blue[400],
-                      isSelected: selectedIcon.selectedWeather,
+                      isSelected: selectedIcon.selectedIcon,
                       children: icons,
                     ),
                   ),
