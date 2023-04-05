@@ -159,5 +159,7 @@
     "saturday":"Cmt",
     "sunday":"Paz",
     "start":"BAŞLAT",
-    "stop":"DURDUR"
+    "stop":"DURDUR",
+    "languagePreference": "Dil Tercihi:",
+    "themePreference": "Tema Tercihi:"
 }

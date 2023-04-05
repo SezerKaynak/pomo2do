@@ -215,7 +215,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
           const Divider(thickness: 1),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+              padding:
+                  const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -224,7 +225,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: [
                       settingTitle(
                         context,
-                        "Tema Tercihi: ",
+                        L10n.of(context)!.themePreference,
                       ),
                       ToggleButtons(
                         onPressed: (int index) {
@@ -232,8 +233,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         },
                         constraints: BoxConstraints(
                             minWidth: MediaQuery.of(context).size.width * .12,
-                            minHeight: MediaQuery.of(context).size.height * .06),
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            minHeight:
+                                MediaQuery.of(context).size.height * .06),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
                         selectedBorderColor: Colors.blue[700],
                         selectedColor: Colors.white,
                         fillColor: Theme.of(context).primaryColor,
@@ -248,18 +251,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: [
                       settingTitle(
                         context,
-                        "Dil Tercihi: ",
+                        L10n.of(context)!.languagePreference,
                       ),
                       ToggleButtons(
                         onPressed: (int index) {
                           localeProvider.locale == const Locale('en', 'US')
                               ? localeProvider.locale = const Locale('tr', 'TR')
-                              : localeProvider.locale = const Locale('en', 'US');
+                              : localeProvider.locale =
+                                  const Locale('en', 'US');
                         },
                         constraints: BoxConstraints(
                             minWidth: MediaQuery.of(context).size.width * .12,
-                            minHeight: MediaQuery.of(context).size.height * .06),
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            minHeight:
+                                MediaQuery.of(context).size.height * .06),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
                         selectedBorderColor: Colors.blue[700],
                         selectedColor: Colors.white,
                         fillColor: Theme.of(context).primaryColor,

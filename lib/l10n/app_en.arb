@@ -159,5 +159,7 @@
     "saturday":"Sat",
     "sunday":"Sun",
     "start":"START",
-    "stop":"STOP"
+    "stop":"STOP",
+    "languagePreference": "Language Preference:",
+    "themePreference": "Theme Preference:"
 }
