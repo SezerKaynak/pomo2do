@@ -150,7 +150,8 @@ class HomeWidget extends StatelessWidget {
                                                           l10n.alertReject,
                                                       confirmBtnColor:
                                                           Theme.of(context)
-                                                              .colorScheme.error,
+                                                              .colorScheme
+                                                              .error,
                                                       onConfirmBtnTap: () =>
                                                           Navigator.of(context)
                                                               .pop(true),
@@ -223,21 +224,28 @@ class HomeWidget extends StatelessWidget {
                                                     GoogleAds()
                                                         .loadInterstitialAd();
                                                     Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ChangeNotifierProvider(
-                                                                      create: (context) =>
-                                                                          PageUpdate(),
-                                                                      child:
-                                                                          PomodoroWidget(
-                                                                        task: providerOfTasks
-                                                                            .retrievedTaskList![key]![index],
-                                                                      )),
-                                                            ))
-                                                        .then((_) =>
-                                                            providerOfTasks
-                                                                .refresh());
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChangeNotifierProvider(
+                                                                  create: (context) =>
+                                                                      PageUpdate(),
+                                                                  child:
+                                                                      PomodoroWidget(
+                                                                    task: providerOfTasks
+                                                                            .retrievedTaskList![
+                                                                        key]![index],
+                                                                  )),
+                                                        )).then((_) {
+                                                      TaskStatsProvider
+                                                          leaderboardUpdate =
+                                                          TaskStatsProvider();
+                                                      leaderboardUpdate
+                                                          .weeklyTaskPassingTime();
+                                                      leaderboardUpdate
+                                                          .montlyTaskPassingTime();
+                                                      providerOfTasks.refresh();
+                                                    });
                                                   },
                                                   title: Text(
                                                     providerOfTasks
