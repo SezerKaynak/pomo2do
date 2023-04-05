@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/leaderboard_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/views/leaderboard_view/leaderboard.widgets.dart';
@@ -46,6 +47,11 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Card(
+                            color: leaderboardProvider
+                                        .leaderboardList[index + 3].uid ==
+                                    context.read<PomotodoUser>().userId
+                                ? Colors.lightGreen
+                                : Theme.of(context).cardColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)),
                             child: Row(
