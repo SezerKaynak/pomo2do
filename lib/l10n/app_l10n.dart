@@ -1052,6 +1052,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'STOP'**
   String get stop;
+
+  /// No description provided for @languagePreference.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Preference:'**
+  String get languagePreference;
+
+  /// No description provided for @themePreference.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme Preference:'**
+  String get themePreference;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

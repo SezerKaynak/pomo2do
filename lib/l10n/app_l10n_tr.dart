@@ -483,4 +483,10 @@ class L10nTr extends L10n {
 
   @override
   String get stop => 'DURDUR';
+
+  @override
+  String get languagePreference => 'Dil Tercihi:';
+
+  @override
+  String get themePreference => 'Tema Tercihi:';
 }
