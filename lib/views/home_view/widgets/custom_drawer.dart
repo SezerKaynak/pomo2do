@@ -60,8 +60,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
     ];
 
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.745,
-      child: ListView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
@@ -212,65 +213,65 @@ class _CustomDrawerState extends State<CustomDrawer> {
             },
           ),
           const Divider(thickness: 1),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    settingTitle(
-                      context,
-                      "Tema Tercihi: ",
-                    ),
-                    ToggleButtons(
-                      onPressed: (int index) {
-                        themeChange.darkTheme = index == 0 ? false : true;
-                      },
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width * .12,
-                          minHeight: MediaQuery.of(context).size.height * .06),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      selectedBorderColor: Colors.blue[700],
-                      selectedColor: Colors.white,
-                      fillColor: Theme.of(context).primaryColor,
-                      color: Colors.blue[400],
-                      isSelected: selectedThemeIcon.selectedTheme,
-                      children: themeIcons,
-                    ),
-                  ],
-                ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      settingTitle(
+                        context,
+                        "Tema Tercihi: ",
+                      ),
+                      ToggleButtons(
+                        onPressed: (int index) {
+                          themeChange.darkTheme = index == 0 ? false : true;
+                        },
+                        constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width * .12,
+                            minHeight: MediaQuery.of(context).size.height * .06),
+                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                        selectedBorderColor: Colors.blue[700],
+                        selectedColor: Colors.white,
+                        fillColor: Theme.of(context).primaryColor,
+                        color: Colors.blue[400],
+                        isSelected: selectedThemeIcon.selectedTheme,
+                        children: themeIcons,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      settingTitle(
+                        context,
+                        "Dil Tercihi: ",
+                      ),
+                      ToggleButtons(
+                        onPressed: (int index) {
+                          localeProvider.locale == const Locale('en', 'US')
+                              ? localeProvider.locale = const Locale('tr', 'TR')
+                              : localeProvider.locale = const Locale('en', 'US');
+                        },
+                        constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width * .12,
+                            minHeight: MediaQuery.of(context).size.height * .06),
+                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                        selectedBorderColor: Colors.blue[700],
+                        selectedColor: Colors.white,
+                        fillColor: Theme.of(context).primaryColor,
+                        color: Colors.blue[400],
+                        isSelected: selectedLanguage.selectedLanguage,
+                        children: selectedLanguage.flags,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    settingTitle(
-                      context,
-                      "Dil Tercihi: ",
-                    ),
-                    ToggleButtons(
-                      onPressed: (int index) {
-                        localeProvider.locale == const Locale('en', 'US')
-                            ? localeProvider.locale = const Locale('tr', 'TR')
-                            : localeProvider.locale = const Locale('en', 'US');
-                      },
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width * .12,
-                          minHeight: MediaQuery.of(context).size.height * .06),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      selectedBorderColor: Colors.blue[700],
-                      selectedColor: Colors.white,
-                      fillColor: Theme.of(context).primaryColor,
-                      color: Colors.blue[400],
-                      isSelected: selectedLanguage.selectedLanguage,
-                      children: selectedLanguage.flags,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
