@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/leaderboard_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,8 @@ class _LeaderboardAppBarState extends State<LeaderboardAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title: const Text(
-        "Liderlik Sıralaması",
+      title:  Text(
+        L10n.of(context)!.leaderboard,
       ),
       centerTitle: true,
       leading: IconButton(

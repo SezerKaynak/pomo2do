@@ -123,7 +123,7 @@ class DeletedTasksWidget extends StatelessWidget {
                                       var elevatedButtonWorks =
                                           context.read<ListUpdate>();
                                       elevatedButtonWorks.taskActivationButton(
-                                          selectedIndexes, tasks);
+                                          selectedIndexes, tasks, context);
                                     },
                                     child: SizedBox(
                                       child: Center(
@@ -153,7 +153,7 @@ class DeletedTasksWidget extends StatelessWidget {
                                         elevatedButtonWorks.deleteTasksButton(
                                             selectedIndexes, tasks);
                                       },
-                                      child:  SizedBox(
+                                      child: SizedBox(
                                         child: Center(
                                             child: Text(
                                           L10n.of(context)!.deleteButton,

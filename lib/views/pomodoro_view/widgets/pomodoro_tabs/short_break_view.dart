@@ -141,7 +141,7 @@ class _ShortBreakState extends State<ShortBreak> with WidgetsBindingObserver {
                                 .getInt("longBreakNumberSelect")!);
                       },
                       child: context.select(
-                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                        (PageUpdate pageNotifier) => pageNotifier.callText(context),
                       ),
                     ),
                     if (pageUpdateProvider.skipButtonVisible)

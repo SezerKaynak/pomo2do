@@ -348,7 +348,7 @@ abstract class L10n {
   /// No description provided for @trashAlertSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Move task to trash?'**
+  /// **'Are you sure you want to move task to trash?'**
   String get trashAlertSubtitle;
 
   /// No description provided for @alertApprove.
@@ -486,7 +486,7 @@ abstract class L10n {
   /// No description provided for @isTaskArchive.
   ///
   /// In en, this message translates to:
-  /// **'Archive task?'**
+  /// **'Do you want to archive the task?'**
   String get isTaskArchive;
 
   /// No description provided for @taskMovedIntoArchive.

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/providers/drawer_image_provider.dart';
@@ -184,7 +185,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               tap: () {}),
           const Divider(thickness: 1),
           settings.Settings(
-              settingIcon: Icons.watch,
+              settingIcon: Icons.timer,
               subtitle: L10n.of(context)!.uEditPomodoro,
               title: settingTitle(context, L10n.of(context)!.pomodoroTitle),
               tap: () {
@@ -195,7 +196,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               }),
           const Divider(thickness: 1),
           settings.Settings(
-            settingIcon: Icons.logout,
+            settingIcon: Icons.logout_outlined,
             subtitle: L10n.of(context)!.logOutAcc,
             title: settingTitle(context, L10n.of(context)!.logOut),
             tap: () {
