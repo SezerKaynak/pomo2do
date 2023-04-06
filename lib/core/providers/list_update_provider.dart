@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 
 class ListUpdate extends ChangeNotifier {
   bool isLoading = false;
@@ -15,7 +16,9 @@ class ListUpdate extends ChangeNotifier {
     notifyListeners();
   }
 
-  void taskActivationButton(List selectedIndexes, List<TaskModel> tasks) async {
+  void taskActivationButton(
+      List selectedIndexes, List<TaskModel> tasks, BuildContext context) async {
+    var l10n = L10n.of(context)!;
     int selectedNumber = selectedIndexes.length;
     selectedIndexes.sort();
     isLoading = true;
@@ -28,10 +31,10 @@ class ListUpdate extends ChangeNotifier {
 
     for (int i = 0; i < selectedIndexes.length; i++) {
       tasks[selectedIndexes[i] - i].isDone
-          ? SmartDialog.showToast(
-              "${tasks[selectedIndexes[i - i]].taskName} görevi tamamlanmış görevler sayfasına taşındı!")
-          : SmartDialog.showToast(
-              "${tasks[selectedIndexes[i - i]].taskName} görevi görevler sayfasına taşındı!");
+          ? SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName}"
+              " ${l10n.moveDonePage}")
+          : SmartDialog.showToast("${tasks[selectedIndexes[i - i]].taskName}"
+              " ${l10n.moveTaskPage}");
       tasks.removeAt(selectedIndexes[i] - i);
     }
     selectedIndexes.clear();

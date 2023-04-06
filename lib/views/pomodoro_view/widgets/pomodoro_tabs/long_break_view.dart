@@ -143,7 +143,7 @@ class _LongBreakState extends State<LongBreak> with WidgetsBindingObserver {
                                 .getInt("longBreakNumberSelect")!);
                       },
                       child: context.select(
-                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                        (PageUpdate pageNotifier) => pageNotifier.callText(context),
                       ),
                     ),
                     if (pageUpdateProvider.skipButtonVisible)
