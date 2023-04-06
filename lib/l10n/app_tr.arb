@@ -122,14 +122,15 @@
     "uEditProfile":"Profilinizi düzenleyebilirsiniz.",
     "uChangePassword":"Şifrenizi değiştirebilirsiniz.",
     "uEditNotification":"Bildirim ayarlarını yapabilirsiniz.",
-    "notificationSettings":"Bildirim Ayarları",
+    "notificationSettings":"Bildirim Ayarları",  
     "uEditPomodoro":"Pomodoro sayacı vb. ayarları yapabilirsiniz.",
     "logOutAcc":"Hesaptan çıkış yapın.",
     "logOut":"Çıkış Yap",
     "taskBeCompleted":"Tamamlanması Gereken Görevler",
     "passingTime":"Görevlerde Bugün Geçen Süre",
     "pomoTodo":"PomoTodo",
-    "leaderBoard":"Liderlik Sıralaması",
+    "stats":"İstatistikler",
+    "leaderboard":"Liderlik Sıralaması",
     "weekly":"Haftalık",
     "monthly":"Aylık",
     "longBreak1":"1.arada uzun mola",
@@ -158,5 +159,7 @@
     "saturday":"Cmt",
     "sunday":"Paz",
     "start":"BAŞLAT",
-    "stop":"DURDUR"
+    "stop":"DURDUR",
+    "languagePreference": "Dil Tercihi:",
+    "themePreference": "Tema Tercihi:"
 }

@@ -23,9 +23,7 @@ class MiniTaskStatistics extends StatelessWidget {
                     future: providerOfTasks.taskList,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TaskModel>> snapshot) {
-                      if (snapshot.hasData
-                          //&& snapshot.data!.isNotEmpty
-                          ) {
+                      if (snapshot.hasData) {
                         try {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -42,9 +40,7 @@ class MiniTaskStatistics extends StatelessWidget {
                             ],
                           );
                         } catch (e) {
-                          return const Center(
-                              child: RepaintBoundary(
-                                  child: CircularProgressIndicator()));
+                          providerOfTasks.refresh();
                         }
                       } else if (snapshot.connectionState ==
                               ConnectionState.done &&
@@ -64,9 +60,7 @@ class MiniTaskStatistics extends StatelessWidget {
                     future: providerOfTasks.taskList,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TaskModel>> snapshot) {
-                      if (snapshot.hasData
-                          //&& snapshot.data!.isNotEmpty
-                          ) {
+                      if (snapshot.hasData) {
                         try {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -87,9 +81,7 @@ class MiniTaskStatistics extends StatelessWidget {
                             ],
                           );
                         } catch (e) {
-                          return const Center(
-                              child: RepaintBoundary(
-                                  child: CircularProgressIndicator()));
+                          providerOfTasks.refresh();
                         }
                       } else if (snapshot.connectionState ==
                               ConnectionState.done &&

@@ -186,12 +186,18 @@ class TaskStatsProvider extends ChangeNotifier {
     }
   }
 
-  weeklyTaskPassingTime() {
+  weeklyTaskPassingTime() async {
+    tasks = await service.retrieveTasks();
+    List<String> date = getWeekDays()[0];
     int weeklyTaskPassingTime = 0;
-    for (var i = 0; i < table1.length; i++) {
-      weeklyTaskPassingTime += table1[i].sum;
-    }
 
+    for (var i = 0; i < date.length; i++) {
+      List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
+
+      for (var element in stats) {
+        weeklyTaskPassingTime += int.parse(element.taskPassingTime);
+      }
+    }
     service.setWeeklyTaskPassingTime(weeklyTaskPassingTime);
   }
 

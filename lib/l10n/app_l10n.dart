@@ -867,11 +867,17 @@ abstract class L10n {
   /// **'PomoTodo'**
   String get pomoTodo;
 
-  /// No description provided for @leaderBoard.
+  /// No description provided for @leaderboard.
   ///
   /// In en, this message translates to:
-  /// **'LeaderBoard'**
-  String get leaderBoard;
+  /// **'Leaderboard'**
+  String get leaderboard;
+
+  /// No description provided for @stats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get stats;
 
   /// No description provided for @weekly.
   ///
@@ -1046,6 +1052,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'STOP'**
   String get stop;
+
+  /// No description provided for @languagePreference.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Preference:'**
+  String get languagePreference;
+
+  /// No description provided for @themePreference.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme Preference:'**
+  String get themePreference;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

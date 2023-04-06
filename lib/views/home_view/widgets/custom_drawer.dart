@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/providers/drawer_image_provider.dart';
 import 'package:pomotodo/core/providers/locale_provider.dart';
+import 'package:pomotodo/core/providers/select_icon_provider.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/edit_password_view/edit_password.view.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
-import 'package:pomotodo/views/home_view/widgets/custom_switch.dart';
 import 'package:pomotodo/views/home_view/widgets/settings.dart' as settings;
 import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.view.dart';
 import 'package:provider/provider.dart';
@@ -27,10 +26,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
   late DrawerImageProvider drawerImageProvider;
   late LocaleModel localeProvider;
-
+  late DarkThemeProvider themeChange;
   @override
   void initState() {
     super.initState();
+    themeChange = Provider.of<DarkThemeProvider>(context, listen: false);
     drawerImageProvider =
         Provider.of<DrawerImageProvider>(context, listen: false);
     localeProvider = Provider.of<LocaleModel>(context, listen: false);
@@ -41,11 +41,28 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     var user = users.doc(context.read<PomotodoUser>().userId);
-    final themeChange = Provider.of<DarkThemeProvider>(context);
+
+    SelectTheme selectedThemeIcon = SelectTheme();
+    selectedThemeIcon.selectedTheme = [
+      !themeChange.darkTheme,
+      themeChange.darkTheme
+    ];
+    List<IconData> iconData = selectedThemeIcon.icons;
+    List<Widget> themeIcons = [];
+    for (int i = 0; i < iconData.length; i++) {
+      themeIcons.add(Icon(iconData[i]));
+    }
+
+    SelectLanguage selectedLanguage = SelectLanguage();
+    selectedLanguage.selectedLanguage = [
+      localeProvider.locale == const Locale('tr', 'TR') ? true : false,
+      localeProvider.locale == const Locale('en', 'US') ? true : false,
+    ];
 
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.745,
-      child: ListView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
@@ -178,56 +195,90 @@ class _CustomDrawerState extends State<CustomDrawer> {
               }),
           const Divider(thickness: 1),
           settings.Settings(
-              settingIcon: Icons.logout,
-              subtitle: L10n.of(context)!.logOutAcc,
-              title: settingTitle(context, L10n.of(context)!.logOut),
-              tap: () {
-                QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.confirm,
-                  title: L10n.of(context)!.alertTitleLogOut,
-                  text: L10n.of(context)!.alertSubtitleLogOut,
-                  confirmBtnText: L10n.of(context)!.alertApprove,
-                  cancelBtnText: L10n.of(context)!.alertReject,
-                  confirmBtnColor: Theme.of(context).errorColor,
-                  onConfirmBtnTap: () async => await _authService.signOut(),
-                  onCancelBtnTap: () => Navigator.of(context).pop(false),
-                );
-              }),
-          const Divider(thickness: 1),
-          CustomSwitch(
-            switchValue: themeChange.darkTheme,
-            switchOnChanged: (bool? value) {
-              themeChange.darkTheme = value!;
+            settingIcon: Icons.logout,
+            subtitle: L10n.of(context)!.logOutAcc,
+            title: settingTitle(context, L10n.of(context)!.logOut),
+            tap: () {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.confirm,
+                title: L10n.of(context)!.alertTitleLogOut,
+                text: L10n.of(context)!.alertSubtitleLogOut,
+                confirmBtnText: L10n.of(context)!.alertApprove,
+                cancelBtnText: L10n.of(context)!.alertReject,
+                confirmBtnColor: Theme.of(context).colorScheme.error,
+                onConfirmBtnTap: () async => await _authService.signOut(),
+                onCancelBtnTap: () => Navigator.of(context).pop(false),
+              );
             },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  localeProvider.set(const Locale('tr', 'TR'));
-                },
-                child: CountryFlags.flag(
-                  'tr',
-                  height: 40,
-                  width: 40,
-                  borderRadius: 8,
-                ),
+          const Divider(thickness: 1),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      settingTitle(
+                        context,
+                        L10n.of(context)!.themePreference,
+                      ),
+                      ToggleButtons(
+                        onPressed: (int index) {
+                          themeChange.darkTheme = index == 0 ? false : true;
+                        },
+                        constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width * .12,
+                            minHeight:
+                                MediaQuery.of(context).size.height * .06),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        selectedBorderColor: Colors.blue[700],
+                        selectedColor: Colors.white,
+                        fillColor: Theme.of(context).primaryColor,
+                        color: Colors.blue[400],
+                        isSelected: selectedThemeIcon.selectedTheme,
+                        children: themeIcons,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      settingTitle(
+                        context,
+                        L10n.of(context)!.languagePreference,
+                      ),
+                      ToggleButtons(
+                        onPressed: (int index) {
+                          localeProvider.locale == const Locale('en', 'US')
+                              ? localeProvider.locale = const Locale('tr', 'TR')
+                              : localeProvider.locale =
+                                  const Locale('en', 'US');
+                        },
+                        constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width * .12,
+                            minHeight:
+                                MediaQuery.of(context).size.height * .06),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        selectedBorderColor: Colors.blue[700],
+                        selectedColor: Colors.white,
+                        fillColor: Theme.of(context).primaryColor,
+                        color: Colors.blue[400],
+                        isSelected: selectedLanguage.selectedLanguage,
+                        children: selectedLanguage.flags,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              InkWell(
-                onTap: () {
-                  localeProvider.set(const Locale('en', 'US'));
-                },
-                child: CountryFlags.flag(
-                  'us',
-                  height: 40,
-                  width: 40,
-                  borderRadius: 8,
-                ),
-              ),
-            ],
-          )
+            ),
+          ),
         ],
       ),
     );
@@ -237,7 +288,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         textTitle,
         style: Theme.of(context)
             .textTheme
-            .headline6
+            .titleLarge
             ?.copyWith(fontWeight: FontWeight.w400, fontSize: 18),
       );
 }

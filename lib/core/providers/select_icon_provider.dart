@@ -1,3 +1,4 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
 class SelectIcon extends ChangeNotifier {
@@ -11,7 +12,7 @@ class SelectIcon extends ChangeNotifier {
     Icons.menu_book,
   ];
   int codePoint = 984386;
-  final List<bool> selectedWeather = [
+  final List<bool> selectedIcon = [
     true,
     false,
     false,
@@ -21,11 +22,36 @@ class SelectIcon extends ChangeNotifier {
     false
   ];
 
-  selectedIcon(int index) {
-    for (int i = 0; i < selectedWeather.length; i++) {
-      selectedWeather[i] = i == index;
+  selectIcon(int index) {
+    for (int i = 0; i < selectedIcon.length; i++) {
+      selectedIcon[i] = i == index;
       codePoint = icons[index].codePoint;
     }
     notifyListeners();
   }
+}
+
+class SelectTheme {
+  List<IconData> icons = const [Icons.light_mode, Icons.dark_mode];
+
+  List<bool> selectedTheme = [true, false];
+}
+
+class SelectLanguage {
+  List<CountryFlags> flags = [
+    CountryFlags.flag(
+      'tr',
+      height: 40,
+      width: 40,
+      borderRadius: 8,
+    ),
+    CountryFlags.flag(
+      'us',
+      height: 40,
+      width: 40,
+      borderRadius: 8,
+    ),
+  ];
+
+  List<bool> selectedLanguage = [true, false];
 }

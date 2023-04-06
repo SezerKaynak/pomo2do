@@ -129,7 +129,8 @@
     "taskBeCompleted":"Tasks to Complete",
     "passingTime":"Time spent on tasks today",
     "pomoTodo":"PomoTodo",
-    "leaderBoard":"LeaderBoard",
+    "leaderboard":"Leaderboard",
+    "stats":"Stats",
     "weekly":"Weekly",
     "monthly":"Monthly",
     "longBreak1":"Long break at the 1st break",
@@ -158,5 +159,7 @@
     "saturday":"Sat",
     "sunday":"Sun",
     "start":"START",
-    "stop":"STOP"
+    "stop":"STOP",
+    "languagePreference": "Language Preference:",
+    "themePreference": "Theme Preference:"
 }
