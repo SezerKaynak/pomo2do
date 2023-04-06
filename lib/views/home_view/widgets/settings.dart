@@ -24,7 +24,7 @@ class Settings extends StatelessWidget {
           children: [
             Icon(
               settingIcon,
-              size: 40,
+              size: 35,
             ),
             Expanded(
               child: Padding(
@@ -43,7 +43,9 @@ class Settings extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall!
-                            .copyWith(fontSize: 16),
+                            .copyWith(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.035),
                       ),
                     )
                   ],

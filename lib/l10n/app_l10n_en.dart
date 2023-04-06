@@ -131,7 +131,7 @@ class L10nEn extends L10n {
   String get trashAlertTitle => 'The task will be moved to the trash!';
 
   @override
-  String get trashAlertSubtitle => 'Move task to trash?';
+  String get trashAlertSubtitle => 'Are you sure you want to move task to trash?';
 
   @override
   String get alertApprove => 'Approve';
@@ -200,7 +200,7 @@ class L10nEn extends L10n {
   String get isTaskDone => 'Is the task completed?';
 
   @override
-  String get isTaskArchive => 'Archive task?';
+  String get isTaskArchive => 'Do you want to archive the task?';
 
   @override
   String get taskMovedIntoArchive => 'The task has been moved to the archive!';

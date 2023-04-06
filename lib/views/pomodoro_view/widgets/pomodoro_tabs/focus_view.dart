@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
-import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
@@ -170,7 +169,7 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                 .getInt("longBreakNumberSelect")!);
                       },
                       child: context.select(
-                        (PageUpdate pageNotifier) => pageNotifier.callText(),
+                        (PageUpdate pageNotifier) => pageNotifier.callText(context),
                       ),
                     ),
                     if (context.select((PageUpdate pageNotifier) =>

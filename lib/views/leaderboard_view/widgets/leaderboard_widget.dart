@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/leaderboard_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/montly_tab.dart';
 import 'package:pomotodo/views/leaderboard_view/widgets/weekly_tab.dart';
 import 'package:provider/provider.dart';
@@ -56,12 +57,12 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget>
               },
               labelColor: Colors.white,
               unselectedLabelColor: Colors.black,
-              tabs: const [
+              tabs:  [
                 Tab(
-                  text: 'Haftalık',
+                  text: L10n.of(context)!.weekly,
                 ),
                 Tab(
-                  text: 'Aylık',
+                  text: L10n.of(context)!.monthly,
                 )
               ],
             ),

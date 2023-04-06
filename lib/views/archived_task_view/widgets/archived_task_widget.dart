@@ -129,10 +129,10 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                             tasks[selectedIndexes[i] - i].isDone
                                 ? SmartDialog.showToast(
                                     "${tasks[selectedIndexes[i - i]].taskName}"
-                                    "${l10n.moveDonePage}")
+                                    " ${l10n.moveDonePage}")
                                 : SmartDialog.showToast(
                                     "${tasks[selectedIndexes[i - i]].taskName}"
-                                    "${l10n.moveTaskPage}");
+                                    " ${l10n.moveTaskPage}");
                             tasks.removeAt(selectedIndexes[i] - i);
                           }
 

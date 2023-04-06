@@ -51,7 +51,9 @@ class _EditTaskState extends State<EditTaskWidget> {
 
     TaskModel selectedTask = Provider.of<TasksProvider>(context)
         .retrievedTaskList![keyAndIndex[0]]![keyAndIndex[1]];
-
+    _taskNameController.text = selectedTask.taskName;
+    _taskInfoController.text = selectedTask.taskInfo;
+    _taskTypeController.text = selectedTask.taskType;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -72,44 +74,35 @@ class _EditTaskState extends State<EditTaskWidget> {
               children: [
                 ScreenTexts(
                   title: l10n.taskPageTitle,
-                  theme: Theme.of(context).textTheme.headline4,
+                  theme: Theme.of(context).textTheme.headlineMedium,
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left,
                 ),
                 ScreenTexts(
                     title: l10n.taskPageSubtitle,
-                    theme: Theme.of(context).textTheme.subtitle1,
+                    theme: Theme.of(context).textTheme.titleMedium,
                     fontW: FontWeight.w400,
                     textPosition: TextAlign.left),
                 ScreenTexts(
                     title: l10n.taskPageTaskName,
-                    theme: Theme.of(context).textTheme.subtitle1,
+                    theme: Theme.of(context).textTheme.titleMedium,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
-                ScreenTextField(
-                    textLabel: _taskNameController.text = selectedTask.taskName,
-                    controller: _taskNameController,
-                    maxLines: 1),
+                ScreenTextField(controller: _taskNameController, maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
                     title: l10n.taskPageTaskType,
-                    theme: Theme.of(context).textTheme.subtitle1,
+                    theme: Theme.of(context).textTheme.titleMedium,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
-                ScreenTextField(
-                    textLabel: _taskTypeController.text = selectedTask.taskType,
-                    controller: _taskTypeController,
-                    maxLines: 1),
+                ScreenTextField(controller: _taskTypeController, maxLines: 1),
                 const SizedBox(height: 20),
                 ScreenTexts(
                     title: l10n.taskPageTaskInfo,
-                    theme: Theme.of(context).textTheme.subtitle1,
+                    theme: Theme.of(context).textTheme.titleMedium,
                     fontW: FontWeight.w500,
                     textPosition: TextAlign.left),
-                ScreenTextField(
-                    textLabel: _taskInfoController.text = selectedTask.taskInfo,
-                    controller: _taskInfoController,
-                    maxLines: 3),
+                ScreenTextField(controller: _taskInfoController, maxLines: 3),
                 FormField(
                   initialValue: selectedTask.isDone,
                   builder: (FormFieldState state) {

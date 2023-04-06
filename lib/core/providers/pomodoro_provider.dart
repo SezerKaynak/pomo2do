@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/service/google_ads.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 
 class PageUpdate extends ChangeNotifier with DatabaseService {
@@ -48,11 +49,11 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
     notifyListeners();
   }
 
-  Widget callText() {
+  Widget callText(BuildContext context) {
     if (startStop == true) {
-      return Text(basla);
+      return Text(L10n.of(context)!.start);
     } else {
-      return Text(durdur);
+      return Text(L10n.of(context)!.stop);
     }
   }
 
