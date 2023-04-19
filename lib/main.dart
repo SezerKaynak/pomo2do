@@ -9,6 +9,7 @@ import 'package:pomotodo/core/providers/list_update_provider.dart';
 import 'package:pomotodo/core/providers/locale_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/core/service/notification_controller.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/archived_task_view/archived_task.view.dart';
 import 'package:pomotodo/views/auth_view/auth_widget.dart';
@@ -28,12 +29,9 @@ import 'package:json_theme/json_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:alarm/alarm.dart';
 
 Future<void> main() async {
   ThemeData theme, themeDark;
@@ -48,18 +46,16 @@ Future<void> main() async {
     return theme;
   }
 
+  await Alarm.init();
+
   theme = await loadTheme("assets/app_theme/appainter_theme.json");
   themeDark = await loadTheme("assets/app_theme/appainter_theme_dark.json");
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  var initializationSettingsAndroid =
-      const AndroidInitializationSettings("google");
-  var initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  tz.initializeTimeZones();
+
+  await NotificationController.initializeLocalNotifications();
 
   await dotenv.load(fileName: ".env");
 

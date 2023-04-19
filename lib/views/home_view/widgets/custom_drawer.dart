@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/providers/drawer_image_provider.dart';

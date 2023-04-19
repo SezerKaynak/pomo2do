@@ -20,8 +20,7 @@ class SearchWidget extends StatelessWidget {
       searchTextHintColor: Colors.black,
       searchTextColor: Colors.black,
       searchBodyBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      firestoreCollectionName:
-          'Users/$user/tasks',
+      firestoreCollectionName: 'Users/$user/tasks',
       searchBy: 'taskNameCaseInsensitive',
       dataListFromSnapshot: TaskModel().dataListFromSnapshot,
       builder: (context, snapshot) {
@@ -56,7 +55,7 @@ class SearchWidget extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder: (context) => ChangeNotifierProvider(
                                     create: (context) {
-                                      return PageUpdate();
+                                      return PageUpdate(context: context);
                                     },
                                     child: PomodoroWidget(
                                       task: dataList[index],

@@ -161,5 +161,17 @@
     "start":"START",
     "stop":"STOP",
     "languagePreference": "Language Preference:",
-    "themePreference": "Theme Preference:"
+    "themePreference": "Theme Preference:",
+    "shortBreakSubtitle": "Shall we take a short break?",
+    "longBreakSubtitle":"Shall we take a long break?",
+    "shortBreakDone": "Short break has ended.",
+    "shortBreakDoneSubtitle":  "Shall we move on to the next Pomodoro timer?",
+    "pomodoroCycleDone": "The Pomodoro cycle has been completed.",
+    "pomodoroCycleDoneSubtitle": "Should we move on to the next cycle?",
+    "nextPomodoro": "You can start the next pomodoro.",
+    "longBreakDone": "Long break has ended.",
+    "pomodoroNextCycle": "You can start the next cycle.",
+    "pomodoroDone": "Pomodoro timer has ended.",
+    "nextBreak": "You can start the next break.",
+    "stopAlarm": "Stop the alarm"
 }

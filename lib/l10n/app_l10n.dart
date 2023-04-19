@@ -1064,6 +1064,78 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Theme Preference:'**
   String get themePreference;
+
+  /// No description provided for @shortBreakSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shall we take a short break?'**
+  String get shortBreakSubtitle;
+
+  /// No description provided for @longBreakSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shall we take a long break?'**
+  String get longBreakSubtitle;
+
+  /// No description provided for @shortBreakDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Short break has ended.'**
+  String get shortBreakDone;
+
+  /// No description provided for @shortBreakDoneSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shall we move on to the next Pomodoro timer?'**
+  String get shortBreakDoneSubtitle;
+
+  /// No description provided for @pomodoroCycleDone.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pomodoro cycle has been completed.'**
+  String get pomodoroCycleDone;
+
+  /// No description provided for @pomodoroCycleDoneSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Should we move on to the next cycle?'**
+  String get pomodoroCycleDoneSubtitle;
+
+  /// No description provided for @nextPomodoro.
+  ///
+  /// In en, this message translates to:
+  /// **'You can start the next pomodoro.'**
+  String get nextPomodoro;
+
+  /// No description provided for @longBreakDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Long break has ended.'**
+  String get longBreakDone;
+
+  /// No description provided for @pomodoroNextCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can start the next cycle.'**
+  String get pomodoroNextCycle;
+
+  /// No description provided for @pomodoroDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Pomodoro timer has ended.'**
+  String get pomodoroDone;
+
+  /// No description provided for @nextBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'You can start the next break.'**
+  String get nextBreak;
+
+  /// No description provided for @stopAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop the alarm'**
+  String get stopAlarm;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

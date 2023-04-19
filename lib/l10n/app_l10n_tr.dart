@@ -489,4 +489,40 @@ class L10nTr extends L10n {
 
   @override
   String get themePreference => 'Tema Tercihi:';
+
+  @override
+  String get shortBreakSubtitle => 'Kısa araya geçilsin mi?';
+
+  @override
+  String get longBreakSubtitle => 'Uzun araya geçilsin mi?';
+
+  @override
+  String get shortBreakDone => 'Kısa ara bitti';
+
+  @override
+  String get shortBreakDoneSubtitle => 'Sıradaki pomodoro sayacına geçilsin mi?';
+
+  @override
+  String get pomodoroCycleDone => 'Pomodoro döngüsü tamamlandı';
+
+  @override
+  String get pomodoroCycleDoneSubtitle => 'Sıradaki döngüye geçilsin mi?';
+
+  @override
+  String get nextPomodoro => 'Sıradaki pomodoroyu başlatabilirsiniz.';
+
+  @override
+  String get longBreakDone => 'Uzun ara sonlandı.';
+
+  @override
+  String get pomodoroNextCycle => 'Sıradaki döngüyü başlatabilirsiniz.';
+
+  @override
+  String get pomodoroDone => 'Pomodoro sayacı sonlandı.';
+
+  @override
+  String get nextBreak => 'Sıradaki arayı başlatabilirsiniz.';
+
+  @override
+  String get stopAlarm => 'Alarmı kapat';
 }
