@@ -12,24 +12,41 @@ class FloatingButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: ExpandableFab(
-        distance: 75.0,
-        children: [
-          ActionButton(
-            text: L10n.of(context)!.stats,
-            icon: Icons.stacked_bar_chart,
-            onPressed: () {
-              Navigator.pushNamed(context, '/taskStatistics');
-            },
-          ),
-          ActionButton(
-            text: L10n.of(context)!.leaderboard,
-            icon: Icons.leaderboard,
-            onPressed: () {
-              Navigator.pushNamed(context, '/leaderboard');
-            },
-          )
-        ],
+      child: ChangeNotifierProvider(
+        create: (context) => ButtonState(),
+        child: ExpandableFab(
+          distance: 75.0,
+          children: [
+            Consumer<ButtonState>(
+              builder: (context, value, child) {
+                return IgnorePointer(
+                  ignoring: !context.watch<ButtonState>().open,
+                  child: ActionButton(
+                    text: L10n.of(context)!.stats,
+                    icon: Icons.stacked_bar_chart,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/taskStatistics');
+                    },
+                  ),
+                );
+              },
+            ),
+            Consumer<ButtonState>(
+              builder: (context, value, child) {
+                return IgnorePointer(
+                  ignoring: !context.watch<ButtonState>().open,
+                  child: ActionButton(
+                    text: L10n.of(context)!.leaderboard,
+                    icon: Icons.leaderboard,
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/leaderboard');
+                    },
+                  ),
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -55,14 +72,16 @@ class _ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
-  bool _open = false;
+  late ButtonState buttonState;
 
   @override
   void initState() {
     super.initState();
-    _open = widget.initialOpen ?? false;
+    buttonState = Provider.of<ButtonState>(context, listen: false);
+
+    buttonState.open = widget.initialOpen ?? false;
     _controller = AnimationController(
-      value: _open ? 1.0 : 0.0,
+      value: buttonState.open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
       vsync: this,
     );
@@ -80,14 +99,12 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 
   void _toggle() {
-    setState(() {
-      _open = !_open;
-      if (_open) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
+    buttonState.changeStateOfButton();
+    if (buttonState.open) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
   }
 
   @override
@@ -153,18 +170,18 @@ class _ExpandableFabState extends State<ExpandableFab>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IgnorePointer(
-          ignoring: _open,
+          ignoring: buttonState.open,
           child: AnimatedContainer(
             transformAlignment: Alignment.center,
             transform: Matrix4.diagonal3Values(
-              _open ? 0.7 : 1.0,
-              _open ? 0.7 : 1.0,
+              buttonState.open ? 0.7 : 1.0,
+              buttonState.open ? 0.7 : 1.0,
               1.0,
             ),
             duration: const Duration(milliseconds: 250),
             curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
             child: AnimatedOpacity(
-              opacity: _open ? 0.0 : 1.0,
+              opacity: buttonState.open ? 0.0 : 1.0,
               curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
               duration: const Duration(milliseconds: 250),
               child: FloatingActionButton(
@@ -293,5 +310,14 @@ class ActionButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ButtonState extends ChangeNotifier {
+  bool open = false;
+
+  changeStateOfButton() {
+    open = !open;
+    notifyListeners();
   }
 }
