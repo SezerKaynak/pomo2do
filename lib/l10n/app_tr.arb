@@ -161,5 +161,17 @@
     "start":"BAŞLAT",
     "stop":"DURDUR",
     "languagePreference": "Dil Tercihi:",
-    "themePreference": "Tema Tercihi:"
+    "themePreference": "Tema Tercihi:",
+    "shortBreakSubtitle": "Kısa araya geçilsin mi?",
+    "longBreakSubtitle": "Uzun araya geçilsin mi?",
+    "shortBreakDone": "Kısa ara bitti",
+    "shortBreakDoneSubtitle": "Sıradaki pomodoro sayacına geçilsin mi?",
+    "pomodoroCycleDone": "Pomodoro döngüsü tamamlandı",
+    "pomodoroCycleDoneSubtitle": "Sıradaki döngüye geçilsin mi?",
+    "nextPomodoro": "Sıradaki pomodoroyu başlatabilirsiniz.",
+    "longBreakDone": "Uzun ara sonlandı.",
+    "pomodoroNextCycle": "Sıradaki döngüyü başlatabilirsiniz.",
+    "pomodoroDone": "Pomodoro sayacı sonlandı.",
+    "nextBreak": "Sıradaki arayı başlatabilirsiniz.",
+    "stopAlarm": "Alarmı kapat"
 }

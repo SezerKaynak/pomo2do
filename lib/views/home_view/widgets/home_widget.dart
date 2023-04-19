@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
@@ -220,16 +221,32 @@ class HomeWidget extends StatelessWidget {
                                                           horizontal: 10,
                                                           vertical: 5),
                                                   leading: Icon(taskIcon),
-                                                  onTap: () {
+                                                  onTap: () async {
                                                     GoogleAds()
                                                         .loadInterstitialAd();
+
+                                                    AwesomeNotifications()
+                                                        .isNotificationAllowed()
+                                                        .then((isAllowed) {
+                                                      if (!isAllowed) {
+                                                        AwesomeNotifications()
+                                                            .requestPermissionToSendNotifications(
+                                                                channelKey:
+                                                                    'basic');
+                                                      }
+                                                    });
+                                                    // ignore: use_build_context_synchronously
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                           builder: (context) =>
                                                               ChangeNotifierProvider(
                                                                   create: (context) =>
-                                                                      PageUpdate(),
+                                                                      PageUpdate(
+                                                                          context:
+                                                                              context,
+                                                                          l10n:
+                                                                              l10n),
                                                                   child:
                                                                       PomodoroWidget(
                                                                     task: providerOfTasks

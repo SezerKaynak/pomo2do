@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
-import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';

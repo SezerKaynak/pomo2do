@@ -489,4 +489,40 @@ class L10nEn extends L10n {
 
   @override
   String get themePreference => 'Theme Preference:';
+
+  @override
+  String get shortBreakSubtitle => 'Shall we take a short break?';
+
+  @override
+  String get longBreakSubtitle => 'Shall we take a long break?';
+
+  @override
+  String get shortBreakDone => 'Short break has ended.';
+
+  @override
+  String get shortBreakDoneSubtitle => 'Shall we move on to the next Pomodoro timer?';
+
+  @override
+  String get pomodoroCycleDone => 'The Pomodoro cycle has been completed.';
+
+  @override
+  String get pomodoroCycleDoneSubtitle => 'Should we move on to the next cycle?';
+
+  @override
+  String get nextPomodoro => 'You can start the next pomodoro.';
+
+  @override
+  String get longBreakDone => 'Long break has ended.';
+
+  @override
+  String get pomodoroNextCycle => 'You can start the next cycle.';
+
+  @override
+  String get pomodoroDone => 'Pomodoro timer has ended.';
+
+  @override
+  String get nextBreak => 'You can start the next break.';
+
+  @override
+  String get stopAlarm => 'Stop the alarm';
 }

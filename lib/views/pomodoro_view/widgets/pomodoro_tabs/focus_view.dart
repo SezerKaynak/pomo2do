@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/core/service/notification_controller.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/spotify_build_player_state.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/task_info_list_tile.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class FocusView extends StatefulWidget {
   const FocusView({
@@ -39,6 +38,7 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
   void initState() {
     pageUpdateProvider = Provider.of<PageUpdate>(context, listen: false);
     WidgetsBinding.instance.addObserver(this);
+    NotificationController.startListeningNotificationEvents();
     super.initState();
   }
 
@@ -55,13 +55,15 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
         case AppLifecycleState.paused:
           pageUpdateProvider.timerWorking = true;
           context.read<PageUpdate>().startOrStop(
-              context.read<SharedPreferences>().getInt("workTimerSelect")! * 60,
-              widget.controller,
-              widget.widget.task,
-              widget.tabController,
-              context
-                  .read<SharedPreferences>()
-                  .getInt("longBreakNumberSelect")!);
+                context.read<SharedPreferences>().getInt("workTimerSelect")! *
+                    60,
+                widget.controller,
+                widget.widget.task,
+                widget.tabController,
+                context
+                    .read<SharedPreferences>()
+                    .getInt("longBreakNumberSelect")!,
+              );
           firstDateTime = DateTime.now();
           break;
         case AppLifecycleState.resumed:
@@ -81,12 +83,14 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
       }
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    
     SpotifyProvider spotifyProvider =
         Provider.of<SpotifyProvider>(context, listen: true);
     int pomodoroCount = widget.widget.task.pomodoroCount;
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -107,34 +111,20 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                     isReverseAnimation: true,
                     onComplete: () async {
                       pageUpdateProvider.startOrStop(
-                          context
-                                  .read<SharedPreferences>()
-                                  .getInt("workTimerSelect")! *
-                              60,
-                          widget.controller,
-                          widget.widget.task,
-                          widget.tabController,
-                          context
-                              .read<SharedPreferences>()
-                              .getInt("longBreakNumberSelect")!);
+                        context
+                                .read<SharedPreferences>()
+                                .getInt("workTimerSelect")! *
+                            60,
+                        widget.controller,
+                        widget.widget.task,
+                        widget.tabController,
+                        context
+                            .read<SharedPreferences>()
+                            .getInt("longBreakNumberSelect")!,
+                      );
                       pageUpdateProvider.floatingActionOnPressed(
                           widget.widget.task, pomodoroCount + 1);
-                      await FlutterLocalNotificationsPlugin().zonedSchedule(
-                          0,
-                          'scheduled title',
-                          'scheduled body',
-                          tz.TZDateTime.now(tz.local)
-                              .add(const Duration(seconds: 1)),
-                          const NotificationDetails(
-                              android: AndroidNotificationDetails(
-                                  'your channel id', 'your channel name',
-                                  channelDescription:
-                                      'your channel description',
-                                  importance: Importance.max)),
-                          androidAllowWhileIdle: true,
-                          uiLocalNotificationDateInterpretation:
-                              UILocalNotificationDateInterpretation
-                                  .absoluteTime);
+ 
                     },
                     duration: context.select((SharedPreferences prefs) =>
                             prefs.getInt("workTimerSelect"))! *
@@ -157,19 +147,21 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                       buttonHeight: MediaQuery.of(context).size.height * 0.06,
                       onPressed: () {
                         pageUpdateProvider.startOrStop(
-                            context
-                                    .read<SharedPreferences>()
-                                    .getInt("workTimerSelect")! *
-                                60,
-                            widget.controller,
-                            widget.widget.task,
-                            widget.tabController,
-                            context
-                                .read<SharedPreferences>()
-                                .getInt("longBreakNumberSelect")!);
+                          context
+                                  .read<SharedPreferences>()
+                                  .getInt("workTimerSelect")! *
+                              60,
+                          widget.controller,
+                          widget.widget.task,
+                          widget.tabController,
+                          context
+                              .read<SharedPreferences>()
+                              .getInt("longBreakNumberSelect")!,
+                        );
                       },
                       child: context.select(
-                        (PageUpdate pageNotifier) => pageNotifier.callText(context),
+                        (PageUpdate pageNotifier) =>
+                            pageNotifier.callText(context),
                       ),
                     ),
                     if (context.select((PageUpdate pageNotifier) =>
@@ -177,16 +169,17 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                       IconButton(
                           onPressed: () {
                             pageUpdateProvider.startOrStop(
-                                context
-                                        .read<SharedPreferences>()
-                                        .getInt("workTimerSelect")! *
-                                    60,
-                                widget.controller,
-                                widget.widget.task,
-                                widget.tabController,
-                                context
-                                    .read<SharedPreferences>()
-                                    .getInt("longBreakNumberSelect")!);
+                              context
+                                      .read<SharedPreferences>()
+                                      .getInt("workTimerSelect")! *
+                                  60,
+                              widget.controller,
+                              widget.widget.task,
+                              widget.tabController,
+                              context
+                                  .read<SharedPreferences>()
+                                  .getInt("longBreakNumberSelect")!,
+                            );
                             widget.tabController
                                 .animateTo(widget.tabController.index + 1);
                           },
@@ -350,19 +343,22 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                       },
                                       child: SizedBox(
                                         child: Center(
-                                            child: Wrap(
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.center,
-                                          direction: Axis.vertical,
-                                          children: [
-                                            Text(
-                                                L10n.of(context)!.resetPomodoro,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white)),
-                                          ],
-                                        )),
+                                          child: Wrap(
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            direction: Axis.vertical,
+                                            children: [
+                                              Text(
+                                                  L10n.of(context)!
+                                                      .resetPomodoro,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white)),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

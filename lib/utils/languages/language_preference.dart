@@ -20,9 +20,9 @@ class LanguagePreference {
     List<String> languageAndCountryCode = [];
 
     String languageCode = prefs.getString(LOCALE_LANGUAGECODE) ??
-        const Locale("TR", "tr").languageCode;
+        const Locale("tr", "TR").languageCode;
     String countryCode = prefs.getString(LOCALE_COUNTRYCODE) ??
-        const Locale("TR", "tr").countryCode!;
+        const Locale("tr", "TR").countryCode!;
     languageAndCountryCode.addAll([languageCode, countryCode]);
     return languageAndCountryCode;
   }

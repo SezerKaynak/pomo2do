@@ -144,14 +144,6 @@ class _EditProfileState extends State<EditProfileWidget> {
                           stream: user.snapshots(),
                           builder: (BuildContext context,
                               AsyncSnapshot asyncSnapshot) {
-                            if (asyncSnapshot.hasError) {
-                              return ScreenTextField(
-                                textLabel: l10n.somethingWrong,
-                                controller: _nameController,
-                                maxLines: 1,
-                              );
-                            }
-
                             if (asyncSnapshot.connectionState ==
                                 ConnectionState.active) {
                               _nameController.text =
@@ -210,61 +202,60 @@ class _EditProfileState extends State<EditProfileWidget> {
 
                                         _birthdayController.text =
                                             formattedDate;
-                                      } else {}
+                                      }
                                     },
                                     con: const Icon(Icons.calendar_today),
                                     controller: _birthdayController,
                                     maxLines: 1,
                                   ),
+                                  const SizedBox(height: 40),
+                                  CustomElevatedButton(
+                                    onPressed: () async {
+                                      CollectionReference users =
+                                          FirebaseFirestore.instance
+                                              .collection('Users');
+                                      var user = users.doc(
+                                          context.read<PomotodoUser>().userId);
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      user.set({
+                                        'name': _nameController.text,
+                                        'surname': _surnameController.text,
+                                        'birthday': _birthdayController.text,
+                                        'email': context
+                                            .read<PomotodoUser>()
+                                            .userMail
+                                            .toString(),
+                                      });
+
+                                      if (temp != image) {
+                                        await uploadImage();
+                                      }
+
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      //ignore: use_build_context_synchronously
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                const HomeView()),
+                                        ModalRoute.withName('/'),
+                                      );
+                                    },
+                                    child: Text(l10n.updateButtonText),
+                                  )
                                 ],
                               );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
                             }
-
-                            return ScreenTextField(
-                              textLabel: l10n.loading,
-                              controller: _nameController,
-                              maxLines: 1,
-                            );
                           },
                         ),
-                        const SizedBox(height: 40),
-                        CustomElevatedButton(
-                          onPressed: () async {
-                            CollectionReference users =
-                                FirebaseFirestore.instance.collection('Users');
-                            var user =
-                                users.doc(context.read<PomotodoUser>().userId);
-                            setState(() {
-                              isLoading = true;
-                            });
-                            user.set({
-                              'name': _nameController.text,
-                              'surname': _surnameController.text,
-                              'birthday': _birthdayController.text,
-                              'email': context
-                                  .read<PomotodoUser>()
-                                  .userMail
-                                  .toString(),
-                            });
-
-                            if (temp != image) {
-                              await uploadImage();
-                            }
-
-                            setState(() {
-                              isLoading = false;
-                            });
-                            //ignore: use_build_context_synchronously
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const HomeView()),
-                              ModalRoute.withName('/'),
-                            );
-                          },
-                          child: Text(l10n.updateButtonText),
-                        )
                       ],
                     ),
                   ),
