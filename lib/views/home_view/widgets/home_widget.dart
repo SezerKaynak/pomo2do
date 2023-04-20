@@ -20,6 +20,7 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var l10n = L10n.of(context)!;
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
+    TaskStatsProvider leaderboardUpdate = TaskStatsProvider();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -235,7 +236,6 @@ class HomeWidget extends StatelessWidget {
                                                                     'basic');
                                                       }
                                                     });
-                                                    // ignore: use_build_context_synchronously
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
@@ -254,9 +254,6 @@ class HomeWidget extends StatelessWidget {
                                                                         key]![index],
                                                                   )),
                                                         )).then((_) {
-                                                      TaskStatsProvider
-                                                          leaderboardUpdate =
-                                                          TaskStatsProvider();
                                                       leaderboardUpdate
                                                           .weeklyTaskPassingTime();
                                                       leaderboardUpdate

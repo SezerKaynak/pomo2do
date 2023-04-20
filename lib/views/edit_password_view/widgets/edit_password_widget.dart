@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
-import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:quickalert/quickalert.dart';
 
 class EditPasswordWidget extends StatefulWidget {
@@ -37,24 +37,24 @@ class _EditPasswordState extends State<EditPasswordWidget> {
       child: Form(
         key: _formKey,
         child: Padding(
-          padding: ScreenPadding()
+          padding: ScreenPadding
               .screenPadding
               .copyWith(top: 10, left: 20, right: 20),
           child: Column(
             children: [
               ScreenTexts(
                   title: l10n.changePassword,
-                  theme: Theme.of(context).textTheme.headline4,
+                  theme: Theme.of(context).textTheme.headlineMedium,
                   fontW: FontWeight.w600,
                   textPosition: TextAlign.left),
               ScreenTexts(
                   title: l10n.rePassword,
-                  theme: Theme.of(context).textTheme.subtitle1,
+                  theme: Theme.of(context).textTheme.titleMedium,
                   fontW: FontWeight.w400,
                   textPosition: TextAlign.left),
               ScreenTexts(
                   title: l10n.oldPassword,
-                  theme: Theme.of(context).textTheme.subtitle1,
+                  theme: Theme.of(context).textTheme.titleMedium,
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
@@ -70,7 +70,7 @@ class _EditPasswordState extends State<EditPasswordWidget> {
                   maxLines: 1),
               ScreenTexts(
                   title: l10n.newPasswordText,
-                  theme: Theme.of(context).textTheme.subtitle1,
+                  theme: Theme.of(context).textTheme.titleMedium,
                   fontW: FontWeight.w500,
                   textPosition: TextAlign.left),
               ScreenTextField(
@@ -118,6 +118,7 @@ class _EditPasswordState extends State<EditPasswordWidget> {
                             isLoading = false;
                           });
 
+                          // ignore: use_build_context_synchronously
                           QuickAlert.show(
                             context: context,
                             type: QuickAlertType.success,

@@ -9,7 +9,6 @@ import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
-import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:provider/provider.dart';
 
 class EditTaskWidget extends StatefulWidget {
@@ -67,7 +66,7 @@ class _EditTaskState extends State<EditTaskWidget> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: ScreenPadding()
+            padding: ScreenPadding
                 .screenPadding
                 .copyWith(top: 10, left: 20, right: 20),
             child: Column(

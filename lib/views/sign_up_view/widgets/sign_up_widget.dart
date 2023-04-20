@@ -53,7 +53,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: ScreenPadding().screenPadding.copyWith(top: 0),
+        padding: ScreenPadding.screenPadding.copyWith(top: 0),
         child: Column(
           children: [
             ScreenTexts(

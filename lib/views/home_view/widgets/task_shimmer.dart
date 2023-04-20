@@ -12,7 +12,6 @@ class TaskShimmer extends StatelessWidget {
         children: [
           Expanded(
             child: Shimmer.fromColors(
-              //period: Duration(milliseconds: 1),
               baseColor: Colors.grey[300]!,
               highlightColor: Colors.grey[100]!,
               enabled: true,
@@ -21,16 +20,12 @@ class TaskShimmer extends StatelessWidget {
                   height: 10,
                 ),
                 itemBuilder: (_, __) => Container(
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(16),
-                  // ),
                   alignment: Alignment.center,
                   height: 80,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(),
                   ),
-
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -51,7 +46,6 @@ class TaskShimmer extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                //width: double.infinity,
                                 height: 10.0,
                                 color: Colors.white,
                               ),

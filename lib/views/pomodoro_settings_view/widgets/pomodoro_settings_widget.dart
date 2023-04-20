@@ -44,7 +44,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
     var l10n = L10n.of(context)!;
     return SingleChildScrollView(
       child: Padding(
-        padding: ScreenPadding().screenPadding.copyWith(top: 20),
+        padding: ScreenPadding.screenPadding.copyWith(top: 20),
         child: Column(
           children: [
             ScreenTexts(

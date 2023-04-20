@@ -181,18 +181,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
               subtitle: L10n.of(context)!.uEditNotification,
               title:
                   settingTitle(context, L10n.of(context)!.notificationSettings),
-              tap: () {}),
+              tap: () {
+              }),
           const Divider(thickness: 1),
           settings.Settings(
-              settingIcon: Icons.timer,
-              subtitle: L10n.of(context)!.uEditPomodoro,
-              title: settingTitle(context, L10n.of(context)!.pomodoroTitle),
-              tap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PomodoroSettingsView()));
-              }),
+            settingIcon: Icons.timer,
+            subtitle: L10n.of(context)!.uEditPomodoro,
+            title: settingTitle(context, L10n.of(context)!.pomodoroTitle),
+            tap: () {
+              Navigator.pushNamed(context, '/pomodoroSettings');
+            },
+          ),
           const Divider(thickness: 1),
           settings.Settings(
             settingIcon: Icons.logout_outlined,

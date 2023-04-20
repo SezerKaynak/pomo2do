@@ -8,12 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
+import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/common/widgets/screen_text_field.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/edit_profile_view/widgets/custom_avatar.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
-import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileWidget extends StatefulWidget {
@@ -100,7 +100,7 @@ class _EditProfileState extends State<EditProfileWidget> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: ScreenPadding()
+                    padding: ScreenPadding
                         .screenPadding
                         .copyWith(top: 8, left: 20, right: 20),
                     child: Column(

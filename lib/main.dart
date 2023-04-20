@@ -17,6 +17,7 @@ import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
 import 'package:pomotodo/views/completed_task_view/completed_task.view.dart';
 import 'package:pomotodo/views/deleted_task_view/deleted_task.view.dart';
 import 'package:pomotodo/views/leaderboard_view/leaderboard.view.dart';
+import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.view.dart';
 import 'package:pomotodo/views/task_statistics/task_statistics.view.dart';
 import 'package:pomotodo/views/edit_profile_view/edit_profile.view.dart';
 import 'package:pomotodo/views/edit_task_view/edit_task.view.dart';
@@ -133,6 +134,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                       '/editProfile': (context) => const EditProfileView(),
                       '/archived': (context) => const ArchivedTasksView(),
+                      '/pomodoroSettings':(context) => const PomodoroSettingsView(),
                       '/taskStatistics': (context) => ChangeNotifierProvider(
                             create: (context) => TaskStatsProvider(),
                             child: const TaskStatisticsView(),

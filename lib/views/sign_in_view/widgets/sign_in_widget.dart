@@ -47,7 +47,7 @@ class _SignInWidgetState extends State<SignInWidget> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: ScreenPadding().screenPadding,
+        padding: ScreenPadding.screenPadding,
         child: Column(
           children: [
             ScreenTexts(
@@ -220,8 +220,4 @@ class _SignInWidgetState extends State<SignInWidget> {
       ),
     );
   }
-}
-
-class ScreenPadding {
-  final EdgeInsets screenPadding = const EdgeInsets.fromLTRB(30, 40, 30, 20);
 }
