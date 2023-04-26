@@ -10,7 +10,6 @@ import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/edit_password_view/edit_password.view.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
 import 'package:pomotodo/views/home_view/widgets/settings.dart' as settings;
-import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.view.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -181,18 +180,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
               subtitle: L10n.of(context)!.uEditNotification,
               title:
                   settingTitle(context, L10n.of(context)!.notificationSettings),
-              tap: () {}),
+              tap: () {
+                Navigator.pushNamed(context, '/notificationSettings');
+              }),
           const Divider(thickness: 1),
           settings.Settings(
-              settingIcon: Icons.timer,
-              subtitle: L10n.of(context)!.uEditPomodoro,
-              title: settingTitle(context, L10n.of(context)!.pomodoroTitle),
-              tap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PomodoroSettingsView()));
-              }),
+            settingIcon: Icons.timer,
+            subtitle: L10n.of(context)!.uEditPomodoro,
+            title: settingTitle(context, L10n.of(context)!.pomodoroTitle),
+            tap: () {
+              Navigator.pushNamed(context, '/pomodoroSettings');
+            },
+          ),
           const Divider(thickness: 1),
           settings.Settings(
             settingIcon: Icons.logout_outlined,

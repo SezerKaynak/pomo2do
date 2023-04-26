@@ -7,7 +7,9 @@ import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/service/google_ads.dart';
 import 'package:pomotodo/core/service/notification_controller.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
+import 'package:pomotodo/views/notification_settings/notification_settings.viewmodel.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
+import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 
 class PageUpdate extends ChangeNotifier with DatabaseService {
@@ -26,7 +28,14 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
   final L10n? l10n;
 
   void startButton(CountDownController controller, int time, int index) {
-    NotificationController().createNotification(index, time, l10n!);
+    NotificationController().createNotification(
+      index,
+      time,
+      l10n!,
+      context.read<NotificationSettingsController>().notificationSetting,
+      context.read<NotificationSettingsController>().alarmSetting,
+    );
+
     GoogleAds().loadInterstitialAd(showAfterLoad: true);
     controller.resume();
     countDown = controller.getTimeInSeconds();

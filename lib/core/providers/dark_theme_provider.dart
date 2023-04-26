@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:pomotodo/utils/themes/dark_theme_preference.dart';
 
-class DarkThemeProvider with ChangeNotifier{
+class DarkThemeProvider extends ChangeNotifier {
   DarkThemePreference darkThemePreference = DarkThemePreference();
   bool _darkTheme = false;
 

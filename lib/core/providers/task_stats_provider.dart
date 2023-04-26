@@ -186,7 +186,7 @@ class TaskStatsProvider extends ChangeNotifier {
     }
   }
 
-  weeklyTaskPassingTime() async {
+  void weeklyTaskPassingTime() async {
     tasks = await service.retrieveTasks();
     List<String> date = getWeekDays()[0];
     int weeklyTaskPassingTime = 0;
@@ -201,7 +201,7 @@ class TaskStatsProvider extends ChangeNotifier {
     service.setWeeklyTaskPassingTime(weeklyTaskPassingTime);
   }
 
-  montlyTaskPassingTime() async {
+  void montlyTaskPassingTime() async {
     tasks = await service.retrieveTasks();
     List<String> date = getMonthDays()[0];
     int montlyTaskPassingTime = 0;
