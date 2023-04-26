@@ -30,7 +30,8 @@ class NotificationController {
     );
   }
 
-  Future<void> createNotification(int index, int time, L10n l10n) async {
+  Future<void> createNotification(int index, int time, L10n l10n,
+      bool notificationPermission, bool alarmPermission) async {
     NotificationContent notificationContent;
 
     final alarmSettings = AlarmSettings(
@@ -74,22 +75,35 @@ class NotificationController {
         );
     }
 
-    AwesomeNotifications()
-        .createNotification(
-      content: notificationContent,
-      actionButtons: [
-        NotificationActionButton(key: "close", label: l10n.stopAlarm)
-      ],
-      schedule: NotificationCalendar.fromDate(
-        date: DateTime.now().add(
-          Duration(seconds: time),
+    if (notificationPermission && alarmPermission) {
+      AwesomeNotifications()
+          .createNotification(
+        content: notificationContent,
+        actionButtons: [
+          NotificationActionButton(key: "close", label: l10n.stopAlarm)
+        ],
+        schedule: NotificationCalendar.fromDate(
+          date: DateTime.now().add(
+            Duration(seconds: time),
+          ),
         ),
-      ),
-    )
-        .then(
-      (value) {
-        Alarm.set(alarmSettings: alarmSettings);
-      },
-    );
+      )
+          .then(
+        (value) {
+          Alarm.set(alarmSettings: alarmSettings);
+        },
+      );
+    } else if (notificationPermission) {
+      AwesomeNotifications().createNotification(
+        content: notificationContent,
+        schedule: NotificationCalendar.fromDate(
+          date: DateTime.now().add(
+            Duration(seconds: time),
+          ),
+        ),
+      );
+    } else {
+      Alarm.set(alarmSettings: alarmSettings);
+    }
   }
 }

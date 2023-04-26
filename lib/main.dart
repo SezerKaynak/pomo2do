@@ -17,6 +17,7 @@ import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
 import 'package:pomotodo/views/completed_task_view/completed_task.view.dart';
 import 'package:pomotodo/views/deleted_task_view/deleted_task.view.dart';
 import 'package:pomotodo/views/leaderboard_view/leaderboard.view.dart';
+import 'package:pomotodo/views/notification_settings/notification_settings.view.dart';
 import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.view.dart';
 import 'package:pomotodo/views/task_statistics/task_statistics.view.dart';
 import 'package:pomotodo/views/edit_profile_view/edit_profile.view.dart';
@@ -30,9 +31,10 @@ import 'package:json_theme/json_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:alarm/alarm.dart';
+
+import 'views/notification_settings/notification_settings.viewmodel.dart';
 
 Future<void> main() async {
   ThemeData theme, themeDark;
@@ -84,12 +86,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
   LocaleModel languageProvider = LocaleModel();
+  NotificationSettingsController notificationSettingsController =
+      NotificationSettingsController();
 
   @override
   void initState() {
     super.initState();
     getCurrentAppTheme();
     getCurrentAppLanguage();
+    getCurrentNotificationSettings();
   }
 
   void getCurrentAppTheme() async {
@@ -107,54 +112,72 @@ class _MyAppState extends State<MyApp> {
     languageProvider.locale = Locale(languageCode, countryCode);
   }
 
+  void getCurrentNotificationSettings() async {
+    notificationSettingsController.alarmSetting =
+        await notificationSettingsController.notificationSettingsPreference
+            .getSetting()
+            .then((value) => value[0]);
+    notificationSettingsController.notificationSetting =
+        await notificationSettingsController.notificationSettingsPreference
+            .getSetting()
+            .then((value) => value[1]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => languageProvider),
-          ChangeNotifierProvider(create: (context) => themeChangeProvider),
-        ],
-        child: AuthWidgetBuilder(
-            onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
-                MaterialApp(
-                    localizationsDelegates: L10n.localizationsDelegates,
-                    navigatorObservers: [FlutterSmartDialog.observer],
-                    supportedLocales: L10n.supportedLocales,
-                    locale: context.watch<LocaleModel>().locale,
-                    builder: FlutterSmartDialog.init(),
-                    initialRoute: '/',
-                    routes: {
-                      '/task': (context) => const HomeView(),
-                      '/done': (context) => const CompletedTasksView(),
-                      '/editTask': (context) => const EditTaskView(),
-                      '/deleted': (context) =>
-                          ChangeNotifierProvider<ListUpdate>(
-                            create: (context) => ListUpdate(),
-                            child: const DeletedTasksView(),
-                          ),
-                      '/editProfile': (context) => const EditProfileView(),
-                      '/archived': (context) => const ArchivedTasksView(),
-                      '/pomodoroSettings':(context) => const PomodoroSettingsView(),
-                      '/taskStatistics': (context) => ChangeNotifierProvider(
-                            create: (context) => TaskStatsProvider(),
-                            child: const TaskStatisticsView(),
-                          ),
-                      '/leaderboard': (context) => MultiProvider(
-                            providers: [
-                              ChangeNotifierProvider(
-                                create: (context) => LeaderboardProvider(),
-                              ),
-                              ChangeNotifierProvider(
-                                create: (context) => TaskStatsProvider(),
-                              )
-                            ],
-                            child: const LeaderboardView(),
-                          ),
-                    },
-                    debugShowCheckedModeBanner: false,
-                    theme: context.watch<DarkThemeProvider>().darkTheme
-                        ? widget.themeDark
-                        : widget.theme,
-                    home: AuthWidget(snapShot: snapShot))));
+      providers: [
+        ChangeNotifierProvider(create: (context) => languageProvider),
+        ChangeNotifierProvider(create: (context) => themeChangeProvider),
+        ChangeNotifierProvider(
+          create: (context) => notificationSettingsController,
+        ),
+      ],
+      child: AuthWidgetBuilder(
+        onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>
+            MaterialApp(
+          localizationsDelegates: L10n.localizationsDelegates,
+          navigatorObservers: [FlutterSmartDialog.observer],
+          supportedLocales: L10n.supportedLocales,
+          locale: context.watch<LocaleModel>().locale,
+          builder: FlutterSmartDialog.init(),
+          initialRoute: '/',
+          routes: {
+            '/task': (context) => const HomeView(),
+            '/done': (context) => const CompletedTasksView(),
+            '/editTask': (context) => const EditTaskView(),
+            '/deleted': (context) => ChangeNotifierProvider<ListUpdate>(
+                  create: (context) => ListUpdate(),
+                  child: const DeletedTasksView(),
+                ),
+            '/editProfile': (context) => const EditProfileView(),
+            '/archived': (context) => const ArchivedTasksView(),
+            '/pomodoroSettings': (context) => const PomodoroSettingsView(),
+            '/notificationSettings': (context) =>
+                const NotificationSettingsView(),
+            '/taskStatistics': (context) => ChangeNotifierProvider(
+                  create: (context) => TaskStatsProvider(),
+                  child: const TaskStatisticsView(),
+                ),
+            '/leaderboard': (context) => MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (context) => LeaderboardProvider(),
+                    ),
+                    ChangeNotifierProvider(
+                      create: (context) => TaskStatsProvider(),
+                    )
+                  ],
+                  child: const LeaderboardView(),
+                ),
+          },
+          debugShowCheckedModeBanner: false,
+          theme: context.watch<DarkThemeProvider>().darkTheme
+              ? widget.themeDark
+              : widget.theme,
+          home: AuthWidget(snapShot: snapShot),
+        ),
+      ),
+    );
   }
 }

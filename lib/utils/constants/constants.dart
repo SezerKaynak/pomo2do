@@ -115,5 +115,5 @@ const Color kLightGrey = Color.fromRGBO(238, 238, 238, 1),
     kDarkerGreen = Color.fromRGBO(25, 97, 39, 1);
 
 class ScreenPadding {
-  static EdgeInsets screenPadding = const EdgeInsets.fromLTRB(30, 40, 30, 20);
+  static EdgeInsets screenPadding = const EdgeInsets.fromLTRB(20, 40, 20, 20);
 }

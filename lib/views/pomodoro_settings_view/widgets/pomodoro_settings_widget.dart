@@ -4,7 +4,6 @@ import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:pomotodo/views/common/widgets/screen_texts.dart';
-import 'package:pomotodo/views/sign_in_view/widgets/sign_in_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -73,7 +72,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 ),
                 Slider(
                   value: _workTimeSliderValue.toDouble(),
-                  min: 20,
+                  min: 1,
                   max: 40,
                   divisions: 4,
                   label: '$_workTimeSliderValue $minute',
