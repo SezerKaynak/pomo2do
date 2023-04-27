@@ -525,4 +525,37 @@ class L10nEn extends L10n {
 
   @override
   String get stopAlarm => 'Stop the alarm';
+
+  @override
+  String get turkish => 'Turkish';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get darkMode => 'Dark';
+
+  @override
+  String get lightMode => 'Light';
+
+  @override
+  String get appSettings => 'Application Settings';
+
+  @override
+  String get appSettingsSubtitle => 'You can set the application settings using the fields below.';
+
+  @override
+  String get setAlarm => 'Should an alarm be set when the timer ends?';
+
+  @override
+  String get setNotification => 'Should a notification be sent when the timer ends?';
+
+  @override
+  String get resetPomodoroWarn => 'Should a warning be shown when resetting the timer?';
+
+  @override
+  String get spotifyPlayer => 'Should the Spotify player be displayed?';
+
+  @override
+  String get stopMusic => 'Should music be stopped during breaks?';
 }

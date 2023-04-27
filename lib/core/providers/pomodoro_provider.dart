@@ -3,11 +3,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
+import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/service/google_ads.dart';
 import 'package:pomotodo/core/service/notification_controller.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
-import 'package:pomotodo/views/notification_settings/notification_settings.viewmodel.dart';
+import 'package:pomotodo/views/app_settings/app_settings.viewmodel.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
@@ -32,8 +33,8 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
       index,
       time,
       l10n!,
-      context.read<NotificationSettingsController>().notificationSetting,
-      context.read<NotificationSettingsController>().alarmSetting,
+      context.read<AppSettingsController>().notificationSetting,
+      context.read<AppSettingsController>().alarmSetting,
     );
 
     GoogleAds().loadInterstitialAd(showAfterLoad: true);
@@ -114,6 +115,9 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
         Alarm.stop(10);
         AwesomeNotifications().dismiss(0);
         tabController.animateTo(tabIndex);
+        if (context.read<AppSettingsController>().pauseSpotifySetting) {
+          context.read<SpotifyProvider>().pause();
+        }
         Navigator.pop(context);
       },
       onCancelBtnTap: () {

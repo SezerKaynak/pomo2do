@@ -24,15 +24,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final AuthService _authService = AuthService();
   CollectionReference users = FirebaseFirestore.instance.collection("Users");
   late DrawerImageProvider drawerImageProvider;
-  late LocaleModel localeProvider;
-  late DarkThemeProvider themeChange;
+
   @override
   void initState() {
     super.initState();
-    themeChange = Provider.of<DarkThemeProvider>(context, listen: false);
     drawerImageProvider =
         Provider.of<DrawerImageProvider>(context, listen: false);
-    localeProvider = Provider.of<LocaleModel>(context, listen: false);
     WidgetsBinding.instance
         .addPostFrameCallback((_) => drawerImageProvider.getURL(context, null));
   }
@@ -40,23 +37,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     var user = users.doc(context.read<PomotodoUser>().userId);
-
-    SelectTheme selectedThemeIcon = SelectTheme();
-    selectedThemeIcon.selectedTheme = [
-      !themeChange.darkTheme,
-      themeChange.darkTheme
-    ];
-    List<IconData> iconData = selectedThemeIcon.icons;
-    List<Widget> themeIcons = [];
-    for (int i = 0; i < iconData.length; i++) {
-      themeIcons.add(Icon(iconData[i]));
-    }
-
-    SelectLanguage selectedLanguage = SelectLanguage();
-    selectedLanguage.selectedLanguage = [
-      localeProvider.locale == const Locale('tr', 'TR') ? true : false,
-      localeProvider.locale == const Locale('en', 'US') ? true : false,
-    ];
 
     return Drawer(
       child: Column(
@@ -212,72 +192,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
             },
           ),
           const Divider(thickness: 1),
-          Expanded(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      settingTitle(
-                        context,
-                        L10n.of(context)!.themePreference,
-                      ),
-                      ToggleButtons(
-                        onPressed: (int index) {
-                          themeChange.darkTheme = index == 0 ? false : true;
-                        },
-                        constraints: BoxConstraints(
-                            minWidth: MediaQuery.of(context).size.width * .12,
-                            minHeight:
-                                MediaQuery.of(context).size.height * .06),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                        selectedBorderColor: Colors.blue[700],
-                        selectedColor: Colors.white,
-                        fillColor: Theme.of(context).primaryColor,
-                        color: Colors.blue[400],
-                        isSelected: selectedThemeIcon.selectedTheme,
-                        children: themeIcons,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      settingTitle(
-                        context,
-                        L10n.of(context)!.languagePreference,
-                      ),
-                      ToggleButtons(
-                        onPressed: (int index) {
-                          localeProvider.locale == const Locale('en', 'US')
-                              ? localeProvider.locale = const Locale('tr', 'TR')
-                              : localeProvider.locale =
-                                  const Locale('en', 'US');
-                        },
-                        constraints: BoxConstraints(
-                            minWidth: MediaQuery.of(context).size.width * .12,
-                            minHeight:
-                                MediaQuery.of(context).size.height * .06),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                        selectedBorderColor: Colors.blue[700],
-                        selectedColor: Colors.white,
-                        fillColor: Theme.of(context).primaryColor,
-                        color: Colors.blue[400],
-                        isSelected: selectedLanguage.selectedLanguage,
-                        children: selectedLanguage.flags,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );

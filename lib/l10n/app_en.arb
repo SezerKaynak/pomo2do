@@ -173,5 +173,16 @@
     "pomodoroNextCycle": "You can start the next cycle.",
     "pomodoroDone": "Pomodoro timer has ended.",
     "nextBreak": "You can start the next break.",
-    "stopAlarm": "Stop the alarm"
+    "stopAlarm": "Stop the alarm",
+    "turkish": "Turkish",
+    "english": "English",
+    "darkMode": "Dark",
+    "lightMode": "Light",
+    "appSettings": "Application Settings",
+    "appSettingsSubtitle": "You can set the application settings using the fields below.",
+    "setAlarm" : "Should an alarm be set when the timer ends?",
+    "setNotification": "Should a notification be sent when the timer ends?",
+    "resetPomodoroWarn": "Should a warning be shown when resetting the timer?",
+    "spotifyPlayer": "Should the Spotify player be displayed?",
+    "stopMusic": "Should music be stopped during breaks?"
 }

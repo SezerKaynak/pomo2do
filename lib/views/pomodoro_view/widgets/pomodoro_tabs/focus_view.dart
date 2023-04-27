@@ -5,6 +5,7 @@ import 'package:pomotodo/core/providers/spotify_provider.dart';
 import 'package:pomotodo/core/service/notification_controller.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
+import 'package:pomotodo/views/app_settings/app_settings.viewmodel.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/spotify_build_player_state.dart';
@@ -83,10 +84,9 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
       }
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    
     SpotifyProvider spotifyProvider =
         Provider.of<SpotifyProvider>(context, listen: true);
     int pomodoroCount = widget.widget.task.pomodoroCount;
@@ -124,7 +124,6 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                       );
                       pageUpdateProvider.floatingActionOnPressed(
                           widget.widget.task, pomodoroCount + 1);
- 
                     },
                     duration: context.select((SharedPreferences prefs) =>
                             prefs.getInt("workTimerSelect"))! *
@@ -203,98 +202,110 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                         borderRadius: BorderRadius.circular(8)),
                     elevation: 10,
                     child: SizedBox(
-                      height: kToolbarHeight * 2,
+                      height: context
+                              .read<AppSettingsController>()
+                              .spotifySetting
+                          ? kToolbarHeight * 2
+                          : kToolbarHeight,
                       child: Column(
                         children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8)),
-                            clipBehavior: Clip.hardEdge,
-                            child: SizedBox(
-                              height: kToolbarHeight,
-                              child: Row(
-                                children: [
-                                  spotifyProvider.connected
-                                      ? Expanded(
-                                          child: Wrap(
-                                            alignment:
-                                                WrapAlignment.spaceBetween,
-                                            children: [
-                                              Stack(
-                                                children: [
-                                                  buildPlayerStateWidget(
-                                                      context),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      : Expanded(
-                                          child: Material(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  topRight: Radius.circular(8)),
-                                            ),
-                                            child: Stack(
+                          Visibility(
+                            visible: context
+                                .read<AppSettingsController>()
+                                .spotifySetting,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8)),
+                              clipBehavior: Clip.hardEdge,
+                              child: SizedBox(
+                                height: kToolbarHeight,
+                                child: Row(
+                                  children: [
+                                    spotifyProvider.connected
+                                        ? Expanded(
+                                            child: Wrap(
+                                              alignment:
+                                                  WrapAlignment.spaceBetween,
                                               children: [
-                                                Visibility(
-                                                  visible:
-                                                      !spotifyProvider.loading,
-                                                  child: SizedBox(
-                                                    height: kToolbarHeight,
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        try {
-                                                          await spotifyProvider
-                                                              .connectToSpotifyRemote();
-                                                        } on PlatformException {
-                                                          QuickAlert.show(
-                                                              context: context,
-                                                              type:
-                                                                  QuickAlertType
-                                                                      .error,
-                                                              title: L10n.of(
-                                                                      context)!
-                                                                  .failConnect,
-                                                              text: L10n.of(
-                                                                      context)!
-                                                                  .noSpotify,
-                                                              confirmBtnText: L10n
-                                                                      .of(context)!
-                                                                  .confirmButtonText);
-                                                        }
-                                                      },
-                                                      child: Center(
-                                                          child: Text(
-                                                        L10n.of(context)!
-                                                            .connectSpotify,
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      )),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Center(
-                                                  child: Visibility(
-                                                      visible: spotifyProvider
-                                                          .loading,
-                                                      child:
-                                                          const CircularProgressIndicator(
-                                                              color: Colors
-                                                                  .white)),
-                                                ),
+                                                Stack(
+                                                  children: [
+                                                    buildPlayerStateWidget(
+                                                        context),
+                                                  ],
+                                                )
                                               ],
                                             ),
-                                          ),
-                                        )
-                                ],
+                                          )
+                                        : Expanded(
+                                            child: Material(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8)),
+                                              ),
+                                              child: Stack(
+                                                children: [
+                                                  Visibility(
+                                                    visible: !spotifyProvider
+                                                        .loading,
+                                                    child: SizedBox(
+                                                      height: kToolbarHeight,
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          try {
+                                                            await spotifyProvider
+                                                                .connectToSpotifyRemote();
+                                                          } on PlatformException {
+                                                            QuickAlert.show(
+                                                                context:
+                                                                    context,
+                                                                type: QuickAlertType
+                                                                    .error,
+                                                                title: L10n.of(
+                                                                        context)!
+                                                                    .failConnect,
+                                                                text: L10n.of(
+                                                                        context)!
+                                                                    .noSpotify,
+                                                                confirmBtnText:
+                                                                    L10n.of(context)!
+                                                                        .confirmButtonText);
+                                                          }
+                                                        },
+                                                        child: Center(
+                                                            child: Text(
+                                                          L10n.of(context)!
+                                                              .connectSpotify,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Center(
+                                                    child: Visibility(
+                                                        visible: spotifyProvider
+                                                            .loading,
+                                                        child:
+                                                            const CircularProgressIndicator(
+                                                                color: Colors
+                                                                    .white)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

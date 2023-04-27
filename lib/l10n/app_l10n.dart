@@ -1136,6 +1136,72 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Stop the alarm'**
   String get stopAlarm;
+
+  /// No description provided for @turkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get turkish;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get darkMode;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightMode;
+
+  /// No description provided for @appSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Settings'**
+  String get appSettings;
+
+  /// No description provided for @appSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can set the application settings using the fields below.'**
+  String get appSettingsSubtitle;
+
+  /// No description provided for @setAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Should an alarm be set when the timer ends?'**
+  String get setAlarm;
+
+  /// No description provided for @setNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Should a notification be sent when the timer ends?'**
+  String get setNotification;
+
+  /// No description provided for @resetPomodoroWarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Should a warning be shown when resetting the timer?'**
+  String get resetPomodoroWarn;
+
+  /// No description provided for @spotifyPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Should the Spotify player be displayed?'**
+  String get spotifyPlayer;
+
+  /// No description provided for @stopMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'Should music be stopped during breaks?'**
+  String get stopMusic;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

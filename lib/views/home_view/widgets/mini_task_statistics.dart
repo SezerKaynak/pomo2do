@@ -56,7 +56,7 @@ class MiniTaskStatistics extends StatelessWidget {
                 decoration: const BoxDecoration(
                     border: Border(right: BorderSide(width: 0.5))),
                 child: FutureBuilder(
-                    future: providerOfTasks.taskList,
+                    future: providerOfTasks.getTasks(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<TaskModel>> snapshot) {
                       if (snapshot.hasData) {

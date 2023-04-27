@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
+import 'package:pomotodo/views/app_settings/app_settings.viewmodel.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/long_break_view.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_tabs/short_break_view.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
@@ -49,20 +50,28 @@ class _PomodoroViewState extends State<PomodoroWidget>
             onPressed: () {
               pageUpdateNotifier.onWillPop
                   ? widget.task.pomodoroCount != 0
-                      ? QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.confirm,
-                          title: l10n.uSure,
-                          text: l10n.pomodoroWillReset,
-                          confirmBtnText: l10n.alertApprove,
-                          cancelBtnText: l10n.alertReject,
-                          confirmBtnColor: Colors.green,
-                          onConfirmBtnTap: () {
-                            widget.task.pomodoroCount = 0;
-                            updateTask(widget.task);
-                            Navigator.pop(context);
-                          },
-                        )
+                      ? context
+                              .read<AppSettingsController>()
+                              .warnSetting
+                          ? QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.confirm,
+                              title: l10n.uSure,
+                              text: l10n.pomodoroWillReset,
+                              confirmBtnText: l10n.alertApprove,
+                              cancelBtnText: l10n.alertReject,
+                              confirmBtnColor: Colors.green,
+                              onConfirmBtnTap: () {
+                                widget.task.pomodoroCount = 0;
+                                updateTask(widget.task);
+                                Navigator.pop(context);
+                              },
+                            )
+                          : {
+                              widget.task.pomodoroCount = 0,
+                              updateTask(widget.task),
+                              Navigator.pop(context)
+                            }
                       : Navigator.pop(context)
                   : DoNothingAction();
             },
@@ -77,9 +86,6 @@ class _PomodoroViewState extends State<PomodoroWidget>
                 child: IgnorePointer(
                   ignoring: !pageUpdateNotifier.startStop,
                   child: TabBar(
-                    // labelColor: const Color.fromRGBO(4, 2, 46, 1),
-                    // indicatorColor: const Color.fromRGBO(4, 2, 46, 1),
-                    // unselectedLabelColor: Colors.grey,
                     controller: tabController,
                     onTap: (_) {
                       pageUpdateNotifier.skipButtonVisible = false;
@@ -94,9 +100,6 @@ class _PomodoroViewState extends State<PomodoroWidget>
             Expanded(
               child: SizedBox(
                 child: TabBarView(
-                  // physics: !pageUpdateNotifier.startStop
-                  //     ? const NeverScrollableScrollPhysics()
-                  //     : const AlwaysScrollableScrollPhysics(),
                   physics: const NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [

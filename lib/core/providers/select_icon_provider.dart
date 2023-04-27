@@ -1,5 +1,8 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:pomotodo/core/providers/locale_provider.dart';
+import 'package:pomotodo/l10n/app_l10n.dart';
+import 'package:provider/provider.dart';
 
 class SelectIcon extends ChangeNotifier {
   List<IconData> icons = const [
@@ -38,18 +41,49 @@ class SelectTheme {
 }
 
 class SelectLanguage {
-  List<CountryFlags> flags = [
-    CountryFlags.flag(
-      'tr',
-      height: 40,
-      width: 40,
-      borderRadius: 8,
+
+  List<Widget> flags = [
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Row(
+        children: [
+          CountryFlags.flag(
+            'tr',
+            height: 35,
+            width: 35,
+            borderRadius: 8,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Consumer<LocaleModel>(
+              builder: (context, value, child) {
+                return Text(L10n.of(context)!.turkish);
+              },
+            ),
+          )
+        ],
+      ),
     ),
-    CountryFlags.flag(
-      'us',
-      height: 40,
-      width: 40,
-      borderRadius: 8,
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Row(
+        children: [
+          CountryFlags.flag(
+            'us',
+            height: 35,
+            width: 35,
+            borderRadius: 8,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Consumer<LocaleModel>(
+              builder: (context, value, child) {
+                return Text(L10n.of(context)!.english);
+              },
+            ),
+          )
+        ],
+      ),
     ),
   ];
 

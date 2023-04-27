@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pomotodo/views/notification_settings/notification_settings.widgets.dart';
+import 'package:pomotodo/views/app_settings/app_settings.widgets.dart';
 
-class NotificationSettingsView extends StatelessWidget
-    with NotificationSettingsWidgets {
-  const NotificationSettingsView({super.key});
+class AppSettingsView extends StatelessWidget
+    with AppSettingsWidgets {
+  const AppSettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {

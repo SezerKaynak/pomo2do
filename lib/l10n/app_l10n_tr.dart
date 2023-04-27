@@ -525,4 +525,37 @@ class L10nTr extends L10n {
 
   @override
   String get stopAlarm => 'Alarmı kapat';
+
+  @override
+  String get turkish => 'Türkçe';
+
+  @override
+  String get english => 'İngilizce';
+
+  @override
+  String get darkMode => 'Koyu';
+
+  @override
+  String get lightMode => 'Açık';
+
+  @override
+  String get appSettings => 'Uygulama Ayarları';
+
+  @override
+  String get appSettingsSubtitle => 'Aşağıdaki alanları kullanarak uygulama ayarlarını yapabilirsiniz.';
+
+  @override
+  String get setAlarm => 'Sayaç bitiminde alarm çalsın mı?';
+
+  @override
+  String get setNotification => 'Sayaç bitiminde bildirim gönderilsin mi?';
+
+  @override
+  String get resetPomodoroWarn => 'Sayaç sıfırlanacak uyarısı gösterilsin mi?';
+
+  @override
+  String get spotifyPlayer => 'Spotify oynatıcısı gösterilsin mi?';
+
+  @override
+  String get stopMusic => 'Araya geçişlerde müzik durdurulsun mu?';
 }

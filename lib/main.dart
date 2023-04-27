@@ -17,7 +17,7 @@ import 'package:pomotodo/views/auth_view/auth_widget_builder.dart';
 import 'package:pomotodo/views/completed_task_view/completed_task.view.dart';
 import 'package:pomotodo/views/deleted_task_view/deleted_task.view.dart';
 import 'package:pomotodo/views/leaderboard_view/leaderboard.view.dart';
-import 'package:pomotodo/views/notification_settings/notification_settings.view.dart';
+import 'package:pomotodo/views/app_settings/app_settings.view.dart';
 import 'package:pomotodo/views/pomodoro_settings_view/pomodoro_settings.view.dart';
 import 'package:pomotodo/views/task_statistics/task_statistics.view.dart';
 import 'package:pomotodo/views/edit_profile_view/edit_profile.view.dart';
@@ -34,7 +34,7 @@ import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:alarm/alarm.dart';
 
-import 'views/notification_settings/notification_settings.viewmodel.dart';
+import 'views/app_settings/app_settings.viewmodel.dart';
 
 Future<void> main() async {
   ThemeData theme, themeDark;
@@ -86,8 +86,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
   LocaleModel languageProvider = LocaleModel();
-  NotificationSettingsController notificationSettingsController =
-      NotificationSettingsController();
+  AppSettingsController notificationSettingsController =
+      AppSettingsController();
 
   @override
   void initState() {
@@ -121,6 +121,18 @@ class _MyAppState extends State<MyApp> {
         await notificationSettingsController.notificationSettingsPreference
             .getSetting()
             .then((value) => value[1]);
+    notificationSettingsController.warnSetting =
+        await notificationSettingsController.notificationSettingsPreference
+            .getSetting()
+            .then((value) => value[2]);
+    notificationSettingsController.spotifySetting =
+        await notificationSettingsController.notificationSettingsPreference
+            .getSetting()
+            .then((value) => value[3]);
+    notificationSettingsController.pauseSpotifySetting =
+        await notificationSettingsController.notificationSettingsPreference
+            .getSetting()
+            .then((value) => value[4]);
   }
 
   @override
@@ -153,8 +165,7 @@ class _MyAppState extends State<MyApp> {
             '/editProfile': (context) => const EditProfileView(),
             '/archived': (context) => const ArchivedTasksView(),
             '/pomodoroSettings': (context) => const PomodoroSettingsView(),
-            '/notificationSettings': (context) =>
-                const NotificationSettingsView(),
+            '/notificationSettings': (context) => const AppSettingsView(),
             '/taskStatistics': (context) => ChangeNotifierProvider(
                   create: (context) => TaskStatsProvider(),
                   child: const TaskStatisticsView(),
