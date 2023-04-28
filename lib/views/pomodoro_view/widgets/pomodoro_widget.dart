@@ -25,6 +25,7 @@ class _PomodoroViewState extends State<PomodoroWidget>
   late TabController tabController;
   late CountDownController controller;
   late TextEditingController controller2;
+
   int time = 0;
 
   @override
@@ -50,9 +51,7 @@ class _PomodoroViewState extends State<PomodoroWidget>
             onPressed: () {
               pageUpdateNotifier.onWillPop
                   ? widget.task.pomodoroCount != 0
-                      ? context
-                              .read<AppSettingsController>()
-                              .warnSetting
+                      ? context.read<AppSettingsController>().warnSetting
                           ? QuickAlert.show(
                               context: context,
                               type: QuickAlertType.confirm,
@@ -104,17 +103,20 @@ class _PomodoroViewState extends State<PomodoroWidget>
                   controller: tabController,
                   children: [
                     FocusView(
-                        widget: widget,
-                        controller: controller,
-                        tabController: tabController),
+                      widget: widget,
+                      controller: controller,
+                      tabController: tabController,
+                    ),
                     ShortBreak(
-                        widget: widget,
-                        controller: controller,
-                        tabController: tabController),
+                      widget: widget,
+                      controller: controller,
+                      tabController: tabController,
+                    ),
                     LongBreak(
-                        widget: widget,
-                        controller: controller,
-                        tabController: tabController),
+                      widget: widget,
+                      controller: controller,
+                      tabController: tabController,
+                    ),
                   ],
                 ),
               ),

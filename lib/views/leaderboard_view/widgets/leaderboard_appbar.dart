@@ -24,7 +24,7 @@ class _LeaderboardAppBarState extends State<LeaderboardAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      title:  Text(
+      title: Text(
         L10n.of(context)!.leaderboard,
       ),
       centerTitle: true,
@@ -47,9 +47,9 @@ class _LeaderboardAppBarState extends State<LeaderboardAppBar> {
         child: Container(
           height: 30,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(32.0),
               topRight: Radius.circular(32.0),
             ),

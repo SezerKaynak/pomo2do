@@ -154,7 +154,7 @@ class TaskStatsProvider extends ChangeNotifier {
     return Colors.black;
   }
 
-  Future<void> sumOfTaskTimeWeekly() async {
+  Future<void> dailyTaskPassingTime() async {
     List<String> date = getWeekDays()[0];
     int totalTime = 0;
 

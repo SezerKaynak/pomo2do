@@ -36,8 +36,8 @@ class NotificationPreference {
     List<bool> settingList = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     settingList.addAll([
-      prefs.getBool(alarm_status) ?? false,
-      prefs.getBool(notification_status) ?? false,
+      prefs.getBool(alarm_status) ?? true,
+      prefs.getBool(notification_status) ?? true,
       prefs.getBool(warn_status) ?? true,
       prefs.getBool(spotify_status) ?? true,
       prefs.getBool(pause_spotify_status) ?? true,

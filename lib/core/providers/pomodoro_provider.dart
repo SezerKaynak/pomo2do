@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/spotify_provider.dart';
+import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/core/service/google_ads.dart';
 import 'package:pomotodo/core/service/notification_controller.dart';
@@ -27,6 +28,7 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
   bool isAlarmRinging = true;
   final BuildContext context;
   final L10n? l10n;
+  TaskStatsProvider leaderboardUpdate = TaskStatsProvider();
 
   void startButton(CountDownController controller, int time, int index) {
     NotificationController().createNotification(
@@ -59,6 +61,8 @@ class PageUpdate extends ChangeNotifier with DatabaseService {
       notifyListeners();
     } else {
       stop(controller, task, time, tabController, longBreakTimerSelect);
+      leaderboardUpdate.weeklyTaskPassingTime();
+      leaderboardUpdate.montlyTaskPassingTime();
       onWillPop = true;
       skipButtonVisible = false;
       notifyListeners();

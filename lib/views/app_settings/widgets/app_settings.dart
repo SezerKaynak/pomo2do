@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/providers/locale_provider.dart';
@@ -37,6 +38,22 @@ class _AppSettingsWidgetState extends State<AppSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> titles = [
+      L10n.of(context)!.setAlarm,
+      L10n.of(context)!.setNotification,
+      L10n.of(context)!.resetPomodoroWarn,
+      L10n.of(context)!.spotifyPlayer,
+      L10n.of(context)!.stopMusic
+    ];
+
+    List<String> settingTypes = [
+      'Alarm',
+      'Notification',
+      "Warning",
+      "Spotify",
+      "PauseSpotify"
+    ];
+
     SelectTheme selectedThemeIcon = SelectTheme();
     selectedThemeIcon.selectedTheme = [
       !themeChange.darkTheme,
@@ -85,101 +102,84 @@ class _AppSettingsWidgetState extends State<AppSettingsWidget> {
             fontW: FontWeight.w400,
             textPosition: TextAlign.left,
           ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Consumer<AppSettingsController>(
-                  builder: (context, alarmValue, child) {
-                    return Setting(
-                      settingTitle: L10n.of(context)!.setAlarm,
-                      settingValue: alarmValue,
-                      settingType: 'Alarm',
-                    );
-                  },
-                ),
-                Consumer<AppSettingsController>(
-                  builder: (context, notificationValue, child) {
-                    return Setting(
-                      settingTitle: L10n.of(context)!.setNotification,
-                      settingValue: notificationValue,
-                      settingType: 'Notification',
-                    );
-                  },
-                ),
-                Consumer<AppSettingsController>(
-                  builder: (context, warningValue, child) {
-                    return Setting(
-                      settingTitle: L10n.of(context)!.resetPomodoroWarn,
-                      settingValue: warningValue,
-                      settingType: "Warning",
-                    );
-                  },
-                ),
-                Consumer<AppSettingsController>(
-                  builder: (context, spotifyPlayerValue, child) {
-                    return Setting(
-                      settingTitle: L10n.of(context)!.spotifyPlayer,
-                      settingValue: spotifyPlayerValue,
-                      settingType: "Spotify",
-                    );
-                  },
-                ),
-                Consumer<AppSettingsController>(
-                  builder: (context, pauseSpotifyValue, child) {
-                    return Setting(
-                      settingTitle: L10n.of(context)!.stopMusic,
-                      settingValue: pauseSpotifyValue,
-                      settingType: "PauseSpotify",
-                    );
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(L10n.of(context)!.themePreference),
-                    ToggleButtons(
-                      onPressed: (int index) {
-                        themeChange.darkTheme = index == 0 ? false : true;
-                      },
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width * .12,
-                          minHeight: MediaQuery.of(context).size.height * .05),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      selectedBorderColor: Colors.blue[700],
-                      selectedColor: Colors.white,
-                      fillColor: Theme.of(context).primaryColor,
-                      color: Colors.blue[400],
-                      isSelected: selectedThemeIcon.selectedTheme,
-                      children: themeIcons,
+          Consumer<AppSettingsController>(
+            builder: (context, value, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: titles.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Setting(
+                          settingTitle: titles[index],
+                          settingValue: value,
+                          settingType: settingTypes[index],
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(L10n.of(context)!.themePreference),
+                        ToggleButtons(
+                          onPressed: (int index) {
+                            themeChange.darkTheme = index == 0 ? false : true;
+                          },
+                          constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width * .12,
+                              minHeight:
+                                  MediaQuery.of(context).size.height * .05),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          selectedBorderColor: Colors.blue[700],
+                          selectedColor: Colors.white,
+                          fillColor: Theme.of(context).primaryColor,
+                          color: Colors.blue[400],
+                          isSelected: selectedThemeIcon.selectedTheme,
+                          children: themeIcons,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(L10n.of(context)!.languagePreference),
-                    ToggleButtons(
-                      onPressed: (int index) {
-                        localeProvider.locale == const Locale('en', 'US')
-                            ? localeProvider.locale = const Locale('tr', 'TR')
-                            : localeProvider.locale = const Locale('en', 'US');
-                      },
-                      constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width * .2,
-                          minHeight: MediaQuery.of(context).size.height * .05),
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      selectedBorderColor: Colors.blue[700],
-                      selectedColor: Colors.white,
-                      fillColor: Theme.of(context).primaryColor,
-                      color: Theme.of(context).textTheme.bodyMedium!.color,
-                      isSelected: selectedLanguage.selectedLanguage,
-                      children: selectedLanguage.flags,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(L10n.of(context)!.languagePreference),
+                        ToggleButtons(
+                          onPressed: (int index) {
+                            localeProvider.locale == const Locale('en', 'US')
+                                ? localeProvider.locale =
+                                    const Locale('tr', 'TR')
+                                : localeProvider.locale =
+                                    const Locale('en', 'US');
+                          },
+                          constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width * .2,
+                              minHeight:
+                                  MediaQuery.of(context).size.height * .05),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          selectedBorderColor: Colors.blue[700],
+                          selectedColor: Colors.white,
+                          fillColor: Theme.of(context).primaryColor,
+                          color: Theme.of(context).textTheme.bodyMedium!.color,
+                          isSelected: selectedLanguage.selectedLanguage,
+                          children: selectedLanguage.flags,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),

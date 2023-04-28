@@ -142,8 +142,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => languageProvider),
         ChangeNotifierProvider(create: (context) => themeChangeProvider),
         ChangeNotifierProvider(
-          create: (context) => notificationSettingsController,
-        ),
+            create: (context) => notificationSettingsController)
       ],
       child: AuthWidgetBuilder(
         onPageBuilder: (context, AsyncSnapshot<PomotodoUser?> snapShot) =>

@@ -98,7 +98,7 @@ class MiniTaskStatistics extends StatelessWidget {
             decoration: const BoxDecoration(
                 border: Border(right: BorderSide(width: 0.5))),
             child: FutureBuilder(
-              future: providerOfTaskStat.sumOfTaskTimeWeekly(),
+              future: providerOfTaskStat.dailyTaskPassingTime(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Column(

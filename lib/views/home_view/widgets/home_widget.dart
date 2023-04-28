@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
@@ -20,7 +21,7 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var l10n = L10n.of(context)!;
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
-    TaskStatsProvider leaderboardUpdate = TaskStatsProvider();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -34,6 +35,29 @@ class HomeWidget extends StatelessWidget {
                 create: (context) => TaskStatsProvider(),
                 child: const MiniTaskStatistics()),
           ),
+        ),
+        FutureBuilder<Widget>(
+          future: GoogleAds.buildBannerWidget(
+            context: context,
+          ),
+          builder: (_, snapshot) {
+            if (!snapshot.hasData) return const SizedBox.shrink();
+
+            return Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: kToolbarHeight,
+                  width: MediaQuery.of(context).size.width,
+                  child: snapshot.data,
+                ),
+              ),
+            );
+          },
         ),
         Expanded(
           flex: 12,
@@ -50,6 +74,7 @@ class HomeWidget extends StatelessWidget {
                       return providerOfTasks.retrievedTaskList!.isEmpty
                           ? Center(child: Text(l10n.noActiveTask))
                           : ListView.separated(
+                              physics: const BouncingScrollPhysics(),
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
                                     height: 10,
@@ -111,172 +136,159 @@ class HomeWidget extends StatelessWidget {
                                                   BorderRadius.circular(8),
                                             ),
                                             child: Dismissible(
-                                                onDismissed:
-                                                    ((direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    providerOfTasks.dismiss(
-                                                        key, index);
-                                                  } else {
-                                                    {
-                                                      Navigator.pushNamed(
-                                                          context, '/editTask',
-                                                          arguments: [
-                                                            key,
-                                                            index
-                                                          ]).then((_) =>
-                                                          providerOfTasks
-                                                              .refresh());
-                                                    }
+                                              onDismissed: ((direction) async {
+                                                if (direction ==
+                                                    DismissDirection
+                                                        .endToStart) {
+                                                  providerOfTasks.dismiss(
+                                                      key, index);
+                                                } else {
+                                                  {
+                                                    Navigator.pushNamed(
+                                                        context, '/editTask',
+                                                        arguments: [
+                                                          key,
+                                                          index
+                                                        ]).then((_) =>
+                                                        providerOfTasks
+                                                            .refresh());
                                                   }
-                                                }),
-                                                confirmDismiss:
-                                                    (DismissDirection
-                                                        direction) async {
-                                                  if (direction ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    return await QuickAlert
-                                                        .show(
-                                                      context: context,
-                                                      type: QuickAlertType
-                                                          .confirm,
-                                                      title:
-                                                          l10n.trashAlertTitle,
-                                                      text: l10n
-                                                          .trashAlertSubtitle,
-                                                      confirmBtnText:
-                                                          l10n.alertApprove,
-                                                      cancelBtnText:
-                                                          l10n.alertReject,
-                                                      confirmBtnColor:
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .error,
-                                                      onConfirmBtnTap: () =>
-                                                          Navigator.of(context)
-                                                              .pop(true),
-                                                      onCancelBtnTap: () =>
-                                                          Navigator.of(context)
-                                                              .pop(false),
-                                                    );
-                                                  }
-                                                  return true;
-                                                },
-                                                background: Container(
-                                                  color:
-                                                      const Color(0xFF21B7CA),
+                                                }
+                                              }),
+                                              confirmDismiss: (DismissDirection
+                                                  direction) async {
+                                                if (direction ==
+                                                    DismissDirection
+                                                        .endToStart) {
+                                                  return await QuickAlert.show(
+                                                    context: context,
+                                                    type:
+                                                        QuickAlertType.confirm,
+                                                    title: l10n.trashAlertTitle,
+                                                    text:
+                                                        l10n.trashAlertSubtitle,
+                                                    confirmBtnText:
+                                                        l10n.alertApprove,
+                                                    cancelBtnText:
+                                                        l10n.alertReject,
+                                                    confirmBtnColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .error,
+                                                    onConfirmBtnTap: () =>
+                                                        Navigator.of(context)
+                                                            .pop(true),
+                                                    onCancelBtnTap: () =>
+                                                        Navigator.of(context)
+                                                            .pop(false),
+                                                  );
+                                                }
+                                                return true;
+                                              },
+                                              background: Container(
+                                                color: const Color(0xFF21B7CA),
+                                                padding: const EdgeInsets.only(
+                                                    left: 28.0),
+                                                alignment: AlignmentDirectional
+                                                    .centerStart,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(Icons.edit,
+                                                        color: Colors.white),
+                                                    Text(
+                                                      l10n.editText,
+                                                      style: const TextStyle(
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              secondaryBackground: Container(
+                                                  color: Colors.red,
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 28.0),
+                                                          right: 28.0),
                                                   alignment:
                                                       AlignmentDirectional
-                                                          .centerStart,
+                                                          .centerEnd,
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
                                                     children: [
-                                                      const Icon(Icons.edit,
+                                                      const Icon(Icons.delete,
                                                           color: Colors.white),
-                                                      Text(
-                                                        l10n.editText,
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )
+                                                      Text(l10n.moveIntoTrash,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white))
                                                     ],
-                                                  ),
-                                                ),
-                                                secondaryBackground: Container(
-                                                    color: Colors.red,
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 28.0),
-                                                    alignment:
-                                                        AlignmentDirectional
-                                                            .centerEnd,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        const Icon(Icons.delete,
-                                                            color:
-                                                                Colors.white),
-                                                        Text(l10n.moveIntoTrash,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .white))
-                                                      ],
-                                                    )),
-                                                resizeDuration: const Duration(
-                                                    milliseconds: 200),
-                                                key: UniqueKey(),
-                                                child: ListTile(
-                                                  contentPadding:
-                                                      const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 5),
-                                                  leading: Icon(taskIcon),
-                                                  onTap: () async {
-                                                    GoogleAds()
-                                                        .loadInterstitialAd();
-
-                                                    AwesomeNotifications()
-                                                        .isNotificationAllowed()
-                                                        .then((isAllowed) {
-                                                      if (!isAllowed) {
-                                                        AwesomeNotifications()
-                                                            .requestPermissionToSendNotifications(
-                                                                channelKey:
-                                                                    'basic');
-                                                      }
-                                                    });
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChangeNotifierProvider(
-                                                                  create: (context) =>
-                                                                      PageUpdate(
-                                                                          context:
-                                                                              context,
-                                                                          l10n:
-                                                                              l10n),
-                                                                  child:
-                                                                      PomodoroWidget(
-                                                                    task: providerOfTasks
-                                                                            .retrievedTaskList![
-                                                                        key]![index],
-                                                                  )),
-                                                        )).then((_) {
-                                                      leaderboardUpdate
-                                                          .weeklyTaskPassingTime();
-                                                      leaderboardUpdate
-                                                          .montlyTaskPassingTime();
-                                                      providerOfTasks.refresh();
-                                                    });
-                                                  },
-                                                  title: Text(
-                                                    providerOfTasks
-                                                        .retrievedTaskList![
-                                                            key]![index]
-                                                        .taskName,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  subtitle: Text(providerOfTasks
+                                                  )),
+                                              resizeDuration: const Duration(
+                                                  milliseconds: 200),
+                                              key: UniqueKey(),
+                                              child: ListTile(
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
+                                                leading: Icon(taskIcon),
+                                                onTap: () async {
+                                                  GoogleAds()
+                                                      .loadInterstitialAd();
+                                                  AwesomeNotifications()
+                                                      .isNotificationAllowed()
+                                                      .then((isAllowed) {
+                                                    if (!isAllowed) {
+                                                      AwesomeNotifications()
+                                                          .requestPermissionToSendNotifications(
+                                                              channelKey:
+                                                                  'basic');
+                                                    }
+                                                  });
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ChangeNotifierProvider(
+                                                              create: (context) =>
+                                                                  PageUpdate(
+                                                                      context:
+                                                                          context,
+                                                                      l10n:
+                                                                          l10n),
+                                                              child:
+                                                                  PomodoroWidget(
+                                                                task: providerOfTasks
+                                                                        .retrievedTaskList![
+                                                                    key]![index],
+                                                              )),
+                                                    ),
+                                                  ).then((_) {
+                                                    providerOfTasks.refresh();
+                                                  });
+                                                },
+                                                title: Text(
+                                                  providerOfTasks
                                                       .retrievedTaskList![key]![
                                                           index]
-                                                      .taskInfo),
-                                                  trailing: const Icon(
-                                                      Icons.arrow_right_sharp),
-                                                )),
+                                                      .taskName,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                subtitle: Text(providerOfTasks
+                                                    .retrievedTaskList![key]![
+                                                        index]
+                                                    .taskInfo),
+                                                trailing: const Icon(
+                                                  Icons.arrow_right_sharp,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         );
                                       },

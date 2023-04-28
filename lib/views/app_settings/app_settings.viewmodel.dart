@@ -5,8 +5,8 @@ class AppSettingsController extends ChangeNotifier {
   NotificationPreference notificationSettingsPreference =
       NotificationPreference();
 
-  bool _alarmSetting = false;
-  bool _notificationSetting = false;
+  bool _alarmSetting = true;
+  bool _notificationSetting = true;
   bool _warnSetting = true;
   bool _spotifySetting = true;
   bool _pauseSpotifySetting = true;
