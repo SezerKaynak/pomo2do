@@ -181,7 +181,7 @@ class _ExpandableFabState extends State<ExpandableFab>
             duration: const Duration(milliseconds: 250),
             curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
             child: AnimatedOpacity(
-              opacity: buttonState.open ? 0.0 : 1.0,
+              opacity: context.watch<ButtonState>().open ? 0.0 : 1.0,
               curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
               duration: const Duration(milliseconds: 250),
               child: FloatingActionButton(
