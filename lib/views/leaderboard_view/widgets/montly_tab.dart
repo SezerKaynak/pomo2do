@@ -62,9 +62,10 @@ class _MontlyTabState extends State<MontlyTab> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(
-                                montlyLeaderboardProvider
-                                    .leaderboardList[1].montlyTaskPassingTime!
-                                    .toString(),
+                                (montlyLeaderboardProvider.leaderboardList[1]
+                                            .montlyTaskPassingTime! /
+                                        3600)
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(color: Colors.white),
                               )
                             ],
@@ -101,9 +102,10 @@ class _MontlyTabState extends State<MontlyTab> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(
-                                montlyLeaderboardProvider
-                                    .leaderboardList[0].montlyTaskPassingTime!
-                                    .toString(),
+                                (montlyLeaderboardProvider.leaderboardList[0]
+                                            .montlyTaskPassingTime! /
+                                        3600)
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(color: Colors.white),
                               )
                             ],
@@ -139,9 +141,10 @@ class _MontlyTabState extends State<MontlyTab> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               Text(
-                                montlyLeaderboardProvider
-                                    .leaderboardList[2].montlyTaskPassingTime!
-                                    .toString(),
+                                (montlyLeaderboardProvider.leaderboardList[2]
+                                            .montlyTaskPassingTime! /
+                                        3600)
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(color: Colors.white),
                               )
                             ],

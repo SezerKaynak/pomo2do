@@ -1,6 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pomotodo/core/models/task_model.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/core/providers/tasks_provider.dart';
@@ -21,6 +20,7 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var l10n = L10n.of(context)!;
     final providerOfTasks = Provider.of<TasksProvider>(context, listen: true);
+    TaskStatsProvider leaderboardUpdate = TaskStatsProvider();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -268,6 +268,10 @@ class HomeWidget extends StatelessWidget {
                                                               )),
                                                     ),
                                                   ).then((_) {
+                                                    leaderboardUpdate
+                                                        .weeklyTaskPassingTime();
+                                                    leaderboardUpdate
+                                                        .montlyTaskPassingTime();
                                                     providerOfTasks.refresh();
                                                   });
                                                 },

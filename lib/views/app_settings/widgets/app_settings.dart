@@ -86,102 +86,109 @@ class _AppSettingsWidgetState extends State<AppSettingsWidget> {
       localeProvider.locale == const Locale('tr', 'TR') ? true : false,
       localeProvider.locale == const Locale('en', 'US') ? true : false,
     ];
-    return Padding(
-      padding: ScreenPadding.screenPadding.copyWith(top: 20),
-      child: Column(
-        children: [
-          ScreenTexts(
-            title: L10n.of(context)!.appSettings,
-            theme: Theme.of(context).textTheme.headlineMedium,
-            fontW: FontWeight.w600,
-            textPosition: TextAlign.left,
-          ),
-          ScreenTexts(
-            title: L10n.of(context)!.appSettingsSubtitle,
-            theme: Theme.of(context).textTheme.titleMedium,
-            fontW: FontWeight.w400,
-            textPosition: TextAlign.left,
-          ),
-          Consumer<AppSettingsController>(
-            builder: (context, value, child) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: titles.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Setting(
-                          settingTitle: titles[index],
-                          settingValue: value,
-                          settingType: settingTypes[index],
-                        ),
-                      );
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(L10n.of(context)!.themePreference),
-                        ToggleButtons(
-                          onPressed: (int index) {
-                            themeChange.darkTheme = index == 0 ? false : true;
-                          },
-                          constraints: BoxConstraints(
-                              minWidth: MediaQuery.of(context).size.width * .12,
-                              minHeight:
-                                  MediaQuery.of(context).size.height * .05),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: Colors.blue[700],
-                          selectedColor: Colors.white,
-                          fillColor: Theme.of(context).primaryColor,
-                          color: Colors.blue[400],
-                          isSelected: selectedThemeIcon.selectedTheme,
-                          children: themeIcons,
-                        ),
-                      ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: ScreenPadding.screenPadding.copyWith(top: 20),
+        child: Column(
+          children: [
+            ScreenTexts(
+              title: L10n.of(context)!.appSettings,
+              theme: Theme.of(context).textTheme.headlineMedium,
+              fontW: FontWeight.w600,
+              textPosition: TextAlign.left,
+            ),
+            ScreenTexts(
+              title: L10n.of(context)!.appSettingsSubtitle,
+              theme: Theme.of(context).textTheme.titleMedium,
+              fontW: FontWeight.w400,
+              textPosition: TextAlign.left,
+            ),
+            Consumer<AppSettingsController>(
+              builder: (context, value, child) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: titles.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Setting(
+                            settingTitle: titles[index],
+                            settingValue: value,
+                            settingType: settingTypes[index],
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(L10n.of(context)!.languagePreference),
-                        ToggleButtons(
-                          onPressed: (int index) {
-                            localeProvider.locale == const Locale('en', 'US')
-                                ? localeProvider.locale =
-                                    const Locale('tr', 'TR')
-                                : localeProvider.locale =
-                                    const Locale('en', 'US');
-                          },
-                          constraints: BoxConstraints(
-                              minWidth: MediaQuery.of(context).size.width * .2,
-                              minHeight:
-                                  MediaQuery.of(context).size.height * .05),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                          selectedBorderColor: Colors.blue[700],
-                          selectedColor: Colors.white,
-                          fillColor: Theme.of(context).primaryColor,
-                          color: Theme.of(context).textTheme.bodyMedium!.color,
-                          isSelected: selectedLanguage.selectedLanguage,
-                          children: selectedLanguage.flags,
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(L10n.of(context)!.themePreference),
+                          ToggleButtons(
+                            onPressed: (int index) {
+                              themeChange.darkTheme = index == 0 ? false : true;
+                            },
+                            constraints: BoxConstraints(
+                                minWidth:
+                                    MediaQuery.of(context).size.width * .12,
+                                minHeight:
+                                    MediaQuery.of(context).size.height * .05),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            selectedBorderColor: Colors.blue[700],
+                            selectedColor: Colors.white,
+                            fillColor: Theme.of(context).primaryColor,
+                            color: Colors.blue[400],
+                            isSelected: selectedThemeIcon.selectedTheme,
+                            children: themeIcons,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(L10n.of(context)!.languagePreference),
+                          ToggleButtons(
+                            onPressed: (int index) {
+                              localeProvider.locale == const Locale('en', 'US')
+                                  ? localeProvider.locale =
+                                      const Locale('tr', 'TR')
+                                  : localeProvider.locale =
+                                      const Locale('en', 'US');
+                            },
+                            constraints: BoxConstraints(
+                                minWidth:
+                                    MediaQuery.of(context).size.width * .2,
+                                minHeight:
+                                    MediaQuery.of(context).size.height * .05),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            selectedBorderColor: Colors.blue[700],
+                            selectedColor: Colors.white,
+                            fillColor: Theme.of(context).primaryColor,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium!.color,
+                            isSelected: selectedLanguage.selectedLanguage,
+                            children: selectedLanguage.flags,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

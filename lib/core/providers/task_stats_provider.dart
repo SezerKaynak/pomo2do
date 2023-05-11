@@ -64,7 +64,7 @@ class TaskStatsProvider extends ChangeNotifier {
           : TaskStatisticsModel.fromDocumentSnapshot({});
       totalTime += int.parse(ikinciDeneme.taskPassingTime);
     }
-    ActiveDaysModel monthCell = ActiveDaysModel(formattedDate, totalTime);
+    ActiveDaysModel monthCell = ActiveDaysModel(formattedDate, totalTime/60);
     cell.add(monthCell);
     table3 = cell;
   }
@@ -90,9 +90,9 @@ class TaskStatsProvider extends ChangeNotifier {
     for (var i = 6; i >= 0; i--) {
       List<TaskStatisticsModel> stats = taskToTaskStats(date[i]);
 
-      int totalTime = 0;
+      double totalTime = 0;
       for (var element in stats) {
-        totalTime += int.parse(element.taskPassingTime);
+        totalTime += int.parse(element.taskPassingTime)/60;
       }
       SumOfTaskTimeModel newColumn =
           SumOfTaskTimeModel(dayOfWeeks[(now.weekday - 1 - i) % 7], totalTime);
@@ -107,9 +107,9 @@ class TaskStatsProvider extends ChangeNotifier {
         taskToTaskStats(date[-count.value + 6]);
 
     for (var i = 0; i < tasks.length; i++) {
-      TaskByTaskModel deneme = TaskByTaskModel(
-          tasks[i].taskName, int.parse(dayStats[i].taskPassingTime));
-      if (deneme.passingTime != 0) taskByTask.add(deneme);
+      TaskByTaskModel task = TaskByTaskModel(
+          tasks[i].taskName, double.parse(dayStats[i].taskPassingTime)/60);
+      if (task.passingTime != 0) taskByTask.add(task);
     }
     table2 = taskByTask;
   }
@@ -132,12 +132,12 @@ class TaskStatsProvider extends ChangeNotifier {
     );
   }
 
-  Color _getMonthCellBackgroundColor(int time) {
-    if (time > 150) {
+  Color _getMonthCellBackgroundColor(double time) {
+    if (time > 120) {
       return kDarkerGreen;
-    } else if (time > 100) {
+    } else if (time > 80) {
       return kDarkGreen;
-    } else if (time > 50) {
+    } else if (time > 40) {
       return kMidGreen;
     } else if (time > 0) {
       return kLightGreen;

@@ -57,7 +57,7 @@ class _ArchivedTasksState extends State<ArchivedTaskWidget> {
                                 decoration: BoxDecoration(
                                     color: data.isDone == true
                                         ? Colors.green[500]
-                                        : Theme.of(context).cardColor,
+                                        : Colors.grey,
                                     borderRadius: BorderRadius.circular(8.0)),
                                 child: ListTile(
                                   contentPadding: const EdgeInsets.all(15),

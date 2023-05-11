@@ -1,5 +1,5 @@
 class SumOfTaskTimeModel {
   String date;
-  int sum;
+  double sum;
   SumOfTaskTimeModel(this.date, this.sum);
 }

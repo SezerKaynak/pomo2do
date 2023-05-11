@@ -157,9 +157,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           settings.Settings(
               settingIcon: Icons.notifications,
-              subtitle: L10n.of(context)!.uEditNotification,
+              subtitle: L10n.of(context)!.uAppSettings,
               title:
-                  settingTitle(context, L10n.of(context)!.notificationSettings),
+                  settingTitle(context, L10n.of(context)!.appSettings),
               tap: () {
                 Navigator.pushNamed(context, '/notificationSettings');
               }),

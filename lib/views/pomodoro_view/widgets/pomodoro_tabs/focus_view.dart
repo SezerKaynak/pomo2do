@@ -106,7 +106,7 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
               children: [
                 RepaintBoundary(
                   child: PomodoroTimer(
-                    width: MediaQuery.of(context).size.width * 0.65,
+                    width: MediaQuery.of(context).size.width * 0.60,
                     isReverse: true,
                     isReverseAnimation: true,
                     onComplete: () async {
@@ -166,23 +166,24 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                     if (context.select((PageUpdate pageNotifier) =>
                         pageNotifier.skipButtonVisible))
                       IconButton(
-                          onPressed: () {
-                            pageUpdateProvider.startOrStop(
-                              context
-                                      .read<SharedPreferences>()
-                                      .getInt("workTimerSelect")! *
-                                  60,
-                              widget.controller,
-                              widget.widget.task,
-                              widget.tabController,
-                              context
-                                  .read<SharedPreferences>()
-                                  .getInt("longBreakNumberSelect")!,
-                            );
-                            widget.tabController
-                                .animateTo(widget.tabController.index + 1);
-                          },
-                          icon: const Icon(Icons.skip_next))
+                        onPressed: () {
+                          pageUpdateProvider.startOrStop(
+                            context
+                                    .read<SharedPreferences>()
+                                    .getInt("workTimerSelect")! *
+                                60,
+                            widget.controller,
+                            widget.widget.task,
+                            widget.tabController,
+                            context
+                                .read<SharedPreferences>()
+                                .getInt("longBreakNumberSelect")!,
+                          );
+                          widget.tabController
+                              .animateTo(widget.tabController.index + 1);
+                        },
+                        icon: const Icon(Icons.skip_next),
+                      )
                   ],
                 ),
               ],
@@ -202,11 +203,10 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                         borderRadius: BorderRadius.circular(8)),
                     elevation: 10,
                     child: SizedBox(
-                      height: context
-                              .read<AppSettingsController>()
-                              .spotifySetting
-                          ? kToolbarHeight * 2
-                          : kToolbarHeight,
+                      height:
+                          context.read<AppSettingsController>().spotifySetting
+                              ? kToolbarHeight * 2
+                              : kToolbarHeight,
                       child: Column(
                         children: [
                           Visibility(
@@ -360,13 +360,12 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                             direction: Axis.vertical,
                                             children: [
                                               Text(
-                                                  L10n.of(context)!
-                                                      .resetPomodoro,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white)),
+                                                L10n.of(context)!.resetPomodoro,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
                                             ],
                                           ),
                                         ),

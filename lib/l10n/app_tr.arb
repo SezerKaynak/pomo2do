@@ -121,8 +121,8 @@
     "accSettings":"Hesap Ayarları",
     "uEditProfile":"Profilinizi düzenleyebilirsiniz.",
     "uChangePassword":"Şifrenizi değiştirebilirsiniz.",
-    "uEditNotification":"Bildirim ayarlarını yapabilirsiniz.",
-    "notificationSettings":"Bildirim Ayarları",  
+    "uAppSettings":"Uygulama ayarlarını yapabilirsiniz.",
+    "appSettings":"Uygulama Ayarları",  
     "uEditPomodoro":"Pomodoro sayacı vb. ayarları yapabilirsiniz.",
     "logOutAcc":"Hesaptan çıkış yapın.",
     "logOut":"Çıkış Yap",
@@ -148,7 +148,7 @@
     "errorPic":"Fotoğraf alınırken hata oluştu...",
     "takingPic":"Fotoğraf alınıyor...",
     "failedSignIn":"Giriş Başarısız!",
-    "workTime":"Çalışma Süresi",
+    "workTime":"Haftalık Çalışma Süresi",
     "few":"Az",
     "much":"Çok",
     "monday":"Pzt",
@@ -184,5 +184,7 @@
     "setNotification": "Sayaç bitiminde bildirim gönderilsin mi?",
     "resetPomodoroWarn": "Sayaç sıfırlanacak uyarısı gösterilsin mi?",
     "spotifyPlayer": "Spotify oynatıcısı gösterilsin mi?",
-    "stopMusic": "Araya geçişlerde müzik durdurulsun mu?"
+    "stopMusic": "Araya geçişlerde müzik durdurulsun mu?",
+    "onWeeklyPlacement": "Haftalık sıralamada",
+    "tasksWorkedOn": " Tarihinde çalışılan görevler"
 }

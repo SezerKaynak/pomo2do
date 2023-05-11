@@ -31,47 +31,44 @@ class SearchWidget extends StatelessWidget {
               child: Text(noResult),
             );
           }
-          return ListView.builder(
-              itemCount: dataList.length,
-              itemBuilder: (context, index) {
-                final TaskModel data = dataList[index];
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: getColor(data, context),
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(15),
-                          leading: const Icon(Icons.numbers),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChangeNotifierProvider(
-                                    create: (context) {
-                                      return PageUpdate(context: context);
-                                    },
-                                    child: PomodoroWidget(
-                                      task: dataList[index],
-                                    ),
-                                  ),
-                                ));
-                          },
-                          title: Text(data.taskName),
-                          subtitle: Text(data.taskInfo),
-                          trailing: const Icon(Icons.arrow_right_sharp),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              });
+          return ListView.separated(
+            padding: const EdgeInsets.all(8.0),
+            separatorBuilder: (context, index) {
+              return const SizedBox(
+                height: 5,
+              );
+            },
+            itemCount: dataList.length,
+            itemBuilder: (context, index) {
+              final TaskModel data = dataList[index];
+              return Container(
+                decoration: BoxDecoration(
+                    color: getColor(data, context),
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(10),
+                  leading: const Icon(Icons.numbers),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChangeNotifierProvider(
+                            create: (context) {
+                              return PageUpdate(context: context);
+                            },
+                            child: PomodoroWidget(
+                              task: dataList[index],
+                            ),
+                          ),
+                        ));
+                  },
+                  title: Text(data.taskName),
+                  subtitle: Text(data.taskInfo),
+                  trailing: const Icon(Icons.arrow_right_sharp),
+                ),
+              );
+            },
+          );
         }
 
         if (snapshot.connectionState == ConnectionState.done) {

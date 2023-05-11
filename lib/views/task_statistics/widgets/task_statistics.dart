@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/sum_of_task_time_model.dart';
 import 'package:pomotodo/core/models/task_by_task_model.dart';
+import 'package:pomotodo/core/providers/locale_provider.dart';
 import 'package:pomotodo/core/providers/task_stats_provider.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
+import 'package:pomotodo/utils/languages/language_preference.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -102,11 +104,39 @@ class _TaskStatisticsState extends State<TaskStatistics> {
                               padding: const EdgeInsets.all(8.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(
-                                  taskStatsProvider.getWeekDays()[0]
-                                      [-taskStatsProvider.count.value + 6],
-                                  style: const TextStyle(fontSize: 16),
-                                ),
+                                child: context.read<LocaleModel>().locale ==
+                                        const Locale("tr", "TR")
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                            taskStatsProvider.getWeekDays()[0][
+                                                -taskStatsProvider.count.value +
+                                                    6],
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                          Text(
+                                            L10n.of(context)!.tasksWorkedOn,
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          Text(
+                                            L10n.of(context)!.tasksWorkedOn,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                          Text(
+                                            taskStatsProvider.getWeekDays()[0][
+                                                -taskStatsProvider.count.value +
+                                                    6],
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
                               ),
                             ),
                           ),

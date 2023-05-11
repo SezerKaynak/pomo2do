@@ -819,17 +819,17 @@ abstract class L10n {
   /// **'You can change your password.'**
   String get uChangePassword;
 
-  /// No description provided for @uEditNotification.
+  /// No description provided for @uAppSettings.
   ///
   /// In en, this message translates to:
-  /// **'You can adjust notification settings.'**
-  String get uEditNotification;
+  /// **'You can adjust application settings.'**
+  String get uAppSettings;
 
-  /// No description provided for @notificationSettings.
+  /// No description provided for @appSettings.
   ///
   /// In en, this message translates to:
-  /// **'Notification Settings'**
-  String get notificationSettings;
+  /// **'Application Settings'**
+  String get appSettings;
 
   /// No description provided for @uEditPomodoro.
   ///
@@ -984,7 +984,7 @@ abstract class L10n {
   /// No description provided for @workTime.
   ///
   /// In en, this message translates to:
-  /// **'Working Time'**
+  /// **'Weekly Working Time'**
   String get workTime;
 
   /// No description provided for @few.
@@ -1161,12 +1161,6 @@ abstract class L10n {
   /// **'Light'**
   String get lightMode;
 
-  /// No description provided for @appSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Application Settings'**
-  String get appSettings;
-
   /// No description provided for @appSettingsSubtitle.
   ///
   /// In en, this message translates to:
@@ -1202,6 +1196,18 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Should music be stopped during breaks?'**
   String get stopMusic;
+
+  /// No description provided for @onWeeklyPlacement.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Rank'**
+  String get onWeeklyPlacement;
+
+  /// No description provided for @tasksWorkedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks worked on '**
+  String get tasksWorkedOn;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
