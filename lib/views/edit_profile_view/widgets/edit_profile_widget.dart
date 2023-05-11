@@ -7,6 +7,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
+import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/core/service/database_service.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
@@ -74,6 +76,7 @@ class _EditProfileState extends State<EditProfileWidget> {
     var l10n = L10n.of(context)!;
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
+
     return WillPopScope(
       onWillPop: () async => isLoading ? false : true,
       child: Scaffold(
@@ -100,8 +103,7 @@ class _EditProfileState extends State<EditProfileWidget> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: ScreenPadding
-                        .screenPadding
+                    padding: ScreenPadding.screenPadding
                         .copyWith(top: 8, left: 20, right: 20),
                     child: Column(
                       children: [
@@ -132,9 +134,9 @@ class _EditProfileState extends State<EditProfileWidget> {
                                         context: context,
                                         builder: ((builder) => choose()));
                                   },
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.camera_alt,
-                                    color: Colors.white,
+                                    color: Theme.of(context).primaryColor,
                                     size: 28,
                                   ),
                                 ))
@@ -227,6 +229,32 @@ class _EditProfileState extends State<EditProfileWidget> {
                                             .read<PomotodoUser>()
                                             .userMail
                                             .toString(),
+                                        'weeklyTaskPassingTime':
+                                            await DatabaseService()
+                                                .leaderboardStats()
+                                                .then((value) {
+                                          var index = value.indexWhere(
+                                              (element) =>
+                                                  element.uid ==
+                                                  context
+                                                      .read<PomotodoUser>()
+                                                      .userId);
+                                          return value[index]
+                                              .weeklyTaskPassingTime;
+                                        }),
+                                        'montlyTaskPassingTime':
+                                            await DatabaseService()
+                                                .leaderboardStats()
+                                                .then((value) {
+                                          var index = value.indexWhere(
+                                              (element) =>
+                                                  element.uid ==
+                                                  context
+                                                      .read<PomotodoUser>()
+                                                      .userId);
+                                          return value[index]
+                                              .montlyTaskPassingTime;
+                                        })
                                       });
 
                                       if (temp != image) {

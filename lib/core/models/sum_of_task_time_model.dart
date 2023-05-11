@@ -1,5 +1,5 @@
 class TaskByTaskModel {
   String taskName;
-  int passingTime;
+  double passingTime;
   TaskByTaskModel(this.taskName, this.passingTime);
 }

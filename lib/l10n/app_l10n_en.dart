@@ -368,10 +368,10 @@ class L10nEn extends L10n {
   String get uChangePassword => 'You can change your password.';
 
   @override
-  String get uEditNotification => 'You can adjust notification settings.';
+  String get uAppSettings => 'You can adjust application settings.';
 
   @override
-  String get notificationSettings => 'Notification Settings';
+  String get appSettings => 'Application Settings';
 
   @override
   String get uEditPomodoro => 'Pomodoro timer etc. you can make settings.';
@@ -449,7 +449,7 @@ class L10nEn extends L10n {
   String get failedSignIn => 'Login Failed!';
 
   @override
-  String get workTime => 'Working Time';
+  String get workTime => 'Weekly Working Time';
 
   @override
   String get few => 'Few';
@@ -525,4 +525,40 @@ class L10nEn extends L10n {
 
   @override
   String get stopAlarm => 'Stop the alarm';
+
+  @override
+  String get turkish => 'Turkish';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get darkMode => 'Dark';
+
+  @override
+  String get lightMode => 'Light';
+
+  @override
+  String get appSettingsSubtitle => 'You can set the application settings using the fields below.';
+
+  @override
+  String get setAlarm => 'Should an alarm be set when the timer ends?';
+
+  @override
+  String get setNotification => 'Should a notification be sent when the timer ends?';
+
+  @override
+  String get resetPomodoroWarn => 'Should a warning be shown when resetting the timer?';
+
+  @override
+  String get spotifyPlayer => 'Should the Spotify player be displayed?';
+
+  @override
+  String get stopMusic => 'Should music be stopped during breaks?';
+
+  @override
+  String get onWeeklyPlacement => 'Weekly Rank';
+
+  @override
+  String get tasksWorkedOn => 'Tasks worked on ';
 }

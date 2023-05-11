@@ -102,7 +102,7 @@ class NotificationController {
           ),
         ),
       );
-    } else {
+    } else if (alarmPermission) {
       Alarm.set(alarmSettings: alarmSettings);
     }
   }

@@ -64,10 +64,10 @@ class _WeeklyTabState extends State<WeeklyTab> {
                                 ),
                               ),
                               Text(
-                                weeklyLeaderboardProvider
-                                    .leaderboardList[1]
-                                    .weeklyTaskPassingTime
-                                    .toString(),
+                                (weeklyLeaderboardProvider.leaderboardList[1]
+                                            .weeklyTaskPassingTime! /
+                                        3600)
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],
@@ -107,10 +107,10 @@ class _WeeklyTabState extends State<WeeklyTab> {
                                 ),
                               ),
                               Text(
-                                weeklyLeaderboardProvider
-                                    .leaderboardList[0]
-                                    .weeklyTaskPassingTime
-                                    .toString(),
+                                (weeklyLeaderboardProvider.leaderboardList[0]
+                                            .weeklyTaskPassingTime! /
+                                        3600)
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),
@@ -150,10 +150,10 @@ class _WeeklyTabState extends State<WeeklyTab> {
                                 ),
                               ),
                               Text(
-                                weeklyLeaderboardProvider
-                                    .leaderboardList[2]
-                                    .weeklyTaskPassingTime
-                                    .toString(),
+                                (weeklyLeaderboardProvider.leaderboardList[2]
+                                            .weeklyTaskPassingTime! /
+                                        3600)
+                                    .toStringAsFixed(1),
                                 style: const TextStyle(
                                   color: Colors.white,
                                 ),

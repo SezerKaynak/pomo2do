@@ -1,5 +1,5 @@
 class ActiveDaysModel {
   String date;
-  int time;
+  double time;
   ActiveDaysModel(this.date, this.time);
 }

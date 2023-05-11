@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
@@ -93,10 +94,19 @@ class _SignInWidgetState extends State<SignInWidget> {
                           title: l10n.enterEmail,
                           confirmBtnText: l10n.alertApprove,
                           cancelBtnText: l10n.alertReject,
+                          backgroundColor:
+                              context.read<DarkThemeProvider>().darkTheme
+                                  ? Colors.black
+                                  : Colors.white,
+                          titleColor:
+                              context.read<DarkThemeProvider>().darkTheme
+                                  ? Colors.white
+                                  : Colors.black,
                           widget: ScreenTextField(
-                              textLabel: l10n.enterEmailHint,
-                              controller: _resetEmailController,
-                              maxLines: 1),
+                            textLabel: l10n.enterEmailHint,
+                            controller: _resetEmailController,
+                            maxLines: 1,
+                          ),
                           onConfirmBtnTap: () async {
                             FocusManager.instance.primaryFocus?.unfocus();
                             try {
@@ -111,7 +121,10 @@ class _SignInWidgetState extends State<SignInWidget> {
                               }
                             }
                           },
-                          onCancelBtnTap: () => Navigator.pop(context));
+                          onCancelBtnTap: () {
+                            _resetEmailController.clear();
+                            Navigator.pop(context);
+                          });
                     },
                     child: Text(l10n.forgotPassword,
                         style: Theme.of(context)

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/providers/pomodoro_provider.dart';
+import 'package:pomotodo/core/service/google_ads.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_timer/pomodoro_timer.dart';
 import 'package:pomotodo/views/pomodoro_view/widgets/pomodoro_widget.dart';
@@ -94,7 +95,7 @@ class _LongBreakState extends State<LongBreak> with WidgetsBindingObserver {
               children: [
                 RepaintBoundary(
                   child: PomodoroTimer(
-                    width: MediaQuery.of(context).size.width * 0.65,
+                    width: MediaQuery.of(context).size.width * 0.60,
                     onComplete: () {
                       pageUpdateProvider.startOrStop(
                           context
@@ -143,7 +144,8 @@ class _LongBreakState extends State<LongBreak> with WidgetsBindingObserver {
                                 .getInt("longBreakNumberSelect")!);
                       },
                       child: context.select(
-                        (PageUpdate pageNotifier) => pageNotifier.callText(context),
+                        (PageUpdate pageNotifier) =>
+                            pageNotifier.callText(context),
                       ),
                     ),
                     if (pageUpdateProvider.skipButtonVisible)
@@ -165,8 +167,37 @@ class _LongBreakState extends State<LongBreak> with WidgetsBindingObserver {
                         icon: const Icon(Icons.skip_next),
                       )
                   ],
-                )
+                ),
               ],
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FutureBuilder<Widget>(
+                future: GoogleAds.buildBannerWidget(
+                  context: context,
+                ),
+                builder: (_, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox.shrink();
+
+                  return Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 5),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        height: kToolbarHeight,
+                        width: MediaQuery.of(context).size.width,
+                        child: snapshot.data,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],

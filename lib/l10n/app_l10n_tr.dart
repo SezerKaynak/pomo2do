@@ -368,10 +368,10 @@ class L10nTr extends L10n {
   String get uChangePassword => 'Şifrenizi değiştirebilirsiniz.';
 
   @override
-  String get uEditNotification => 'Bildirim ayarlarını yapabilirsiniz.';
+  String get uAppSettings => 'Uygulama ayarlarını yapabilirsiniz.';
 
   @override
-  String get notificationSettings => 'Bildirim Ayarları';
+  String get appSettings => 'Uygulama Ayarları';
 
   @override
   String get uEditPomodoro => 'Pomodoro sayacı vb. ayarları yapabilirsiniz.';
@@ -449,7 +449,7 @@ class L10nTr extends L10n {
   String get failedSignIn => 'Giriş Başarısız!';
 
   @override
-  String get workTime => 'Çalışma Süresi';
+  String get workTime => 'Haftalık Çalışma Süresi';
 
   @override
   String get few => 'Az';
@@ -525,4 +525,40 @@ class L10nTr extends L10n {
 
   @override
   String get stopAlarm => 'Alarmı kapat';
+
+  @override
+  String get turkish => 'Türkçe';
+
+  @override
+  String get english => 'İngilizce';
+
+  @override
+  String get darkMode => 'Koyu';
+
+  @override
+  String get lightMode => 'Açık';
+
+  @override
+  String get appSettingsSubtitle => 'Aşağıdaki alanları kullanarak uygulama ayarlarını yapabilirsiniz.';
+
+  @override
+  String get setAlarm => 'Sayaç bitiminde alarm çalsın mı?';
+
+  @override
+  String get setNotification => 'Sayaç bitiminde bildirim gönderilsin mi?';
+
+  @override
+  String get resetPomodoroWarn => 'Sayaç sıfırlanacak uyarısı gösterilsin mi?';
+
+  @override
+  String get spotifyPlayer => 'Spotify oynatıcısı gösterilsin mi?';
+
+  @override
+  String get stopMusic => 'Araya geçişlerde müzik durdurulsun mu?';
+
+  @override
+  String get onWeeklyPlacement => 'Haftalık sıralamada';
+
+  @override
+  String get tasksWorkedOn => ' Tarihinde çalışılan görevler';
 }

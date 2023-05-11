@@ -80,10 +80,12 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                                           Text(
                                               "${leaderboardProvider.leaderboardList[index + 3].userName!} ${leaderboardProvider.leaderboardList[index + 3].surname!}"),
                                           Text(
-                                            leaderboardProvider
-                                                .leaderboardList[index + 3]
-                                                .weeklyTaskPassingTime!
-                                                .toString(),
+                                            (leaderboardProvider
+                                                        .leaderboardList[
+                                                            index + 3]
+                                                        .weeklyTaskPassingTime! /
+                                                    3600)
+                                                .toStringAsFixed(1),
                                           )
                                         ],
                                       )
@@ -96,10 +98,12 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                                           Text(
                                               "${leaderboardProvider.leaderboardList[index + 3].userName!} ${leaderboardProvider.leaderboardList[index + 3].surname!}"),
                                           Text(
-                                            leaderboardProvider
-                                                .leaderboardList[index + 3]
-                                                .montlyTaskPassingTime!
-                                                .toString(),
+                                            (leaderboardProvider
+                                                        .leaderboardList[
+                                                            index + 3]
+                                                        .montlyTaskPassingTime! /
+                                                    3600)
+                                                .toStringAsFixed(1),
                                           )
                                         ],
                                       )

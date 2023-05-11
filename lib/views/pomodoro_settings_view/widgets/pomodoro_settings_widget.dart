@@ -72,7 +72,7 @@ class _PomodoroSettingsState extends State<PomodoroSettingsWidget> {
                 ),
                 Slider(
                   value: _workTimeSliderValue.toDouble(),
-                  min: 1,
+                  min: 20,
                   max: 40,
                   divisions: 4,
                   label: '$_workTimeSliderValue $minute',
