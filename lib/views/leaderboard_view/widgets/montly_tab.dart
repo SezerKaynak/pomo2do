@@ -29,6 +29,14 @@ class _MontlyTabState extends State<MontlyTab> {
       future: montlyLeaderboardProvider.leaderboardListProvider(1),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          if (montlyLeaderboardProvider.leaderboardList.length < 3) {
+            return const Center(
+              child: Text(
+                "Yeterli sayıda kullanıcı bulunmuyor",
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
           LeaderboardImages first = LeaderboardImages(
               user: montlyLeaderboardProvider.leaderboardList[0]);
 

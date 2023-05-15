@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,45 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAdY2gxZn5bdR6MDuiPmRx8EW3Fv5SKlo0',
-    appId: '1:564579364345:web:04358159ae830e8d476128',
-    messagingSenderId: '564579364345',
-    projectId: 'pomotodo-f236a',
-    authDomain: 'pomotodo-f236a.firebaseapp.com',
-    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pomotodo-f236a.appspot.com',
-    measurementId: 'G-JWDDMTEBPG',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyATYp93dobUuYCMWCUsHdpYwEnFnZTK6hA',
-    appId: '1:564579364345:android:eea0b3ac91f0b2ad476128',
-    messagingSenderId: '564579364345',
-    projectId: 'pomotodo-f236a',
-    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pomotodo-f236a.appspot.com',
+    apiKey: 'AIzaSyBb4RiYufpyDDBNWeHt2jkJiY4Fe5sQGkg',
+    appId: '1:238337804993:android:705bc0e5e30aa002d92240',
+    messagingSenderId: '238337804993',
+    projectId: 'pomo2do',
+    storageBucket: 'pomo2do.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDhe9NTSK8oTWdhx27h3D4NFrTtQs53GnE',
-    appId: '1:564579364345:ios:2708d5a49f1290cf476128',
-    messagingSenderId: '564579364345',
-    projectId: 'pomotodo-f236a',
-    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pomotodo-f236a.appspot.com',
-    iosClientId: '564579364345-hjt9ktssi2f3pp4kn94vkslsic0cfrs2.apps.googleusercontent.com',
-    iosBundleId: 'com.example.flutterApplication1',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDhe9NTSK8oTWdhx27h3D4NFrTtQs53GnE',
-    appId: '1:564579364345:ios:2708d5a49f1290cf476128',
-    messagingSenderId: '564579364345',
-    projectId: 'pomotodo-f236a',
-    databaseURL: 'https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'pomotodo-f236a.appspot.com',
-    iosClientId: '564579364345-hjt9ktssi2f3pp4kn94vkslsic0cfrs2.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBrlJWG4q4CsttY5ajk3E2tn6LYhs6kvDQ',
+    appId: '1:238337804993:ios:7db08342b75405bcd92240',
+    messagingSenderId: '238337804993',
+    projectId: 'pomo2do',
+    storageBucket: 'pomo2do.appspot.com',
+    androidClientId: '238337804993-19903bmpiq753gr1evdihp6l5a8ekema.apps.googleusercontent.com',
+    iosClientId: '238337804993-44vaig6hejp578e2i4nvcgg5s7e7qae5.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
 }
