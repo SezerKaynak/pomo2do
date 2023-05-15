@@ -389,7 +389,7 @@ class L10nTr extends L10n {
   String get passingTime => 'Görevlerde Bugün Geçen Süre';
 
   @override
-  String get pomoTodo => 'PomoTodo';
+  String get pomoTodo => 'Pomo2do';
 
   @override
   String get leaderboard => 'Liderlik Sıralaması';

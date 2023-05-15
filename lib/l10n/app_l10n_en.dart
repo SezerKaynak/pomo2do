@@ -389,7 +389,7 @@ class L10nEn extends L10n {
   String get passingTime => 'Time spent on tasks today';
 
   @override
-  String get pomoTodo => 'PomoTodo';
+  String get pomoTodo => 'Pomo2do';
 
   @override
   String get leaderboard => 'Leaderboard';

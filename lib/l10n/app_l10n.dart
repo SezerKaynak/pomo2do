@@ -864,7 +864,7 @@ abstract class L10n {
   /// No description provided for @pomoTodo.
   ///
   /// In en, this message translates to:
-  /// **'PomoTodo'**
+  /// **'Pomo2do'**
   String get pomoTodo;
 
   /// No description provided for @leaderboard.
