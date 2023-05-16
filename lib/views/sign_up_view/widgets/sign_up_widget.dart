@@ -106,11 +106,17 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     lastDate: DateTime(2100));
 
                 if (pickedDate != null) {
-                  String formattedDate =
-                      DateFormat('dd.MM.yyyy').format(pickedDate);
+                  var deneme = DateTime.now().difference(pickedDate);
+                  if (deneme.inDays / 365 >= 13) {
+                    String formattedDate =
+                        DateFormat('dd.MM.yyyy').format(pickedDate);
 
-                  _birthdayController.text = formattedDate;
-                } else {}
+                    _birthdayController.text = formattedDate;
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    ageAlert(context, l10n);
+                  }
+                }
               },
               con: const Icon(Icons.calendar_today),
               controller: _birthdayController,
@@ -201,6 +207,16 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<dynamic> ageAlert(BuildContext context, L10n l10n) {
+    return QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: L10n.of(context)!.warning,
+      text: L10n.of(context)!.underThirteen,
+      confirmBtnText: l10n.confirmButtonText,
     );
   }
 }

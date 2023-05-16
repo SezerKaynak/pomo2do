@@ -186,5 +186,9 @@
     "spotifyPlayer": "Spotify oynatıcısı gösterilsin mi?",
     "stopMusic": "Araya geçişlerde müzik durdurulsun mu?",
     "onWeeklyPlacement": "Haftalık sıralamada",
-    "tasksWorkedOn": " Tarihinde çalışılan görevler"
+    "tasksWorkedOn": " Tarihinde çalışılan görevler",
+    "deleteAccount": "Hesabınızı Silin",
+    "willBeDeleted": "HESABINIZ SİLİNECEK!",
+    "warning": "Uyarı",
+    "underThirteen": "13 yaşından küçükseniz uygulamaya kayıt olamazsınız!"
 }

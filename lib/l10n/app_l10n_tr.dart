@@ -561,4 +561,16 @@ class L10nTr extends L10n {
 
   @override
   String get tasksWorkedOn => ' Tarihinde çalışılan görevler';
+
+  @override
+  String get deleteAccount => 'Hesabınızı Silin';
+
+  @override
+  String get willBeDeleted => 'HESABINIZ SİLİNECEK!';
+
+  @override
+  String get warning => 'Uyarı';
+
+  @override
+  String get underThirteen => '13 yaşından küçükseniz uygulamaya kayıt olamazsınız!';
 }

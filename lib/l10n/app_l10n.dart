@@ -1208,6 +1208,30 @@ abstract class L10n {
   /// In en, this message translates to:
   /// **'Tasks worked on '**
   String get tasksWorkedOn;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account'**
+  String get deleteAccount;
+
+  /// No description provided for @willBeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'YOUR ACCOUNT WILL BE DELETED!'**
+  String get willBeDeleted;
+
+  /// No description provided for @warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get warning;
+
+  /// No description provided for @underThirteen.
+  ///
+  /// In en, this message translates to:
+  /// **'If you are under the age of 13, you cannot register on the app!'**
+  String get underThirteen;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

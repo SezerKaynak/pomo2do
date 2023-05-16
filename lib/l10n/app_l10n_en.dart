@@ -561,4 +561,16 @@ class L10nEn extends L10n {
 
   @override
   String get tasksWorkedOn => 'Tasks worked on ';
+
+  @override
+  String get deleteAccount => 'Delete your account';
+
+  @override
+  String get willBeDeleted => 'YOUR ACCOUNT WILL BE DELETED!';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get underThirteen => 'If you are under the age of 13, you cannot register on the app!';
 }

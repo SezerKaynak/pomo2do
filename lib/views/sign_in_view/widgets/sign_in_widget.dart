@@ -129,7 +129,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                     child: Text(l10n.forgotPassword,
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle1
+                            .titleMedium
                             ?.copyWith(fontWeight: FontWeight.w300)))),
             const SizedBox(height: 50),
             CustomElevatedButton(
@@ -183,7 +183,7 @@ class _SignInWidgetState extends State<SignInWidget> {
             const SizedBox(height: 40),
             ScreenTexts(
                 title: l10n.loginWithAccount,
-                theme: Theme.of(context).textTheme.subtitle1,
+                theme: Theme.of(context).textTheme.titleMedium,
                 fontW: FontWeight.w300,
                 textPosition: TextAlign.center),
             Padding(

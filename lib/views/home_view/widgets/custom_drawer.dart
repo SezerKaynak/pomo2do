@@ -2,10 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
-import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/providers/drawer_image_provider.dart';
-import 'package:pomotodo/core/providers/locale_provider.dart';
-import 'package:pomotodo/core/providers/select_icon_provider.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/views/edit_password_view/edit_password.view.dart';
 import 'package:pomotodo/core/service/firebase_service.dart';
@@ -98,31 +95,33 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 StreamBuilder(
-                    stream: user.snapshots(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot asyncSnapshot) {
-                      if (asyncSnapshot.hasError) {
-                        return Text(L10n.of(context)!.somethingWrong);
-                      } else if (asyncSnapshot.hasData &&
-                          !asyncSnapshot.data!.exists) {
-                        return Text(
-                          L10n.of(context)!.uSelectPic,
-                          overflow: TextOverflow.clip,
-                          maxLines: 3,
-                        );
-                      } else if (asyncSnapshot.connectionState ==
-                          ConnectionState.active) {
-                        return Text(
+                  stream: user.snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot asyncSnapshot) {
+                    if (asyncSnapshot.hasError) {
+                      return Text(L10n.of(context)!.somethingWrong);
+                    } else if (asyncSnapshot.hasData &&
+                        !asyncSnapshot.data!.exists) {
+                      return Text(
+                        L10n.of(context)!.uSelectPic,
+                        overflow: TextOverflow.clip,
+                        maxLines: 3,
+                      );
+                    } else if (asyncSnapshot.connectionState ==
+                        ConnectionState.active) {
+                      return FittedBox(
+                        child: Text(
                           "${asyncSnapshot.data.data()["name"]}"
                           " ${asyncSnapshot.data.data()["surname"]}",
                           style: const TextStyle(
                               color: Colors.black,
                               fontSize: 23,
                               fontWeight: FontWeight.normal),
-                        );
-                      }
-                      return Text(L10n.of(context)!.loading);
-                    }),
+                        ),
+                      );
+                    }
+                    return Text(L10n.of(context)!.loading);
+                  },
+                ),
               ],
             ),
           ),
@@ -158,8 +157,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           settings.Settings(
               settingIcon: Icons.notifications,
               subtitle: L10n.of(context)!.uAppSettings,
-              title:
-                  settingTitle(context, L10n.of(context)!.appSettings),
+              title: settingTitle(context, L10n.of(context)!.appSettings),
               tap: () {
                 Navigator.pushNamed(context, '/notificationSettings');
               }),

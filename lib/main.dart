@@ -54,13 +54,15 @@ Future<void> main() async {
   theme = await loadTheme("assets/app_theme/appainter_theme.json");
   themeDark = await loadTheme("assets/app_theme/appainter_theme_dark.json");
 
+  await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await NotificationController.initializeLocalNotifications();
 
-  await dotenv.load(fileName: ".env");
+  
 
   runApp(
     MultiProvider(
