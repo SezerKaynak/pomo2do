@@ -40,7 +40,7 @@ Future<void> main() async {
   ThemeData theme, themeDark;
   WidgetsFlutterBinding.ensureInitialized();
 
-  MobileAds.instance.initialize();
+  
 
   Future<ThemeData> loadTheme(String path) async {
     final themeStr = await rootBundle.loadString(path);
@@ -56,6 +56,8 @@ Future<void> main() async {
 
   await dotenv.load(fileName: ".env");
 
+  MobileAds.instance.initialize();
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
