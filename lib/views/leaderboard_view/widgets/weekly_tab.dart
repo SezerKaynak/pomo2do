@@ -29,6 +29,14 @@ class _WeeklyTabState extends State<WeeklyTab> {
       future: weeklyLeaderboardProvider.leaderboardListProvider(0),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          if (weeklyLeaderboardProvider.leaderboardList.length < 3) {
+            return const Center(
+              child: Text(
+                "Yeterli sayıda kullanıcı bulunmuyor",
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
           LeaderboardImages first = LeaderboardImages(
               user: weeklyLeaderboardProvider.leaderboardList[0]);
 

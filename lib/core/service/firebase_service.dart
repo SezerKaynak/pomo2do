@@ -109,4 +109,12 @@ class AuthService with ConvertUser implements IAuthService {
     return _authInstance.currentUser!
         .reauthenticateWithCredential(authCredential);
   }
+
+  Future<void> deleteAccount() async {
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(_authInstance.currentUser!.uid)
+        .delete();
+    await _authInstance.currentUser!.delete();
+  }
 }

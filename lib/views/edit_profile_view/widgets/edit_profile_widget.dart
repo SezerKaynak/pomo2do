@@ -7,8 +7,9 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
-import 'package:pomotodo/core/providers/task_stats_provider.dart';
+import 'package:pomotodo/core/providers/dark_theme_provider.dart';
 import 'package:pomotodo/core/service/database_service.dart';
+import 'package:pomotodo/core/service/firebase_service.dart';
 import 'package:pomotodo/l10n/app_l10n.dart';
 import 'package:pomotodo/utils/constants/constants.dart';
 import 'package:pomotodo/views/common/widgets/custom_elevated_button.dart';
@@ -17,6 +18,7 @@ import 'package:pomotodo/views/common/widgets/screen_texts.dart';
 import 'package:pomotodo/views/edit_profile_view/widgets/custom_avatar.dart';
 import 'package:pomotodo/views/home_view/home.view.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/quickalert.dart';
 
 class EditProfileWidget extends StatefulWidget {
   const EditProfileWidget({super.key});
@@ -32,6 +34,7 @@ class _EditProfileState extends State<EditProfileWidget> {
   late TextEditingController _nameController;
   late TextEditingController _surnameController;
   late TextEditingController _birthdayController;
+  late TextEditingController _passwordController;
 
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _EditProfileState extends State<EditProfileWidget> {
     _nameController = TextEditingController();
     _surnameController = TextEditingController();
     _birthdayController = TextEditingController();
+    _passwordController = TextEditingController();
     super.initState();
   }
 
@@ -76,6 +80,7 @@ class _EditProfileState extends State<EditProfileWidget> {
     var l10n = L10n.of(context)!;
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
     var user = users.doc(context.read<PomotodoUser>().userId);
+    AuthService authService = AuthService();
 
     return WillPopScope(
       onWillPop: () async => isLoading ? false : true,
@@ -274,6 +279,67 @@ class _EditProfileState extends State<EditProfileWidget> {
                                       );
                                     },
                                     child: Text(l10n.updateButtonText),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      QuickAlert.show(
+                                        animType:
+                                            QuickAlertAnimType.slideInLeft,
+                                        context: context,
+                                        type: QuickAlertType.warning,
+                                        showCancelBtn: true,
+                                        barrierColor: Colors.red,
+                                        confirmBtnColor: Colors.red,
+                                        confirmBtnText: l10n.alertApprove,
+                                        cancelBtnText: l10n.alertReject,
+                                        backgroundColor: context
+                                                .read<DarkThemeProvider>()
+                                                .darkTheme
+                                            ? Colors.black
+                                            : Colors.white,
+                                        titleColor: context
+                                                .read<DarkThemeProvider>()
+                                                .darkTheme
+                                            ? Colors.white
+                                            : Colors.black,
+                                        widget: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              L10n.of(context)!.willBeDeleted,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(L10n.of(context)!
+                                                .enterPassword),
+                                            ScreenTextField(
+                                              obscure: true,
+                                              textLabel:
+                                                  L10n.of(context)!.password,
+                                              controller: _passwordController,
+                                              maxLines: 1,
+                                            ),
+                                          ],
+                                        ),
+                                        onConfirmBtnTap: () async {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                          await authService.editPassword(
+                                              _passwordController);
+                                          await authService.deleteAccount();
+                                        },
+                                        onCancelBtnTap: () {
+                                          _passwordController.clear();
+                                          Navigator.pop(context);
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      L10n.of(context)!.deleteAccount,
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
                                   )
                                 ],
                               );

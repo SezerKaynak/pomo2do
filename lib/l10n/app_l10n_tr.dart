@@ -389,7 +389,7 @@ class L10nTr extends L10n {
   String get passingTime => 'Görevlerde Bugün Geçen Süre';
 
   @override
-  String get pomoTodo => 'PomoTodo';
+  String get pomoTodo => 'Pomo2do';
 
   @override
   String get leaderboard => 'Liderlik Sıralaması';
@@ -561,4 +561,16 @@ class L10nTr extends L10n {
 
   @override
   String get tasksWorkedOn => ' Tarihinde çalışılan görevler';
+
+  @override
+  String get deleteAccount => 'Hesabınızı Silin';
+
+  @override
+  String get willBeDeleted => 'HESABINIZ SİLİNECEK!';
+
+  @override
+  String get warning => 'Uyarı';
+
+  @override
+  String get underThirteen => '13 yaşından küçükseniz uygulamaya kayıt olamazsınız!';
 }
