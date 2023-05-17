@@ -45,4 +45,3 @@ app.*.map.json
 
 *.env
 lib/views/deneme
-.metadata
