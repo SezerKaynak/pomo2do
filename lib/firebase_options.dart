@@ -50,6 +50,7 @@ class DefaultFirebaseOptions {
     }
   }
 
+
   static FirebaseOptions android = FirebaseOptions(
     apiKey: dotenv.env["androidApiKey"].toString(),
     appId: '1:238337804993:android:705bc0e5e30aa002d92240',
