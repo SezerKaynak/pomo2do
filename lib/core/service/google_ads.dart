@@ -35,7 +35,7 @@ class GoogleAds {
       mediaQuery.orientation,
       mediaQuery.size.width.toInt(),
     );
-    _bannerAd = null;
+
     return SizedBox(
       // ignore: use_build_context_synchronously
       width: MediaQuery.of(context).size.width,

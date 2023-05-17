@@ -36,6 +36,11 @@
             "package_name": "com.app.pomo2do",
             "certificate_hash": "7b64bda111cba29472ccd57286d67c951de3e345"
           }
+        },
+        {
+          "client_id": "238337804993-t856jj9t3cghbck1888smfi1dki7mg33.apps.googleusercontent.com",
+          "client_type": 3
+
         }
       ],
       "api_key": [
@@ -47,11 +52,8 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "238337804993-44vaig6hejp578e2i4nvcgg5s7e7qae5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.flutterApplication1"
-              }
+              "client_id": "238337804993-nde3v7bnn26tvnemibi6r7khln54vjgm.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         }

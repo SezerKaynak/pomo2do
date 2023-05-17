@@ -128,7 +128,7 @@
     "logOut":"Log out",
     "taskBeCompleted":"Tasks to Complete",
     "passingTime":"Time spent on tasks today",
-    "pomoTodo":"PomoTodo",
+    "pomoTodo":"Pomo2do",
     "leaderboard":"Leaderboard",
     "stats":"Stats",
     "weekly":"Weekly",
@@ -186,5 +186,9 @@
     "spotifyPlayer": "Should the Spotify player be displayed?",
     "stopMusic": "Should music be stopped during breaks?",
     "onWeeklyPlacement": "Weekly Rank",
-    "tasksWorkedOn": "Tasks worked on "
+    "tasksWorkedOn": "Tasks worked on ",
+    "deleteAccount": "Delete your account",
+    "willBeDeleted": "YOUR ACCOUNT WILL BE DELETED!",
+    "warning": "Warning",
+    "underThirteen": "If you are under the age of 13, you cannot register on the app!"
 }
