@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- For apps with targetSDK=31 (Android 12) -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
    <application
         android:label="Pomo2do"
         android:name="${applicationName}"
@@ -42,7 +41,7 @@
             <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1840194818024562~4847562996"/>
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
         <service
             android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmService"
             android:permission="android.permission.BIND_JOB_SERVICE"

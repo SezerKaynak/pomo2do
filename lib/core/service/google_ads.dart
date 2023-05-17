@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class GoogleAds {
@@ -8,7 +7,7 @@ class GoogleAds {
 
   void loadInterstitialAd({bool showAfterLoad = false}) {
     InterstitialAd.load(
-      adUnitId: dotenv.env["interstitialAdUnitId"].toString(),
+      adUnitId: "ca-app-pub-3940256099942544/1033173712",
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -46,7 +45,7 @@ class GoogleAds {
 
   static Future<BannerAd> _instantiateBanner(orientation, width) async {
     _bannerAd = BannerAd(
-      adUnitId: dotenv.env["bannerAdUnitId"].toString(),
+      adUnitId: "ca-app-pub-3940256099942544/6300978111",
       size: (await AdSize.getAnchoredAdaptiveBannerAdSize(orientation, width))!,
       request: _getBannerAdRequest(),
       listener: _buildListener(),
