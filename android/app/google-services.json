@@ -1,54 +1,53 @@
 {
   "project_info": {
-    "project_number": "564579364345",
-    "firebase_url": "https://pomotodo-f236a-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "pomotodo-f236a",
-    "storage_bucket": "pomotodo-f236a.appspot.com"
+    "project_number": "238337804993",
+    "project_id": "pomo2do",
+    "storage_bucket": "pomo2do.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:564579364345:android:eea0b3ac91f0b2ad476128",
+        "mobilesdk_app_id": "1:238337804993:android:705bc0e5e30aa002d92240",
         "android_client_info": {
-          "package_name": "com.example.flutter_application_1"
+          "package_name": "com.app.pomo2do"
         }
       },
       "oauth_client": [
         {
-          "client_id": "564579364345-9eh4dkr4qne6keglsfttg48gmlhau33s.apps.googleusercontent.com",
+          "client_id": "238337804993-19903bmpiq753gr1evdihp6l5a8ekema.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.flutter_application_1",
+            "package_name": "com.app.pomo2do",
             "certificate_hash": "0fa09cd971357fdb6d02a4c5f3a165d0dbfdbe94"
           }
         },
         {
-          "client_id": "564579364345-rkehem8mnnovdt8bb4c2lmbrmsb6tl9c.apps.googleusercontent.com",
+          "client_id": "238337804993-36rt3ipl53ct8uhu6milg0ve9lvtj6tl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.flutter_application_1",
-            "certificate_hash": "7b64bda111cba29472ccd57286d67c951de3e345"
+            "package_name": "com.app.pomo2do",
+            "certificate_hash": "9ed5a715c46de4bf8706b934298c83dd934ab4c0"
           }
         },
         {
-          "client_id": "564579364345-7nahm3gve1muqlpsp7iugvnllqecincg.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "238337804993-a7g1u7o4tliaje1q5910dqf3jmuils3f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.pomo2do",
+            "certificate_hash": "7b64bda111cba29472ccd57286d67c951de3e345"
+          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyATYp93dobUuYCMWCUsHdpYwEnFnZTK6hA"
+          "current_key": "AIzaSyBb4RiYufpyDDBNWeHt2jkJiY4Fe5sQGkg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "564579364345-7nahm3gve1muqlpsp7iugvnllqecincg.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "564579364345-hjt9ktssi2f3pp4kn94vkslsic0cfrs2.apps.googleusercontent.com",
+              "client_id": "238337804993-44vaig6hejp578e2i4nvcgg5s7e7qae5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.flutterApplication1"
