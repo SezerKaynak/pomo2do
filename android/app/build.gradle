@@ -84,3 +84,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.gms:play-services-ads:22.0.0'
 }
+
+configurations.all { 
+    exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
+}
+
+android.buildTypes.release.ndk.debugSymbolLevel = 'FULL'
