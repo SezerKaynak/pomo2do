@@ -115,6 +115,26 @@ class AuthService with ConvertUser implements IAuthService {
         .collection("Users")
         .doc(_authInstance.currentUser!.uid)
         .delete();
+
     await _authInstance.currentUser!.delete();
+  }
+
+  Future<void> deleteGoogleUser() async {
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(_authInstance.currentUser!.uid)
+        .delete();
+
+    final googleUser = await _googleSignIn.signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    OAuthCredential? credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    await _authInstance.currentUser!.reauthenticateWithCredential(credential);
+    await _authInstance.currentUser!.delete();
+    await signOut();
   }
 }
