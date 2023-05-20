@@ -282,59 +282,109 @@ class _EditProfileState extends State<EditProfileWidget> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      QuickAlert.show(
-                                        animType:
-                                            QuickAlertAnimType.slideInLeft,
-                                        context: context,
-                                        type: QuickAlertType.warning,
-                                        showCancelBtn: true,
-                                        barrierColor: Colors.red,
-                                        confirmBtnColor: Colors.red,
-                                        confirmBtnText: l10n.alertApprove,
-                                        cancelBtnText: l10n.alertReject,
-                                        backgroundColor: context
-                                                .read<DarkThemeProvider>()
-                                                .darkTheme
-                                            ? Colors.black
-                                            : Colors.white,
-                                        titleColor: context
-                                                .read<DarkThemeProvider>()
-                                                .darkTheme
-                                            ? Colors.white
-                                            : Colors.black,
-                                        widget: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              L10n.of(context)!.willBeDeleted,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                      if (context
+                                          .read<PomotodoUser>()
+                                          .loginProviderData!) {
+                                        QuickAlert.show(
+                                          animType:
+                                              QuickAlertAnimType.slideInLeft,
+                                          context: context,
+                                          type: QuickAlertType.warning,
+                                          showCancelBtn: true,
+                                          barrierColor: Colors.red,
+                                          confirmBtnColor: Colors.red,
+                                          confirmBtnText: l10n.alertApprove,
+                                          cancelBtnText: l10n.alertReject,
+                                          backgroundColor: context
+                                                  .read<DarkThemeProvider>()
+                                                  .darkTheme
+                                              ? Colors.black
+                                              : Colors.white,
+                                          titleColor: context
+                                                  .read<DarkThemeProvider>()
+                                                  .darkTheme
+                                              ? Colors.white
+                                              : Colors.black,
+                                          widget: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                L10n.of(context)!.willBeDeleted,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            ),
-                                            Text(L10n.of(context)!
-                                                .enterPassword),
-                                            ScreenTextField(
-                                              obscure: true,
-                                              textLabel:
-                                                  L10n.of(context)!.password,
-                                              controller: _passwordController,
-                                              maxLines: 1,
-                                            ),
-                                          ],
-                                        ),
-                                        onConfirmBtnTap: () async {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                          await authService.editPassword(
-                                              _passwordController);
-                                          await authService.deleteAccount();
-                                        },
-                                        onCancelBtnTap: () {
-                                          _passwordController.clear();
-                                          Navigator.pop(context);
-                                        },
-                                      );
+                                            ],
+                                          ),
+                                          onConfirmBtnTap: () async {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+
+                                            await authService
+                                                .deleteGoogleUser();
+                                          },
+                                          onCancelBtnTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      } else {
+                                        QuickAlert.show(
+                                          animType:
+                                              QuickAlertAnimType.slideInLeft,
+                                          context: context,
+                                          type: QuickAlertType.warning,
+                                          showCancelBtn: true,
+                                          barrierColor: Colors.red,
+                                          confirmBtnColor: Colors.red,
+                                          confirmBtnText: l10n.alertApprove,
+                                          cancelBtnText: l10n.alertReject,
+                                          backgroundColor: context
+                                                  .read<DarkThemeProvider>()
+                                                  .darkTheme
+                                              ? Colors.black
+                                              : Colors.white,
+                                          titleColor: context
+                                                  .read<DarkThemeProvider>()
+                                                  .darkTheme
+                                              ? Colors.white
+                                              : Colors.black,
+                                          widget: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                L10n.of(context)!.willBeDeleted,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(L10n.of(context)!
+                                                  .enterPassword),
+                                              ScreenTextField(
+                                                obscure: true,
+                                                textLabel:
+                                                    L10n.of(context)!.password,
+                                                controller: _passwordController,
+                                                maxLines: 1,
+                                              ),
+                                            ],
+                                          ),
+                                          onConfirmBtnTap: () async {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+
+                                            await authService.editPassword(
+                                                _passwordController);
+
+                                            await authService.deleteAccount();
+                                          },
+                                          onCancelBtnTap: () {
+                                            _passwordController.clear();
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      }
                                     },
                                     child: Text(
                                       L10n.of(context)!.deleteAccount,

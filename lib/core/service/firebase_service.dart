@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/servicemanagement/v1.dart';
 import 'package:pomotodo/core/models/pomotodo_user.dart';
 import 'package:pomotodo/core/service/i_auth_service.dart';
 import 'package:pomotodo/core/service/mixin_user.dart';
@@ -115,6 +116,26 @@ class AuthService with ConvertUser implements IAuthService {
         .collection("Users")
         .doc(_authInstance.currentUser!.uid)
         .delete();
+
     await _authInstance.currentUser!.delete();
+  }
+
+  Future<void> deleteGoogleUser() async {
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(_authInstance.currentUser!.uid)
+        .delete();
+
+    final googleUser = await _googleSignIn.signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    OAuthCredential? credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    await _authInstance.currentUser!.reauthenticateWithCredential(credential);
+    await _authInstance.currentUser!.delete();
+    await signOut();
   }
 }
