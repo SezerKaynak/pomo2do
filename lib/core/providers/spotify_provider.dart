@@ -39,7 +39,7 @@ class SpotifyProvider extends ChangeNotifier {
     isPlaying = true;
     notifyListeners();
   }
-
+ 
   Future<void> pause() async {
     await SpotifySdk.pause();
     isPlaying = false;
