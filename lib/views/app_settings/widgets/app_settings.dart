@@ -42,16 +42,16 @@ class _AppSettingsWidgetState extends State<AppSettingsWidget> {
       L10n.of(context)!.setAlarm,
       L10n.of(context)!.setNotification,
       L10n.of(context)!.resetPomodoroWarn,
-      L10n.of(context)!.spotifyPlayer,
-      L10n.of(context)!.stopMusic
+      // L10n.of(context)!.spotifyPlayer,
+      // L10n.of(context)!.stopMusic
     ];
 
     List<String> settingTypes = [
       'Alarm',
       'Notification',
       "Warning",
-      "Spotify",
-      "PauseSpotify"
+      // "Spotify",
+      // "PauseSpotify"
     ];
 
     SelectTheme selectedThemeIcon = SelectTheme();

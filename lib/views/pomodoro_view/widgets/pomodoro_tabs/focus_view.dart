@@ -204,15 +204,17 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                     elevation: 10,
                     child: SizedBox(
                       height:
-                          context.read<AppSettingsController>().spotifySetting
-                              ? kToolbarHeight * 2
-                              : kToolbarHeight,
+                          // context.read<AppSettingsController>().spotifySetting
+                          //     ? kToolbarHeight * 2
+                          //     : kToolbarHeight,
+                          kToolbarHeight,
                       child: Column(
                         children: [
                           Visibility(
-                            visible: context
-                                .read<AppSettingsController>()
-                                .spotifySetting,
+                            // visible: context
+                            //     .read<AppSettingsController>()
+                            //     .spotifySetting,
+                            visible: false,
                             child: ClipRRect(
                               borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -293,12 +295,13 @@ class _FocusViewState extends State<FocusView> with WidgetsBindingObserver {
                                                   ),
                                                   Center(
                                                     child: Visibility(
-                                                        visible: spotifyProvider
-                                                            .loading,
-                                                        child:
-                                                            const CircularProgressIndicator(
-                                                                color: Colors
-                                                                    .white)),
+                                                      visible: spotifyProvider
+                                                          .loading,
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
